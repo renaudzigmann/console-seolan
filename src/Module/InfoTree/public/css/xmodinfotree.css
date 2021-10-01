@@ -143,9 +143,12 @@
     width: 200px;
 }
 
-#tzr-page-content .ui-sortable-helper{
+.ui-sortable-helper {
+	height: auto !important;
+	padding: 5px 10px;
     background-color:#dddddd;
 }
+
 .cv8-infotree-ctree .ui-sortable-placeholder,.cv8-infotree-ctree .ui-sortable-helper,#tzr-page-content .ui-sortable-placeholder,#tzr-page-content .ui-sortable-helper{
     background-color:#dddddd;
     margin-bottom: 20px;

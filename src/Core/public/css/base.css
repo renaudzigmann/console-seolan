@@ -1688,6 +1688,10 @@ div.inplaceaction {
 	margin: 1em 0;
 }
 
+.modal-footer .tzr-action {
+	margin: 0;
+}
+
 .tzr-action .form-group {
 	margin-right: 10px;
 }
@@ -1696,6 +1700,9 @@ div.inplaceaction {
 	margin-right: 5px;
 }
 
+.modal-footer .tzr-action .form-group {
+	margin: 0;
+}
 
 .tzr-action input,
 .tzr-action button {
@@ -3188,6 +3195,8 @@ body.dragging .uploadCont.droppable {
 	background-color: #545e6a;
 	border: none;
 }
+
+
 /* champ gmappoint */
 .gmap {
 	background-color:white;
@@ -3241,10 +3250,32 @@ body.dragging .uploadCont.droppable {
 	margin: 0;
 	vertical-align: bottom;
 }
+
 /* champ User */
 ul.selectedusers>div{
   display:inline;
 }
+
+.btn.addpoint {
+	margin-right: 10px;
+}
+
+
+.custom-icon span {
+	position: absolute;
+	top: -37px;
+	left: -9px;
+	display: inline-block;
+	width: 19px;
+	height: 19px;
+	font-weight: 700;
+	white-space: nowrap;
+	text-align: center;
+	border-radius: 9.5px;
+	background-color: #ffffff;
+}
+
+
 /* Drag&drop de fichier */
 body .droppable .dropoverlay {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);

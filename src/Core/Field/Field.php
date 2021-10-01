@@ -52,6 +52,7 @@ abstract class Field  {
     '\Seolan\Field\DependentLink\DependentLink'                => array('Oid',  false, true,  false, true),
     '\Seolan\Field\GmapPoint\GmapPoint'                        => array('Data', false, false, false, false),
     '\Seolan\Field\GmapPoint2\GmapPoint2'                      => array('Data', false, false, false, false),
+    '\Seolan\Field\Gpath\Gpath'                                => array('Data', false, false, false, false),
     '\Seolan\Field\Serialize\Serialize'                        => array('Data', true,  false, false, false),
     '\Seolan\Field\Country\Country'                            => array('Oid',  false, true,  false, true),
     '\Seolan\Field\Interval\Interval'                          => array('Data', false, false, false, false),
