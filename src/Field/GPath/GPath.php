@@ -1,11 +1,11 @@
 <?php
-namespace Seolan\Field\Gpath;
+namespace Seolan\Field\GPath;
 /*
   pas de modmap nécessaire
   Structures des données brutes
   latitude (float) longitude (float)
 */
-class Gpath extends \Seolan\Core\Field\Field {
+class GPath extends \Seolan\Core\Field\Field {
   private static $SRID = '4326'; //wgs84
   private $googleGeoStatusV3 = array(
     'OK' => 'No errors occurred; the address was successfully parsed and at least one geocode was returned.',
@@ -83,10 +83,10 @@ class Gpath extends \Seolan\Core\Field\Field {
     return $txt;
   }
 
-  private function getGpathFieldJS(){
+  private function getGPathFieldJS(){
     if ( !defined(TZR_ISSET_GPATH_SCRIPT) ){
       define(TZR_ISSET_GPATH_SCRIPT, true);
-      return '<script src="/csx/src/Field/Gpath/public/js/Gpath.js"></script>';
+      return '<script src="/csx/src/Field/GPath/public/js/GPath.js"></script>';
     }
     return '';
   }
@@ -105,13 +105,13 @@ class Gpath extends \Seolan\Core\Field\Field {
 	      $title = htmlspecialchars(addslashes($this->label), ENT_QUOTES);
         
         $points = json_encode(array('lat'=>$r->lat, 'lng'=>$r->lng));
-        $r->html = $this->getGpathFieldJS();
+        $r->html = $this->getGPathFieldJS();
         $r->html .= '<div id="'.$uniqid.'">'.$txt;
         if ($txt != ""){
           $r->html .= ' <button class="btn btn-default btn-md btn-inverse viewmapall" id="'.$uniqid.'-loc">'.$localize.'</button>';
           $js  = <<<EOT
           <script>
-            TZR.Gpath.init({
+            TZR.GPath.init({
                 varid: '{$uniqid}',
                 closeLabel: '{$closeLabel}',
                 intable: '{$intable}',
@@ -153,13 +153,13 @@ EOT;
 	          $title = htmlspecialchars(addslashes($this->label), ENT_QUOTES);
             $txt = $this->getLatLngString($r);
             $points = json_encode(array('lat'=>$r->lat, 'lng'=>$r->lng));
-            $r->html = $this->getGpathFieldJS();
+            $r->html = $this->getGPathFieldJS();
             $r->html .= $txt;
             if ($txt != ""){
               $r->html .= ' <button class="btn btn-default btn-md btn-inverse viewmapall" id="'.$uniqid.'-loc">'.$localize.'</button>';
               $js  = <<<EOT
               <script>
-                TZR.Gpath.init({
+                TZR.GPath.init({
                     varid: '{$fieldid}',
                     closeLabel: '{$closeLabel}',
                     intable: '{$intable}',
@@ -197,8 +197,9 @@ EOT;
     $intable = 0;
     if (isset($options['intable'])){
       $intable = 1;
-      $fname = $this->field."[{$options['intable']}]";
-      $hiddenname = $this->field."_HID[{$options['intable']}]";
+      $intableValue = $options['intable'];
+      $fname = $this->field."[{$intableValue}]";
+      $hiddenname = $this->field."_HID[{$intableValue}]";
       $br = '<br>';
     } elseif (!empty($options['fieldname'])) {
       $fname = $options['fieldname'];
@@ -232,8 +233,8 @@ EOT;
     $r->htmlmore = <<<EOT
       <li class="form-group latlng"  data-order=x>\
       <span class="title point">{$elementName} x : </span>\
-      <label for="{$uniqid}-x-lat">Lat</label>&nbsp;<input type="text" name="{$hiddenname}[lat][]" id="{$uniqid}-x-lat" value="{$deflat}" size="15">\
-      <label for="{$uniqid}-x-lng">Lng</label>&nbsp;<input type="text" name="{$hiddenname}[lng][]" id="{$uniqid}-x-lng" value="{$deflng}" size="15">\
+      <label for="uniqidx-lat">Lat</label>&nbsp;<input type="text" name="{$hiddenname}[lat][]" id="uniqidx-lat" value="{$deflat}" size="15">\
+      <label for="uniqidx-lng">Lng</label>&nbsp;<input type="text" name="{$hiddenname}[lng][]" id="uniqidx-lng" value="{$deflng}" size="15">\
       {$actions}\
       </li>
 EOT;
@@ -250,7 +251,7 @@ EOT;
 EOT;
     }
 
-    $r->html = $this->getGpathFieldJS();
+    $r->html = $this->getGPathFieldJS();
     $r->html .= <<<EOT
       <div id="{$uniqid}">
       <div class="form-group">
@@ -267,9 +268,10 @@ EOT;
 EOT;
     $js  = <<<EOT
     <script>
-      TZR.Gpath.htmlDefaultPoint = '{$r->htmlmore}';
-      TZR.Gpath.init({
+      TZR.GPath.htmlDefaultPoint = '{$r->htmlmore}';
+      TZR.GPath.init({
           varid: '{$uniqid}',
+          fieldName: '{$r->fielddef->field}',
           closeLabel: '{$closeLabel}',
           saveLabel:  '{$saveLabel}',
           reverseLabel:  '{$reverseLabel}',
@@ -277,6 +279,7 @@ EOT;
           deleteInfos: '{$deleteInfos}',
           elementName: '{$elementName}',
           intable: '{$intable}',
+          intableValue: '{$intableValue}',
           defaultZoom: '{$this->defaultZoom}',
           defaultLocation: '{$this->defaultLocation}',
           mapGeometry: '{$this->mapGeometry}',
@@ -323,7 +326,7 @@ EOT;
       $split = preg_split('/[^0-9.-]/', $value, null, PREG_SPLIT_NO_EMPTY);
       $lat = ($split[0] && is_numeric($split[0])) ? $split[0] : 0;
       $lng = ($split[1] && is_numeric($split[1])) ? $split[1] : 0;
-      $r->raw = ['MULTIPOINT('.$lat.' '.$lng.')', \Seolan\Field\Gpath\Gpath::$SRID];
+      $r->raw = ['MULTIPOINT('.$lat.' '.$lng.')', \Seolan\Field\GPath\GPath::$SRID];
     }
     else {
       $points = [];
@@ -335,7 +338,7 @@ EOT;
         $points[] = $lat.' '.$lng;
       }
 
-       $r->raw = ['MULTIPOINT('.implode(',',$points).')', \Seolan\Field\Gpath\Gpath::$SRID];
+       $r->raw = ['MULTIPOINT('.implode(',',$points).')', \Seolan\Field\GPath\GPath::$SRID];
     }
 
     return $r;
@@ -351,11 +354,11 @@ EOT;
 
     $points = json_encode(array('lat'=>$r->lat, 'lng'=>$r->lng));
     $mapid = $r->fielddef->field;
-    $map = $this->getGpathFieldJS();
+    $map = $this->getGPathFieldJS();
     $map .= ' <div id="map'.$mapid.'" class="google-map" style="width:'.$width.';height:'.$height.'px"></div>';
     $js  = <<<EOT
     <script>
-    TZR.Gpath.init({
+    TZR.GPath.init({
         varid: '{$mapid}',
         modal: 'none',
         intable: '{$intable}',

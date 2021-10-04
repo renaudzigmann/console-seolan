@@ -1,7 +1,7 @@
-if( typeof(TZR.Gpath) == "undefined" ) {
-  TZR.Gpath=new Object();
+if( typeof(TZR.GPath) == "undefined" ) {
+  TZR.GPath=new Object();
 
-  TZR.Gpath.localizeOSM = function(options) {
+  TZR.GPath.localizeOSM = function(options) {
     if (window.L == undefined) {
       console.error('Leaflet manquant !');
       return false;
@@ -26,7 +26,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
     let group = jQuery("#"+params.varid+' .form-group.latlng');
     
     if (params.edit) {
-      var optionsSelect = TZR.Gpath.getOptionsSelect(group.length);
+      var optionsSelect = TZR.GPath.getOptionsSelect(group.length);
       var menuInverse1 = '<select name="reverse_pt1" id="reverse_pt1">'+optionsSelect+'</select>';
       var menuInverse2 = '<select name="reverse_pt2" id="reverse_pt2">'+optionsSelect+'</select>';
 
@@ -81,9 +81,9 @@ if( typeof(TZR.Gpath) == "undefined" ) {
     }
     
     if ( typeof params.points == 'object'){
-      TZR.Gpath.createMarkers(null, params.varid, params.points, params.edit);
+      TZR.GPath.createMarkers(null, params.varid, params.points, params.edit);
     }else if ( group.length > 0 ){
-      TZR.Gpath.createMarkers(group, params.varid, '', params.edit);
+      TZR.GPath.createMarkers(group, params.varid, '', params.edit);
     }else{
       TZR.marker = L.marker(center);
       TZR.marker.addTo(TZR.osmFeatureGroup);
@@ -99,7 +99,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
     return false;
   };
   
-  TZR.Gpath.osmRemove = function(){
+  TZR.GPath.osmRemove = function(){
     if (TZR.gmap_div != undefined) {
       TZR.gmap_div.remove();
       TZR.gmap_div = null;
@@ -108,7 +108,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
   };
 
   // mise a jour de la position des points et de leur id
-  TZR.Gpath.setOrder = function(varid){
+  TZR.GPath.setOrder = function(varid){
     group = jQuery('#'+varid+' .form-group.latlng');
     let currentGroup = null;
     let number;
@@ -116,7 +116,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
       currentGroup = jQuery(group[i]);
       currentGroup.attr('data-order',i);
       number = i+1;
-      currentGroup.children('span.title').text(TZR.Gpath.elementName+" "+number+" : ");
+      currentGroup.children('span.title').text(TZR.GPath.elementName+" "+number+" : ");
       let input = currentGroup.children('input');
       input.first().attr("id", varid+"-"+i+"-lat");
       input.last().attr("id",varid+"-"+i+"-lng");
@@ -127,7 +127,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
   };
 
   // Mise a jours de la position dans le formulaire
-  TZR.Gpath.osmSetPosition = function(close = false) {
+  TZR.GPath.osmSetPosition = function(close = false) {
     let layers = TZR.osmFeatureGroup._layers;
     for(var i in layers){
         id = layers[i].options.id;
@@ -135,10 +135,10 @@ if( typeof(TZR.Gpath) == "undefined" ) {
         jQuery("#"+id+"-lat").val(pos.lat);
         jQuery("#"+id+"-lng").val(pos.lng);
     };
-    if (close) TZR.Gpath.osmRemove();
+    if (close) TZR.GPath.osmRemove();
   };
 
-  TZR.Gpath.addEventMarker = function(marker, varid, edit){
+  TZR.GPath.addEventMarker = function(marker, varid, edit){
     marker.on('moveend', function(e){  // modifie l'input correspondant après le deplacement
       let pos = e.target.getLatLng();
       let id = e.target.options.id;
@@ -150,14 +150,14 @@ if( typeof(TZR.Gpath) == "undefined" ) {
       let order = e.target.options.order;
       let varid = e.target.options.id.split('-')[0];
       jQuery("#"+varid+' .form-group.latlng[data-order='+order+']').remove();
-      TZR.Gpath.setOrder(varid);
-      TZR.Gpath.setMap(varid, {edit:edit});
-      TZR.Gpath.updateOptionsSelect(TZR.osmFeatureGroup.getLayers().length);
+      TZR.GPath.setOrder(varid);
+      TZR.GPath.setMap(varid, {edit:edit});
+      TZR.GPath.updateOptionsSelect(TZR.osmFeatureGroup.getLayers().length);
     });
   } 
 
   // Prepare les markers les ajoute au group TZR.osmFeatureGroup
-  TZR.Gpath.createMarkers = function(group, varid, points = "", edit = false) {
+  TZR.GPath.createMarkers = function(group, varid, points = "", edit = false) {
     let marker;
     if( typeof points != "object" ){
       let currentGroup = null;
@@ -167,8 +167,8 @@ if( typeof(TZR.Gpath) == "undefined" ) {
         let id  = varid+"-"+order;
         let lat = currentGroup.children('input').first().val();
         let lng = currentGroup.children('input').last().val();
-        marker = TZR.Gpath.createMarker(lat, lng, id, order, edit);
-        TZR.Gpath.addEventMarker(marker, varid, edit);
+        marker = TZR.GPath.createMarker(lat, lng, id, order, edit);
+        TZR.GPath.addEventMarker(marker, varid, edit);
         marker.addTo(TZR.osmFeatureGroup);
       }
     }else{ // For display
@@ -180,14 +180,14 @@ if( typeof(TZR.Gpath) == "undefined" ) {
       }
       for (let i = 0; i < lat.length; i++) {
         let order = id = i;
-        marker = TZR.Gpath.createMarker(lat[i],lng[i],id,order);
+        marker = TZR.GPath.createMarker(lat[i],lng[i],id,order);
         marker.addTo(TZR.osmFeatureGroup);
       }
     }
   };
 
   // Prepare et retourne un marker
-  TZR.Gpath.createMarker = function(lat, lng, id, order, edit) {
+  TZR.GPath.createMarker = function(lat, lng, id, order, edit) {
     let options = {
       id: id,
       order: order,
@@ -204,7 +204,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
   };
 
   // supprime tous les markers de TZR.OSMFeatureroup
-  TZR.Gpath.removeMarkers = function() {
+  TZR.GPath.removeMarkers = function() {
     let layers = TZR.osmFeatureGroup._layers;
     for(var i in layers){
       layers[i].removeFrom(TZR.osmFeatureGroup);
@@ -212,26 +212,32 @@ if( typeof(TZR.Gpath) == "undefined" ) {
   }
 
   // Ajout d'un point dans le formulaire
-  TZR.Gpath.addInputGroup = function(varid, options) {
+  TZR.GPath.addInputGroup = function(varid, options) {
     let groupLength = jQuery("#"+varid+" .form-group.latlng").length;
 
     if ( groupLength > 0 ){
       let lastGroup = jQuery("#"+varid+" .form-group.latlng").last();
       jQuery("#"+varid+" .fields").append(lastGroup.clone());
     }else{
-      jQuery("#"+varid+" .fields").append(TZR.Gpath.htmlDefaultPoint);
+      let fields = jQuery("#"+varid+" .fields");
+      fields.append(TZR.GPath.htmlDefaultPoint);
+      if (typeof options.intable != "undefined" && options.intable == 1){
+        let input = jQuery(fields).children('li').children('input');
+        input.first().attr("name", options.fieldName+'_HID['+options.intableValue+'][lat][]');
+        input.last().attr("name", options.fieldName+'_HID['+options.intableValue+'][lng][]');
+      }
     }
-    TZR.Gpath.setOrder(varid);
+    TZR.GPath.setOrder(varid);
   }
 
   // Suppression d'un point dans le formulaire
-  TZR.Gpath.removeInputGroup = function(target,varid) {
+  TZR.GPath.removeInputGroup = function(target,varid) {
     jQuery(target).closest('.form-group').remove();
-    TZR.Gpath.setOrder(varid);
+    TZR.GPath.setOrder(varid);
   }
 
   // Inversion de 2 points
-  TZR.Gpath.reverse = function(pt1, pt2, varid) {
+  TZR.GPath.reverse = function(pt1, pt2, varid) {
     pt1 = jQuery('#'+varid+' .form-group.latlng[data-order='+pt1+']');
     pt2 = jQuery('#'+varid+' .form-group.latlng[data-order='+pt2+']');
     clonept1 = pt1.clone();
@@ -241,48 +247,48 @@ if( typeof(TZR.Gpath) == "undefined" ) {
     clonept1.insertAfter(pt2);
     clonept2.insertAfter(pt1);
     jQuery('#'+varid+' .form-group.latlng.oldgroup').remove();
-    TZR.Gpath.setOrder(varid);
+    TZR.GPath.setOrder(varid);
   }
 
   // Création des options de la liste déroulante pour l'inversion des points
-  TZR.Gpath.getOptionsSelect = function(size) {
+  TZR.GPath.getOptionsSelect = function(size) {
     var optionsSelect = '<option value="">---</option>';
     let number;
     for (let i = 0; i < size; i++) {          
       number = i+1;
-      optionsSelect  += '<option value="'+i+'">'+TZR.Gpath.elementName+' '+number+'</option>';
+      optionsSelect  += '<option value="'+i+'">'+TZR.GPath.elementName+' '+number+'</option>';
     }
     return optionsSelect;
   }
 
   // Mise a jour des liste déroulantes pour l'inversion des points
-  TZR.Gpath.updateOptionsSelect = function(size) {
-    let opt = TZR.Gpath.getOptionsSelect(size);
+  TZR.GPath.updateOptionsSelect = function(size) {
+    let opt = TZR.GPath.getOptionsSelect(size);
     document.getElementById('reverse_pt1').innerHTML = opt;  
     document.getElementById('reverse_pt2').innerHTML = opt;  
   }
 
   // decalage a droite du dernier point pour éviter la superposition
-  TZR.Gpath.shiftLastPoint = function(varid, options) {
+  TZR.GPath.shiftLastPoint = function(varid, options) {
     let mapBounds = TZR.osm.getBounds();
     let ecart = (mapBounds._northEast.lng - mapBounds._southWest.lng) / 40;
     let newPoint = jQuery("#"+varid+" .form-group.latlng").last().children('input[id$=lng]');
     newPoint.val(parseFloat(newPoint.val())+ecart);
-    TZR.Gpath.setMap(varid, options);
+    TZR.GPath.setMap(varid, options);
   }
 
   // Mise a jour de la carte
-  TZR.Gpath.setMap = function(varid, options) {
-    TZR.Gpath.removeMarkers();
+  TZR.GPath.setMap = function(varid, options) {
+    TZR.GPath.removeMarkers();
     let group = jQuery("#"+varid+' .form-group.latlng');
-    TZR.Gpath.createMarkers(group, varid, '', options.edit);
+    TZR.GPath.createMarkers(group, varid, '', options.edit);
   }
 
   // Initialisation de la carte
   // 2 mode : 
   //   'one' => un seul point : utilisation de localizeOSM() de generic8 utilisé pour le champ Gmap2
-  //   'all' => affichage de tous les point avec numérotation via TZR.Gpath.localizeOSM()
-  TZR.Gpath.openOSMMap = function(options, mode) {
+  //   'all' => affichage de tous les point avec numérotation via TZR.GPath.localizeOSM()
+  TZR.GPath.openOSMMap = function(options, mode) {
     let varid = options.varid;
     let paramOSM = {
       varid           : options.varid,
@@ -310,7 +316,7 @@ if( typeof(TZR.Gpath) == "undefined" ) {
 
     if ( mode == 'one'){
       let number = parseInt(options.order,10)+1;
-      paramOSM.title = options.title+" : "+TZR.Gpath.elementName+" n°"+number;
+      paramOSM.title = options.title+" : "+TZR.GPath.elementName+" n°"+number;
       paramOSM.id = options.varid+"-"+options.order;
       TZR.localizeOSM(paramOSM);
       return false;
@@ -319,28 +325,28 @@ if( typeof(TZR.Gpath) == "undefined" ) {
       let groupLength = jQuery("#"+varid+" .form-group.latlng").length;
       // ouverture de la carte sans point : on l'ajoute avant
       if ( options.mode != 'display' && groupLength == 0 ){
-        TZR.Gpath.addInputGroup(varid, options);
+        TZR.GPath.addInputGroup(varid, options);
       }
-      TZR.Gpath.localizeOSM(paramOSM);
+      TZR.GPath.localizeOSM(paramOSM);
       return false;
     }
   }
 
   // Initialisation du champ
-  TZR.Gpath.init = function(options) {
+  TZR.GPath.init = function(options) {
     let varid = options.varid;
-    TZR.Gpath.elementName = typeof options.elementName == 'undefined' ? 'Point' : options.elementName;
+    TZR.GPath.elementName = typeof options.elementName == 'undefined' ? 'Point' : options.elementName;
     var body = jQuery("body");
-    var gPath = jQuery("#"+varid);
+    var GPath = jQuery("#"+varid);
 
     if (options.modal === 'none'){
-      TZR.Gpath.openOSMMap(options, 'all');
+      TZR.GPath.openOSMMap(options, 'all');
       return;
     }
 
-    gPath.on('click', 'button.viewmapall', function(e){
+    GPath.on('click', 'button.viewmapall', function(e){
       e.preventDefault();
-      TZR.Gpath.openOSMMap(options, 'all');
+      TZR.GPath.openOSMMap(options, 'all');
     });
     
     if ( options.edit == 1){
@@ -350,19 +356,19 @@ if( typeof(TZR.Gpath) == "undefined" ) {
         handle: ".sortablehandler",  
         cursor: "move",
         stop: function( e, ui ) {
-          TZR.Gpath.setOrder(varid);
+          TZR.GPath.setOrder(varid);
         },
       });  
 
       // MODAL EVENT
       body.on("click", ".modal-content #"+varid+"-addpoint", function(){
-        TZR.Gpath.osmSetPosition();
-        TZR.Gpath.addInputGroup(varid), options;
-        TZR.Gpath.shiftLastPoint(varid, options);
-        TZR.Gpath.updateOptionsSelect(TZR.osmFeatureGroup.getLayers().length);
+        TZR.GPath.osmSetPosition();
+        TZR.GPath.addInputGroup(varid), options;
+        TZR.GPath.shiftLastPoint(varid, options);
+        TZR.GPath.updateOptionsSelect(TZR.osmFeatureGroup.getLayers().length);
       });
       body.on("click", ".modal-content #"+varid+"-reverse", function(){
-        TZR.Gpath.osmSetPosition();
+        TZR.GPath.osmSetPosition();
         let pt1 = jQuery('#reverse_pt1').val();
         let pt2 = jQuery('#reverse_pt2').val();
         let group = jQuery("#"+varid+' .form-group.latlng');
@@ -370,24 +376,24 @@ if( typeof(TZR.Gpath) == "undefined" ) {
         // si les deux point existent
         if( pt1 != "" && pt2 != "" && pt1 >= 0 && pt1 < group.length && pt2 >= 0 && pt2 < group.length){
           if( pt1 == pt2 ) return;
-          TZR.Gpath.reverse(pt1, pt2, varid);
-          TZR.Gpath.setMap(varid, options);
+          TZR.GPath.reverse(pt1, pt2, varid);
+          TZR.GPath.setMap(varid, options);
         }else{
-          console.warn("Un des points séléctionné dans la liste déroulante n'existe. Vérifier leur construcion dans Gpath.js" )
+          console.warn("Un des points séléctionné dans la liste déroulante n'existe. Vérifier leur construcion dans GPath.js" )
         }
       });
 
       // FORM EVENT
-      gPath.on("click", "button.addlatlng", function(){
-        TZR.Gpath.addInputGroup(varid, options);     
+      GPath.on("click", "button.addlatlng", function(){
+        TZR.GPath.addInputGroup(varid, options);     
         jQuery("#"+varid+" .form-group.latlng").last().children('button.viewmapone').trigger('click');
       });
-      gPath.on("click", ".delete-group", function(e){
-        TZR.Gpath.removeInputGroup(e.currentTarget, varid);
+      GPath.on("click", ".delete-group", function(e){
+        TZR.GPath.removeInputGroup(e.currentTarget, varid);
       });
-      gPath.on('click', 'button.viewmapone', function(e){
+      GPath.on('click', 'button.viewmapone', function(e){
         options.order = e.currentTarget.parentElement.dataset.order;
-        TZR.Gpath.openOSMMap(options, 'one');
+        TZR.GPath.openOSMMap(options, 'one');
       });
     }
   };
