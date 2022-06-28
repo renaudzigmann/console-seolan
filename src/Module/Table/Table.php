@@ -1033,7 +1033,17 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     return \Seolan\Core\Shell::toScreen1($tplentry,$r);
   }
 
-  /// Retourne la requete permattant de recuperer tous les objets suivant le contexte (selection, recherche en cours...)
+  // Retourne une chaine de caractère avec la liste de tous les champs pour une requête sql.
+  // La liste est générée via get_sqlSelectExpr() pour prendre en compte les cas particulier.
+  function getAllFieldsListForSqlRequest(){
+    $list = [];
+    foreach($this->xset->desc as $field_name => $field) {
+      $list[] = $field->get_sqlSelectExpr();
+    }
+    return implode(',',$list);
+  }
+
+  /// Retourne la requete permettant de recuperer tous les objets suivant le contexte (selection, recherche en cours...)
   function getContextQuery($ar,$queryonly=true){
     $p=new \Seolan\Core\Param($ar,array());
     $oidsel=$p->get('_selected');
@@ -1055,7 +1065,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
 	$q=$r['select'];
       }
       if(!$noreg)
-        $q = preg_replace('@select (.*) from (.*)$@iU','select '.$this->table.'.* from $2',$q);
+        $q = preg_replace('@select (.*) from (.*)$@iU','select '.$this->getAllFieldsListForSqlRequest().' from $2',$q);
     }else{
       $q=$this->xset->select_query(array("cond"=>array()));
     }
