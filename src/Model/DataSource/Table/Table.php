@@ -221,7 +221,7 @@ class Table extends \Seolan\Core\DataSource\DataSource {
         $select = $this->base.'.KOID '.$fields;
       }
     }
-    if(empty($select)) $select = $this->base.'.*';
+    if(empty($select)) $select = $this->get_sqlSelectFields('*',$this->base);
     $where = @$args['where'];
     $tr=$this->getTranslatable();
     if($tr==TZR_LANG_BASEDLANG) {
