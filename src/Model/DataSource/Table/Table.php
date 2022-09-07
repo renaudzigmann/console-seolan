@@ -915,10 +915,10 @@ class Table extends \Seolan\Core\DataSource\DataSource {
   function sql_delField($field) {
     $def=$this->desc[$field];
     // drop column col_name
-    $requete = "alter table " . $this->base . " drop $field";
+    $requete = "alter table " . $this->base . " drop `$field`";
     getDB()->execute($requete);
     if(\Seolan\Core\System::tableExists('A_'.$this->base)) {
-      $requete = "alter table A_" . $this->base . " drop $field";
+      $requete = "alter table A_" . $this->base . " drop `$field`";
       getDB()->execute($requete);
     }
   }
