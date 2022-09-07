@@ -347,7 +347,7 @@ if(!defined('TZR_UPGRADE_RELEASE')) define('TZR_UPGRADE_RELEASE',['\Seolan\Modul
 if(!defined('TZR_LOG_DAYS')) define('TZR_LOG_DAYS',30);
 if(!defined('TZR_LOG_MAXSIZE')) define('TZR_LOG_MAXSIZE',1000000);
 
-define('TZR_STATUS','testing');
+define('TZR_STATUS','stable');
 
 if(!defined('TZR_MODTABLE_SUBMOD_MAX')) define('TZR_MODTABLE_SUBMOD_MAX',1);
 define('TZR_XMODTABLE_BROWSE_PAGESIZE',   40);
