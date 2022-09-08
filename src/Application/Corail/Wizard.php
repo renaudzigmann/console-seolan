@@ -4,6 +4,8 @@ use \Seolan\Core\DataSource\DataSource;
 use \Seolan\Model\DataSource\Table\Table as DSTable;
 use \Seolan\Core\Module\Module;
 use \Seolan\Core\Logs;
+use \Seolan\Core\Shell;
+use \Seolan\Library\Dir;
 
 class Wizard extends \Seolan\Core\Application\Wizard{
   protected static $chartetab = 'CHARTE';
@@ -160,8 +162,9 @@ class Wizard extends \Seolan\Core\Application\Wizard{
       'COMPULSORY'=>false,
       'LABEL'=>'Photo : module',
       'DPARAM'=>array('filter'=>'TOID=8001 or TOID=25',
-		      'group'=>[TZR_DEFAULT_LANG=>'Actualités'])
+		      'fgroup'=>[TZR_DEFAULT_LANG=>'Actualités'])
     ));
+
 
     $fields['partenaire']=\Seolan\Core\Field\Field::objectFactory((object)array(
       'FIELD'=>'partenaire',
@@ -193,20 +196,32 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 	'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
 	'COMPULSORY'=>false,
 	'LABEL'=>'Créer et initialiser une table charte',
-	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mises en page'])
+	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mise en page'])
       ));
     } else {
-
+      // recherche si un module existe sur la table
+      $mods = Module::modulesUsingTable(static::$chartetab);
+      if (empty($mods)){
+	Shell::alert('La table '.static::$chartetab.' existe, sans module');
+      } else {
+	Shell::alert('La table charte existe, module(s) : '.$this->formatModlist($mods),'info');
+      }
+      
       $fields['charte']=\Seolan\Core\Field\Field::objectFactory((object)array(
 	'FIELD'=>'charte',
 	'FTYPE'=>'\Seolan\Field\Link\Link',
 	'COMPULSORY'=>false,
 	'LABEL'=>'Charte',
 	'TARGET'=>static::$chartetab,
-	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mises en pages',
-				   'filter'=>'TOID=25'])
+	'DPARAM'=>['fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mise en page']]
       ));
-
+      $fields['newcharte']=\Seolan\Core\Field\Field::objectFactory((object)array(
+	'FIELD'=>'newcharte',
+	'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
+	'COMPULSORY'=>false,
+	'LABEL'=>'Initialiser une nouvelle charte',
+	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mise en page'])
+      ));
     }
     if (!DataSource::sourceExists(static::$stylestab)){
       $fields['newtablestyle']=\Seolan\Core\Field\Field::objectFactory((object)array(
@@ -214,9 +229,24 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 	'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
 	'COMPULSORY'=>false,
 	'LABEL'=>'Créer et initialiser une table des mise en page (STYLES)',
-	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mises en page'])
+	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mise en page'])
+      ));
+    } else {
+      $mods = Module::modulesUsingTable(static::$stylestab);
+      if (empty($mods)){
+	Shell::alert('La table des mise en page existe, sans module', 'info');
+      } else {
+	Shell::alert('La table des mises en page existe, module(s) : '.$this->formatModlist($mods),'info');
+      }
+      $fields['newstyles']=\Seolan\Core\Field\Field::objectFactory((object)array(
+	'FIELD'=>'newstyles',
+	'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
+	'COMPULSORY'=>false,
+	'LABEL'=>'Ajouter un jeu de mise en page',
+	'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Charte/Mise en page'])
       ));
     }
+  
     $fields['bingtag']=\Seolan\Core\Field\Field::objectFactory((object)array(
       'FIELD'=>'bingtag',
       'FTYPE'=>'\Seolan\Field\ShortText\ShortText',
@@ -269,6 +299,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
     return $fields;
   }
+  private function formatModlist($mods){
+    $list = [];
+    foreach($mods as $moid=>$name){
+      $mod = Module::objectFactory(['interactive'=>false,'moid'=>$moid,'tplentry'=>TZR_RETURN_DATA]);
+      $list[] = "{$mod->group}>{$name}";
+    }
+    return implode(',', $list);
+  }
   /// valeurs par défaut pour certains champs
   protected function defaultsValues(){
     $newtabs = [];
@@ -318,15 +356,18 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     $mgroup = $this->_app['step1']['name'];
 
     // charte
-    if (empty($params['charte'])){
-      if ($params['newtablecharte'] == 1){
+    if (empty($params['charte']) && $params['newtablecharte'] == 1){
         static::createModuleAndTableCharte($mgroup);
-
-      }
+    } elseif ($params['newcharte']==1){
+      static::createCharte($mgroup);
     }
     // styles
-    if ($params['newtablestyle'] == 1)
+    if (isset($params['newtablestyle']) && $params['newtablestyle'] == 1){
       static::createModuleAndTableStyle($mgroup);
+    } elseif ($params['newstyles']==1){
+      static::createStyles($mgroup);
+    }
+    unset($this->_app['step1']['params']['newstyles']); 
 
     // modules
     $this->createModules();
@@ -334,20 +375,32 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     // ressources
     static::checkLocalAssets();
 
+    if ($params['newtablecharte'] == 1 || $params['newcharte'] == 1){
+      $charteoid = getDB()->fetchOne('select koid from '.static::$chartetab.' where meta01=?', [$mgroup]);
+      $this->_app['step1']['params']['charte']=$charteoid; //$r;
+    }
+    unset($this->_app['step1']['params']['newcharte']);
+
     return parent::iend($ar);
 
   }
-  /// ajout des assets locaux par défaut
+  /**
+   * ajout des assets locaux par défaut
+   * copie dans l lib locale
+   * ajout des liens dans le www pointant sur la lib locale
+   */
+  
   static protected function checkLocalAssets(){
     $localdir = "{$GLOBALS['LOCALLIBTHEZORRO']}Corail";
     if (!file_exists($localdir)){
       mkdir($localdir);
-      symlink("{$GLOBALS['LIBTHEZORRO']}src/Application/Corail/public", "{$localdir}/public");
+      Dir::copy("{$GLOBALS['LIBTHEZORRO']}src/Application/Corail/public", "{$localdir}/public", true);
     }
+
     foreach(['css', 'fonts', 'images', 'js'] as $n){
       if (!file_exists(TZR_WWW_DIR.$n)){
         symlink("{$localdir}/public/{$n}",TZR_WWW_DIR.$n);
-      }
+      } 
     }
 
   }
@@ -358,37 +411,35 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     // création d'un infotree
     if (empty($this->_app['step1']['params']['infotree']) && $this->_app['step1']['params']['newinfotree'] == 1){
       $linked[] = $this->_app['step1']['params']['infotree'] = static::createInfoTreeModule($mgroup, $this->_app['step1']['params']);
-      unset($this->_app['step1']['params']['newinfotree']); // on veut pas mémoriser ça
     }
-
+    unset($this->_app['step1']['params']['newinfotree']); // on veut pas mémoriser ça
+    
     // news : lien vers les rubriques;
     if (empty($this->_app['step1']['params']['news']) && $this->_app['step1']['params']['newnews'] == 1){
       // récupération du nom de la table des rubriques
       $itparams = Module::findParam($this->_app['step1']['params']['infotree']);
       $linked[] = $this->_app['step1']['params']['news'] = static::createNewsModule($mgroup, $itparams['MPARAM']['table']);
-      unset($this->_app['step1']['params']['newnews']);
-
     }
-
+    unset($this->_app['step1']['params']['newnews']);
+    
     // abonnés à la news Letters
     if (empty($this->_app['step1']['params']['nl']) && $this->_app['step1']['params']['newnl'] == 1){
       $linked[] = $this->_app['step1']['params']['nl'] = static::createNewsLetterSubscribersModule($mgroup);
-      unset($this->_app['step1']['params']['newnl']);
     }
+    unset($this->_app['step1']['params']['newnl']);
 
     // médiatheque : ! modules collection et mots clés associés
     if (empty($this->_app['step1']['params']['photo']) && $this->_app['step1']['params']['newphoto'] == 1){
       list($this->_app['step1']['params']['photo'], $linked[], $linked[]) = static::createMediaModule($mgroup);
       $linked[] = $this->_app['step1']['params']['photo'];
-      unset($this->_app['step1']['params']['newphoto']);
-
     }
+    unset($this->_app['step1']['params']['newphoto']);
 
     // Partenaires
     if (empty($this->_app['step1']['params']['partenaire']) && $this->_app['step1']['params']['newpartenaire'] == 1){
       $linked[] = $this->_app['step1']['params']['partenaire'] = static::createPartnerModule($mgroup);
-      unset($this->_app['step1']['params']['newpartenaire']);
     }
+    unset($this->_app['step1']['params']['newpartenaire']);
 
     $this->_app['step1']['modules'] = array_merge($linked, is_array($this->_app['step1']['modules'])?$this->_app['step1']['modules']:[]);
 
@@ -459,8 +510,15 @@ class Wizard extends \Seolan\Core\Application\Wizard{
          'title'=>'Accueil',
          'PUBLISH'=>1];
 
+    $defStyle = getDB()->fetchOne('select koid from '.static::$stylestab.' where title = ?', ["Charte Corail {$mgroup} 1 col"]);
+
     foreach ($defpages as $page) {
+
+      if (isset($defStyle))
+	$page['style'] = $defStyle;
+
       $dsrub->procInput($page);
+	  
     }
 
     return $moid;
@@ -716,7 +774,7 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     'auto_translate'=>0,
     'classname'=>'\Seolan\Model\DataSource\Table\Table',
     'btab'=>static::$stylestab,
-    'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Styles / Mises en page"]
+    'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Styles / Mise en page"]
      ]);
     // $boid = $result['boid'];
     // $result['error'])
@@ -732,22 +790,27 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
     DataSource::clearCache();
 
-    $ds = DataSource::objectFactoryHelper8(static::$stylestab);
-    foreach([
-    ["Charte Corail App 2 cols", "css/style-2cols.css", "application:index-2cols.html"],
-		["Charte Corail App 3 cols", "css/style-3cols.css", "application:index-3cols.html"],
-    ["Charte Corail App 1 col", "css/style-1col.css", "application:index-1col.html"]
-      ] as list($title, $css, $tpl)){
-      $ds->procInput(['_options'=>['local'=>1],
-    'title'=>$title,
-    'style'=>$css,
-    'tpl'=>$tpl]);
-    }
-    $moid = (new \Seolan\Module\Table\Wizard())->quickCreate("Mises en page",
+
+    static::createStyles($group);
+   
+    $moid = (new \Seolan\Module\Table\Wizard())->quickCreate("Mise en page",
     ['table'=>static::$stylestab,
     'group'=>$group]);
     Logs::notice(__METHOD__,"module 'Mise en page' ($moid) created in group $group");
 
+  }
+  protected static function createStyles($group){
+    $ds = DataSource::objectFactoryHelper8(static::$stylestab);
+    foreach([
+      ["Charte Corail {$group} 2 cols", 'css/style-2cols.css', 'application:index-2cols.html'],
+      ["Charte Corail {$group} 3 cols", 'css/style-3cols.css', 'application:index-3cols.html'],
+      ["Charte Corail {$group} 1 col", 'css/style-1col.css', 'application:index-1col.html']
+    ] as list($title, $css, $tpl)){
+      $ds->procInput(['_options'=>['local'=>1],
+		      'title'=>$title,
+		      'style'=>$css,
+		      'tpl'=>$tpl]);
+    }
   }
   /// charte
   static protected function createModuleAndTableCharte(string $group){
@@ -764,7 +827,8 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
-    $ds = DataSource::objectFactoryHelper8('CHARTE');
+    
+    $ds = DataSource::objectFactoryHelper8(static::$chartetab);
 
     $ds->createField('UPD','Last update','\Seolan\Field\Timestamp\Timestamp',0,0,0,0,0,0,0,0,'%');
     $ds->createField('meta01','Meta : Description','\Seolan\Field\Text\Text',50,1,0,0,1,1,0,0,'%');
@@ -801,18 +865,19 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     $ds->createField('social_stream_activated','Activation du mur des réseaux sociaux','\Seolan\Field\Boolean\Boolean',0,32,0,0,0,0,0,0,'%');
 
     DataSource::clearCache();
-    $ds = DataSource::objectFactoryHelper8('CHARTE');
+
+    static::createCharte($group);
     
     $moid = (new \Seolan\Module\Table\Wizard())->quickCreate("Charte",
     ['table'=>static::$chartetab,
-    'group'=>$group]);
-    Logs::notice(__METHOD__,"module 'Charte' ($moid) created in group $group");
-
-
-    // Insertion d'une ligne vide
+     'group'=>$group]);
     
+    Logs::notice(__METHOD__,"module 'Charte' ($moid) created in group $group");
+  }
+  protected static function createCharte($group){
+    // Insertion d'une ligne vide
+    $ds = DataSource::objectFactoryHelper8(static::$chartetab);
     $ds->procInput(['_options'=>['local'=>true],
 		    'meta01'=>$group]);
   }
-
 }
