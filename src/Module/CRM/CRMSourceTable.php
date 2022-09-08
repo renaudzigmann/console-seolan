@@ -10,12 +10,17 @@ class CRMSourceTable extends \Seolan\Module\Table\Table implements CRMSourceInte
 
   public $CRMEmail;
   public $CRMFields;
+  public $CRMTypes;
 
   public function initOptions() {
     parent::initOptions();
     if (\Seolan\Core\Module\Module::getMoid(XMODCRM2_TOID)) {
       $this->_options->setOpt('Champ Email', 'CRMEmail', 'field', ['type' => '\Seolan\Field\ShortText\ShortText'], '', 'Source CRM');
       $this->_options->setOpt('Champs à consolider', 'CRMFields', 'field', ['multivalued' => true], '', 'Source CRM');
+      $this->_options->setOpt('Type de contact', 'CRMTypes', 'multiplelist', [
+        'labels' => ['Marketing', 'Commercial', 'Technique'],
+        'values' => ['Marketing', 'Commercial', 'Technic']], '', 'Source CRM');
+      $this->_options->setComment('Type tous les contacts de ce module', 'CRMTypes');
     }
   }
 
@@ -57,6 +62,9 @@ class CRMSourceTable extends \Seolan\Module\Table\Table implements CRMSourceInte
         if (empty($contact[$fieldName])) {
           $contact[$fieldName] = $row[$fieldName];
         }
+      }
+      foreach ($this->CRMTypes as $type) {
+        $contact[$type] = true;
       }
       $contact['Sources'][] = $row['KOID'];
     }
