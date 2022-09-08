@@ -23,6 +23,7 @@ class Wizard extends \Seolan\Core\Module\Wizard {
         'service-public.html' => '16 - Comarquage service public',
         'roadmap.html'        => '17 - Itinéraire',
         'nivo-slider.html'    => '18 - Slider',
+	'bootstrap-elements.html' => '21 - Composants bootstrap',
         'nl-4-images.html'    => 'NL - 4 images',
         'nl-download.html'    => 'NL - Fichier à télécharger',
         'nl-highlight.html'   => 'NL - Texte mis en valeur',
@@ -385,7 +386,7 @@ class Wizard extends \Seolan\Core\Module\Wizard {
     $moid = $p->get('modid');
     if (empty($moid)) return \Seolan\Core\Logs::notice('\Seolan\Core\Module\Module::createDefaultTemplates', 'No MOID specified');
     // On récupère les titres des templates actuels afin de vérifier si les templates par défaut ont déjà été insérés (à défaut d'avoir un ID)
-    $xds_templates = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS=TEMPLATES');
+    $xds_templates = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('SPECS=TEMPLATES');
     $br_templates = $xds_templates->browse(['cond'=>['modid'=>['=',$moid]],'pagesize'=>9999]);
     $current_titles = [];
     

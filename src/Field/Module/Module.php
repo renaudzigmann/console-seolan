@@ -16,7 +16,7 @@ class Module extends \Seolan\Core\Field\Field {
       $r->text=$modtmp->getLabel();
       $group = \Seolan\Core\Labels::getTextSyslabel('Seolan_Core_General','group');
       $i18n = \Seolan\Core\Labels::getTextSyslabel('Seolan_Core_General','i18ncolon');
-      $r->html = "<span title='{$group}{$i18n}{$modtmp->group}'>{$r->text}</span>";
+      $r->html = "<span title='{$group}{$i18n}{$modtmp->group}, moid{$i18n}{$r->raw}'>{$r->text}</span>";
     }
     return $r;
   }

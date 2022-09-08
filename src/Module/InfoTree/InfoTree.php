@@ -2603,7 +2603,7 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
 
   /// Insertion d'une nouvelle section
   function insertsection($ar=NULL) {
-    $p = new \Seolan\Core\Param($ar, array('level'=>1,'tplentry'=>'it','toc'=>'1','maxlevel'=>1));
+    $p = new \Seolan\Core\Param($ar, ['level'=>1,'tplentry'=>'it','toc'=>'1','maxlevel'=>1]);
     $tplentry = $p->get("tplentry");
     $oidit = $p->get("oidit");
     $lang = \Seolan\Core\Shell::getLangData();
@@ -2613,14 +2613,14 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     $ors=getDB()->fetchRow('select * from TEMPLATES where KOID=?',array($oidtpl));
     if($ors) {
       $tabledst=$ors['tab'];
-      $xst=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS='.$tabledst);
+      $xst=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8($tabledst);
       $ar2=$ar;
       $ar2['tplentry']=TZR_RETURN_DATA;
       $ar2['LANG_DATA']=$lang;
       $ret=$xst->procInput($ar2);
-      $nitoid=$this->insertSectionInIt(array('oidit'=>$oidit,'oidsection'=>$ret['oid'],'oidtpl'=>$oidtpl,'position'=>$position,'zone'=>$zone));
+      $nitoid=$this->insertSectionInIt(['oidit'=>$oidit,'oidsection'=>$ret['oid'],'oidtpl'=>$oidtpl,'position'=>$position,'zone'=>$zone]);
       $this->updatePageCache($oidit);
-      return array('oid'=>$ret['oid'],'itoid'=>$nitoid);
+      return ['oid'=>$ret['oid'],'itoid'=>$nitoid];
     }
   }
 

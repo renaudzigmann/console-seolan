@@ -3,9 +3,7 @@ namespace Seolan\Application\Corail;
 use \Seolan\Core\DataSource\DataSource;
 use \Seolan\Model\DataSource\Table\Table as DSTable;
 use \Seolan\Core\Module\Module;
-use \Seolan\Core\Logs;
-use \Seolan\Core\Shell;
-use \Seolan\Library\Dir;
+use \Seolan\Core\{Logs,Shell,Dir,System,Kernel};
 
 class Wizard extends \Seolan\Core\Application\Wizard{
   protected static $chartetab = 'CHARTE';
@@ -75,6 +73,35 @@ class Wizard extends \Seolan\Core\Application\Wizard{
       'LABEL'=>'Alias menu bas',
       'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Gestionnaire de rubrique'])
     ));
+    // page contact
+    $fields['infotreecontact']=\Seolan\Core\Field\Field::objectFactory((object)array(
+      'FIELD'=>'infotreecontact',
+      'FTYPE'=>'\Seolan\Field\ShortText\ShortText',
+      'COMPULSORY'=>false,
+      'LABEL'=>'Alias page contact',
+      'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Gestionnaire de rubrique'])
+    ));
+    $fields['infotreementions']=\Seolan\Core\Field\Field::objectFactory((object)array(
+      'FIELD'=>'infotreementions',
+      'FTYPE'=>'\Seolan\Field\ShortText\ShortText',
+      'COMPULSORY'=>false,
+      'LABEL'=>'Alias page mentions légales',
+      'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Gestionnaire de rubrique'])
+    ));
+    $fields['infotresubnl']=\Seolan\Core\Field\Field::objectFactory((object)array(
+      'FIELD'=>'infotreesubnl',
+      'FTYPE'=>'\Seolan\Field\ShortText\ShortText',
+      'COMPULSORY'=>false,
+      'LABEL'=>'Alias inscription/désinscription NL',
+      'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Gestionnaire de rubrique'])
+    ));
+    $fields['infotreeplansite']=\Seolan\Core\Field\Field::objectFactory((object)array(
+      'FIELD'=>'infotreeplansite',
+      'FTYPE'=>'\Seolan\Field\ShortText\ShortText',
+      'COMPULSORY'=>false,
+      'LABEL'=>'Alias page plan du site',
+      'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Gestionnaire de rubrique'])
+    ));
     $fields['infotreederoule']=\Seolan\Core\Field\Field::objectFactory((object)array(
       'FIELD'=>'infotreederoule',
       'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
@@ -104,15 +131,23 @@ class Wizard extends \Seolan\Core\Application\Wizard{
       'LABEL'=>'Nouveau module',
       'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'News Letters'])
     ));
-
+    // module contact existant
     $fields['contact']=\Seolan\Core\Field\Field::objectFactory((object)array(
       'FIELD'=>'contact',
       'FTYPE'=>'\Seolan\Field\Module\Module',
       'COMPULSORY'=>false,
-      'LABEL'=>'Contact : module',
+      'LABEL'=>'Module',
+      'DPARAM'=>array('filter'=>'toid='.XMODCRM_TOID,'fgroup'=>[TZR_DEFAULT_LANG=>'Contacts'])
+    ));
+    // création d'un nouveau module contact
+    $fields['newcontact']=\Seolan\Core\Field\Field::objectFactory((object)array(
+      'FIELD'=>'newcontact',
+      'FTYPE'=>'\Seolan\Field\Boolean\Boolean',
+      'COMPULSORY'=>false,
+      'LABEL'=>'Nouveau module',
       'DPARAM'=>array('fgroup'=>[TZR_DEFAULT_LANG=>'Contacts'])
     ));
-
+    
     $fields['photo']=\Seolan\Core\Field\Field::objectFactory((object)array(
       'FIELD'=>'photo',
       'FTYPE'=>'\Seolan\Field\Module\Module',
@@ -314,10 +349,16 @@ class Wizard extends \Seolan\Core\Application\Wizard{
       $newtabs['newtablecharte'] = 1;
     if (!DataSource::sourceExists(static::$stylestab))
       $newtabs['newtablestyle'] = 1;
-    return array_merge($newtabs, ['infotreebottom'=>'bottom',
-	    'infotreetop'=>'site',
-	    'infotreerror'=>'error404',
-	    'infotreehome'=>'home']);
+    return array_merge($newtabs, [
+      'infotreebottom'=>'bottom',
+      'infotreetop'=>'site',
+      'infotreerror'=>'page-non-trouvee',
+      'infotreehome'=>'home',
+      'infotreecontact'=>'contact',
+      'infotreementions'=>'mentions',
+      'infotreeplansite'=>'plansite',
+      'infotreesubnl'=>'newsletter_OK',
+    ]);
   }
 
   function ieditstep2($ar=NULL){
@@ -405,14 +446,29 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
   }
   /// création des modules et mise à jour des moid
+  /// dans le cas de l'infotree, création des pages par défaut
   protected function createModules(){
     $linked = [];
     $mgroup = $this->_app['step1']['name'];
+
+    // module contact (il en faut le moid pour les pages par defaut éventuelles)
+    $contactmoid = null;
+    if (empty($this->_app['step1']['params']['contact']) && $this->_app['step1']['params']['newcontact'] == 1){
+      $contactmoid = $linked[] = $this->_app['step1']['params']['contact'] = static::createContactModule($mgroup);
+    } elseif (!empty($this->_app['step1']['params']['contact'])) {
+      $contactmoid = $this->_app['step1']['params']['contact'];
+    } else {
+      unset($this->app['step1']['params']['infotreecontact']);
+    }
+    unset($this->_app['step1']['params']['newcontact']);
+    
     // création d'un infotree
     if (empty($this->_app['step1']['params']['infotree']) && $this->_app['step1']['params']['newinfotree'] == 1){
-      $linked[] = $this->_app['step1']['params']['infotree'] = static::createInfoTreeModule($mgroup, $this->_app['step1']['params']);
+      $itmoid = $linked[] = $this->_app['step1']['params']['infotree'] = static::createInfoTreeModule($mgroup,
+												      $this->_app['step1']['params'],
+												      ['contactmoid'=>$contactmoid]);
     }
-    unset($this->_app['step1']['params']['newinfotree']); // on veut pas mémoriser ça
+    unset($this->_app['step1']['params']['newinfotree']);
     
     // news : lien vers les rubriques;
     if (empty($this->_app['step1']['params']['news']) && $this->_app['step1']['params']['newnews'] == 1){
@@ -458,7 +514,6 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     }
     return $oid;
   }
-
   /*
   * Suppression de la charte si elle n'est pas utilisé dans une autre application
   *
@@ -476,12 +531,18 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     }
     return false;
   }
-
+  /// suppression des alias crées par defaut dans le gestionnaire de rubrique de base
+  private static function delDefaultPage($dsrub, $alias){
+    $oid = getDB()->fetchOne("select koid from {$dsrub->getTable()} where alias=?",[$alias]);
+    if ($oid)
+      $dsrub->del(['_options'=>['local'=>true],
+		   'oid'=>$oid]);
+  }
   /// module gestionnaire de rubriques
-  static protected function createInfoTreeModule(string $mgroup, array $params):int{
+  static protected function createInfoTreeModule(string $mgroup, array $params, $options=[]):int{
     $wd = new \Seolan\Module\InfoTree\Wizard();
     $wd->_module = (Object)[
-    "modulename"=>"Rubriques",
+    "modulename"=>$params['modulename']??'Rubriques',
     "group"=>$mgroup,
     "comment[TZR_DEFAULT_LANG]"=>"",
     "do_create_structure"=>1,
@@ -509,42 +570,256 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
     $dsrub = DataSource::objectFactoryHelper8($itparams['MPARAM']['table']);
 
+    static::delDefaultPage($dsrub, 'home');
+    static::delDefaultPage($dsrub, 'error404');
+    
     $defpages = [];
     if (!empty($params['infotreetop'])){
-      $defpages[] = ['alias'=>$params['infotreetop'],
-         'title'=>'Home',
-         'PUBLISH'=>1];
-        // il y a un home par défaut quand le module vient d'être créé
-        $oidhome = getDB()->fetchOne("select koid from {$itparams['MPARAM']['table']} where alias=?",['home']);
-        if ($oidhome)
-          $dsrub->del(['_options'=>['local'=>true],'oid'=>$oidhome]);
+      $defpages[] = ['alias'=>$params['infotreetop'], 'title'=>'Menu haut'];
     }
-    if (!empty($params['infotreebottom']))
-      $defpages[] = ['alias'=>$params['infotreebottom'],
-         'title'=>'Menu bas',
-         'PUBLISH'=>1];
-    if (!empty($params['infotreerror']) && $params['infotreerror'] != 'error404')
-      $defpages[] = ['alias'=>$params['infotreerror'],
-         'title'=>'Page non trouvée',
-         'PUBLISH'=>1];
-    if (!empty($params['infotreehome']) && $params['infotreehome'] != 'home')
-      $defpages[] = ['alias'=>$params['infotreehome'],
-         'title'=>'Accueil',
-         'PUBLISH'=>1];
 
+    if (!empty($params['infotreebottom'])){
+      if (!empty($options['contactmoid'])){
+	$tplinsert = getDB()->fetchOne('select koid from TEMPLATES where gtype=? and title=? and functions like ? and (ifnull(modid,"")="" or modid=?)',
+				       ['function',
+					'Insertion d\'une fiche',
+					'%Table::insert%',
+					$moid]
+	);
+	if (!empty($tplinsert))
+	  $contactPage = ['tpl'=>$tplinsert,
+			  'fields'=>[
+			    '__labelvalidate'=>'OK',
+			    '__nextalias'=>($params['infotreecontact']??'demande').'ok',
+			    '__selectedfields'=>['body','email']
+			  ],
+			  'section'=>['function'=>'insert',
+				      'moid'=>$options['contactmoid']
+			  ]
+	  ];
+	else {
+	  $contactPage = null;
+	  Logs::critical(__METHOD__,"function Table::insert not found in TEMPLATES for module $moid");
+	}
+      }
+      
+      $pages = [];
+      if (!empty($params['infotreecontact'])){
+	$pages[] = ['alias'=>$params['infotreecontact'],
+		    'title'=>'Contact',
+		    'fonctions'=>$contactPage??null];
+      }
+      if (!empty($params['infotreementions'])){
+	$txt1 = <<<EOF
+<p><strong>Copyright photo :</strong><br />
+Ce site appartient à la ......&nbsp; qui dispose de tous les droits de propri&eacute;t&eacute; sur tous ses &eacute;l&eacute;ments, affich&eacute;s ou en bases de donn&eacute;es, sur son architecture technique, son mode de navigation, sa mise en page et sa charte graphique.<br />
+<br />
+<strong>H&eacute;bergement du site :</strong> <a href="http://www.xsalto.com"><strong>Xsalto</strong></a><br />
+<br />
+<strong>Photos et autres illustrations</strong> pr&eacute;sents sur ce site ne sont pas libres de droit. Leur reproduction ou leur transmission n&#39;est permise qu&#39;avec l&#39;accord &eacute;crit pr&eacute;alable de l&#39;auteur, m&ecirc;me quand le nom de celui-ci n&#39;apparait pas. Le Code de la propri&eacute;t&eacute; intellectuelle n&#39;autorise, aux termes des alin&eacute;as 1 et 2 de l&#39;article L. 122-5, que &quot;les copies ou reproductions strictement r&eacute;serv&eacute;es &agrave; l&#39;usage priv&eacute; du copiste et non destin&eacute;es &agrave; une utilisation collective&quot;.<br />
+<br />
+<strong>R&eacute;alisation</strong> <strong>:&nbsp;</strong><a href="http://www.xsalto.com"><strong>Xsalto</strong></a></p>
+EOF;
+	$pages[] = ['alias'=>$params['infotreementions'],
+		    'title'=>'Mentions légales',
+		    'contents'=>[['tpl'=>'01 - Texte seul',
+				  'titsec'=>'© Copyright',
+				  'txt1'=>$txt1]]];
+      }
+      if (!empty($params['infotreeplansite'])){
+	$pages[] = ['alias'=>$params['infotreeplansite'],
+		    'title'=>'Plan du site',
+	'contents'=>['tpl'=>'15 - Plan du site']];
+      }
+      
+      $defpages[] = ['alias'=>$params['infotreebottom'],
+		     'title'=>'Menu bas',
+		     'pages'=>$pages
+		     ];
+    }
+    
+    if (!empty($params['infotreehome']))
+      $defpages[] = ['alias'=>$params['infotreehome'],'title'=>'Accueil'];
+
+    // pages distantes
+    $pagesd = [
+      ['alias'=>'newsletter_ok',
+       'title'=>'Inscription/Desinscription newsletter',
+       'contents'=>['tpl'=>'01 - Texte seul',
+		    'txt1'=>'Votre inscription à la lettre d\'information a bien été prise en compte.']],
+      ['alias'=>'cookies',
+       'title'=>'Cookies',
+       'contents'=>[
+	 ['tpl'=>'06 - Texte mis en valeur ', // ?? titre de page
+	  'titsec'=>'Utilisation des cookies'],
+	 ['tpl'=>'01 - Texte seul',
+	  'titsec'=>'Que sont les cookies',
+	  'txt1'=><<<EOF
+<p>Un cookie est un ensemble de données stock&ées sur votre terminal (ordinateur, tablette, mobile) par le biais de votre navigateur lors de la consultation d'un service en ligne.<br />
+Les cookies enregistrés permettent de reconnaître seulement l'appareil que vous êtes en train d'utiliser. Les cookies ne stockent aucune donnée personnelle sensible mais donnent simplement une information sur votre navigation de fa&çon à ce que votre terminal puisse être reconnu plus tard.</p><p>Prenez en compte que les cookies ne peuvent endommager votre terminal et que, en retour, votre disponibilité nous aide à identifier et à résoudre les possibles erreurs qui pourraient surgir. Les cookies permettent d'identifier une session de navigation, et recueillir ainsi, vos préférences. Les cookies ne peuvent lire des informations stockées dans votre ordinateur.</p>
+EOF
+	  ],
+	  ['tpl'=>'01 - Texte seul',
+	   'titsec'=>'Quels types de cookies utilise ce site Web ?',
+	   'txt1'=><<<EOF
+<p><strong>1/ Les cookies de session</strong><br />
+Ces cookies sont nécessaires pour le bon usage des pages web, la gestion de la session des utilisateurs, la navigation ininterrompue en rappelant les options de langue ou pays. Ils sont utilisés pour identifier l'utilisateur une fois que celui-ci s'est authentifié. Sans ces cookies, plusieurs des fonctionnalités disponibles ne seraient pas opérationnelles. Ces cookies périment lorsque le navigateur est fermé ou après un mois.</p><p><strong>2/ Les cookies de statistiques</strong><br />
+Les cookies analytiques nous permettent de mieux connaître nos internautes et d'améliorer nos services en établissant des statistiques et volumes de fréquentation et d'utilisation.</p>
+EOF
+	  ]
+       ]
+      ]
+    ];
+    
+    if (isset($params['infotreecontact'])) // voir aussi contactmoid contact et newcontact
+      $pagesd[] = ['alias'=>$params['infotreecontact'].'_ok',
+		   'title'=>'Votre demande de renseignement',
+		   'contents'=>['tpl'=>'01 - Texte seul',
+				'txt1'=>'Votre demande a bien été prise en compte.<br>Nous vous répondons dans les plus brefs délais.']];
+    
+    if (!empty($params['infotreeerror']))
+      $pagesd[] = ['alias'=>$params['infotreeerror'],
+		   'title'=>'Page non trouvée',
+		   'contents'=>[['tpl'=>'01 - Texte seul',
+				 'txt1'=>'<strong>La page que vous cherchez n\'existe pas ou a été supprimée.</strong>']]];
+    
+    $defpages[] = ['alias'=>'pages_distantes', 'title'=>'Pages distantes','pages'=>$pagesd];
+
+    // liste des gabarits section statitques pages
+    $sectionsStatiques = getDB()->fetchAll('select koid as tpl, title as titsec, tab from TEMPLATES where modid=? and gtype=? and title not like "NL - %" and title not like "21%"',
+					   [$moid,
+					    'page']);
+    foreach($sectionsStatiques as &$section){
+      foreach(['txt1','txt2','txt3'] as $fn){
+	if (empty($section[$fn]))
+	  $section[$fn] = static::ipsum($fn);
+      }
+    }
+
+    // liste des gabarits section statitques pages
+    $sectionsNL = getDB()->fetchAll('select koid as tpl, title as titsec from TEMPLATES where modid=? and gtype=? and title like "NL - %"',
+			       [$moid,
+				'page']);
+    
+    $defpages[] = ['alias'=>'tests_xsalto',
+		   'title'=>'Tests XSALTO - ne pas supprimer',
+		   'pages'=>[
+		     ['alias'=>'composants-bootstrap',
+		      'title'=>'Composants boostrap',
+		      'contents'=>['tpl'=>'21 - Composants bootstrap',
+				   'titsec'=>'Composants']
+		     ],
+		     
+		     ['alias'=>'tests-des-sections',
+		      'title'=>'Page de tests des sections',
+		      'contents'=>$sectionsStatiques],
+		     
+		     ['alias'=>'page-test-newsletter',
+		      'title'=>'Page de test de la newsletter',
+		      'contents'=>$sectionsNL]
+    ]];
+
+    // mise en page par défaut, si elle existe
     $defStyle = getDB()->fetchOne('select koid from '.static::$stylestab.' where title = ?', ["Charte Corail {$mgroup} 1 col"]);
 
-    foreach ($defpages as $page) {
+    Module::clearCache();
+    
+    $itmod = Module::objectFactory($moid);
 
-      if (isset($defStyle))
-	$page['style'] = $defStyle;
-
-      $dsrub->procInput($page);
-	  
-    }
-
+    static::createPages($itmod, $dsrub, $defpages, $defStyle, null);
+    
     return $moid;
+    
+  }
+  /// ipsum
+  private static function ipsum($label){
+    $ipsum = <<<EOF
+Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione. È sopravvissuto non solo a più di cinque secoli, ma anche al passaggio alla videoimpaginazione, pervenendoci sostanzialmente inalterato. Fu reso popolare, negli anni ’60, con la diffusione dei fogli di caratteri trasferibili “Letraset”, che contenevano passaggi del Lorem Ipsum, e più recentemente da software di impaginazione come Aldus PageMaker, che includeva versioni del Lorem Ipsum.
+Perchè lo utilizziamo?
 
+È universalmente riconosciuto che un lettore che osserva il layout di una pagina viene distratto dal contenuto testuale se questo è leggibile. Lo scopo dell’utilizzo del Lorem Ipsum è che offre una normale distribuzione delle lettere (al contrario di quanto avviene se si utilizzano brevi frasi ripetute, ad esempio “testo qui”), apparendo come un normale blocco di testo leggibile. Molti software di impaginazione e di web design utilizzano Lorem Ipsum come testo modello. Molte versioni del testo sono state prodotte negli anni, a volte casualmente, a volte di proposito (ad esempio inserendo passaggi ironici).
+EOF;
+    return "$label $ipsum";
+  }
+  /// création d'un jeux de pages
+  protected static function createPages($itmod, $dsrub, $pages, $defStyle, $linkup=null){
+    $i=0;
+    foreach ($pages as $page) {
+      $ret = $dsrub->procInput(['_options'=>['local'=>1],
+				'alias'=>$page['alias'],
+				'linkup'=>$linkup??null,
+				'title'=>$page['title'],
+				'style'=>$defStyle,
+				'corder'=>$i++,
+				'PUBLISH'=>1
+      ]);
+      if (isset($page['pages'])){
+	static::createPages($itmod, $dsrub, $page['pages'], $defStyle, $ret['oid']);
+      }
+      if (isset($page['contents'])){
+	static::addContent($itmod, $page['contents'], $ret['oid']);
+      }
+      if (isset($page['fonctions'])){
+	static::addSectionFunctions($itmod, $page['fonctions'], $ret['oid']);
+      }
+    }
+  }
+  /// ajout d'une section fonction à une rubrique
+  protected static function addSectionFunctions($itmod, $funcs, $oidit){
+    if (!isset($funcs[0]))
+      $funcs = [$funcs];
+    $i=0;
+    foreach($funcs as $func){
+      $oidtpl = null;
+      if (Kernel::isAKoid($func['tpl'])){
+	$oidtpl = $func['tpl'];
+      }
+      if (!empty($oidtpl)){
+	$arInsert = ['oidit'=>$oidit,
+		     'oidtpl'=>$oidtpl,
+		     'position'=>$i++,
+		     'zone'=>null,
+		     'section'=>['function'=>$func['section']['function'],
+				 'moid'=>$func['section']['moid']]];
+	$arInsert = array_merge($arInsert, $func['fields']);
+	$ret = $itmod->insertfunction($arInsert);
+
+	list($dyntable) = explode(':',$ret['oid']);
+	getDB()->execute("update $dyntable set PUBLISH=1 where koid=?", [$ret['oid']]);
+	
+      } else {
+	Logs::critical(__METHOD__,"tpl not found : {$func['tpl']}");
+      }
+    }
+  }
+  /// ajout de section à une rubrique
+  protected static function addContent($itmod, $contents, $oidit){
+    if (!isset($contents[0]))
+      $contents = [$contents];
+    $i=0;
+    $oidtpl = null;
+    foreach($contents as $content){
+      $oidtpl = null;
+      if (Kernel::isAKoid($content['tpl'])){
+	$oidtpl = $content['tpl'];
+      } else {
+	$oidtpl = getDB()->fetchOne('select koid from TEMPLATES where modid=? and title=?',
+				    [$itmod->_moid,$content['tpl']]);
+      }
+      if (!empty($oidtpl)){
+	$itmod->insertSection(['oidit'=>$oidit,
+			       'oidtpl'=>$oidtpl,
+			       'position'=>$i++,
+			       'zone'=>null,
+			       'PUBLISH'=>1,
+			       'txt1'=>$content['txt1']??null,
+			       'txt2'=>$content['txt2']??null,
+			       'txt3'=>$content['txt3']??null,
+			       'titsec'=>$content['titsec']??null]);
+      } else {
+	Logs::critical(__METHOD__,"tpl not found : $tpl");
+      }
+    }    
   }
   /// module photo / médiathèque
   static protected function createMediaModule(string $group):array{
@@ -586,6 +861,7 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   }
   /// module des partenaires
   static protected function createPartnerModule(string $group):int{
+
     $btab = DSTable::newTableNumber('CPARTNERS');
     $bname = "{$group} - Partenaires";
     $modname = "Partenaires";
@@ -593,6 +869,36 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     $moid = (new \Seolan\Module\Table\Wizard())->quickCreate($modname, ['table'=>$btab,
 								'group'=>$group]);
     Logs::notice(__METHOD__,"module : $modname in group $group created");
+    return $moid;
+  }
+  /// module contacts
+  static protected function createContactModule(string $group):int{
+
+    $btab = DSTable::newTableNumber('CCRM');
+    $bname = "{$group} - Contacts";
+    $modname = "Contacts";
+    
+    static::createContactTable($btab,$bname);
+
+    if(!System::tableExists('LETTERS'))
+      DataSource::createLetters();
+
+    $wd = new \Seolan\Module\Contact\Wizard();
+    $moid = $wd->quickCreate($modname,
+			     [
+			       'table'=>$btab,
+			       'group'=>$group,
+
+			       'mailingokfield'=>'emailok',
+			       'emailfield'=>'email',
+			       'processedfield'=>'pok',
+			       'archivefield'=>'arch',
+			       
+			     ]
+    );
+
+    Logs::notice(__METHOD__,"module : $modname in group $group created");
+    
     return $moid;
   }
   /// module abonnés news Letter
@@ -619,14 +925,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   /// table des collections
   static protected function createMediaCollectionTable(string $btab, string $bname){
     $result = DSTable::procNewSource(
-    ['translatable'=>1,
-    'auto_translate'=>1,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>$btab,
-    'bname'=>[TZR_DEFAULT_LANG=>$bname]
-     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
+      ['translatable'=>0,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>0
+    ]);
 
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
@@ -640,14 +946,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   /// table les mots clés
   static protected function createMediaKeyWordsTable(string $btab, string $bname){
     $result = DSTable::procNewSource(
-      ['translatable'=>1,
-      'auto_translate'=>1,
-      'classname'=>'\Seolan\Model\DataSource\Table\Table',
-      'btab'=>$btab,
-      'bname'=>[TZR_DEFAULT_LANG=>$bname]
-       ]);
-      // $boid = $result['boid'];
-      // $result['error'])
+      ['translatable'=>0,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>0
+    ]);
 
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
@@ -661,14 +967,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   /// table des média
   static protected function createMediaMainTable(string $btab, string $bname, $colbtab, $keywordsbtab){
     $result = DSTable::procNewSource(
-    ['translatable'=>1,
-    'auto_translate'=>1,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>$btab,
-    'bname'=>[TZR_DEFAULT_LANG=>$bname]
-     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
+      ['translatable'=>1,
+       'auto_translate'=>1,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>1
+    ]);
 
     // Champs
     DataSource::clearCache();
@@ -715,15 +1021,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   /// table des partenaires
   static protected function createPartnerTable($btab, $bname){
     $result = DSTable::procNewSource(
-    ['translatable'=>0,
-    'auto_translate'=>0,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>$btab,
-    'bname'=>[TZR_DEFAULT_LANG=>$bname]
+      ['translatable'=>0,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>1
      ]);
-    // $boid = $result['boid'];
-    // $result['error'])
-
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
     $ds = DataSource::objectFactoryHelper8($btab);
@@ -740,15 +1045,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   /// table des news
   static protected function createNewsTable(string $btab, string $bname, string $tabrub){
     $result = DSTable::procNewSource(
-    ['translatable'=>1,
-    'auto_translate'=>0,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>$btab,
-    'bname'=>[TZR_DEFAULT_LANG=>$bname]
-     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
-
+      ['translatable'=>1,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>1
+    ]);
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
     $ds = DataSource::objectFactoryHelper8($btab);
@@ -765,17 +1069,43 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     $ds->createField('rubq','Rubrique','\Seolan\Field\Thesaurus\Thesaurus',0,9,0,1,1,0,1,0,$tabrub);
     $ds->createField('vigncol','Vignette colonne','\Seolan\Field\Boolean\Boolean',0,10,0,1,1,0,0,0,'%');
   }
+  /// table du module contact
+  static protected function createContactTable(string $btab, string $bname){
+
+    $result = DSTable::procNewSource(
+      ['translatable'=>0,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>0
+    ]);
+
+    // Champs
+    DataSource::clearCache(); // référence à la table nouvellement créée
+    $ds = DataSource::objectFactoryHelper8($btab);
+
+    $ds->createField('UPD','Dernière mise à jour','\Seolan\Field\Timestamp\Timestamp',0,0,0,0,0,1,0,0,'%');
+    $ds->createField('title','Titre','\Seolan\Field\ShortText\ShortText',124,2,0,1,1,1,0,1,'%');
+    $ds->createField('body','Question','\Seolan\Field\Text\Text',70,2,0,1,1,1,0,1,'%');
+    $ds->createField('email','EMail','\Seolan\Field\ShortText\ShortText',124,2,0,1,1,1,0,1,'%');
+    $ds->createField('pok','Traité','\Seolan\Field\Boolean\Boolean',124,2,0,1,1,1,0,1,'%');
+    $ds->createField('arch','Archivé','\Seolan\Field\Boolean\Boolean',124,2,0,1,1,1,0,1,'%');
+    $ds->createField('emailok','Mail OK','\Seolan\Field\Boolean\Boolean',124,2,0,1,1,1,0,1,'%');
+    
+  }
   /// table abonnés newsletter
   static protected function createNewsLetterSubscribersTable(string $btab, string $bname){
     $result = DSTable::procNewSource(
-    ['translatable'=>1,
-    'auto_translate'=>0,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>$btab,
-    'bname'=>[TZR_DEFAULT_LANG=>$bname]
-     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
+      ['translatable'=>1,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>$btab,
+       'bname'=>[TZR_DEFAULT_LANG=>$bname],
+       'own'=>0,
+       'publish'=>0
+    ]);
 
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
@@ -791,15 +1121,16 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   }
   /// styles / mises en page
   static protected function createModuleAndTableStyle(string $group){
+
     $result = DSTable::procNewSource(
-    ['translatable'=>0,
-    'auto_translate'=>0,
-    'classname'=>'\Seolan\Model\DataSource\Table\Table',
-    'btab'=>static::$stylestab,
-    'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Styles / Mise en page"]
-     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
+      ['translatable'=>0,
+       'auto_translate'=>0,
+       'classname'=>'\Seolan\Model\DataSource\Table\Table',
+       'btab'=>static::$stylestab,
+       'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Styles / Mises en page"],
+       'own'=>0,
+       'publish'=>0
+    ]);
 
     // Champs
     $ds = DataSource::objectFactoryHelper8('STYLES');
@@ -811,7 +1142,6 @@ class Wizard extends \Seolan\Core\Application\Wizard{
     $ds->createField('tpl','Gabarit','\Seolan\Field\ShortText\ShortText',40,4,1,1,1,0,0,0,'%');
 
     DataSource::clearCache();
-
 
     static::createStyles($group);
    
@@ -838,15 +1168,14 @@ class Wizard extends \Seolan\Core\Application\Wizard{
   static protected function createModuleAndTableCharte(string $group){
     DataSource::clearCache(); // référence à la table nouvellement créée
     $result = DSTable::procNewSource(
-      ['translatable'=>1,
-       'auto_translate'=>1,
+      ['translatable'=>0,
+       'auto_translate'=>0,
        'classname'=>'\Seolan\Model\DataSource\Table\Table',
        'btab'=>static::$chartetab,
-       'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Charte"]
+       'bname'=>[TZR_DEFAULT_LANG=>"{$group} - Charte"],
+       'own'=>0,
+       'publish'=>0
     ]);
-    // $boid = $result['boid'];
-    // $result['error'])
-
     // Champs
     DataSource::clearCache(); // référence à la table nouvellement créée
     
