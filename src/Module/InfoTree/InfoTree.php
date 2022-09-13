@@ -446,6 +446,14 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     list($oidit,$oiddest,$oidtemplate)=$this->_getOids($oidsection);
 
     $d=$this->getFullFunctionDetails($oiddest);
+    foreach ( $d['_fullquery']['_FIELDS'] as $k => $field ){
+      if( !empty($d['_fullquery'][$field])){
+        $tmp = array_filter($d['_fullquery'][$field], function($v) { return $v == 'on'; });
+        if( count($tmp) > 0 ){
+          $d['_fullquery'][$field] = array_keys($tmp);
+        }
+      }
+    }
     $params=&$d['_fullquery'];
     // casse l'autocomplétion si mis mais casse uiparam_query si pas mis ...
     $params['itmoid']=$this->_moid;
