@@ -2,7 +2,7 @@
 /**
  * Classe de gestion de base des SMS
  * @todo : se rapprocher de \Seolan\Library\Mail (logs ...)
- * @note : c'est l'infrastructure traite l'encodage
+ * @note : les caractères accentués ne sont pas supportés
  */
 namespace Seolan\Library;
 class SMS {
@@ -98,13 +98,14 @@ class SMS {
     }
     try{
       $this->connect();
+      $mess = removeaccents($mess);
       $send = $this->soapClient->send_sms((String)$num, $mess);
     } catch(\Exception $e){
       \Seolan\Core\Logs::critical(get_class($this), '::sendSMS '.$e->getMessage());
       $send = (Object)array('status'=>'X', 'status_message'=>'Could not connect to device or send message -  '.$e->getMessage(), 'id'=>NULL);
     }
     if (!is_object($send)){
-      $send = (Object)array('status'=>'X', 'status_message'=>'Unxepected error', 'id'=>NULL);
+      $send = (Object)array('status'=>'X', 'status_message'=>'Unexpected error', 'id'=>NULL);
     }
     $r = $this->dssms->procInput(array_merge($data, array(
         'newoid' => $smsOid,
