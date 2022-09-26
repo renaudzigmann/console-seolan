@@ -106,7 +106,8 @@ class Phone extends ShortText {
           utilsScript: '$packPath/js/utils.js'
         });
 
-        jQuery(input_$id).on('keyup change', {input: input_$id, hid: hid_$id, iti: iti_$id}, TZR.phoneFormat);
+        jQuery(input_$id).on('keyup change countrychange', {input: input_$id, hid: hid_$id, iti: iti_$id}, TZR.phoneFormat);
+
       </script>
     ";
 
