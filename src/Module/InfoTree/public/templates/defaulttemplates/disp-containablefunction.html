@@ -1,7 +1,16 @@
 <%if $moduleid%>
+<%assign var=func value=$it_olines[it].ofct->raw%>
+
+<%parse_str($func,$query_tab)%>
+<%if empty($query_tab['moid']) && $query_tab['mode'] == app%>
+  <%if isset($application->$query_tab['appfield'])%>
+    <%assign var=func value=$func|cat:"&moid="|cat:$application->$query_tab['appfield']%>
+  <%/if%>
+<%/if%>
+
 <script type="text/javascript">
  jQuery(function(){
-   TZR.jQueryLoad({nocheckauth:true,url:'<%if strpos($it_olines[it].ofct->raw,'/')!==0%><%$self%><%/if%><%$it_olines[it].ofct->raw%>&_bdxnewstack=1&_nohistory=1&_raw=1&_ajax=1',target:'#<%$moduleid%>',cb:function(responseText,textStatus,XMLHttpRequest){
+   TZR.jQueryLoad({nocheckauth:true,url:'<%if strpos($it_olines[it].ofct->raw,'/')!==0%><%$self%><%/if%><%$func%>&_bdxnewstack=1&_nohistory=1&_raw=1&_ajax=1',target:'#<%$moduleid%>',cb:function(responseText,textStatus,XMLHttpRequest){
     if(XMLHttpRequest.status==401){
      jQuery('#<%$moduleid%>').parents('div.cv8-module').remove();
     }
