@@ -445,14 +445,36 @@ class Wizard extends \Seolan\Core\Application\Wizard{
 
   }
 
-  static function dupCharte($oid) {
+  static function dupCharte($oid, $name) {
     $charte = static::$chartetab;
     if($oid) {
       $datasourceCharte = DataSource::objectFactoryHelper8($charte);
       $newOid = $datasourceCharte->duplicate(['oid'=> $oid]);
+      $datasourceCharte->procEdit([
+          'oid'=>$newOid,
+          'nom'=>$name,
+      ]);
       return $newOid;
     }
     return $oid;
+  }
+
+  /*
+  * Suppression de la charte si elle n'est pas utilisé dans une autre application
+  *
+  * @param string $charteOid oid de la charte à supprimer
+  * @param string $appOid application
+  * @return oid de la charte si supprimer || false sinon
+  */
+  static function delCharte($charteOid, $appOid) {
+    $chartetab = static::$chartetab;
+    $appList = getDB()->fetchCol('SELECT KOID FROM APP WHERE JSON_EXTRACT(params,"$.charte")=? AND KOID!=?',array($charteOid, $appOid));
+    if (empty($appList)){
+      $datasourceCharte = DataSource::objectFactoryHelper8($chartetab);
+      $datasourceCharte->del(['oid'=>$charteOid]);
+      return $charteOid;
+    }
+    return false;
   }
 
   /// module gestionnaire de rubriques

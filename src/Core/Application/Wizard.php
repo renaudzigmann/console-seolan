@@ -275,7 +275,7 @@ abstract class Wizard implements ISec {
     return $newGroups;
   }
 
-  static function dupCharte($oid) {
+  static function dupCharte($oid, $name) {
     return $oid;
   }
 

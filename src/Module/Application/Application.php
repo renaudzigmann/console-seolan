@@ -381,6 +381,14 @@ function &browse($ar=null){
       }
     }
 
+    // Suppression de la charte
+    if($app->_conf['charte']) {
+      $charteOid = $app::delCharte($app->_conf['charte'],$app->_conf['oid']);
+      if($charteOid){
+        \Seolan\Core\Logs::notice(get_class($this),get_class($this).'::del suppression de la charte '.$charteOid);
+      }
+    }
+
     return parent::del($ar);
   }
 
@@ -444,7 +452,7 @@ function &browse($ar=null){
     $newGroups = $wizard::dupGroups($groups, $name);
 
     if($params['charte']) {
-      $charteOid = $wizard::dupCharte($params['charte']);
+      $charteOid = $wizard::dupCharte($params['charte'], $name);
       $params['charte'] = $charteOid;
     }
 
