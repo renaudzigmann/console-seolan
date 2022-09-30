@@ -388,4 +388,259 @@ abstract class ModuleWithSourceManagement extends \Seolan\Core\Module\Module{
     \Seolan\Core\Shell::toScreen2('','message',$message);
   }
 
+
+  /**
+   * Construction de la liste les contacts signataires pour la signature électronique de documents
+   *
+   * @param $ar
+   * @return void
+   */
+  function browseElectronicSignatureContacts($ar) {
+    $apiData = $this->universignWebServiceInfo();
+
+    if(!$apiData || !$apiData['login'] || !$apiData['passwd'] || !$apiData['url']) {
+      die(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Module_Module', 'esign_badspecs'));
+    }
+
+    $p = new \Seolan\Core\Param($ar,array());
+    $all = $p->get('all');
+    $oidsel = $p->get('_selected');
+    $oid = $p->get('oid');
+    if(count($oidsel) == 1) {
+      $oid = $oidsel[0];
+    }
+
+    // on récupère les destinataires utilisés la dernière fois pour ce doc
+    $registry = \Seolan\Core\Registry::getInstance();
+    $lastUsed = (array)$registry->get($this->_moid, \Seolan\Core\User::get_current_user_uid(), $oid, "browseelectronicsignaturecontacts");
+    // Liste des users/groupes
+    $users = static::objectFactory(array('tplentry'=>TZR_RETURN_DATA,'toid'=>XMODUSER2_TOID,'_options'=>array('local'=>1)));
+
+    $list = \Seolan\Core\User::getUsersAndGroups(true, $all, @$this->directorymodule);
+    \Seolan\Core\Shell::toScreen1('bru', $list[0]);
+    \Seolan\Core\Shell::toScreen1('brus_selected', $lastUsed);
+    \Seolan\Core\Shell::toScreen1('brg', $list[1]);
+    \Seolan\Core\Shell::toScreen2('brm', 'directory_module', @$this->directorymodule);
+
+    // intégration du champ user : on récupère un champ user en mode standard (avec autocompletion et cie)
+    // comme pour le mode treeview
+    $selectors = [];
+    $selopts= ['compulsory'=>0,'multivalued'=>1];
+    if (!empty($this->directorymodule)){
+      $dirmod = static::objectFactory(['moid'=>$this->directorymodule,
+        'interactive'>=false,
+        'tplentry'=>TZR_RETURN_DATA
+      ]);
+      if (!$dirmod instanceof \Seolan\Module\User\User){
+        $selopts['sourcemodule']=$this->directorymodule;
+      }
+    }
+    $ulabel = \Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Module_Module', 'userlist');
+    foreach(['udest' => 'to'] as $fn=>$luname){
+      $selopts['field'] = $fn;
+      $selopts['label'] = $ulabel; //'&nbsp;&nbsp';
+      $lastvalues = $lastUsed[$luname]??null;
+      $selectors[$fn] = $users->getUserSelector($this->_moid,$selopts,$lastvalues);
+    }
+    $selectors['_userfield'] = true;
+    \Seolan\Core\Shell::toScreen1('selector', $selectors);
+  }
+
+  function sendDocumentsToContactsList($ar) {
+
+    $p = new \Seolan\Core\Param($ar);
+
+    $foid = $p->get("foid"); // Identifiant du fichier
+    $fname = $p->get("fname"); // Nom du champ fichier dans table SQL du fichier
+    $fsigned = $p->get("fsigned"); // Nom du champ fichier dans table SQL du fichier
+
+    // Récupération des informations du document
+    $res = $this->display(
+      array(
+        "oid" => $foid,
+        "selectedfields" => [$fname],
+        'tplentry' => TZR_RETURN_DATA,
+        '_mode' => 'object',
+      )
+    );
+
+    // Récupération du chemin local du document à signer
+    // TODO: gestion multi documents à voir.
+    $document[] = [
+      'path' => $res['o'.$fname]->filename,
+      'filename' => $res['o'.$fname]->originalname
+    ];
+
+    // Construction de la liste des signataires à partir de la selection
+    $contacts = array();
+
+    $udest = array_filter($p->get("udest"));
+    $users = static::objectFactory(array('tplentry'=>TZR_RETURN_DATA,'toid'=>XMODUSER2_TOID,'_options'=>array('local'=>1)));
+    foreach($udest as $dest) {
+      $user = $users->display(array('oid'=>$dest,'tplentry'=>TZR_RETURN_DATA));
+      $contacts[] = [
+        'firstname' => $user['ofirstname']->raw ?: $user['ofullnam']->raw,
+        'lastname' => $user['olastname']->raw ?: '',
+        'email' => $user['oemail']->raw,
+      ];
+    }
+
+    $dest_aemails = $p->get("dest_aemails");
+    $dest_aemails = preg_split('/;/', $dest_aemails, null, PREG_SPLIT_NO_EMPTY);
+    foreach($dest_aemails as $email) {
+      $contacts[] = [
+        'firstname' => '',
+        'lastname' => '',
+        'email' => $email,
+      ];
+    }
+
+    // Envoi pour signature
+    if (count($document) && count($contacts)) {
+
+      $apiData = $this->universignWebServiceInfo();
+
+      $electronicSignatureWebService = new ElectronicSignatureWebService($apiData['url'], $apiData['login'], $apiData['passwd']);
+
+      // Envoi de la demande au service web
+      $res = $electronicSignatureWebService->sendDocumentsForElectronicSignature($document, $contacts, 'Demande de signature via console Séolan');
+
+      // Si la requète de soumission de document s'est bien passée. On obtient un id de requète pour suivi.
+      if ($res['id']) {
+
+        $signatures = \Seolan\Core\DbIni::get('electronic_signature', 'val');
+        if (!$signatures) {
+          $signatures = array();
+        }
+
+        // On enrichit la liste de suivi de signature
+        $signatures[$res['id']] =
+          [
+            'moid' => $this->_moid,
+            'foid' => $foid,
+            'fsigned' => $fsigned,
+          ];
+        \Seolan\Core\DbIni::set('electronic_signature', $signatures);
+
+        // TODO: peut mieux faire
+        echo 'Demande de signature envoyée.';
+
+      } else if ($res['error']) {
+        // Erreur de soumission au service à gérer
+        echo $res['error'];
+      }
+    }
+  }
+
+  /**
+   *
+   * @return void
+   * @throws \DOMException
+   */
+  protected function checkNumericalSignatureValidations() {
+
+    $apiData = $this->universignWebServiceInfo();
+
+    $electronicSignatureWebService = new ElectronicSignatureWebService($apiData['url'],$apiData['login'],$apiData['passwd']);
+
+    $signatures = \Seolan\Core\DbIni::get('electronic_signature', 'val');
+    if (count($signatures)) {
+      foreach ($signatures as $signatureId => $signature) {
+        if ($signature['moid'] == $this->_moid) {
+
+          // Demande d'état de signature au service Universign
+          $res = $electronicSignatureWebService->sendTransactionInfoRequest($signatureId);
+
+          switch ($res['status']) {
+
+            case 'ready': // Document(s) en attente des signatures par les signataires. On ne fait rien.
+              break;
+
+            case 'canceled': // La demande de signature a été annulée.
+              // Suppression des signatures en attente
+              unset($signatures[$signatureId]);
+              \Seolan\Core\DbIni::set('electronic_signature', $signatures);
+              break;
+
+            case 'completed': // Tous les signataires ont signé le(s) document(s)
+
+              // Récupération des documents signés
+              $dlRes = $electronicSignatureWebService->sendDownloadSignedDocumentsRequest($signatureId);
+
+              if( $dlRes['status'] == 'error'){
+                \Seolan\Core\Logs::debug(__METHOD__.' '.$dlRes['description']);
+              }
+              else
+              {
+                foreach ( $dlRes as $document ){
+
+                  $filenameInfo = pathinfo($document['fileName']);
+
+                  // Renommage du document
+                  $filename = $filenameInfo['filename']."_signed.".$filenameInfo['extension'];
+
+                  // Contenus signés
+                  $content = base64_decode($document['content']);
+
+                  $tmpFilename = $filenameInfo['filename']."_signé_".$document['id'].".".$filenameInfo['extension'];
+                  file_put_contents(TZR_TMP_DIR.$tmpFilename, $content);
+
+                  $paramProc = ['oid' => $signature['foid'],
+                    $signature['fsigned']=> [
+                      'size' => @filesize(TZR_TMP_DIR.$tmpFilename),
+                      'type' => 'application/pdf',
+                      'name' => $filename,
+                      'tmp_name' => TZR_TMP_DIR.$tmpFilename,
+                      'filename_del' => 'off',
+                      'title' => $filename,
+                    ]
+                  ];
+
+                  $this->procEdit($paramProc);
+
+                  // TODO: voir gestion des ID pour récupération multi documents. En l'état on ne prend que le premier.
+                  break;
+                }
+
+                // Suppression des signatures en attente
+                unset($signatures[$signatureId]);
+                \Seolan\Core\DbIni::set('electronic_signature', $signatures);
+              }
+
+              break;
+
+            case 'error': // Problème avec la requète
+              \Seolan\Core\Logs::debug(__METHOD__.' '.$res['description']);
+              break;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Les informations d'identification du Web Service Universing sont stockées dans la table des comptes externes
+   * (table _ACCOUNTS -> url, login et passwd) dans un enregistrement dont le type est "WebServiceUniversign'.
+   *
+   * @return array
+   */
+  private function universignWebServiceInfo(): array {
+
+    // Récupération des infos de l'API Universign en base
+    $apiData = getDB()->fetchRow('SELECT login,passwd,url FROM `_ACCOUNTS` WHERE `atype` = "WebServiceUniversign"');
+    if (!$apiData) {
+      return [];
+    }
+
+    return $apiData;
+  }
+
+  protected function _daemon($period) {
+    parent::_daemon($period);
+
+    // Validation des signatures numériques de documents pdf en attente
+    $this->checkNumericalSignatureValidations();
+  }
+
+
 }

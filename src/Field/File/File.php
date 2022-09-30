@@ -38,6 +38,7 @@ class File extends \Seolan\Core\Field\Field {
     'ogg'  => array('ffmpeg_opts' => FFMPEG_OGG_OPTS),
     'mp4'  => array('ffmpeg_opts' => FFMPEG_MP4_OPTS),
   );
+  public $electronic_signature;
 
   function __construct($obj=NULL) {
     parent::__construct($obj);
@@ -78,6 +79,13 @@ class File extends \Seolan\Core\Field\Field {
 
     $querygroup=\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_General','query');
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Field_Field','indexable'), 'indexable', 'boolean', NULL, true, $querygroup);
+
+    $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Field_Field','electronic_signature'),'electronic_signature','boolean');
+
+    // L'option de signature électronique des documents est-elle déjà activées?
+    if( $this->DPARAM['electronic_signature'] ){
+      $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Field_Field','electronic_signature_destination'),'electronic_signature_destination','field');
+    }
   }
 
   /// Retourne vrai si le type mime représente une image
@@ -1941,8 +1949,14 @@ jQuery("#'.$varid.'").on("change", function(){
     $r->html.=$txtPreview;
     $r->html.=$txtInput;
 
+    if ($this->electronic_signature) {
+      $buttonlabel = \Seolan\Core\Labels::getSysLabel('Seolan_Core_Field_Field', 'electronic_signature');
+      $r->html .= '<input type="button" value="'.$buttonlabel.'" class="" onclick="TZR.openContactListForElectronicSignature(\''.$options['fmoid'].'\',\''.$options['oid'].'\',\''.$fname.'\',\''.$this->electronic_signature_destination.'\')">';
+    }
+
     return $r;
   }
+
   /// html d'appel de la popup de sélection/ajout
 
   protected function my_edit_multiple(&$value,&$options,&$fields_complement=NULL) {

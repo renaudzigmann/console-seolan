@@ -201,15 +201,14 @@ function xmodgroup_getGroupTree(){
 				 'selectedfields'=>array('fullnam')));
   } else {
     $users=$xuser->browse(array('tplentry'=>TZR_RETURN_DATA, 'order'=>'fullnam', 'select'=>$select,
-				'pagesize'=>'1000','selectedfields'=>array('fullnam')));
+				'pagesize'=>'1000','selectedfields'=>array('fullnam', 'alias')));
   }
 
   header('Content-type: text/html; charset='.TZR_INTERNAL_CHARSET);
   foreach($users['lines_oid'] as $i=>$oid){
-    if(in_array($oid, $selected)) $sel="selected";
-    else $sel="unselected";
-    echo "<li x-value=\"$oid\" x-name=\"{$_REQUEST['name']}\" x-type=\"doc\"><span><span class=\"$sel\">".
-      $users['lines_ofullnam'][$i]->html.'</span></span></li>';
+    $sel = in_array($oid, $selected) ? "selected" : "unselected";
+    $label = $users['lines_ofullnam'][$i]->html ?: $users['lines_oalias'][$i]->html;
+    echo "<li x-value=\"$oid\" x-name=\"{$_REQUEST['name']}\" x-type=\"doc\"><span><span class=\"$sel\">".$label.'</span></span></li>';
   }
   die();
 }

@@ -353,6 +353,8 @@ Exemple : XMP.photo.dc:subject=>code.1',
 'preferredcountries'=>'Pays préférentiels',
 'initialcountry'=>'Pays initial',
 'valuewillbecomputed'=>'Valeur calculée après enregistrement',
+'electronic_signature' => 'Signature électronique',
+'electronic_signature_destination' => 'Destination de la signature électronique',
 'zz'=>''
 );
 ?>

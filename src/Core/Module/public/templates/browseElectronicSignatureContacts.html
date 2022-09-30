@@ -1,0 +1,60 @@
+<div class="title"><%$syslabels.Seolan_Core_Module_Module.esign_popuptitle%></div>
+
+<form name="electronic_signature_<%$uniqid%>" id="electronic_signature_<%$uniqid%>" action="<%$self%>" method="post">
+  <input type="hidden" name="_function" value="sendDocumentsToContactsList">
+  <input type="hidden" name="uniqid" value="electronic_signature_<%$uniqid%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="foid" value="<%$smarty.get.foid%>">
+  <input type="hidden" name="fname" value="<%$smarty.get.fname%>">
+  <input type="hidden" name="fsigned" value="<%$smarty.get.fsigned%>">
+
+  <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.recipients%></legend>
+    <div class="table-responsive">
+      <table class="table table-striped list2">
+        <tr>
+          <th><%$syslabels.Seolan_Core_Module_Module.sendto%></th>
+          <td>
+            <table class="table">
+              <tr>
+                <td>
+                  <%if !$userselector && $selector_udest%>
+                    <%$selector_udest->html%>
+                  <%else%>
+                    <%include file="Core.users-selector-tree.html" directory_module=$brm_directory_module htmlonly=true inputname="dest" selected=$brus_selected_to%>
+                  <%/if%>
+                </td>
+                <td>
+                  <textarea placeholder="<%$syslabels.Seolan_Core_General.email_text|escape:'html'%>" name="dest_aemails" cols="40" rows="2"><%$brus_selected_dest_aemails%></textarea>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </fieldset>
+
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="submit" class="btn btn-primary" value="<%$syslabels.Seolan_Core_General.send_text%>" onclick="return submitForm(this);">
+  </div>
+
+  <script type="text/javascript">
+    function submitForm( button ) {
+
+      // Vérification si au moins un contact a été coché
+      if(!$('.selectedusers input[name="udest[]"]').length && !$('textarea[name="dest_aemails"]').val()){
+        alert("<%$syslabels.Seolan_Core_Module_Module.esign_errorselect%>");
+        return;
+      }
+
+      // Envoi du formulaire de demande
+      $(".modal-title").html('<%$syslabels.Seolan_Core_Module_Module.esign_popuptitlesubmit%>');
+      button.style.display = 'none';
+      return TZR.ajaxSubmitForm(document.getElementById('electronic_signature_<%$uniqid%>'),'.modal-body');
+    }
+  </script>
+
+</form>
+
+<%if $userselector%><%include file="Core./users-selector-tree.html" jsonly=true%><%/if%>

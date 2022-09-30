@@ -351,6 +351,8 @@ Exemple : XMP.photo.dc:subject=>code.1',
 'preferredcountries'=>'Preferred countries',
 'initialcountry'=>'Initial country',
 'valuewillbecomputed'=>'Value computed after saving',
+'electronic_signature' => 'Electronic signature',
+'electronic_signature_destination' => 'Electronic signature destination',
 'zz'=>''
 );
 ?>
