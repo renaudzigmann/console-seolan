@@ -33,7 +33,7 @@ queryparameters=0%>
   <div class="cv8-phototeque_result linklist">
    <ul class="imagelist">
     <%section name=i loop=$br_lines_oid%>
-    <%capture name=datas assign=datas%>data-link='{"oid":"<%$br_lines_oid[i]%>", "tlink":"<%$br_lines_tlink[i]|escape:'javascript'%>"}'<%/capture%>
+    <%capture name=datas assign=datas%>data-link='{"oid":"<%$br_lines_oid[i]%>", "tlink":"<%$br_lines_tlink[i]|escape:'html'%>"}'<%/capture%>
       <%include file="`$smarty.const.TZR_SHARE_DIR`Module/Media.browseMedia.html"
 		noaction=1
 		personalize_datas=$datas
@@ -55,7 +55,7 @@ queryparameters=0%>
    </thead>
    <tbody>
     <%section name=lines loop=$br_lines_oid %>
-     <tr class="linkable" data-link='{"oid":"<%$br_lines_oid[lines]%>", "tlink":"<%$br_lines_tlink[lines]|escape:'javascript'%>"}' title="<%$br_lines_tlink[lines]|escape:'javascript'%>">
+     <tr class="linkable" data-link='{"oid":"<%$br_lines_oid[lines]%>", "tlink":"<%$br_lines_tlink[lines]|escape:'html'%>"}' title="<%$br_lines_tlink[lines]|escape:'html'%>">
       <%section name=header loop=$br_header_fields %>
        <%assign var="field" value=$br_lines_o<%$br_header_fields[header]->field%>[lines]%>
        <td class="linker" <%if $field->filename%>data-filename="<%$field->filename%>;<%$field->mime%>;<%$field->originalname%>"<%/if%>><%$field->html%></td>
