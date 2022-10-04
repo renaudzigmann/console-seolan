@@ -1,7 +1,5 @@
 <?php
 namespace Seolan\Module\Workflow;
-namespace Seolan\Module\Workflow;
-namespace Seolan\Module\Workflow;
 
 class Wizard extends \Seolan\Core\Module\Wizard {
   function __construct($ar=NULL) {
@@ -89,7 +87,7 @@ class Wizard extends \Seolan\Core\Module\Wizard {
   // Creation des structures
   public function createStructure() {
     $module=(array)$this->_module;
-    $modulename=$module[modulename];
+    $modulename=$module["modulename"];
 
     $wf='WFWORKFLOW';
     if(!\Seolan\Core\System::tableExists($wf)) {
@@ -102,6 +100,8 @@ class Wizard extends \Seolan\Core\Module\Wizard {
       //                                                                s,o,c,q,b,t,m,p,t
       $x->createField('title','Titre','\Seolan\Field\ShortText\ShortText',                100,0,1,1,1,0,0,1);
       $x->createField('descr','Description','\Seolan\Field\Text\Text',                50,0,1,0,0,0,0,0);
+      $x->createField('funct','Fonction','\Seolan\Field\Text\Text',                50,0,1,0,0,0,0,0);
+      $x->createField('source','Source','\Seolan\Field\Text\Text',                50,0,0,0,0,0,0,0);
       $x->createField('modid','Module applicable','\Seolan\Field\Module\Module',         0,0,1,0,1,0,1,0);
       $x->createField('grps','Groupes applicables','\Seolan\Field\Link\Link',          0,0,1,0,1,0,1,0,'GRP');
       $x->createField('trig','Evenement de declenchement','\Seolan\Field\ShortText\ShortText',20,0,1,0,1,0,0,0);
@@ -169,10 +169,10 @@ class Wizard extends \Seolan\Core\Module\Wizard {
       $x->createField('wfid','Workflow','\Seolan\Field\Link\Link',       0,0,1,1,1,0,0,0,'WFWORKFLOW');
       $x->createField('trig','Evenement de declenchement','\Seolan\Field\ShortText\ShortText',
                                                          20,0,1,0,1,0,0,0);
-      $x->createField('timelimit','Temps maximum','\Seolan\Field\Real\Real',20,0,0,0,1,0,0,0, array('decimals'=>'0','edit_format'=>'', 'default'=>'0'));
+      $x->createField('timelimit','Temps maximum','\Seolan\Field\Real\Real',20,0,0,0,1,0,0,0, '%', array('decimals'=>'0','edit_format'=>'', 'default'=>'0'));
       //                                                  s,o,c,q,b,t,m,p,t
       $x->createField('taskid','Tache','\Seolan\Field\Link\Link',        0,0,1,1,0,0,0,0,'WFTASKS');
-      $x->createField('roleid','Role','\Seolan\Field\Link\Link',         0,0,1,1,0,0,0,0,'FUSERS');
+      $x->createField('roleid','Role','\Seolan\Field\Link\Link',         0,0,1,1,0,0,0,0,'USERS');
     }
 
     $wf='WFARC';
