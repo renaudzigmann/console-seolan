@@ -44,6 +44,10 @@ class Integrity {
       if ($table == '_public') // éventuellement en lister le contenu ?
         continue;
       $ds= \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('SPECS='.$table);
+      if (!$ds){
+	\Seolan\Core\Logs::critical(__METHOD__,"instancing error for {$table}, access check ignored");
+	continue;
+      }
       if ($fields == '_all' || isset($fields['_all'])){
 	$fields = $ds->getFieldsList();
 	$fields = array_fill_keys($fields, '1');

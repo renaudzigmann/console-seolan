@@ -9,8 +9,14 @@ namespace Seolan\Module\DocSet;
  * - surcharge des droits sur les fonctions d'insertion (@todo) : on peut insérer / dupliquer 
  * si il existe un dossier de la base doc où on peut écrire
  */
-use \Seolan\Core\{Shell,Labels,Logs,Param,Field\Field, Field\Field\Value, Module\Module, DataSource\DataSource};
-
+use \Seolan\Core\{Shell,
+		  Labels,
+		  Logs,
+		  Param,
+		  Field\Field,
+		  Field\Field\Value,
+		  Module\Module,
+		  DataSource\DataSource};
 
 class DocSet extends \Seolan\Module\Table\Table {
   public $objects_sec = true;
@@ -48,12 +54,13 @@ class DocSet extends \Seolan\Module\Table\Table {
   /// ! en import, $ar est forcé local
   function procInsert($ar=null){
     $r = parent::procInsert($ar);
+    $lang= Shell::getLangData();
     // mise à jour de la base doc
     if (isset($r['oid'])){
       $p = new Param($ar, ['_xmc'=>false]);
       if ($p->get('_xmc') !== true){ // quand on est en dehors de la base doc
 	$this->createNodesAndLinks($r['oid'], $p->get(static::$parentfieldname));
-	getDB()->execute("UPDATE {$this->docmngt->id} node SET node.UPD=(SELECT d.UPD FROM {$this->table} d WHERE d.KOID=node.KOID) WHERE node.KOID=?",[$r['oid']]);
+	getDB()->execute("UPDATE {$this->docmngt->id} node SET node.UPD=(SELECT d.UPD FROM {$this->table} d WHERE d.LANG=? AND d.KOID=node.KOID) WHERE node.KOID=?",[$lang, $r['oid']]);
       }
     }
     return $r;
@@ -226,9 +233,11 @@ class DocSet extends \Seolan\Module\Table\Table {
 
     if (is_array($p->get('oid')))
       return;
-      
+
+    $lang = Shell::getLang();
+    
     if ($p->get('_xmc') != true){
-      getDB()->execute("update {$this->docmngt->id} node set node.UPD=(select d.UPD from {$this->table} d where d.koid=node.koid) where node.koid=?",[$p->get('oid')]);
+      getDB()->execute("update {$this->docmngt->id} node set node.UPD=(select d.UPD from {$this->table} d where d.LANG=? AND d.koid=node.koid) where node.koid=?",[$lang, $p->get('oid')]);
     }
     return $r;
   }

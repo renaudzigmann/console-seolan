@@ -323,7 +323,7 @@ class File extends \Seolan\Core\Field\Field {
     }
     $dirsrc=$this->dirname($fsrc);
     $dirdst=$this->dirname($fdst,$upd);
-    \Seolan\Core\Logs::debug('\Seolan\Field\File\File::copyExternalsToMultiple(): Trying to copy '.$DATA_DIR.$dirsrc.' '.$DATA_DIR.$dirdst);
+    \Seolan\Core\Logs::debug(__METHOD__.' Trying to copy '.$DATA_DIR.$dirsrc.' '.$DATA_DIR.$dirdst);
     \Seolan\Library\Dir::copy($DATA_DIR.$dirsrc,$DATA_DIR.$dirdst,true);
     $json['dir'] = $fdst;
     return json_encode($json);
@@ -358,21 +358,15 @@ class File extends \Seolan\Core\Field\Field {
     global $DATA_DIR;
     if(empty($value) ||empty($oidsrc) || empty($oiddst)) return NULL;
     $json = json_decode($value, true);
-    list($t,$fsrc)=explode(':',$oidsrc);
-    list($t,$fdst)=explode(':',$oiddst);
-    if(strpos($value,'.')){
-      list($lang)=explode('.',$value);
-      $fsrc=$lang.'.'.$fsrc;
-      $fdst=$lang.'.'.$fdst;
-    }
-    $dirsrc=$this->dirname($fsrc,$upd);
+    $fsrc = $fdst = $dir = $json['dir'];
+    $dirsrc=$this->dirname($fsrc,$upd /*secondary root => A_ etc*/);
     $dirdst=$this->dirname($fdst);
-    \Seolan\Core\Logs::debug(__METHOD__.' Trying to copy '.$DATA_DIR.$dirsrc.' '.$DATA_DIR.$dirdst);
+    \Seolan\Core\Logs::debug(__METHOD__." $value  ".'Trying to restore '.$DATA_DIR.$dirsrc.' '.$DATA_DIR.$dirdst);
     \Seolan\Library\Dir::copy($DATA_DIR.$dirsrc,$DATA_DIR.$dirdst,true);
     $json->dir = $fdst;
     return json_encode($json);
   }
-  // Verification que les repertoires qui contiennent les fichiers n'existent pas,  sinon on les cree
+  // Vérification que les répertoires qui contiennent les fichiers n'existent pas, sinon on les crée
   function _checkDir() {
     global $DATA_DIR;
     umask(0000);
