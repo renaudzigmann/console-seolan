@@ -44,6 +44,8 @@ class File extends \Seolan\Core\Field\Field {
     parent::__construct($obj);
     $this->thumb_geometry = TZR_THUMB_SIZE.'x'.TZR_THUMB_SIZE;
     if(empty($this->image_max_geometry) && defined('XFILEDEF_IMAGE_MAX_GEOMETRY')) $this->image_max_geometry=XFILEDEF_IMAGE_MAX_GEOMETRY;
+    if ($this->sourcemodule && !\Seolan\Core\Module\Module::moduleExists($this->sourcemodule))
+      $this->sourcemodule = null;
   }
 
   function initOptions() {

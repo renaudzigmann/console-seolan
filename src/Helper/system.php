@@ -1140,7 +1140,10 @@ function newPassword() {
 function &getTextContentFrom($mime, $filename) {
   $empty="";
   if(!file_exists($filename) || empty($mime)) return $empty;
-  if(in_array($mime,array('application/msword','application/vnd.msword','application/vnd.ms-word')))
+  if(in_array($mime,['application/msword',
+		     'application/vnd.msword',
+		     'application/vnd.ms-word',
+		     'application/vnd.openxmlformats-officedocument.wordprocessingml.document']))
     return getTextContentFromWord($filename);
   if(in_array($mime,array('application/msexcel','application/vnd.msexcel','application/vnd.ms-excel')))
     return getTextContentFromExcel($filename);
@@ -1150,6 +1153,7 @@ function &getTextContentFrom($mime, $filename) {
     return getTextContentFromODT($filename);
   if($mime=='application/pdf') return getTextContentFromPDF($filename);
   if($mime=='text/plain') return getTextContentFromTxt($filename);
+  \Seolan\Core\Logs::notice(__METHOD__,"unknown mime '{$mime}' file '{$filename}'");
   return $empty;
 }
 
