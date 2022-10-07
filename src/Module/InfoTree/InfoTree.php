@@ -45,7 +45,25 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     if (isset($this->linkin) && !$this->xset->fieldExists($this->linkin)){
       $this->linkin = null;
     }
+    if ( TZR_USE_APP ){
+      $this->updatePreviewDomain();
+    }
   }
+
+  /**
+   * Modification de $this->preview dans le cas des APP
+   */
+  protected function updatePreviewDomain(){
+    $app = getDB()->fetchRow('SELECT domain, domain_is_regex FROM APP WHERE JSON_EXTRACT(params,"$.infotree")=? limit 1',array($this->_moid));
+    if ( !empty($app) ){
+      if( $app['domain_is_regex'] == "1" ){
+        return;
+      }
+      $this->_options->delOpt('preview');
+      $this->preview = "https://".$app['domain'].'/index.php?';
+    }
+  }
+
   /// sections fonctions
   function getUIFunctionList() {
     $funcs = [];
