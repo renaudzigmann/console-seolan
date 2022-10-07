@@ -3868,6 +3868,12 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     if ($nb) {
       \Seolan\Core\Shell::alert(sprintf(\Seolan\Core\Labels::getSysLabel('Seolan_Core_Module_Module','deleted_templates'),$nb));
     }
+    // Suppression de la table de zone si elle existe
+    if (!empty($this->zonetable)){
+      $xbase=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8($this->zonetable);
+      $ret=$xbase->procDeleteDataSource();
+      \Seolan\Core\Logs::notice(__METHOD__, $ret['message']);
+    }
     return parent::delete($ar);
   }
 
