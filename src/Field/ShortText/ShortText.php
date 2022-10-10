@@ -278,6 +278,7 @@ class ShortText extends \Seolan\Core\Field\Field {
       if ($this->quicksearchmulti && $this->quicksearchmultiseparator === 'newline') {
         $cols = $this->quicksearchmulticols ?? self::$qqmaxsize;
         $rows = $this->quicksearchmultirows ?? 4;
+        $t1 = str_replace($this->separator[0],"\n",$t1);
         $r->html.='<textarea '.($this->isFilterCompulsory($options) ? 'required' : '').' name="'.$this->field.'" cols="'.$cols.'" rows="'.$rows.'">'.$t1.'</textarea>';
       } else {
         $r->html .= '<input '.($this->isFilterCompulsory($options) ? 'required' : '').' type="text" name="'.$this->field.'" maxlength="'.$this->fcount.'" size="'.$boxsize.'" value="'.$t1.'">';
