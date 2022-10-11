@@ -540,6 +540,7 @@ abstract class ModuleWithSourceManagement extends \Seolan\Core\Module\Module{
   protected function checkNumericalSignatureValidations() {
 
     $apiData = $this->universignWebServiceInfo();
+    if(empty($apiData)) return;
 
     $electronicSignatureWebService = new ElectronicSignatureWebService($apiData['url'],$apiData['login'],$apiData['passwd']);
 
