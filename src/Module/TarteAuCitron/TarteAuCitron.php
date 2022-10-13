@@ -18,9 +18,9 @@ use \Seolan\Core\Labels, \Seolan\Core\Shell, \Seolan\Core\Param, Seolan\Core\Log
 class TarteAuCitron extends \Seolan\Module\Table\Table {
 
   public static $upgrades = [
-    '20210323' => 'root',
-    '20220401' => 'root',
-    '20220426' => 'root'
+    '20210323' => '',
+    '20220401' => '',
+    '20220426' => ''
   ];
 
   // Liste des propriétés de base qui sont réutilisées dans le script du header
