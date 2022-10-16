@@ -636,7 +636,7 @@ abstract class ModuleWithSourceManagement extends \Seolan\Core\Module\Module{
     return $apiData;
   }
 
-  protected function _daemon($period) {
+  protected function _daemon($period = "any") {
     parent::_daemon($period);
 
     // Validation des signatures numériques de documents pdf en attente

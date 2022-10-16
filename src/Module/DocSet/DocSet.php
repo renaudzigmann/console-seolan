@@ -159,7 +159,7 @@ class DocSet extends \Seolan\Module\Table\Table {
    * dossier parent doit être renseigné
    * taille < à la limite import arrière plan
   */
-  function import($ar){
+  function import($ar=NULL){
     $p = new Param($ar, []);
     if (!$p->is_set(static::$parentfieldname)){
       Shell::alert('Renseigner le champ dossier parent');

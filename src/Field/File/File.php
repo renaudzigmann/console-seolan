@@ -38,7 +38,7 @@ class File extends \Seolan\Core\Field\Field {
     'ogg'  => array('ffmpeg_opts' => FFMPEG_OGG_OPTS),
     'mp4'  => array('ffmpeg_opts' => FFMPEG_MP4_OPTS),
   );
-  public $electronic_signature;
+  public $electronic_signature=false;
 
   function __construct($obj=NULL) {
     parent::__construct($obj);

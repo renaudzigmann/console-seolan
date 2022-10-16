@@ -1499,18 +1499,17 @@ static function daemon($period){
       $my['stack']=array();
       if($alfunction) $this->_actionlistonfunction($my);
     }
-
     // ajout dans le menu more de toutes les actions de workflow applicable sur ce module
-    if(!empty($_REQUEST['oid']) && \Seolan\Core\Module\Module::getMoid(XMODWORKFLOW_TOID)) {
-      $umod=\Seolan\Core\Module\Module::objectFactory(array('toid'=>XMODWORKFLOW_TOID,'moid'=>'','tplentry'=>TZR_RETURN_DATA));
-      $workflows=$umod->getWorkflows($this, 'user', 'edit', $_REQUEST['oid']);
+    if(!empty($_REQUEST["oid"]) && \Seolan\Core\Module\Module::getMoid(XMODWORKFLOW_TOID)) {
+      $umod=\Seolan\Core\Module\Module::objectFactory(array("toid"=>XMODWORKFLOW_TOID,"moid"=>"","tplentry"=>TZR_RETURN_DATA));
+      $workflows=$umod->getWorkflows($this, "user", "edit", $_REQUEST["oid"]);
       foreach($workflows as $i=>$f) {
-	$o1=new \Seolan\Core\Module\Action($this,'workflow'.$i, $f[1],
-			      '&moid='.$this->_moid.'&_function=newWFCase&template=Module/Workflow.newcase.html&tplentry=br&oid='.
-			      $_REQUEST['oid'].'&wfid='.$f[0],'more');
+	$o1=new \Seolan\Core\Module\Action($this,"workflow".$i, $f[1],
+			      "&moid={$this->_moid}&_function=newWFCase&template=Module/Workflow.newcase.html&tplentry=br&oid=".
+			      $_REQUEST["oid"]."&wfid=".$f[0],"more");
 	$o1->menuable=true;
 	if($f[2]) $o1->actionable=true;
-	$my['wf'.$i]=$o1;
+	$my["wf$i"]=$o1;
       }
     }
   }

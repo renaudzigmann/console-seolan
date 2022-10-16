@@ -228,7 +228,7 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     return \Seolan\Core\Shell::toScreen1('siteSearch', $res);
   }
   /// mise en forme BO des résultats
-  public function getSearchResult($doid, $advfilter){
+  public function getSearchResult($doid, $advfilter=NULL){
     $path = $this->getPath($doid);
     
     return ['path'=>implode(' > ', $path['labeldown'])];
@@ -4616,7 +4616,7 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
   /**
    * surcharge pour indexation dans le contexte des applications
    */
-  protected function _daemon($period){
+  protected function _daemon($period="any"){
 
     parent::_daemon($period);
 

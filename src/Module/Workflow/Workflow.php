@@ -80,6 +80,7 @@ class Workflow extends \Seolan\Module\Table\Table {
       $this->_addPlace($ret['oid'], 'start', 'Start');
       $this->_addPlace($ret['oid'], 'end', 'End');
     }
+    return $ret;
   }
 
 
@@ -119,11 +120,11 @@ class Workflow extends \Seolan\Module\Table\Table {
 
   /// ajout d'une place
   private function _addPlace($wfid, $type, $title) {
-    $this->_places->procInput(array('wfid'=>$wfid, 
-				    'type'=>$type,
-				    'title'=>$title,
-				    '_local'=>1));
-  }
+    return $this->_places->procInput(array('wfid'=>$wfid, 
+					   'type'=>$type,
+					   'title'=>$title,
+					   '_local'=>1));
+    }
 
 
   /// ajout d'un cas sur le workflow pour l'oid document $oid
@@ -138,7 +139,7 @@ class Workflow extends \Seolan\Module\Table\Table {
 					'modid'=>$modid,
 					'_local'=>1));
     $caseid=$ret['oid'];
-    $this->log($caseid, 'Creation');
+    $this->log($caseid, "Creation");
     $all = getDB()->fetchAll('SELECT distinct KOID,title FROM WFPLACE WHERE type=? and wfid=?', array('start', $wfid));
     if(!empty($all) && !empty($all[0])) {
       $placeid=$all[0]['KOID'];
@@ -208,7 +209,6 @@ class Workflow extends \Seolan\Module\Table\Table {
     $taskid=$transition['otaskid']->raw;
     if(!empty($taskid)) {
       $taskstemplate = $this->_tasks->rDisplay($taskid);
-      $tocheck=$taskstemplate['otocheck']->raw;
       $case = $this->_cases->rDisplay($caseid);
       $wfid=$case['owfid']->raw;
       
@@ -226,7 +226,6 @@ class Workflow extends \Seolan\Module\Table\Table {
                                      'taskid'=>$taskid,
                                      'trig'=>$transition['otrig']->raw,
                                      'deadline'=>$deadline->format('Y-m-d H:i:s')));
-      
       $this->log($caseid, 'Creating workitem '.$taskstemplate['otitle']->raw);
     }
     
@@ -243,14 +242,15 @@ class Workflow extends \Seolan\Module\Table\Table {
 
   /// taches a excuter
   public function executeTasks($caseid=NULL) {
-    $cond=(empty($caseid)?'':' AND WFWORKITEM.caseid="'.$caseid.'"');
+    $cond=(empty($caseid)?'':" AND WFWORKITEM.caseid=\"$caseid\"");
     $updated=false;
 
     // lancement des taches en attente de lancement
-    $rs1=getDB()->select('SELECT WFWORKITEM.*,WFTASKS.myclass FROM WFWORKITEM,WFTASKS WHERE status IN ("enabled","inprogress") AND WFWORKITEM.taskid=WFTASKS.KOID'.$cond);
-    while($rs1 && $task=$rs1->fetch()) {
+    $rs1=getDB()->fetchAll('SELECT WFWORKITEM.*,WFTASKS.myclass FROM WFWORKITEM,WFTASKS WHERE status IN ("enabled","inprogress") AND WFWORKITEM.taskid=WFTASKS.KOID'.$cond);
+    foreach($rs1 as $task) {
       $workid=$task['KOID'];
       $work=\Seolan\Module\Workflow\Task::objectFactory($this, $workid);
+
       $updated = $work->run() || $updated;
       $update = $this->checkAndUpdateTask($workid) || $updated;
     }
@@ -272,7 +272,7 @@ class Workflow extends \Seolan\Module\Table\Table {
     $myi=0;
     $updated=true;
     $nbmax=0;	
-    $cond=(empty($caseid)?'':' AND WFTOKEN.caseid="'.$caseid.'"');
+    $cond=(empty($caseid)?'':" AND WFTOKEN.caseid=\"$caseid\"");
     // on tourne tant qu'il a des modifs mais pas plus de x fois
     while($updated && ($nbmax<=50)) {
       $nbmax++;
@@ -320,7 +320,6 @@ class Workflow extends \Seolan\Module\Table\Table {
 		       'AND WFTOKEN.caseid = WFCASE.KOID AND WFWORKITEM.caseid = WFCASE.KOID', array($oid));
     }
     \Seolan\Core\Logs::debug('\Seolan\Module\Workflow\Workflow::workflowEngine(): cycles '.$nbmax);
-    \Seolan\Core\Logs::debug('\Seolan\Module\Workflow\Workflow::workflowEngine(): cycles '.$nbmax);
     \Seolan\Library\ProcessCache::activate();
     \Seolan\Library\Lock::releaseLock($lock);
     return $updated;
@@ -335,12 +334,13 @@ class Workflow extends \Seolan\Module\Table\Table {
     if(!empty($oid) && $checkexisting && $this->isPendingCase($oid)) return array();
 
     $table=\Seolan\Core\Kernel::getTable($oid);
-    $rs=getDB()->select('SELECT * FROM WFWORKFLOW WHERE trig=? AND funct like ? and (modid=? OR modid like "%'.$mod->_moid.'%") AND '.
-			' (source like "%'.$table.'%" OR source ="")', array($trig, '%'.$funct.'%', $mod->_moid));
+
+    $rs=getDB()->fetchAll("SELECT * FROM WFWORKFLOW WHERE trig=? AND funct like ? and (modid=? OR modid like \"%{$mod->_moid}%\") AND ".
+                          " (source like \"%$table%\" OR source =\"\")", array($trig, "%$funct%", $mod->_moid));
     $actions=array();
     $user = \Seolan\Core\User::get_user();
 
-    while($rs && $o=$rs->fetch()) {
+    foreach($rs as $o) {
       if($user->inGroups(explode('|',$o['grps']))) {
 	$actions[]=array($o['KOID'], $o['title'], ($o['princip']==1));
       }
@@ -471,22 +471,25 @@ class Workflow extends \Seolan\Module\Table\Table {
     $wf = $this->xset->rDisplay($case['owfid']->raw);
     // pas de notification si propriété notif non renseignée
     if(!fieldExists('WFWORKFLOW','notif') || ($wf['onotif']->raw!='2')) {
-      $uid=$case['oOWN']->raw;
-      $u=new \Seolan\Core\User(array('UID'=>$case['oOWN']->raw));
-      $docxset = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS='.$case['odoc']->raw);
-      if(!empty($docxset) && \Seolan\Core\Kernel::objectExists($case['odoc']->raw)) {
-        $document = $docxset->rDisplayText($case['odoc']->raw);
-        $documentlink=$document['link'];
+      $uid=$user??$case['oOWN']->raw;
+      $uids=\Seolan\Module\Group\Group::users($uid,true);
+      foreach($uids as $uid) {
+	$u=new \Seolan\Core\User($uid);
+	$docxset = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS='.$case['odoc']->raw);
+	if(!empty($docxset) && \Seolan\Core\Kernel::objectExists($case['odoc']->raw)) {
+	  $document = $docxset->rDisplayText($case['odoc']->raw);
+	  $documentlink=$document['link'];
+	}
+	if(!empty($case['omodid']->raw)) {
+	  $url=$GLOBALS['TZR_SESSION_MANAGER']::admin_url(true,false).'&moid='.$case['omodid']->raw.
+	    '&function=goto1&oid='.$case['odoc']->raw.'&tplentry=br&template=Core.message.html&_direct=1';
+	}
+	$wftitle = $case['owfid']->text;
+	$body='<html><body><p><b>Processus: </b>'.$wftitle.'<br/><b>Document : </b><a href="'.$url.'">'.$documentlink.'</a></p><p>'.$message.'</p></body></html>';
+	$subject=$wftitle.' '.$title;
+	$u->sendMail2User($subject, $body, NULL, NULL, true, NULL, NULL, NULL, NULL, array('sign'=>true));
+	unset($u);
       }
-      if(!empty($case['omodid']->raw)) {
-        $url=$GLOBALS['TZR_SESSION_MANAGER']::admin_url(true,false).'&moid='.$case['omodid']->raw.
-          '&function=goto1&oid='.$case['odoc']->raw.'&tplentry=br&template=Core.message.html&_direct=1';
-      }
-      $wftitle = $case['owfid']->text;
-      $body='<html><body><p><b>Processus: </b>'.$wftitle.'<br/><b>Document : </b><a href="'.$url.'">'.$documentlink.'</a></p><p>'.$message.'</p></body></html>';
-      $subject=$wftitle.' '.$title;
-      $u->sendMail2User($subject, $body, NULL, NULL, true, NULL, NULL, NULL, NULL, array('sign'=>true));
-      unset($u);
     }
   }
 

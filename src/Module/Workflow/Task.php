@@ -35,12 +35,9 @@ class Task {
     $this->docid = $this->case['odoc']->raw;
     $this->modid=$this->case['omodid']->raw;
 
-    if(!empty($this->task['oproperties']->text)) {
-      try {
-	eval($this->task['oproperties']->text);
-      } catch(\Exception $e) {
-	$this->_wfmodule->log($this->caseid, 'Work '.$this->_workid.' error while evaluating');
-      }
+    $docxset = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS='.$this->case['odoc']->raw);
+    if(!empty($docxset) && \Seolan\Core\Kernel::objectExists($this->docid)) {
+      $this->document = $docxset->rDisplayText($this->docid);
     }
   }
 
@@ -56,13 +53,38 @@ class Task {
   function stringIncrement($str,$incr) {
     $str=trim($str);
     if(strlen($str)==1) $str='@'.$str;
-    $c2=ord($str{1})-ord('A')+$incr;
-    $c1=ord($str{0})-ord('A')+(int)($c2/26);
+    $c2=ord($str[1])-ord('A')+$incr;
+    $c1=ord($str[0])-ord('A')+(int)($c2/26);
     $c2=$c2%26;
     $str=str_replace('@',' ',chr($c1+ord('A')).chr($c2+ord('A')));
     return trim($str);
   }
 
+  /// recupérer la liste des paramètres de la transisiton
+  function getParameters() {
+    $parameters=$this->transition['oparameters']->raw;
+    $params=explode(",", $parameters);
+    $paramvalues=[];
+    $i=1;
+    foreach($params as $param) {
+      $value=$this->getContext($param);
+      if($value === NULL) {
+	if(!empty($this->document["o$param"])) $paramvalues[$i]=$this->document["o$param"];
+	else $paramvalues[$i]=NULL;
+      } else {
+	$paramvalues[$i]=$value;
+      }
+      $i++;
+    }
+    return $paramvalues;
+  }
+
+  function _check() {
+  }
+  function _run() {
+    return ["status"=>"inprogress"];
+  }
+  
   /// execution de la tache, mise a jour de UPD si deja en cours d'execution
   function run() {
     if(!empty($this->work['odeadline']->raw) &&
@@ -72,50 +94,21 @@ class Task {
     }
 
     $tocheck=false;
-    if($this->work['ostatus']->raw=='inprogress') {
-      $sourcecode=$this->task['otocheck']->raw;
-      $tocheck=true;
-    } else {
-      if(!empty($this->transition['otask']->raw)) {
-	$sourcecode=$this->transition['otask']->raw.';$this->ftransition='.$this->task['otask']->raw;
-	$sourcecode .= ';call_user_func($this->ftransition);';
-      } else {
-	$sourcecode=$this->task['otask']->raw;
-      }
+    if(!$this->work['ostatus']->raw=='inprogress') {
       $this->setStatus('inprogress');
     }
 
-    // evaluation du code qui se trouche dans task
     if($this->_wfmodule->testMode(true)) {
-      $this->_wfmodule->log($this->caseid, 'Document '.$this->case['odoc']->raw.' run code '.$sourcecode);
+      $this->_wfmodule->log($this->caseid, 'Document '.$this->case['odoc']->raw." run _run");
     }
 
-    $result=true;
-    if(!empty($sourcecode)) {
-      try {
-        if(!\Seolan\Core\Kernel::objectExists($this->docid)) {
-          $this->_wfmodule->log($this->caseid, 'Document '.$this->docid.' does not exist : case ended');
-          $this->_wfmodule->endCase($this->caseid);
-        } else {
-          $d=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS='.$this->docid);
-          $this->DOCUMENT=$DOCUMENT=$d->rDisplay($this->docid, array(), false, '', '', array('_lastupdate'=>true));
-          $result=eval($sourcecode);
-          if(!empty($this->DOCUMENTUPDATE)) $DOCUMENTUPDATE=$this->DOCUMENTUPDATE;
-          if(!empty($DOCUMENTUPDATE)) {
-            $DOCUMENTUPDATE['oid']=$this->case['odoc']->raw;
-            $DOCUMENTUPDATE['_noworkflow']=true;
-            $DOCUMENTUPDATE['_local']=true;
-            $d->procEdit($DOCUMENTUPDATE);
-            $msg='';
-            foreach($DOCUMENTUPDATE as $field=>$foo) $msg.=$field.',';
-            $this->_wfmodule->log($this->caseid, 'Document '.$this->case['odoc']->raw.' update fields '.$msg);
-          }
-        }
-      } catch(\Exception $e) {
-        $this->_wfmodule->log($this->caseid, 'Work '.$this->_workid.' error while checking '.$sourcecode);
-      }
+    try {
+      $result=$this->_run();
+    } catch(\Exception $e) {
+      $this->_wfmodule->log($this->caseid, 'Work '.$this->_workid);
     }
-    if($result==true && $tocheck) {
+
+    if($result["status"]=="finished") {
       $this->setStatus('finished');
     }
     return $result;
@@ -243,7 +236,7 @@ class Task {
     return $this->_wfmodule->_cases->procEdit(array('context'=>serialize($this->context), 'oid'=>$this->caseid, '_local'=>true));
   }
   function getContext($var1) {
-    return $this->context[$var1];
+    return empty($this->context[$var1])?NULL:$this->context[$var1];
   }
 
   function setRo($oid, $fieldstoedit) {

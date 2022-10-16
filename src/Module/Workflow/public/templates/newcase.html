@@ -1,13 +1,18 @@
 <%assign var="title" value=$syslabels.Seolan_Core_Module_Module.module_properties_text%>
 <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%include file="Module/Table.functions.html"%>
 <fieldset><legend><%$br_display.otitle->html%></legend>
 <p><%$br_display.odescr->html%></p>
    <form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
-<table class="list2">
- <%section name=p loop=$br_edit%>
-<tr><th><%$br_edit[p]->fielddef->label%></th><td><%$br_edit[p]->html%></td></tr>
- <%/section%>
-</table>
+<fieldset>
+  <legend><%$group%></legend>
+  <div class="row-striped">
+    <%section name=f loop=$br_edit %>
+    <%call fieldline field=$br_edit[f]%>
+    <%/section%>
+  </div>
+</fieldset>
+
     <input type="hidden" name="_function" value="procNewWFCase">
     <input type="hidden" name="template" value="Core.message.html">
     <input type="hidden" name="uniqid" value="<%$uniqid%>">

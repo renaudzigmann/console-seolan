@@ -1027,7 +1027,7 @@ class Management extends \Seolan\Core\Module\Module {
   /// verifie si le fichier qui dit que la crontab est ok est présent et
   function isCrontabOK() {
     if ($GLOBALS['IS_VHOST']) return true;
-    $okFilename=TZR_TMP_DIR.'crontab-ok';
+    $okFilename=TZR_TMP_DIR."crontab-ok";
     if(!file_exists($okFilename)) return false;
     $timestamp=filemtime($okFilename);
     if((time()-(int)$timestamp)>60*60*4) return false;
@@ -1036,7 +1036,7 @@ class Management extends \Seolan\Core\Module\Module {
   /// vérification que la crontab est ok, appelable seulement depuis le scheduler car sinon bloqué par apparmor
   /// création d un fichier de nom crontab-ok dans les fichiers temporaires si c'est bon
   function checkIfCrontabOK() {
-    if ($GLOBALS['IS_VHOST']) return true;
+    if (!empty($GLOBALS["IS_VHOST"])) return true;
     $res=[];
     if(!empty($GLOBALS['HOME']))
       exec('crontab -l -u '.$GLOBALS['HOME'].'| grep -v "#"| grep '.PHP_SEOLAN.' | grep cli', $res);

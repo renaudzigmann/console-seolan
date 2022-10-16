@@ -73,7 +73,7 @@ class Options extends \Seolan\Core\Field\Field {
   }
   
   /// chargement des options depuis un texte
-  public function createFieldsFromtext($text) {
+  public function createFieldsFromText($text) {
     $lines=explode("\n",$text);
     $o=array();
     $fields=array();
@@ -87,8 +87,7 @@ class Options extends \Seolan\Core\Field\Field {
 	if(!empty($opt)) {
 	  list($label,$value)=explode('=',$opt,2);
 	  if(!empty($label) && isset($value) && strtoupper($label)==$label) {
-	    $instruction='$field->'.trim($opt).';';
-	    eval($instruction);
+	    $field->$label=trim($value);
 	  }
 	}
       }
@@ -104,8 +103,7 @@ class Options extends \Seolan\Core\Field\Field {
 	      if(!empty($opt)) {
 		list($label,$value)=explode('=',$opt,2);
 		if(!empty($label) && isset($value) && strtoupper($label)!=$label) {
-		  $instruction='$ofield->'.trim($opt).';';
-		  eval($instruction);
+		  $ofield->$label=trim($value);
 		}
 	      }
 	    }

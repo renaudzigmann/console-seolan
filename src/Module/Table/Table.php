@@ -1252,7 +1252,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     }
 
     header('Content-type: application/pdf');
-    header('Content-disposition: attachment; filename="'.$pdfname.'"');
+    header("Content-disposition: attachment; filename=\"$pdfname\"");
     $size=filesize($tmpname);
     header('Accept-Ranges: bytes');
     header('Content-Length: '.$size);
@@ -3706,7 +3706,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     $fs['___storedquery']=\Seolan\Core\Field\Field::objectFactory((object)array('FIELD'=>'___storedquery','FTYPE'=>'\Seolan\Field\Link\Link','MULTIVALUED'=>0,
 								 'COMPULSORY'=>false,'TARGET'=>'QUERIES',
 								 'LABEL'=>\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','stored_query')));
-    $fs['___storedquery']->filter='modid="'.$this->_moid.'"';
+    $fs['___storedquery']->filter="modid=\"{$this->_moid}\"";
     $fs['___storedquery']->fgroup=$grp;
 
     $fs['__viewheader']=\Seolan\Core\Field\Field::objectFactory((object)array('FIELD'=>'__viewheader','FTYPE'=>'\Seolan\Field\Boolean\Boolean','MULTIVALUED'=>0,
@@ -3929,7 +3929,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     // Alias page détail
     if ($params['__linktodetail']) {
       list($ittable) = preg_split('/:/', $p->get('oidit'));
-      $params['__linktodetail_oidit'] = getDB()->select('select koid from '.$ittable.' where alias="'.$params['__linktodetail'].'"')->fetch(\PDO::FETCH_COLUMN);
+      $params['__linktodetail_oidit'] = getDB()->select("select koid from $ittable where alias=\"{$params['__linktodetail']}\"")->fetch(\PDO::FETCH_COLUMN);
       // si alias incorect, supprimer
       if (!$params['__linktodetail_oidit']){
       	\Seolan\Core\Shell::alert_admini(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_InfoTree_InfoTree','aliasunknown').' : '.$params['__linktodetail'], 'warning');
@@ -6466,7 +6466,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
 	      // on ne peut pas utiliser l'export du champ qui pose des formats de colonne
 	      $vals = [];
 	      foreach($xfieldval->collection as $collection){
-		$vals[] = addcslashes($collection->link['o'.$subfn]->text,'"');
+		$vals[] = addcslashes($collection->link["o$subfn"]->text,"\"");
 	      }
 	      $setCellValue($rownum, $colnum, '"'.implode('"'.$ar['_multisep'].'"', $vals).'"', null, null, null);
 	    }
