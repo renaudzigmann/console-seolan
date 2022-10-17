@@ -3869,7 +3869,8 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
       \Seolan\Core\Shell::alert(sprintf(\Seolan\Core\Labels::getSysLabel('Seolan_Core_Module_Module','deleted_templates'),$nb));
     }
     // Suppression de la table de zone si elle existe
-    if (!empty($this->zonetable)){
+    if (!empty($this->zonetable) && \Seolan\Core\System::tableExists($this->zonetable)){
+      \Seolan\Core\Logs::notice(__METHOD__,"trying to delete zone table : $this->zonetable");
       $xbase=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8($this->zonetable);
       $ret=$xbase->procDeleteDataSource();
       \Seolan\Core\Logs::notice(__METHOD__, $ret['message']);

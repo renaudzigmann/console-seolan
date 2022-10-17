@@ -85,7 +85,7 @@ class File extends \Seolan\Core\Field\Field {
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Field_Field','electronic_signature'),'electronic_signature','boolean');
 
     // L'option de signature électronique des documents est-elle déjà activées?
-    if( $this->DPARAM['electronic_signature'] ){
+    if(isset($this->DPARAM['electronic_signature']) ){
       $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Field_Field','electronic_signature_destination'),'electronic_signature_destination','field');
     }
   }

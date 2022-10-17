@@ -363,10 +363,14 @@ function &browse($ar=null){
       $moids = preg_split('/\|\|/', $moids, null, PREG_SPLIT_NO_EMPTY);
       foreach($moids as $moid) {
         $mod = Module::objectFactory($moid);
-        $mod->delete(array(
-          'withtable' => true,
-          'withsections' => true
-        ));
+	try{
+          $mod->delete(array(
+            'withtable' => true,
+            'withsections' => true
+          ));
+	} catch(\Throwable $t){
+	  \seolan\Core\Logs::notice(__METHOD__,"Error delete linked module {$moid} {$t->getMessage()}");
+	}
       }
     }
 
