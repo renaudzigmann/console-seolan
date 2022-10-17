@@ -1,4 +1,5 @@
 <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.tzrinfo%>
+<h3><small>Application : </small><%$_appchecked->name%><small>, domaine : '<%$_appchecked->domain%>'</small></h3>
 <%foreach from=$checklist_results key=categorie item=table%>
 <fieldset>
   <legend><%$categorie%></legend>

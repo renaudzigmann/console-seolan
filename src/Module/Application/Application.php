@@ -314,8 +314,12 @@ function &browse($ar=null){
       $my['insert']->setUrl('&moid='.$this->_moid.'&_function=insert&isApp=1&template=Module/Application.new.html&tplentry=br');
     }
     if($this->secure('','checklist')){
+      $appoid='';
+      if ((Shell::_function() == 'display' || Shell::_function() == 'editWizard') && isset($_REQUEST['oid'])){
+	$appoid = "&appoid={$_REQUEST['oid']}";
+      }
       $o1=new \Seolan\Core\Module\Action($this,'checklist','Checklist',
-                            '&moid='.$this->_moid.'&function=checklist&template=Module/Application.checklist.html','more');
+                            $appoid.'&moid='.$this->_moid.'&function=checklist&template=Module/Application.checklist.html','more');
       $o1->menuable=true;
       $my['checklist']=$o1;
     }
@@ -590,8 +594,9 @@ function &browse($ar=null){
    * @todo pour les site avec plusieurs IT, NL, Contacts, faire les tests avec les différents modules via modlist :
    *       \Seolan\Core\Module\Module::modlist(array('tplentry'=>TZR_RETURN_DATA,'basic'=>true, 'toid' => XMODINFOTREE_TOID))
    */
-  function checklist() {
-
+  function checklist($ar=null) {
+    $p = new Param($ar,['appoid'=>null]);
+    $appoid = $p->get('appoid');
     try {
 
       $error = '#FAA';
@@ -599,7 +604,11 @@ function &browse($ar=null){
       $todo = '#FF8';
 
       // Récupération de l'APP
-      $application = \Seolan\Module\Application\Application::getBootstrapApplication();
+      if (empty($appoid))
+	$application = static::getBootstrapApplication();
+      else
+	$application = static::getAppByOid($appoid);
+      
       // spécifique appli
       $moid_it = $application->infotree ?? \Seolan\Core\Ini::get('corailv3_xmodinfotree');
       $moid_nl = $application->nl ?? \Seolan\Core\Ini::get('CorailNewsLetter');
@@ -607,7 +616,7 @@ function &browse($ar=null){
       $moid_contacts = $application->contact ?? \Seolan\Core\Ini::get('corailv3_cart');
 
       $charteTab = explode(':', $application->charte)[0];
-      $xds_charte = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8(charteTab);
+      $xds_charte = \Seolan\Core\DataSource\DataSource::objectFactoryHelper8($charteTab);
       $br_charte = $xds_charte->browse(array('selectedfields'=>'all', '_mode' => 'object'));
       $favicons = $descriptions = $keywords = '';
       foreach ($br_charte['lines'] as $i => $charte) {
@@ -771,7 +780,7 @@ function &browse($ar=null){
     } catch (Exception $e) {
       $checklist['Erreur'] = var_export($e,true);
     }
-
+    \Seolan\Core\Shell::toScreen2('', 'appchecked', $application);
     \Seolan\Core\Shell::toScreen2('checklist','results',$checklist);
   }
 }
