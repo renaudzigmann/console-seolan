@@ -234,7 +234,7 @@ class DocSet extends \Seolan\Module\Table\Table {
     if (is_array($p->get('oid')))
       return;
 
-    $lang = Shell::getLang();
+    $lang = Shell::getLangData();
     
     if ($p->get('_xmc') != true){
       getDB()->execute("update {$this->docmngt->id} node set node.UPD=(select d.UPD from {$this->table} d where d.LANG=? AND d.koid=node.koid) where node.koid=?",[$lang, $p->get('oid')]);
