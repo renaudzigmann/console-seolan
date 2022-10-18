@@ -3670,7 +3670,7 @@ class DataSource implements \Seolan\Core\Module\ConnectionInterface {
     if($this->checkArchiveTable(true)) { // vérifer dans DataSource/Table
       $aupd = null;
       // archivage des lignes
-      $this->duplicate(['oid'=>$oid,'changeown'=>false,'lastonly'=>true,'nolog'=>true],'A_'.$this->base, $aupd);
+      $this->duplicate(['oid'=>$oid,'changeown'=>false,'lastonly'=>false,'nolog'=>true],'A_'.$this->base, $aupd);
       // trace dans les logs : fmoid, fuser
       $comments = ['oid'=>$oid,'moid'=>$trashmoid,'user'=>$trashuser];
       if ($trashdata != null){
