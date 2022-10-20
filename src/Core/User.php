@@ -737,7 +737,7 @@ public function getUserAccess($class, string $moid, $lang=NULL, string $oid='', 
     $firstoid=$oids[0];
     // Si on ne demande le droit que d'un oid sur un user, on vérifié le cache SQL
     // Ce cas étant le plus courant, c'est le seul cache SQL disponible pour l'instant
-    $cacheenabled=($mod->rightCacheEnabled() && $nboids==1 && self::oidIsUser($user)) && false;
+    $cacheenabled=($mod->rightCacheEnabled() && $nboids==1 && self::oidIsUser($user));
 
     while(($oid=array_shift($oids))!==null) {
       // Vérifie si l'objet est locké ou pas
