@@ -202,7 +202,11 @@ class Search extends SearchBase {
     // vérification existence, suppression des objets inexistants
     $deletedOids = [];
     foreach ($tocheck as $table => $oids) {
-      $existantOids = getDB()->fetchCol("SELECT KOID FROM $table where LANG=\"$lang_data\" and KOID in (\"".implode('","', $oids).'")');
+      if (\Seolan\Core\System::tableExists($table))
+	$existantOids = getDB()->fetchCol("SELECT KOID FROM $table where LANG=\"$lang_data\" and KOID in (\"".implode('","', $oids).'")');
+      else
+	$existantOids = [];
+
       $inexistantOids = array_diff($oids, $existantOids);
       foreach ($inexistantOids as $oid) {
 	$this->deleteItem($oid,$dmoid,$lang_data,false);
@@ -297,7 +301,7 @@ class Search extends SearchBase {
     }
     try{
       foreach($tzrid as $id){
-	\Seolan\Core\Logs::notice(get_class($this),get_class($this).'::_deleteItem delete doc : '.$id);
+	\Seolan\Core\Logs::notice(__METHOD__,'delete doc : '.$id);
 	$this->index->deleteById($id);
       }
       if($commit) $this->index->commit();
