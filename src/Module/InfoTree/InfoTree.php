@@ -464,6 +464,7 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     list($oidit,$oiddest,$oidtemplate)=$this->_getOids($oidsection);
 
     $d=$this->getFullFunctionDetails($oiddest);
+    // Workaround, vérifier s'il y aurait une solution plus propre
     foreach ( $d['_fullquery']['_FIELDS'] as $k => $field ){
       if( !empty($d['_fullquery'][$field])){
         $tmp = array_filter($d['_fullquery'][$field], function($v) { return $v == 'on'; });
