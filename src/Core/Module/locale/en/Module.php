@@ -5,6 +5,7 @@
 'added_templates'=>'new templates added to this module',
 'addtoselection'=>'Add to Selection',
 'allstats'=>'Complete statistics',
+'app_context'=>'Contextualize the module on the current application',
 'apply_alllangs'=>'Apply to every languages',
 'apply_recursively'=>'Apply also to sub-elements',
 'arrow_down_fontclass'=>'csico-menu-down',

@@ -2557,14 +2557,6 @@ class DataSource implements \Seolan\Core\Module\ConnectionInterface {
     if($published!='all' && $fields!='*' && $fields!=$this->base.'.*') $fields.=','.$this->base.'.PUBLISH';
     if($published=='public') $cond.=' AND '.$this->base.'.PUBLISH="1" ';
 
-    // Application
-    if(TZR_USE_APP && $this->fieldExists('APP') && !\Seolan\Core\Shell::isRoot()) {
-      $bootstrapApplication = \Seolan\Module\Application\Application::getBootstrapApplication();
-      if($bootstrapApplication && $bootstrapApplication->oid) {
-        $cond .= ' AND '.$this->getTable().'.APP="'.$bootstrapApplication->oid.'" ';
-      }
-    }
-
     // Ordre
     $jointcond = $p->get('jointcond', 'norequest');
     if(!empty($order) && empty($select)) {

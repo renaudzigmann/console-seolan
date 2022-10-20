@@ -5,6 +5,7 @@
 'added_templates'=>'nouveaux templates ont été assignés à ce module',
 'addtoselection'=>'Ajouter à la sélection',
 'allstats'=>'Statistiques complètes',
+'app_context'=>'Contextualiser le module sur l\'application en cours',
 'apply_alllangs'=>'Appliquer à toutes les langues',
 'apply_recursively'=>'Appliquer aux sous-elements',
 'arrow_down_fontclass'=>'csico-menu-down',

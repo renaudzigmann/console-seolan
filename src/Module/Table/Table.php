@@ -378,6 +378,9 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
 
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','edit_table_mode_activated'),'EditTableModeActivated','boolean', NULL,false,$alabel);
 
+    if ( TZR_USE_APP ){
+      $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_Module_Module','app_context'),'activeAppContext','boolean',NULL,true,$alabel);
+    }
   }
 
   /// Cette fonction est appliquee pour afficher l'ensemble des methodes de ce module
@@ -4440,12 +4443,6 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
         $cond[] = $filter;
       if (!\Seolan\Core\Shell::admini_mode() && $this->xset->fieldExists('PUBLISH'))
         $cond[] = 'PUBLISH=1';
-      if(TZR_USE_APP && fieldExists($table, 'APP') && !\Seolan\Core\Shell::isRoot()) {
-        $bootstrapApplication = \Seolan\Module\Application\Application::getBootstrapApplication();
-        if($bootstrapApplication && $bootstrapApplication->oid) {
-          $cond[] = $table.'.APP="'.$bootstrapApplication->oid.'" ';
-        }
-      }
       if (!empty($cond))
         $cond = ' and ' . implode(' and ', $cond);
       else
@@ -7317,6 +7314,13 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
       if($filter) $filter='('.$filter.') AND ('.$ar['_filter'].')';
       else $filter=$ar['_filter'];
     }
+
+    if (TZR_USE_APP && $this->xset->fieldExists('APP') && $this->activeAppContext != false) {
+      $bootstrapApplication = \Seolan\Module\Application\Application::getBootstrapApplication();
+      $condApp = $this->table.'.APP='.getDB()->quote($bootstrapApplication->oid);
+      $filter = empty($filter) ? $condApp : "(".$filter.") AND ".$condApp;
+    }
+
     return $filter?'('.$filter.')':'';
   }
 
