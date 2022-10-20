@@ -688,7 +688,10 @@ class DocumentManagement extends \Seolan\Core\Module\Module {
       }
     }
   }
-
+  /// Existance d'un document dans la base doc
+  public function docExists($oid){
+    return getDB()->fetchOne('select 1 from '.$this->id.' where KOID=?', [$oid]);
+  }
   /// Suppression dans le module des documents qui sont effaces depuis d'autres modules
   function _removeRegisteredOid($oid) {
     \Seolan\Core\Logs::debug(__METHOD__.' '.$oid);

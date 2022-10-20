@@ -8,39 +8,11 @@
  TZR.Archives.labels.trash="<%$syslabels.Seolan_Core_General.trash_text%>";
  TZR.Archives.labels.delfromtrash="<%$syslabels.Seolan_Core_General.deletefromtrashconfirm|escape:'javascript'%>";
  TZR.Archives.labels.delAll="<%$syslabels.Seolan_Core_Module_Module.emptytrash|escape:'javascript'%>?";
- TZR.Archives.restoreArchiveTarget = function(url){
-   var dialogurl = "<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.modaltree.html&_raw=1&moid="+moid+"&tplentry=br&title="+escape(TZR.Archives.labels.restore);
-   TZR.Dialog.openURL(dialogurl, 
-		      null, 
-		      {sizeClass:'modal-md',
-		       initCallback:{_function:"TZR.DocumentManagement.ModalTree.init",
-				     _param:{
-				       selectedcb:function(folderoid, title){
-					 TZR.Archives.restoreArchive.call(TZR.Archives, 
-									  folderoid,
-									  title, 
-									  url);
-				       }
-				     }
-		      }});
- };
- TZR.Archives.restoreArchive = function(folderoid, title, url){
-
-   TZR.Dialog.closeDialog();
-   
-   
-   TZR.jQueryPost({target:null, // target par default
-		   url:url+"&_parentoid="+escape(folderoid),
-		   cb:TZR.updateModuleContainer,
-		   cb_args:[TZR._refresh,null]
-   });
-
- };
 </script>
 <%if $trash_actions.delAll && $trash_nbtot>0%>
 <ul class="nav nav-pills module-tool" role="tablist">
   <li>
-    <button onclick="console.log('ici');TZR.Archives.delAllConfirm('<%$trash_actions.delAll|escape:'javascript'%>');" class="btn btn-primary"><%$syslabels.Seolan_Core_Module_Module.emptytrash%></button>
+    <button onclick="TZR.Archives.delAllConfirm('<%$trash_actions.delAll|escape:'javascript'%>');" class="btn btn-primary"><%$syslabels.Seolan_Core_Module_Module.emptytrash%></button>
   </li>
 </ul>
 <%/if%>

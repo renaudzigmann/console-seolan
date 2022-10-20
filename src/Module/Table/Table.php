@@ -8379,7 +8379,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     return new Class('viewArchive', $this, 'Seolan_Core_General view','display','class="cv8-ajaxlink cv8-dispaction"') extends \Seolan\Core\Module\BrowseActionHelper{
       function browseActionUrl($usersel, $linecontext=null){
 	$dtversion = $linecontext['browse']['lines_oUPD'][$linecontext['index']]->raw;
-	return $GLOBALS['TZR_SESSION_MANAGER']::complete_self().'&moid='.$this->module->_moid.'&_trash=1&_archive='.$dtversion.'&oid=<oid>&tplentry=br&function=display&template=Core/Module.view-archive.html';
+	return $GLOBALS['TZR_SESSION_MANAGER']::complete_self().'&moid='.$this->module->_moid.'&_trash=1&_archive='.$dtversion.'&oid=<oid>&tplentry=br&_skip=1&function=display&template=Core/Module.view-archive.html';
       }
     };
   }

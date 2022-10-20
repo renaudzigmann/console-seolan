@@ -40,7 +40,49 @@ class DocSet extends \Seolan\Module\Table\Table {
     if (!is_int($this->unfoldedgroupsnumber) || $this->unfoldedgroupsnumber < 2)
       $this->unfoldedgroupsnumber = 2;
   }
+  /**
+   * sélection du dossier destination et restauration via la base doc associée
+   */
+  protected function getRestoreArchiveActionHelper(){
+    return new Class('restoreArchive', $this, 'Seolan_Core_General restore_from_trash','display','class="cv8-ajaxlink cv8-dispaction"') extends \Seolan\Core\Module\BrowseActionHelper{
+      function browseActionUrl($usersel, $linecontext=null){
+	$dtversion = $linecontext['browse']['lines_oUPD'][$linecontext['index']]->raw;
+	$oid = $linecontext['browse']['lines_oid'][$linecontext['index']];
+	$url = $GLOBALS['TZR_SESSION_MANAGER']::complete_self();
+	$next= $this->module->getMainAction();
+	return $url.'&moid='.$this->module->_moid.'&_dtype='.urlencode($dtype).'&_archive='.urlencode($dtversion).'&oid=<oid>&tplentry=br&function=moveFromTrash&template=Core.empty.html&_skip=1&_next='.urlencode($next);
+      }
+      function browseActionHtmlAttributes(&$url,&$text,&$icon, $linecontext=null){
+	$dtversion = $linecontext['browse']['lines_oUPD'][$linecontext['index']]->raw;
+	$oid = $linecontext['browse']['lines_oid'][$linecontext['index']];
+	return 'class="cv8-dispaction" '.
+	       ' onclick="TZR.Archives.restoreArchiveTarget(\''.$url.'\', '. $this->module->daclMoid .');'.
+	       ' return false;"';
+      }
+    };
+  }
+  protected function getViewArchiveActionHelper(){
+    return new Class('viewArchive', $this, 'Seolan_Core_General view','display','class="cv8-ajaxlink cv8-dispaction"') extends \Seolan\Core\Module\BrowseActionHelper{
+      function browseActionUrl($usersel, $linecontext=null){
+	$dtversion = $linecontext['browse']['lines_oUPD'][$linecontext['index']]->raw;
+	$dtype = $linecontext['browse']['lines__doc'][$linecontext['index']]->tpl['oid'];
+	return $GLOBALS['TZR_SESSION_MANAGER']::complete_self().'&moid='.$this->module->_moid.'&_dtype='.urlencode($dtype).'&_trash=1&_archive='.$dtversion.'&oid=<oid>&tplentry=br&function=displayTrash&template=Core/Module.view-archive.html';
+      }
+    };
+  }
+  /// restauration d'un document : traiter la base doc associée
+  public function moveFromTrash($ar=null){
 
+    parent::moveFromTrash($ar);
+
+    $p = new Param($ar, []);
+    $oid = $p->get('oid');
+    $parentoid = $p->get('_parentoid');
+
+    // création du noeud à l'emplacement choisi
+    $this->createNodesAndLinks($oid, $parentoid);
+    
+  }
   /// Insertion : dossier parent
   function insert($ar=null){
     list($p, $tpl, $xmc) = $this->prepareAr('insert',$ar);
@@ -69,8 +111,7 @@ class DocSet extends \Seolan\Module\Table\Table {
   /// Ajout d'un document dans la base doc associée
   protected function createNodesAndLinks($newoid, $parentoid){
     // recherche du type de document associé à cet ensemble de fiches
-    $dtypeoid = getDB()->fetchOne('select KOID from _TYPES WHERE modid=? AND modidd=?',
-				  [$this->daclMoid,$this->_moid]);
+    $dtypeoid = $this->getDocumentType();
     if($dtypeoid) {
       $this->docmngt->addDocument($parentoid, $newoid, $dtypeoid);
       Logs::debug(__METHOD__,"add {$newoid} to {$parentoid}");
@@ -78,7 +119,11 @@ class DocSet extends \Seolan\Module\Table\Table {
       Logs::critical(__METHOD__," could not find Document Type for this module ");
     }
   }
-  
+  /// récupération du document type associé 
+  public function getDocumentType(){
+    return  getDB()->fetchOne('select KOID from _TYPES WHERE modid=? AND modidd=?',
+			      [$this->daclMoid,$this->_moid]);
+  }
   /// Display : dossier parent
   function display($ar=null){
     list($p, $tpl, $xmc) = $this->prepareAr('display', $ar);
@@ -304,32 +349,38 @@ class DocSet extends \Seolan\Module\Table\Table {
       case 'display':
 	$editOptions = [];
 	$ofield = $field->_newXFieldVal($editOptions);
-	
-	$dd = $this->docmngt->display(['oid'=>$p->get('oid'),
-				       'tplentry'=>TZR_RETURN_DATA]);
-	$ofield->html = '<div class="csx-docmgt-path csx-docset-parent-path">';
-	$self = $GLOBALS['TZR_SESSION_MANAGER']::complete_self();
-	if (count($dd['path'])>1){
-	  $field->label = Labels::getTextSysLabel('Seolan_Module_DocSet_DocSet', 'parentsfieldlabel');
-	} 
-	$ico = ''; //'<span class="glyphicon csico-folder"></span>';
-	foreach($dd['path'] as $apath){
-	  $poid = '';
-	  $html = [];
-	  foreach($apath as $dir){
-	    $url = makeurl($self,
-			   ['parentoid'=>$poid,
-			    'oid'=>$dir->oid,
-			    'moid'=>$this->docmngt->_moid,
-			    'function'=>'index',
-			    'template'=>'Module/DocumentManagement.index2.html',
-			    'tplentry'=>'br']);
-	    $poid = $dir->oid;
-	    $html[] = "<li><a class=\"cv8-ajaxlink\" href=\"{$url}\">{$dir->title}</a></li>";
+
+	// cas de visualisation d'un doc en corbeille : il n'est plus dans la base doc non plus
+	if ($this->docmngt->docExists($p->get('oid'))){
+	  $dd = $this->docmngt->display(['oid'=>$p->get('oid'),
+					 'tplentry'=>TZR_RETURN_DATA]);
+	  $ofield->html = '<div class="csx-docmgt-path csx-docset-parent-path">';
+	  $self = $GLOBALS['TZR_SESSION_MANAGER']::complete_self();
+	  if (count($dd['path'])>1){
+	    $field->label = Labels::getTextSysLabel('Seolan_Module_DocSet_DocSet', 'parentsfieldlabel');
 	  }
-	  $ofield->html .= "<span class='glyicon csico-folder'></span><ul>".implode('', $html).'</ul>';
+	  $ico = '';
+	  foreach($dd['path'] as $apath){
+	    $poid = '';
+	    $html = [];
+	    foreach($apath as $dir){
+	      $url = makeurl($self,
+			     ['parentoid'=>$poid,
+			      'oid'=>$dir->oid,
+			      'moid'=>$this->docmngt->_moid,
+			      'function'=>'index',
+			      'template'=>'Module/DocumentManagement.index2.html',
+			      'tplentry'=>'br']);
+	      $poid = $dir->oid;
+	      $html[] = "<li><a class=\"cv8-ajaxlink\" href=\"{$url}\">{$dir->title}</a></li>";
+	    }
+	    $ofield->html .= "<span class='glyicon csico-folder'></span><ul>".implode('', $html).'</ul>';
+	  }
+	  $ofield->html .= '</div>';
+	} else {
+	  $ofield->html = '<div class="csx-docmgt-path csx-docset-parent-path">???</div>';
 	}
-	$ofield->html .= '</div>';
+
 	break;
     }
 

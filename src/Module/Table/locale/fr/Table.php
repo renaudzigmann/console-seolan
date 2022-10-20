@@ -68,7 +68,7 @@
 'field_label'=>'Libellé',
 'fieldstoexport'=>'Liste des champs à exporter',
 'fieldstoprint'=>'Liste des champs à imprimer',
-'fieldselectorlegend'=>'Cliquer sur les icônes en regard des nom de champs',
+'fieldselectorlegend'=>'Cliquer sur les icônes en regard des noms de champs',
 'fieldselectorlegend_none'=>'Colonne non présentée',
 'fieldselectorlegend_list'=>'Colonne présente dans la liste',
 'fieldselectorlegend_quicksearch'=>'Colonne présente en liste et disponible en recherche rapide. Seuls les champs en italique sont sélectionnables pour la recherche',

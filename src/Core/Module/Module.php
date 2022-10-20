@@ -1484,8 +1484,11 @@ static function daemon($period){
 
     // corbeille du module
     if($this->usetrash &&  $this->secure('','browseTrash')){
-      $browseTrashAction=new \Seolan\Core\Module\Action($this,'browseTrash',\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_General','trash'),
-							'&moid='.$moid.'&_skip=1&_function=browseTrash&template='.static::$browsetrashtemplate.'&tplentry=trash',static::$trashmenugroup);
+      $browseTrashAction=new \Seolan\Core\Module\Action($this,
+							'browseTrash',
+							\Seolan\Core\Labels::getTextSysLabel('Seolan_Core_General','trash'),
+							'&moid='.$moid.'&_function=browseTrash&template='.static::$browsetrashtemplate.'&tplentry=trash',static::$trashmenugroup);
+      
       $browseTrashAction->menuable=true;
       $browseTrashAction->order=static::$trashmenuorder; // positionner les prop. avant setToolbar
       $browseTrashAction->setToolbar('Seolan_Core_General','trash');

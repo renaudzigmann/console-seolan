@@ -33,6 +33,39 @@ TZR.Archives = {
     TZR.jQueryLoad({target:null, // target par default
 		    url:params.url
     });
+  },
+  // base doc et doc set
+  restoreArchiveTarget:function(url, omoid){
+    if (omoid)
+      moid=omoid;
+    
+    var dialogurl = "<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.modaltree.html&_raw=1&moid="+moid+"&tplentry=br&title="+escape(TZR.Archives.labels.restore);
+    TZR.Dialog.openURL(dialogurl, 
+		       null, 
+		       {sizeClass:'modal-md',
+			initCallback:{_function:"TZR.DocumentManagement.ModalTree.init",
+				      _param:{
+					selectedcb:function(folderoid, title){
+					  TZR.Archives.restoreArchive.call(TZR.Archives, 
+									   folderoid,
+									   title, 
+									   url);
+					}
+				      }
+    }});
+  },
+  restoreArchive:function(folderoid, title, url){
+    
+    TZR.Dialog.closeDialog();
+    
+    
+    TZR.jQueryPost({target:null, // target par default
+		    url:url+"&_parentoid="+escape(folderoid),
+		    cb:TZR.updateModuleContainer,
+		    cb_args:[TZR._refresh,null]
+    });
+    
   }
+  
 };
 </script>

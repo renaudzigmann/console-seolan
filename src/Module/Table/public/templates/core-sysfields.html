@@ -5,10 +5,12 @@
 <%call fieldline field=$fields[fs]%>
 <%/if%>
 <%/section%>
+<%if empty($smarty.request._trash)%>
 <%if !empty($_oLANGREPLI) && $imod_sec.rwv%>
 <%call fieldline field=$_oLANGREPLI%>
 <%/if%>		      
 <%if !empty($oid)%>
 <%call simplefieldline field="oid" label=$syslabels.Seolan_Core_DataSource_DataSource.oid fieldhtml=$oid%>
 <%call documentlink oid=$oid moid=$_moid title=$br_tlink%>
-<%/if%>    
+<%/if%>
+<%/if%>
