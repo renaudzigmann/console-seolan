@@ -15,6 +15,7 @@
           <input type="hidden" name="LANGUSER" value="<%$lang_data%>">
           <input name="email" type="text" id="emailaddress<%$id%>" placeholder="<%$labels.youremail%>"/>
           <%if $frmnewsletter_captcha%><p><%$frmnewsletter_captcha.label%></p><%$frmnewsletter_captcha.html%></p><%/if%>
+          <%if $frmnewsletter_honeypot%><%$frmnewsletter_honeypot%><%/if%>
           <input class="btn" type="submit" name="button" value="<%$labels.subscribe%>" />
           <ul>
             <li><a href="#" onclick="if(document.getElementById('emailaddress<%$id%>').value) {document.getElementById('newsletter_subscribe_form<%$form_id_suffix%><%$id%>')._function.value='unsubscribe';document.getElementById('newsletter_subscribe_form<%$form_id_suffix%><%$id%>').submit();} return false;"><%$labels.unsubscribe%></a></li>

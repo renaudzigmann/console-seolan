@@ -27,6 +27,7 @@
 	'first_page'=>'First page',
 	'form'=>'Form',
 	'formtypename'=>'Form type name',
+	'honeypot'=>'Use honeypot',
 	'identifiersvisible'=>'Identifiers are visible',
 	'identifiersvisibleoptno'=>'Not export',
 	'identifiersvisibleoptmask'=>'Mask',

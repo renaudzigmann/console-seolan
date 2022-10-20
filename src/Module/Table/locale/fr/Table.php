@@ -77,6 +77,7 @@
 'first_page'=>'Première page',
 'form'=>'Formulaire',
 'formtypename'=>'Nom du type de formulaire',
+'honeypot'=>'Utiliser un honeypot',
 'identifiersvisible'=>'Identifiants visibles',
 'identifiersvisibleexpli'=>'Ajouter les identifiants à l\'export.',
 'identifiersvisibleoptdisp'=>'Afficher',

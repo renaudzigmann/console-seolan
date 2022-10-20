@@ -25,6 +25,7 @@
 <tr ><td ><%$br_oF0015->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0015->html%></td></tr>
 <tr ><td ><%$br_omailok->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_omailok->html%></td></tr>
 <%if $br_captcha%><%$br_captcha%><%/if%>
+<%if $br_honeypot%><%$br_honeypot%><%/if%>
 <tr height=15><td colspan="2">&nbsp;</td></tr>
 <tr>
 <td colspan="2" align=center><span class="bt"><a href="#" onClick="if(TZR.isFormValidWithFocus(document.editform,true)) document.editform.submit();"><%if $labels.btvalidate%><%$labels.btvalidate%><%else%>Valider<%/if%></a></span></td></tr>

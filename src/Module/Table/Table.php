@@ -34,6 +34,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
   public $templates='';
   public $btemplates='';
   public $captcha=false;
+  public $honeypot=false;
   public $savenext='standard';
   public $persistentquery=false;
   public $trackaccess=false;
@@ -333,6 +334,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','btemplates'),'btemplates','template',array('moid'=>$this->_moid, 'cond'=>"(gtype like '%')"),
 			    NULL,$alabel);
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','captcha'),'captcha','boolean',NULL,NULL,$alabel);
+    $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','honeypot'),'honeypot','boolean',NULL,NULL,$alabel);
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','consent_field'),'consent_field','field',['table'=>'table','type'=>'\Seolan\Field\Boolean\Boolean'],NULL,$alabel);
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','defaultispublished'),'defaultispublished','boolean',NULL,NULL,$alabel);
     $this->_options->setOpt(\Seolan\Core\Labels::getTextSysLabel('Seolan_Module_Table_Table','savenext'),'savenext','list',
@@ -2700,6 +2702,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
       $r2['urlparms'] = @$submodcontext['urlparms'];
     }
     if($this->captcha && (!\Seolan\Core\Shell::admini_mode() || \Seolan\Core\User::isNobody())) $r2['captcha']=$this->createCaptcha($ar);
+    if($this->honeypot && (!\Seolan\Core\Shell::admini_mode() || \Seolan\Core\User::isNobody())) $r2['honeypot']=$this->createHoneypot();
     if($tplentry!=TZR_RETURN_DATA) \Seolan\Core\Shell::toScreen1('iacl',$r3);
     return \Seolan\Core\Shell::toScreen1($tplentry,$r2);
   }
@@ -2890,6 +2893,10 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
     if($p->is_set('procEditAllLang')) {
       $this->procEditAllLang($ar);
       $p=new \Seolan\Core\Param($ar,array('applyrules'=>true,'_new_comment'=>null,'_sendacopyto'=>0));
+    }
+
+    if($this->honeypot && !$this->checkHoneypot($ar)) {
+      return true;
     }
 
     $ar['table']=$this->table;
@@ -4489,6 +4496,7 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
       \Seolan\Core\Shell::toScreen1($tplentry.'t',$r);
     }
     if($this->captcha) $r2['captcha']=$this->createCaptcha($ar);
+    if($this->honeypot) $r2['honeypot']=$this->createHoneypot();
     if(\Seolan\Core\Module\Module::getMoid(XMODWORKFLOW_TOID)) {
       $umod=\Seolan\Core\Module\Module::objectFactory(array('toid'=>XMODWORKFLOW_TOID,'moid'=>'','tplentry'=>TZR_RETURN_DATA));
       $workflows=$umod->getWorkflows($this, 'user', 'new');
@@ -4512,6 +4520,10 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
   function procInsert($ar) {
     $ar = $this->triggerCallbacks(self::EVENT_PRE_CRUD, $ar);
     $p=new \Seolan\Core\Param($ar,array('_applyrules'=>true,'_new_comment'=>null));
+
+    if($this->honeypot && !$this->checkHoneypot($ar)) {
+      return true;
+    }
 
     $tplentry=$p->get('tplentry');
     $noworkflow=$p->get('_noworkflow');
@@ -7454,6 +7466,58 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
       $captcha['label'] = $GLOBALS['XSHELL']->labels->getCustomSysLabel('Seolan_Module_Table_Table','captcha_label');
       return \Seolan\Core\Shell::toScreen1($tplentry,$captcha);
     }
+  }
+
+  function createHoneypot() {
+    $fields = $this->getHoneypotFields();
+    $ret = '<div class="seolanhp">';
+    foreach($fields as $field) {
+      $ret .= '<label>'.$field['label'].'<input name="'.$field['field'].'" type="'.$field['type'].'"></label>';
+    }
+    $ret .= '</div><script>jQuery(function(){jQuery(".seolanhp").hide();});</script>';
+
+    return $ret;
+  }
+
+  function checkHoneypot($ar) {
+    $p = new Param($ar);
+    if ($this->honeypot) {
+      $fields = $this->getHoneypotFields();
+      foreach($fields as $field) {
+        if($p->get($field['field'])) {
+          Shell::setNext(eplRoute('home'));
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  function getHoneypotFields() {
+    $fields = array(
+      'name' => ['field' => 'name', 'label' => 'Name', 'type' => 'text'],
+      'email' => ['field' => 'email', 'label' => 'Email', 'type' => 'email'],
+      'address' => ['field' => 'address', 'label' => 'Address', 'type' => 'text'],
+    );
+    $xset = $this->xset;
+    foreach($fields as $i => $param) {
+      $field = $param['field'];
+      if($xset->fieldExists($field)) {
+        $field = 'your_'.$field;
+      }
+      if($xset->fieldExists($field)) {
+        $j = 1;
+        $field = $param['field'] . $j;
+        while($xset->fieldExists($field)) {
+          $j++;
+          $field = $param['field'] . $j;
+        }
+      }
+      $fields[$i]['field'] = $field;
+    }
+
+    return $fields;
   }
 
   // implémentation de l'interface des documents

@@ -76,6 +76,7 @@
 'first_page'=>'First page',
 'form'=>'Form',
 'formtypename'=>'Form type name',
+'honeypot'=>'Use honeypot',
 'identifiersvisible'=>'System unique key visible',
 'identifiersvisibleexpli'=>'Add system unique key in the export.',
 'identifiersvisibleoptdisp'=>'Display',
