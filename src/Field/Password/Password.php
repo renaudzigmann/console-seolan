@@ -148,6 +148,7 @@ class Password extends \Seolan\Core\Field\Field {
       $js.="if(typeof(TZR)!='undefined'){TZR.addValidator(['{$varid}_HID',null,'{$this->label}','{$color}','Confirm','{$varid}']);}";
     }
 
+    $r->html .= '</div>';// fermeture input-group
     $r->html .= '</div>';// fermeture form-group
 
     // composant pour l'affichage de la force du mot de passe
