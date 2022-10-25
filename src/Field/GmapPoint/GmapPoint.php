@@ -270,7 +270,15 @@ EOT;
     $r->html.='<input type="hidden" value="'.$this->field.'" name="_FIELDS['.$this->field.']">';
     return $r;
   }
-  
+
+  public function my_getJSon($o, $options) {
+    list($lat, $lng) = preg_split('/[; ]+/', $o->raw);
+    if ($lat && $lng) {
+      return (object) ['latitude' => (float) $lat, 'longitude' => (float) $lng];
+    }
+    return null;
+  }
+
   // Ecriture dans un csv
   function writeCSV($o,$textsep) {
     return $textsep.$o->raw.$textsep;
