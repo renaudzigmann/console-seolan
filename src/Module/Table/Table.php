@@ -7489,7 +7489,6 @@ class Table extends \Seolan\Core\Module\ModuleWithSourceManagement implements \S
       $fields = $this->getHoneypotFields();
       foreach($fields as $field) {
         if($p->get($field['field'])) {
-          Shell::setNext(eplRoute('home'));
           return false;
         }
       }
