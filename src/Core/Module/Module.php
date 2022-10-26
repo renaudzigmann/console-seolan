@@ -1503,7 +1503,7 @@ static function daemon($period){
       if($alfunction) $this->_actionlistonfunction($my);
     }
     // ajout dans le menu more de toutes les actions de workflow applicable sur ce module
-    if(!empty($_REQUEST["oid"]) && \Seolan\Core\Module\Module::getMoid(XMODWORKFLOW_TOID)) {
+    if(!empty($_REQUEST["oid"]) && !is_array($_REQUEST["oid"]) && \Seolan\Core\Module\Module::getMoid(XMODWORKFLOW_TOID)) {
       $umod=\Seolan\Core\Module\Module::objectFactory(array("toid"=>XMODWORKFLOW_TOID,"moid"=>"","tplentry"=>TZR_RETURN_DATA));
       $workflows=$umod->getWorkflows($this, "user", "edit", $_REQUEST["oid"]);
       foreach($workflows as $i=>$f) {
