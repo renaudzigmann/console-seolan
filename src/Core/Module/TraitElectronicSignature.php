@@ -463,8 +463,8 @@ trait TraitElectronicSignature
 
     /*return [
       'url' => 'https://sign.test.cryptolog.com/sign/rpc/',
-      'login' => 'renaud.zigmann@xsalto.com',
-      'passwd' => 'bidonbidon125',
+      'login' => 'blabla@xsalto.com',
+      'passwd' => 'foofoo',
     ];*/
   }
 

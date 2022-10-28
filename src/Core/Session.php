@@ -195,12 +195,6 @@ class Session { // ? implements \Seolan\Core\ISecDeprecated {
 
     /// fix utilisation 'nopassword', qui devrait être abandonné
     if ($p->is_set('nopassword','local')){
-      $mail = new \Seolan\Library\Mail();
-      $mail->From = TZR_SENDER_ADDRESS;
-      $mail->Subject = '['.\Seolan\Core\Ini::get('societe_url').'] procAuth avec \'nopassword\'';
-      $mail->Body = 'utilisation de ar[\'nopassword\'] '.$alias;
-      $mail->AddAddress(defined('TZR_LEGACY_WARNING_ADDR')?TZR_LEGACY_WARNING_ADDR:'renaud@xsalto.com');
-      $mail->send();
       \Seolan\Core\Logs::critical(__METHOD__,"'nopassword' $alias");
       try{
 	$uid = getDB()->fetchOne('select KOID from USERS where LANG=? and alias=?', [TZR_DEFAULT_LANG,
