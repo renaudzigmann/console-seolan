@@ -264,6 +264,7 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     $this->_options->setOpt(\Seolan\Core\Labels::getSysLabel('Seolan_Module_InfoTree_InfoTree','pdf_enabled','text'), 'pdf_enabled', 'boolean', NULL,false,'PDF');
     $this->_options->setOpt(\Seolan\Core\Labels::getSysLabel('Seolan_Module_InfoTree_InfoTree','pdf_css','text'), 'pdf_css', 'text', NULL,'css/pdf.css','PDF');
     $this->_options->setOpt(\Seolan\Core\Labels::getSysLabel('Seolan_Module_InfoTree_InfoTree','pdf_css_content','text'), 'pdf_css_content', 'text', NULL,'css/page-content.css','PDF');
+    $this->_options->setOpt(\Seolan\Core\Labels::getSysLabel('Seolan_Module_InfoTree_InfoTree','pdf_cover_page','text'), 'pdf_cover_page', 'text', NULL,'','PDF');
     $tlabel=\Seolan\Core\Labels::getSysLabel('Seolan_Core_Module_Module','tracking');
     $this->_options->setOpt(\Seolan\Core\Labels::getSysLabel('Seolan_Core_Field_Field','trackchanges'),'trackchanges','boolean',NULL,NULL,$tlabel);
     // Ajout d'une option pour gérer les droits sur les sections
@@ -4000,6 +4001,14 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
     $i = 0;
     $lang = \Seolan\Core\Shell::getLangUser();
     $all_oids = [];
+    $oidTitle=getDB()->fetchOne("select KOID from ".$this->table." where alias=? and LANG=?", array($this->pdf_cover_page,$lang));
+    if ($oidTitle) {
+      $ar['tplentry'] = TZR_RETURN_DATA;
+      $ar['oidit'] = $oidTitle;
+      $tpldata[$i]['it'] = $this->viewpage($ar);
+      array_push($all_oids, $oidTitle);
+      $i++;
+    }
     foreach($sel as $oid => $bid) {
       $oids =[];
       $this->exploreNode($oid, $lang, $oids, $all_oids);
