@@ -9,10 +9,11 @@ texte 545e6a
 
 @font-face {
   font-family: 'seolan';
-  src:
-	url('../fonts/seolan.ttf') format('truetype'),
-	url('../fonts/seolan.woff') format('woff'),
-	url('../fonts/seolan.woff2') format('woff2');
+ src:
+  url('../fonts/seolan.ttf') format('truetype'),
+    url('../fonts/seolan.woff') format('woff'),
+    url('../fonts/seolan.woff2') format('woff2'),
+    url('../fonts/seolan.svg#seolan') format('svg');
   font-weight: normal;
   font-style: normal;
 }

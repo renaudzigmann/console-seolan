@@ -911,6 +911,10 @@ function removeJavascript($text) {
 // vers PDF en utilisant PRINCE. La fonction rend le nom du fichier
 // contenant le pdf en cas de succes.
 function princeTidyXML2PDF($filename=NULL,$content="",$tidyopt=NULL, $option=NULL, $multi=false) {
+  if ($tidyopt == null) $tidyopt = [];
+
+  $tidyopt['drop-empty-elements']=false;
+
   if ($multi) {
     foreach ($content as $key => $value) {
       if($tidyopt)
