@@ -49,6 +49,7 @@ class Monetico extends \Seolan\Module\Monetique\Monetique {
     $this->_options->setOpt('Url de retour annulation client', 'urlCancel', 'text', ['size' => 60], '', 'Monetico');
     $this->_options->setOpt('Champs supplémentaires', '_additionalFields', 'text', ['cols' => 40, 'rows' => 4], '', 'Monetico');
     $this->_options->setComment("à insérer dans le formulaire de paiement, format :<br>name => value", '_additionalFields');
+    $this->_options->setComment("l'url de l'IPN (monetique-retour-auto) est à configurer dans le BO de Monético", 'urlAutoResponse');
   }
 
   private function getPaymentUrl() {
