@@ -50,6 +50,7 @@ class Monetico extends \Seolan\Module\Monetique\Monetique {
     $this->_options->setOpt('Champs supplémentaires', '_additionalFields', 'text', ['cols' => 40, 'rows' => 4], '', 'Monetico');
     $this->_options->setComment("à insérer dans le formulaire de paiement, format :<br>name => value", '_additionalFields');
     $this->_options->setComment("l'url de l'IPN (monetique-retour-auto) est à configurer dans le BO de Monético", 'urlAutoResponse');
+    $this->_options->setComment("Pour monético, l'identifiant de la boutique (siteId) est le numéro de TPE", 'siteId');
   }
 
   private function getPaymentUrl() {
