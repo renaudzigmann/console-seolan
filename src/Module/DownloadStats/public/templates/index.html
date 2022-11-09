@@ -1,0 +1,187 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.info%>
+<script type="text/javascript" src="/tzr/templates/js/ofc2/json2.js"></script>
+<fieldset>
+<legend><%$interval_title%></legend>
+<div class="stats">
+<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.change_view%>:
+  <span class="otherPeriods">
+      <a href="<%$self%>moid=<%$_moid%>&function=index&view=<%$interval_view%>&ts=<%$interval_prev%>" title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.prev%>" class="cv8-ajaxlink"> < </a> |
+      <a href="<%$self%>moid=<%$_moid%>&function=index&view=<%$interval_view%>&ts=<%$interval_next%>" title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.next%>" class="cv8-ajaxlink"> > </a> |
+<%if $interval_view neq 'week'%>
+      <a href="<%$self%>moid=<%$_moid%>&function=index&view=week&ts=<%$interval_ts%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.week%></a> |
+<%/if%>
+<%if $interval_view neq 'month'%>
+      <a href="<%$self%>moid=<%$_moid%>&function=index&view=month&ts=<%$interval_ts%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.month%></a> |
+<%/if%>
+<%if $interval_view neq 'year'%>
+      <a href="<%$self%>moid=<%$_moid%>&function=index&view=year&ts=<%$interval_ts%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.year%></a>
+<%/if%>
+  </span>
+
+<%capture name='widgetFooter'%>
+  <div class="widgetFooter">
+    <span class="tools">
+      <input type="image" src="/tzr/templates/xmoddlstats/images/filter.jpg" class="filterBtn" title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.filter%>"/>
+      <input type="image" src="/tzr/templates/xmoddlstats/images/image.jpg" class="exportImg" title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.export_image%>"/>
+      <input type="image" src="/tzr/templates/xmoddlstats/images/table.jpg" class="exportCSV" title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.export_csv%>"/>
+    </span>
+  </div>
+  <div class="filter" style="display:none;">
+    <form class="form_filter">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <select name="mod">
+<%foreach from=$filter_mod key=koid item=nom%>
+        <option value="<%$koid%>"<%if $koid eq $filter_selected_mod%> selected="selected"<%/if%>><%$nom%></option>
+<%/foreach%>
+      </select>
+      <select name="user" size="1">
+<%foreach from=$filter_user key=koid item=nom%>
+        <option value="<%$koid%>"<%if $koid eq $filter_selected_user%> selected="selected"<%/if%>><%$nom|truncate:20%></option>
+<%/foreach%>
+      </select>
+      <input type="image" src="/tzr/templates/xmoddlstats/images/ok_small.jpg" class="filterSubmit" />
+      <div class="details" style="display:none">
+        <%$syslabels.Seolan_Module_DownloadStats_DownloadStats.details%>
+        <input type="checkbox" name="bymod" value="1"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.by_module%>
+        <input type="checkbox" name="byuser" value="1"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.by_user%>
+      </div>
+    </form>
+  </div>
+<%/capture%>
+
+  <div id="widgets">
+<%foreach from=$list_widget key=i item=widget%>
+    <div id="<%$widget%>" class="widget">
+      <div class="widgetTop">
+        <span class="button" style="float:right;display:none;">
+          <img title="<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.maximize%>" src="/tzr/templates/xmoddlstats/images/maximize.jpg"/>
+        </span>
+        <span><%$title_widget[$i]%></span>
+      </div>
+      <div class="widgetContent">
+        <div id="<%$widget%>_SummaryGraph"><%$syslabels.Seolan_Module_DownloadStats_DownloadStats.flash_needed%></div>
+      </div>
+  <%$smarty.capture.widgetFooter%>
+    </div>
+<%/foreach%>
+  </div>
+
+</div>
+</fieldset>
+
+<script type="text/javascript">
+<%foreach from=$list_widget key=i item=widget%>
+swfobject.embedSWF(
+  "/tzr/templates/js/ofc2/open-flash-chart.swf",
+  "<%$widget%>_SummaryGraph", "100%", "100%", "9.0.0",
+  "/tzr/templates/js/expressInstall.swf",
+  {
+    "get-data":"data_<%$widget%>",
+    "id": "chart_<%$widget%>",
+    "loading": "Chargement..."
+  });
+var <%$widget%>_data = <%$data_widget[$i]%>;
+function data_<%$widget%>(id) {
+  return JSON.stringify(<%$widget%>_data);
+}
+<%/foreach%>
+
+var widget_state = new Array();
+function ofc_ready(){
+}
+
+function ofc_resize(left, width, top, height, id) {
+}
+
+function findSWF(movieName) {
+  if (navigator.appName.indexOf("Microsoft")!= -1) {
+    return window[movieName];
+  } else {
+    return document[movieName];
+  }
+}
+
+jQuery(document).ready(function(){
+  // show details if
+<%foreach from=$view_details key=i item=widget%>
+  jQuery("#<%$widget%>").find('.details').css('display', 'block');
+<%/foreach%>
+  // filtre
+  jQuery(".filterBtn").click(function(e){
+      widget = jQuery(this).parents('.widget');
+      if (widget.find('.filter:visible').length)
+        widget.height(widget.height()-40);
+      else
+        widget.height(widget.height()+40);
+      widget.find('.filter').slideToggle(500);
+  });
+  // post d'un filtre
+  jQuery(".filterSubmit").click(function(e){
+      widget = jQuery(this).parents('.widget');
+      target = widget.attr('id');
+      inputs = widget.find('form').serialize()+'&function=get_data&target='+target;
+
+      jQuery.post('<%$self%>', inputs, function(data){
+          chart = findSWF(target+"_SummaryGraph");
+          chart.load( data );
+      });
+      return false;
+  });
+  // resize
+  jQuery('.widget').resizable({
+      resize:function(event, ui) {
+          reservedH = jQuery(this).find('.filter:visible').length * 40 + 60;
+          jQuery(this).find('.widgetContent').css('height', jQuery(this).height() - reservedH);
+      }
+  });
+//   // sort
+//   jQuery('#widgets').sortable();
+  // toggle button
+  jQuery('.widgetTop').hover(
+      function() { jQuery(this).find('.button').show(); },
+      function() { jQuery(this).find('.button').hide(); }
+  );
+  // maximize / restore
+  jQuery('.widgetTop .button').click(function(e){
+      widget = jQuery(this).parents('.widget');
+      target = widget.attr('id');
+      if ( widget_state[target] == undefined || widget_state[target].state == 'normal' ) {
+          width = widget.width();
+          height = widget.height();
+          widget.css('width', '98%');
+          new_width = widget.width();
+          new_height = height * new_width/width;
+          widget.height( new_height );
+          widget.find('.widgetContent').height( new_height - (widget.find('.filter:visible').length ?100: 60) );
+          widget_state[target] = { state: 'max', prev_width: width, prev_height: height };
+          jQuery(this).find('img').attr('title', '<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.restore%>').attr('src', '/tzr/templates/xmoddlstats/images/restore.jpg');
+      } else {
+          widget.width( widget_state[target].prev_width );
+          widget.height( widget_state[target].prev_height );
+          widget.find('.widgetContent').height( widget_state[target].prev_height - (widget.find('.filter:visible').length ?100: 60) );
+          widget_state[target] = { state: 'normal' };
+          jQuery(this).find('img').attr('title', '<%$syslabels.Seolan_Module_DownloadStats_DownloadStats.maximize%>').attr('src', '/tzr/templates/xmoddlstats/images/maximize.jpg');
+      }
+      jQuery(this).hide();
+  });
+
+  // export image
+  jQuery(".exportImg").click(function(){
+      widget = jQuery(this).parents('.widget');
+      title = widget.find('h2').text();
+      graph = widget.find('object');
+      TZR.Dialog.show('<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" /><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>' + title + '</title></head><body><h2>' + title + '</h2><img title="' + title + '" src="data:image/png;base64,' + graph[0].get_img_binary() + '" /> <br /><br /></body></html>');
+  });
+  // export CSV
+  jQuery(".exportCSV").click(function(e){
+      var values = new Array();
+      widget = jQuery(this).parents('.widget');
+      target = widget.attr('id');
+      inputs = widget.find('form').serialize()+'&function=get_csv&target='+target;
+      location.href = '<%$self%>' + inputs;
+      return false;
+  });
+});
+</script>
+
+

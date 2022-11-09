@@ -1,0 +1,22 @@
+<%if !$noheader%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.view-jsscripts.html"%><%* script à refaire *%>
+<%/if%>
+<%include file="Module/Table.functions.html"%>
+<%if empty($tabsuniqid)%><%assign var=tabsuniqid value=$uniqid%><%/if%>
+<script type="text/javascript">
+  if (TZR.Table.browse['<%$tabsuniqid%>'] === undefined) {
+    TZR.Table.browse['<%$tabsuniqid%>'] = {browseurl:'<%$imod_props.actions.browse->xurl|escape:"url"%>'};
+  }
+</script>
+
+<div class="cv8-contenu-center">
+
+    <%include file="Module/Table.view-core.html"%>
+    <%include file="Module/Table.sysfields.html"%>
+
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <a class="btn btn-primary cv8-ajaxlink" href="<%$back%>"><%$syslabels.Seolan_Core_General.back_text%></a>
+    </div>
+    
+</div>

@@ -1,0 +1,78 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title='Modules'%>
+
+<div class="cv8-contenu-center rgpd">
+  <form action="<%$self%>" method="post" name="rgpdform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="_function" value="procEditFields">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <fieldset>
+      <legend><%$syslabels.Seolan_Core_General.fields%></legend>
+      <%foreach $br_tables as $tableName => $table%>
+        <h4>
+          <a href="" onclick="jQuery(this).parent().next('.group').toggle();
+              jQuery(this).toggleClass('active');
+              return false;">
+            <span class="glyphicon csico-tree-open" aria-hidden="true"></span>
+            <span class="glyphicon csico-tree-close" aria-hidden="true"></span>
+            <%$table.ds->getLabel()%> (<%$table.ds->getTable()%>)
+          </a>
+        </h4>
+        <div class="group" style="display:none;">
+          <div class="line clearfix">
+            <%foreach $table.mods as $mod%>
+              <div>
+                <%$mod->modulename%>,
+                <%$syslabels.Seolan_Core_RGPD.deletedatamethod%> : <b><%$syslabels.Seolan_Core_RGPD.<%$mod->RGPD_deleteDataMethod%>%></b>,
+                <%$syslabels.Seolan_Core_RGPD.typeofdata%> : <b><%$syslabels.Seolan_Core_RGPD.<%$mod->RGPD_typeOfData%>%></b>
+              </div>
+            <%/foreach%>
+          </div>
+          <%if count($table.groups) == 1%>
+            <div class="line clearfix">
+              <table class="table table-auto">
+                <%foreach reset($table.groups) as $label => $opt%>
+                  <tr>
+                    <th>
+                      <label class="fieldHelp"><%$label%></label>
+                    </th>
+                    <td>
+                      <%$opt.edit%>
+                    </td>
+                  </tr>
+                <%/foreach%>
+              </table>
+            </div>
+          <%else%>
+            <%foreach $table.groups as $group => $fields%>
+              <div class="line clearfix">
+                <a href="" onclick="jQuery(this).next('.edit_group').toggle();
+                    jQuery('span:first-child', this).toggleClass('csico-tree-close');
+                    return false;">
+                  <span class="glyphicon csico-tree-open" aria-hidden="true"></span>
+                  <%$group%>
+                </a>
+                <div class="edit_group" style="display:none;">
+                  <table class="table table-auto">
+                    <%foreach $fields as $label => $opt%>
+                      <tr>
+                        <th>
+                          <label class="fieldHelp"><%$label%></label>
+                        </th>
+                        <td>
+                          <%$opt.edit%>
+                        </td>
+                      </tr>
+                    <%/foreach%>
+                  </table>
+                </div>
+              </div>
+            <%/foreach%>
+          <%/if%>
+        </div>
+      <%/foreach%>
+    </fieldset>
+    <div class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    </div>
+  </form>
+</div>
+

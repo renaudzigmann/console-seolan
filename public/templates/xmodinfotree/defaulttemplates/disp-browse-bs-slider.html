@@ -1,0 +1,37 @@
+    <%assign var=sectiondivid value="cv8d-browsediv-`$it_itoid[it]`"%>
+    <%* fontion callback chargement de la page comme toute liste en section fonction *%>
+    <!-- Slider news -->
+    <%assign var=section value=$it_olines[it]%>
+    <div class="cv8d-browsedivslide cv8d-browsedivslide-<%$section._functionparams.moid%>">
+        <ul>
+                <%strip%>
+                <%foreach key=i item=oid from=$section.lines_oid %>
+                <li class="item">
+                    <span class="titre">
+                        <%$section.lines_oF0001.$i->html%>
+                    </span>
+                    <%if $section.lines_oF0003.$i->html%>
+                    <span class="image">
+                        <img src="<%$section.lines_oF0003.$i->resizer%>&geometry=640x480%3E" title="<%$section.lines_oF0003.$i->title%>" alt="<%$section.lines_oF0003.$i->title%>"%>
+                    </span>
+                    <%/if%>
+                    <%if $section.lines_oF0002.$i->html%>
+                    <span class="image">
+                        <%$section.lines_oF0002.$i->html%>
+                    </span>
+                    <%/if%>
+                </li>
+                <%/foreach%>
+                <%/strip%>
+        </ul>
+    </div>
+    <!-- /Slider news -->
+<script>
+<%if !$admini%>
+    jQuery('document').ready(function(){
+        jQuery('.cv8d-browsedivslide-<%$section._functionparams.moid%>').slidewalker({dots: true})
+    });
+<%else%>
+alert('Le slider pour la section "Liste des actus en slider" n\'est pas activé en BO.');
+<%/if%>
+</script>

@@ -1,0 +1,32 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.new_text%>
+<%include file="Module/Table.edit-jsscripts.html"%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+<form action="<%$self%>" method="post" ENCTYPE="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this<%if $sysmods.xmodbackofficeinfotree==$_moid%>,undefined,undefined,{cb:home_reloadMenu}<%/if%>);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="procInput">
+  <input type="hidden" name="oidit" value="<%$smarty.request.oidit%>">
+  <input type="hidden" name="template" value="Module/InfoTree.index.html">
+  <input type="hidden" name="LANG_USER" value='<%$lang_user%>'>
+  <input type="hidden" name="LANG_DATA" value='<%$lang_data%>'>
+  <input type="hidden" name="tplentry" value="mit">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <%if $cat_mitt_oedit->filename%>
+    <!-- mise en page specifique en edition -->
+    <%assign var="filename" value=$cat_mitt_oedit->filename%>
+    <%include file=$filename%>
+  <%else%>
+  <!-- mise en page standard -->
+  <%$br__groups=$__groups%>
+  <%include file="Module/Table.edit-core.html"%>
+  <%/if%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input  class="btn btn-primary" type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+  </div>
+</form>
+</div>
+<script type="text/javascript">
+ TZR.fieldsetAccordion(jQuery(document.editform<%$uniqid%>));
+ TZR.activeDependency(document.editform<%$uniqid%>);
+</script>

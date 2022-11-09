@@ -1,0 +1,610 @@
+ 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:afs="http://www.antidot.net/suggest" lang="fr" xml:lang="fr" >
+<head>
+	<title>Service-public.fr</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="Shortcut Icon" type="image/x-icon" href="/images2/favicon.ico" />
+
+	<link rel="stylesheet" type="text/css" media="screen" href="/css2/styles.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css2/global.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css2/specifiques/accueil.css" />
+	<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/css2/ie6.css" /><![endif]-->
+	<link rel="stylesheet" type="text/css" media="print" href="/css2/print.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="/css2/afs.css" />
+	
+
+	<script type="text/javascript" src="/js2/lib/jquery.js"></script>
+	<script type="text/javascript" src="/js2/global.js"></script>
+	<script type="text/javascript" src="/js2/readspeaker.js"></script>
+	<link title="Service Public - Portail - recherche" type="application/opensearchdescription+xml" rel="search" href="http://www.service-public.fr/recherche/afs/opensearch-portailSP.xml" />
+	<script type='text/javascript' src='/recherche/afs/AFSCustomSuggest/AFSCustomSuggest.nocache.js'></script>
+	<meta name="afs:customSuggest/onload" content="onCustomSuggestLoad()" />
+	<script type="text/javascript">								 
+				function onCustomSuggestLoad() {
+					var suggest = new AFSCustomSuggest(
+						document.getElementById('KEYWORDS'),
+						document.getElementById('suggest_div'),
+						'http://www.service-public.fr/recherche/afssuggest.php', 10034 ) ;
+						suggest.getFeeds().add('general');
+				}	
+	</script>
+
+</head>
+<body class="noScript">
+	<div id="blocEntete">
+		<div id="entete">
+			<ul class="liensAccessibilite">
+				<li><a href="#ancreContenu">Aller au contenu</a></li>
+				<li><a href="#ancreNavigation">Aller au menu</a></li>
+				<li><a href="#ancreRecherche">Aller à la recherche</a></li>
+			</ul>
+
+			<div id="blocNavigationEntete">
+				<ul id="navigationEntete">
+					<li class="liensExternes">
+						<ul>
+							<li><a href="http://www.legifrance.gouv.fr/" class="lienExterne" target="_blank" title="site Legifrance.gouv.fr - Nouvelle fenêtre">Legifrance.gouv.fr<img src="/images2/commun/site-ext2.png" alt="" /></a></li>
+							<li><a href="http://www.vie-publique.fr/" class="lienExterne" target="_blank" title="site Vie-publique.fr - Nouvelle fenêtre">Vie-publique.fr<img src="/images2/commun/site-ext2.png" alt="" /></a></li>
+							<li class="dernier"><a href="https://mon.service-public.fr/" class="lienExterne" target="_blank" title="site Mon.service-public.fr - Nouvelle fenêtre">Mon.service-public.fr<img src="/images2/commun/site-ext2.png" alt="" /></a></li>
+						</ul>
+					</li>
+					<li class="langues">
+						<ul>
+							<li><a href="/langue/deutsch/" lang="de">Deutsch</a></li>
+							<li><a href="/langue/english/" lang="en">English</a></li>
+							<li class="dernier"><a href="/langue/espanol/" lang="es">Español</a></li>
+						</ul>
+					</li>
+					<!--<li class="autresLiens">
+						<ul>
+							<li><a href="#">Visite guidée</a></li>
+						</ul>
+					</li>-->
+				</ul>
+			</div>
+			
+			<div id="contenuEntete">
+				<div class="hautBlocEntete"></div>
+				
+				<h1><img src="/images2/commun/logo.png" alt="Service-public.fr : le site officiel de l’administration française" /></h1>
+				
+				<h2 class="invisible noprint">Navigation et services</h2> 
+				<div id="blocPoserQuestion">
+					<h3><a href="/poser-question/" class="titre">Poser une question</a></h3>
+					<div class="contenuPoserQuestion">
+						<div class="contenuPoserQuestionBas">
+							<strong>Courriel</strong> (réponse en 3 jours, 7 jours maxi)<br />
+							<strong>39 39</strong> (0,06 &euro;/minute en moyenne)
+
+						</div>
+					</div>
+				</div>
+				
+				<form action="http://www.service-public.fr/recherche/afsrecherche.php" 
+						method="get" name="recherche" id="formRecherche" accept-charset="utf-8">
+											
+						<div id="blocRecherche">
+						
+							<a name="ancreRecherche"></a>
+							<h3 class="invisible">Zone de recherche</h3> 
+							<label class="invisible" for="KEYWORDS">Texte à rechercher:</label>
+							<input type="text" class="disableAutoComplete" name="KEYWORDS" id="KEYWORDS" value="" />
+							<span class="bt4"><span><input class="bouton" value="RECHERCHER" type="submit" /></span></span>
+							 
+						</div>
+
+					</form>
+
+					<!-- Appel au suggest d'AFS -->
+					<div id="suggest_div" style="display: none;">
+						<div>
+							<afs:suggestion feed="general">
+								<span>{afs:suggestion}</span>
+							</afs:suggestion>
+						</div>
+
+					</div> 
+				
+				<a name="ancreNavigation"></a>
+				<h3 class="invisible noprint">Rubriques</h3> 
+		
+				<div>
+					<ul id="listeSite">
+						<li id="elemListSite1" class="actif"><a href="http://www.service-public.fr/"><span>Particuliers</span></a></li>
+						<li id="elemListSite2"><a href="http://pme.service-public.fr/" target="_blank" title="site PME.service-public.fr - Nouvelle fenêtre"><span>Professionnels</span></a></li>
+						<li id="elemListSite3"><a href="http://vosdroits.service-public.fr/associations/N20.xhtml"><span>Associations</span></a></li>
+					</ul>
+					
+					<ul id="liensUtiles">
+						<li><a href="http://lannuaire.service-public.fr/" class="lienAnnuaireAdmin">Annuaire de l'administration</a></li>
+						<li><a href="/formulaires/" class="lienServForm">Services en ligne et formulaires</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="blocNavPrincipale">
+		<ul id="navPrincipale">
+			<li id="navElem1"><a href="http://vosdroits.service-public.fr/particuliers/N19803.xhtml">Argent</a></li>
+			<li id="navElem2"><a href="http://vosdroits.service-public.fr/particuliers/N19804.xhtml">Etranger - Europe</a></li>
+			<li id="navElem3"><a href="http://vosdroits.service-public.fr/particuliers/N19805.xhtml">Famille</a></li>
+			<li id="navElem4"><a href="http://vosdroits.service-public.fr/particuliers/N19806.xhtml">Formation - Travail</a></li>
+			<li id="navElem5"><a href="http://vosdroits.service-public.fr/particuliers/N19807.xhtml">Justice</a></li>
+			<li id="navElem6"><a href="http://vosdroits.service-public.fr/particuliers/N19808.xhtml">Logement</a></li>
+			<li id="navElem7"><a href="http://vosdroits.service-public.fr/particuliers/N19809.xhtml">Loisirs</a></li>
+			<li id="navElem8"><a href="http://vosdroits.service-public.fr/particuliers/N19810.xhtml">Papiers - Citoyenneté</a></li>
+			<li id="navElem9"><a href="http://vosdroits.service-public.fr/particuliers/N19811.xhtml">Social - Santé</a></li>
+			<li id="navElem10"><a href="http://vosdroits.service-public.fr/particuliers/N19812.xhtml">Transports</a></li>
+		</ul>
+	</div>
+	
+	
+	<div id="blocCorps">
+		<div id="corps">
+		
+			<div id="filAriane">
+				<a href="/plan/" title="plan du site"><img src="/images2/commun/pct-fil-ariane-off.png" class="rollover noprint" alt="Plan du site" /></a>&nbsp;Accueil
+			</div>
+			
+			<div id="hautContenu">
+				<div id="contenu">
+					<!-- début outils -->
+						<div class="blocBarreOutils">
+							<ul id="barreOutils">
+								<li class="lien btAbonnerLettre"><a href="/actualites/lettresp/">S'abonner à la lettre (gratuit)</a></li>
+								<li class="lien"><a href="/rss/" class="btRss"><abbr title="Really Simple Syndication">RSS</abbr></a></li>
+								<li><a href="#" title="Augmenter la taille du texte"><img src="/images2/commun/barre-outils/typo-augm-off.png" class="rollover triggerAugmTypo" alt="Augmenter la taille du texte" /></a></li>
+								<li><a href="#" title="Réduire la taille du texte"><img src="/images2/commun/barre-outils/typo-dim-off.png" class="rollover triggerDimTypo" alt="Réduire la taille du texte" /></a></li>
+
+							
+								<li id="blocAudio">
+								<div id="readspeaker_button">
+<a accesskey="L" href="http://app.readspeaker.com/cgi-bin/rsent?customerid=4711&amp;lang=fr_fr&amp;url=http://www.service-public.fr/&amp;audiofilename=accueil&amp;readid=colonne2" onclick="readspeaker(this.href+'&amp;selectedhtml='+escape(selectedString)); return false;">Ecouter
+<img style="border-style:none" src='/images2/commun/barre-outils/play-off.png' alt='Ecoutez le texte avec ReadSpeaker' /></a>
+</div>
+<div id='rs_div'></div>
+								</li>
+								
+								<li>
+								<div id="btImprimer">
+									<a title="Imprimer la page" href="#">
+									<img alt="Imprimer" class="rollover triggerImprimerPage" 
+										src="/images2/commun/barre-outils/imprim-off.png" />
+									</a>
+								</div>
+								 <div id="blocImprimer"><p>CTRL+P pour imprimer</p></div>
+								</li>
+								
+								<li><a href="http://vosdroits.service-public.fr/envoyerpagewai?titre=&amp;url=http://www.service-public.fr/index.php" title="Envoyer cette page"><img src="/images2/commun/barre-outils/envoyer-off.png" class="rollover" alt="Envoyer" /></a></li>
+								
+								<li id="btReseauxSociaux">
+									<a href="#listeReseauxSociaux" title="Partager cette page" class="triggerAfficheReseauxSociaux"><img src="/images2/commun/barre-outils/reseau-off.png" class="rollover" alt="R&eacute;seaux sociaux" /></a>
+									<div id="blocReseauxSociaux">
+										<div class="blocReseauxSociauxBas">
+											<a href="#" class="triggerFermerReseauxSociaux btFermerReseauxSociaux"><img src="/images2/commun/boutons/bt-fermer-reseaux-off.png" class="rollover" alt="Fermer les réseaux sociaux" /></a>
+											<span class="titre">Partager sur les réseaux sociaux :</span>
+
+											<div class="listeReseauxSociauxHaut">
+												<div class="listeReseauxSociauxBas">
+													<ul id="listeReseauxSociaux">
+														<li class="gauche">
+														<a href="http://blogmarks.net/my/new.php?mini=1&amp;simple=1&amp;url=http://www.service-public.fr/" title="ajouter à Blogmark - Nouvelle fenêtre" target="_blank">
+														<img src="/images2/commun/barre-outils/reseaux/blogmark.png" alt=""/>Blogmark</a>
+														</li>
+														<li>
+															<a href="http://www.wikio.fr/#vurl=http://www.service-public.fr/" title="ajouter à Wikio - Nouvelle fenêtre" target="_blank">
+															Wikio
+															<script src="http://www.wikio.fr/getvote?style=styleold2" type="text/javascript"></script>	
+														</li>
+														<li class="gauche">
+															<a href="http://del.icio.us/post?url=http://www.service-public.fr/" title="ajouter à Del.icio.us - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/delicious.png" alt="" />Del.icio.us</a>
+														</li>
+														<li>
+															<a href="http://myweb.yahoo.com/myresults/bookmarklet?u=http://www.service-public.fr/" title="ajouter à yahoo - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/yahoo.png" alt="" />Yahoo</a>
+														</li>
+														<li class="gauche">
+															<a href="http://digg.com/submit?phase=2&amp;url=http://www.service-public.fr/" title="ajouter à Digg - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/digg.png" alt="" />Digg</a>
+														</li>
+														<li>
+															<a href="http://www.viadeo.com/shareit/share/?url=http://www.service-public.fr/" title="ajouter à Viadeo - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/viadeo.png" alt="" />Viadeo</a>
+														</li>
+														<li class="gauche">
+															<a href="http://www.facebook.com/sharer.php?u=http://www.service-public.fr/" title="ajouter à Facebook - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/facebook.png" alt=""/>Facebook</a>
+														</li>
+														<li>
+															<a href="http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=http://www.service-public.fr/" title="ajouter à Google - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/google.png" alt=""/>Google</a>
+														</li>
+														<li class="gauche">
+															<a href="http://twitter.com/home?status=je%20lis%20%3A%20http://www.service-public.fr/" title="ajouter à Facebook - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/twitter.png" alt=""/>Twitter</a>
+														</li>
+														<li>
+															<a href="http://www.netvibes.com/share?url=http://www.service-public.fr/" title="ajouter à Netvibes - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/netvibes.png" alt="" />Netvibes</a>
+														</li>
+														<li class="mvp">
+															<a href="https://mon.vie-publique.fr/?a=se&amp;v=2&amp;f=clip&amp;tl=bk&amp;u=http://www.service-public.fr/&amp;t=service-public.fr, le site officiel de l'administration française&amp;x=&amp;tag=&amp;sw=1" title="ajouter à mon.vie-publique.fr - Nouvelle fenêtre" target="_blank">
+															<img src="/images2/commun/barre-outils/reseaux/mvp.png" width="38" height="17" alt="" />mon.vie-publique.fr</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li id="btFaireUnLien"><a class="triggerAfficheFaireUnLien" title="Faire un lien vers cette page" href="#blocFaireUnLien"><img alt="Faire un lien vers cette page" class="rollover" src="/images2/commun/barre-outils/lien-off.png" /></a>
+								<div id="blocFaireUnLien">
+                              <div class="blocFaireUnLienBas"><a class="triggerFermerFaireUnLien btFermerFaireUnLien" href="#"><img alt="Fermer un lien vers cette page" class="rollover" src="/images2/commun/boutons/bt-fermer-reseaux-off.png" /></a><span class="titre">Faire un lien vers cette page :</span>
+							  <div class="listeFaireUnLienHaut">
+                                    <div class="listeFaireUnLienBas">
+
+                                       <form action="" method="get" name="formFaireUnLien" id="formFaireUnLien"><textarea cols="" rows="" id="urlFaireUnLien" name="urlFaireUnLien" readonly="readonly" >http://www.service-public.fr/</textarea></form>
+                                       <p class="message">CTRL + C pour copier</p>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </li>
+							
+							</ul>
+						</div>
+					
+					<!-- fin outils -->
+					
+					<!-- Colonne de gauche -->
+					<div id="colonne1">
+						
+						<div id="blocCommentFaireSi" class="bloc1">
+							<div class="bloc1Bas">
+								<div class="imageTitre"><h2><img src="/images2/accueil/comment-faire-si.jpg" alt="Comment faire si..." /></h2></div>
+								
+								<div class="sep1"></div>
+								
+								<ul class="list1">
+
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F14128.xhtml">Je déménage</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F16225.xhtml">J'attends un enfant</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F17556.xhtml">Je cherche un emploi</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F14485.xhtml">Je me marie</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F16507.xhtml">Je dois faire face au décès d'un proche</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F15913.xhtml">J'achète un logement</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F601.xhtml">J'ai besoin de faire garder mes enfants</a></li>
+									<li><a href="http://vosdroits.service-public.fr/particuliers/F17904.xhtml">Je prépare ma retraite</a></li>
+								</ul>
+								
+								<div class="sep1"></div>
+								
+								<a href="http://vosdroits.service-public.fr/particuliers/N13042.xhtml" class="lien2">Accueil comment faire si...</a>
+							</div>
+						</div>
+						
+						<!-- début bandeau eregie -->
+						<div id="blocAnnoncesGouvernementales" class="bloc2">
+							<span class="titre">Annonces gouvernementales</span>
+							<p>
+                <script type="text/javascript">
+                <!-- 
+                var oas_server="http://eregie.premier-ministre.gouv.fr";
+                var oas_sitepage="www.service-public.fr/accueil/";
+                var oas_position="Middle2";
+                var oas_query="?";
+                
+                if (!(RN)) {
+                	var RN=new String (Math.random());
+                	var RNS=RN.substring (2, 11);
+                }
+                var oas_page=oas_sitepage + '/1' + RNS + '@' + oas_position + oas_query;
+                
+                document.write ('<scr'+'ipt type="text/javascript" src="' + oas_server + '/3/' + oas_page + '">'); document.write ('\<\/scr'+'ipt\>'); // --> </script> 
+                <noscript><a href="http://eregie.premier-ministre.gouv.fr/1c/www.service-public.fr/accueil/[RANDOM]@Middle2" title="Annonces gouvernementales" target="_top"><img src="http://eregie.premier-ministre.gouv.fr/1/www.service-public.fr/accueil/[RANDOM]@Middle2" alt="Annonces gouvernementales" border="0" /></a></noscript>
+                </p>
+						</div><!-- fin bandeau eregie -->
+						
+						
+						
+						<div id="blocLegifrance" class="bloc1">
+							<div class="bloc1Bas">
+								<div class="imageTitre"><a href="http://www.legifrance.gouv.fr/" target="_blank"><img src="/images2/accueil/logo-legifrance.png" id="logoLegifrance" alt="Logo Legifrance"  title="site Legifrance.gouv.fr - Nouvelle fenêtre" /></a></div>
+																
+								<ul class="list3 listDepliante">
+									<li class="dernier">
+										<a href="#" class="triggerDeplier">A la source du droit avec Legifrance</a>
+										<ul class="list3Int detail">
+											<li><a  class="lienExterne" href="http://www.legifrance.gouv.fr/affichJO.do" title="accès au détail du dernier journal officiel sur le site legifrance.gouv.fr - Nouvelle fenêtre" target="_blank">dernier journal officiel<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a  class="lienExterne" href="http://www.legifrance.gouv.fr/html/actualite/jo/actualite_jo.htm" title="accès à la sélection du mois sur le site legifrance.gouv.fr - Nouvelle fenêtre" target="_blank">sélection du mois<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a  class="lienExterne" href="http://www.legifrance.gouv.fr/initRechTexte.do" title="accès à la recherche sur le site legifrance.gouv.fr - Nouvelle fenêtre" target="_blank">recherche d'un texte<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a  class="lienExterne"  href="http://www.legifrance.gouv.fr/initRechCodeArticle.do"   title="accès à tous les codes en vigueur sur le site legifrance.gouv.fr - Nouvelle fenêtre" target="_blank">tous les codes<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a  class="lienExterne" href="http://www.legifrance.gouv.fr/initRechConvColl.do"   title="accès aux conventions collectives sur le site legifrance.gouv.fr - Nouvelle fenêtre" target="_blank">conventions collectives<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a class="lienExterne" href="http://www.circulaires.gouv.fr" title="accès aux circulaires - Nouvelle fenêtre" target="_blank">circulaires<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+										</ul>
+									</li>
+								</ul>
+								
+							</div>
+						</div>
+						
+						<div id="blocViePublique" class="bloc1">
+							<div class="bloc1Bas">
+								<div class="imageTitre"><a href="http://www.vie-publique.fr/" target="_blank" title="site Vie-publique.fr - Nouvelle fenêtre"><img src="/images2/accueil/logo-vie-publique.png" id="logoViePublique" alt="Logo vie publique" /></a></div>
+																
+								<ul class="list3 listDepliante">
+									<li class="dernier">
+										<a href="#" class="triggerDeplier">Au cœur du débat public avec Vie-publique</a>
+										<ul class="list3Int detail">
+											<li><a class="lienExterne" href="http://www.vie-publique.fr/decouverte-institutions/"  title="accès à la rubrique découverte des institutions sur le site vie-publique.fr - Nouvelle fenêtre" target="_blank">découverte des institutions<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a class="lienExterne" href="http://www.vie-publique.fr/actualite/panorama/" title="accès à la rubrique panorama des loi sur le site vie-publique.fr - Nouvelle fenêtre"  target="_blank">panorama des lois<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a class="lienExterne" href="http://www.ladocumentationfrancaise.fr/rapports/index.shtml"  title="accès à la bibliothèque des rapports publics sur le site ladocumentationfrancaise.fr - Nouvelle fenêtre"  target="_blank">rapports publics<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a class="lienExterne" href="http://www.vie-publique.fr/forums/"  title="accès à la rubrique des débats publics sur le site vie-publique.fr - Nouvelle fenêtre"  target="_blank">débats publics<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+										</ul>
+									</li>
+								</ul>
+																
+							</div>
+						</div>
+						
+						
+						<div id="blocListLienCol1" class="bloc25">
+							<div class="bloc25Bas">
+							
+								<a href="http://communaute.service-public.fr" target="_blank" class="lien13" title="site Communaute.service-public.fr - Nouvelle fenêtre">Communauté des partenaires</a>
+								<a href="http://lecomarquage.service-public.fr/index.php" target="_blank" class="lien13" title="site lecomarquage.service-public.fr - Nouvelle fenêtre">Co-marquage avec service-public.fr</a>
+
+							</div>
+						</div>
+						
+					</div>
+					
+					
+					<div id="colonne2" class="accueil">
+						<a name="ancreContenu" class="noprint"></a>
+						<!-- RSPEAK_START -->
+						<!-- Colonne centrale -->
+						<div id="colonne21">
+						
+							<div class="bloc1CC">
+								<div class="bloc1Bas">
+									<h2 class="titre">Dernières informations </h2>
+									<div class="decoActu"></div>
+								</div>
+							</div>
+							
+							<div id="blocDernieresInformations">
+								﻿<ul id="listeDernieresInformations"><li><a href="/actualites/002056.html"><strong>La convention d&#8217;assurance chômage&nbsp;2011 agréée</strong></a> - <span class="date">21.06.2011</span></li><li><a href="/actualites/00219.html"><strong>La qualité des eaux de baignade dans l&#8217;Union européenne</strong></a> - <span class="date">20.06.2011</span></li><li><a href="/actualites/00929.html"><strong>Eté&nbsp;2011&nbsp;: les conseils vacances de la DGCCRF</strong></a> - <span class="date">16.06.2011</span></li></ul>								<a href="/actualites/" class="lien4">Toute l'actualité</a>
+								
+							</div>
+							
+							
+							<div id="blocDroitsDemarches">
+									<h2><img src="/images2/accueil/titre-droits-demarches.jpg" alt="Vos droits et d&eacute;marches" /></h2>
+									
+									<ul id="listeDroitsDemarches">
+										<li class="gauche argent">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19803.xhtml" class="titre">Argent</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N20375.xhtml">Épargne</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20263.xhtml">Assurance</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20073.xhtml">Impôts</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20154.xhtml">Consommation</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20369.xhtml">Crédit et surendettement</a>...</p>
+											
+											<a href="http://vosdroits.service-public.fr/particuliers/N19803.xhtml" class="lien4">Tout Argent</a>
+										</li>
+									
+										<li class="europe">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19804.xhtml" class="titre">Etranger - Europe</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N20273.xhtml">Français expatriés</a> / <a href="http://vosdroits.service-public.fr/particuliers/N110.xhtml">Titres de séjour</a> / <a href="http://vosdroits.service-public.fr/particuliers/N111.xhtml">Acquisition de la nationalité française</a>...</p>
+											
+											<a href="http://vosdroits.service-public.fr/particuliers/N19804.xhtml" class="lien4">Tout Etranger - Europe</a>
+										</li>
+										
+										<li class="gauche famille">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19805.xhtml" class="titre">Famille</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N156.xhtml">Allocations familiales</a> / <a href="http://vosdroits.service-public.fr/particuliers/N128.xhtml">Naissance</a> / <a href="http://vosdroits.service-public.fr/particuliers/N142.xhtml">Mariage</a> / <a href="http://vosdroits.service-public.fr/particuliers/N144.xhtml">PACS</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20265.xhtml">Scolarité</a>...</p>
+											
+											<a href="http://vosdroits.service-public.fr/particuliers/N19805.xhtml" class="lien4">Tout Famille</a>
+										</li>
+										
+										<li class="travail">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19806.xhtml" class="titre">Formation - Travail</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N19871.xhtml">CDD</a> / <a href="http://vosdroits.service-public.fr/particuliers/N500.xhtml">Accès à la fonction publique</a> / <a href="http://vosdroits.service-public.fr/particuliers/N461.xhtml">Chômage</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20166.xhtml">Retraite</a>...</p>
+											
+											<a href="http://vosdroits.service-public.fr/particuliers/N19806.xhtml" class="lien4">Tout Formation - Travail</a>
+										</li>
+										
+										<li class="gauche justice">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19807.xhtml" class="titre">Justice</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/F1420.xhtml">Casier judiciaire</a> / <a href="http://vosdroits.service-public.fr/particuliers/N274.xhtml">Médiation</a> / <a href="http://vosdroits.service-public.fr/particuliers/F1435.xhtml">Porter plainte</a> / <a href="http://vosdroits.service-public.fr/particuliers/N269.xhtml">Procès civil</a>...</p>
+											<a href="http://vosdroits.service-public.fr/particuliers/N19807.xhtml" class="lien4">Tout Justice</a>
+										</li>
+										
+										<li class="logement">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19808.xhtml" class="titre">Logement</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N319.xhtml">Construction</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20360.xhtml">Allocations logement</a> / <a href="http://vosdroits.service-public.fr/particuliers/N292.xhtml">Location</a>...</p>
+											<a href="http://vosdroits.service-public.fr/particuliers/N19808.xhtml" class="lien4">Tout Logement</a>
+										</li>
+			
+										<li class="gauche loisirs">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19809.xhtml" class="titre">Loisirs</a><br />
+											<p class="texte"><!--<a href="http://vosdroits.service-public.fr/particuliers/N541.xhtml">Aides pour les vacances</a> / --><a href="http://vosdroits.service-public.fr/particuliers/N18944.xhtml">Animaux</a> / <a href="http://vosdroits.service-public.fr/particuliers/N19969.xhtml">Chasse et Pêche</a> / <a href="http://vosdroits.service-public.fr/particuliers/N168.xhtml">Vacances</a>...</p>
+											<a href="http://vosdroits.service-public.fr/particuliers/N19809.xhtml" class="lien4">Tout Loisirs</a>
+										</li>
+															
+										<li class="papiers">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19810.xhtml" class="titre">Papiers-Citoyenneté</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N359.xhtml">Etat-civil</a> / <a href="http://vosdroits.service-public.fr/particuliers/N360.xhtml">Passeport</a> / <a href="http://vosdroits.service-public.fr/particuliers/N47.xhtml">Elections</a>...</p>
+											<a href="http://vosdroits.service-public.fr/particuliers/N19810.xhtml" class="lien4">Tout Papiers - Citoyenneté</a>
+										</li>
+										
+										<li class="gauche derniereLigne social">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19811.xhtml" class="titre">Social - Santé</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N20270.xhtml">Handicap</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20272.xhtml">Sécurité sociale</a> / <a href="http://vosdroits.service-public.fr/particuliers/N19775.xhtml">RSA</a> / <a href="http://vosdroits.service-public.fr/particuliers/N20271.xhtml">Personnes âgées</a> / <a href="http://vosdroits.service-public.fr/particuliers/F163.xhtml">Médecin traitant</a> ...</p>
+											<a href="http://vosdroits.service-public.fr/particuliers/N19811.xhtml" class="lien4">Tout Social - Santé</a>
+										</li>
+										
+										<li class="derniereLigne transports">
+											<a href="http://vosdroits.service-public.fr/particuliers/N19812.xhtml" class="titre">Transports</a><br />
+											<p class="texte"><a href="http://vosdroits.service-public.fr/particuliers/N367.xhtml">Carte grise</a> / <a href="http://vosdroits.service-public.fr/particuliers/N530.xhtml">Permis de conduire</a> / <a href="http://vosdroits.service-public.fr/particuliers/N18131.xhtml">Contrôle technique </a>...</p>
+
+											<a href="http://vosdroits.service-public.fr/particuliers/N19812.xhtml" class="lien4">Tout Transports</a>
+										</li>
+									</ul>
+									
+									<div class="sep3"></div>
+							</div>
+							
+						</div>
+						<!-- RSPEAK_STOP -->
+						
+						<!-- Colonne de droite -->
+						<div id="colonne22">
+						<div id="blocMSP" class="bloc1">
+							<div class="bloc1Bas">
+								<div class="imageTitre">
+									<a href="https://mon.service-public.fr/" target="_blank" title="Mon.service-public.fr - Nouvelle fenêtre">
+										<img src="/images2/accueil/logo-msp.png" id="logoMSP" alt="Logo Mon.Service-Public.fr" />
+									</a>
+								</div>
+								<div class="lien">
+									<a href="https://mon.service-public.fr/" target="_blank" title="Nouvelle fenêtre">Accédez à votre compte personnel</a>
+								</div>
+							</div>
+						</div>
+							<h2 class="invisible">Actualités</h2> 
+							
+							﻿								
+								
+								<div id="blocFocusSur" class="bloc11">
+									<div class="bloc11Bas">						
+										<h3 class="titre2-2"><span><span>Focus sur...</span></span></h3>
+										<!--br class="clear" /-->
+										<ul class="listStandard">
+										
+											<li class="dernier">
+												Agence de l&#8217;environnement et de la maîtrise de l&#8217;énergie (Ademe)<br />
+												<a href="/actualites/00858.html" class="bold">CO²&nbsp;: palmarès&nbsp;2011 des voitures les moins polluantes</a> – 22.06.2011
+											</li>
+										
+										</ul>
+										
+									</div>
+								</div>
+								
+								<div id="blocNePasOublier" class="bloc10">
+									<div class="bloc10Bas">	
+									
+										<h3><a href="/actualites/agenda/" class="lien10">Juin, ne pas oublier&nbsp;!</a></h3>
+
+									</div>
+								</div>
+
+							<div id="blocServEtForm">
+								<h2 class="titreServEtForm"><span>Services en ligne<br />et formulaires</span></h2>
+								
+								<div class="bloc5">
+									<div class="bloc5Bas">
+									
+										<ul class="list1">
+											<li><a href="http://www.impots.gouv.fr" target="_blank" class="lienExterne" title="accès au site Impôts en ligne  - Nouvelle fenêtre">Impôts en ligne<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a href="https://www.acte-etat-civil.fr/"  target="_blank" class="lienExterne" title="accès au site d'acte d'état civil - Nouvelle fenêtre">Demande d'actes d'état civil<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a href="http://www.interieur.gouv.fr/sections/a_votre_service/vos_demarches/vehicules/telecartegrise_particuliers"  target="_blank" class="lienExterne" title="accès à la rubrique Certificat de non gage sur le site du ministère de l'intérieur  - Nouvelle fenêtre">Certificat de non gage<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<li><a href="https://mdel.mon.service-public.fr/je-change-de-coordonnees.html "  target="_blank" class="lienExterne" title="accès au site Mon.service-public.fr, je change de coordonnées - Nouvelle fenêtre">Changement d’adresse en ligne<img src="/images2/commun/site-ext.png" alt="" /></a></li>
+											<!--li><a href="https://mon.service-public.fr/"  target="_blank" class="lienExterne" title="accès au site Mon.service-public.fr - Nouvelle fenêtre">Mon.service-public.fr, le compte personnel des démarches en ligne<img src="/images2/commun/site-ext.png" alt="" /></a></li-->
+										</ul>
+										
+										<div class="sep4"></div>
+										
+										<a href="/formulaires/" class="lien6">Tous les services en ligne et formulaires</a>
+										
+										<!--<a href="https://mon.service-public.fr/" id="btSavoirPlus"><img src="/images2/commun/liens/bg-mon-sp.png" alt="Connectez-vous à Mon service public" /></a>-->
+									</div>
+								</div>
+							</div>
+							
+						
+							<div id="blocAnnuaire" class="blocTypeAnnuaire">
+								<h2 class="titreAnnuaire"><span>Annuaire de<br />l'administration</span></h2>
+						
+								<div class="bloc6">
+									<div class="bloc6Bas">
+									
+										<ul class="list1">
+											<li><a href="http://lannuaire.service-public.fr/navigation/index-mairie.html">Mairies</a></li>
+											<li><a href="http://lannuaire.service-public.fr/navigation/accueil_sl.html">Services locaux</a></li>
+											<li><a href="/annuaire/centres-contact/">Centres d'appel et de contact</a></li>
+											<li><a href="http://lannuaire.service-public.fr/navigation/gouvernement.html">Ministères</a></li>
+											<li><a href="http://lannuaire.service-public.fr/navigation/institutions_juridictions.html">Institutions françaises</a></li>
+											<li><a href="http://lannuaire.service-public.fr/navigation/institutions_europeennes.html">Institutions européennes</a></li>
+										</ul>
+
+										<div class="sep5"></div>
+										
+										<a href="http://lannuaire.service-public.fr/" class="lien7">Tout l'annuaire</a>
+										
+									</div>
+								</div>
+							</div>
+					
+
+						</div>
+					
+					
+					</div>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+	
+	
+	﻿<script type="text/javascript" src="/js2/autocompletion.js"></script>
+<div id="blocPiedPage">
+	<div id="piedPage">
+		<div class="blocNavPied">
+			<ul id="navPied">
+				<li class="marianne"><img src="/images2/commun/logo-marianne.png" alt="logo du label Marianne" /></li>
+				<li class="premier engagements"><a href="/apropos-du-site/001369.html">Engagements de service</a></li>
+				<li class="planSite"><a href="/plan/">Plan du site</a></li>
+				<li class="aide"><a href="/aide/">Aide</a></li>
+				<!--<li class="glossaire"><a href="#">Glossaire</a></li>-->
+				<li class="accessibilite"><a href="/apropos-du-site/001356.html">Accessibilité</a></li>
+				<li class="mentions"><a href="/apropos-du-site/001357.html">Mentions légales</a></li>
+				<li class="avis"><a href="http://interactif.service-public.fr/cgi-bin/posez_question/akio.cgi?amp;page=posez_question/question-suggestion.html">Avis et suggestions</a></li>
+				<li class="presse"><a href="/presse/">Presse</a></li>
+				<li class="dernier apropos"><a href="/apropos-du-site/">A propos du site</a></li>
+				<!--<li class="dernier mobile"><a href="#">Réutilisation des informations</a></li> -->
+				<li class="hautPage"><a href="#contenuEntete">Haut de page</a></li> 
+			</ul>
+		</div>
+		<p><a href="http://www.dila.premier-ministre.gouv.fr" target="_blank" title="Nouvelle fenêtre. Direction de l'information légale et administrative. Accueil">Service-public.fr est réalisé par la Direction de l’information légale et administrative</a></p>
+	</div>
+</div>
+<div id="footerPrint">
+	<p>http://www.service-public.fr/ </p>
+	<p>Direction de l'information légale et administrative &copy; 2010 - Tous droits réservés</p>
+</div>
+
+  <script type="text/javascript" src="/js2/autocompletion.js"></script>  
+
+<!-- DEBUT XITI -->
+<script type="text/javascript">
+<!--
+xtnv = document;        //parent.document or top.document or document         
+xtsd = "http://logp";
+xtsite = "17709";
+xtn2 = "1";        // level 2 site 
+xtpage = "Accueil_site";        //page name (with the use of :: to create chapters)
+xtdi = "";        //implication degree
+//-->
+</script>
+<script type="text/javascript" src="http://www.service-public.fr/xtcore2.js"></script>
+<noscript>
+<img width="1" height="1" alt="" src="http://logp.xiti.com/hit.xiti?s=17709&amp;s2=1&amp;p=Accueil_site&amp;di=&amp;" />
+</noscript>
+<!-- FIN XITI-->
+</body>
+</html>

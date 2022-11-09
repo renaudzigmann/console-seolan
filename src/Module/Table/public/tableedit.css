@@ -1,0 +1,129 @@
+/* jexcel construction table */
+
+
+.jexcel_container {
+	display: block;
+	padding-right: 0;
+}
+
+.jexcel_content {
+	padding-right: 0;
+	padding-bottom: 15px;
+}
+
+.jexcel {
+	width: 100%;
+}
+
+.jexcel > thead > tr > th:first-child {
+	border-left: none;
+}
+
+.jexcel > thead:first-child > tr:first-child > th,
+.jexcel > thead:first-child > tr:first-child > td {
+	border-top: 0;
+}
+
+.jexcel > thead > tr > td,
+.jexcel > thead > tr > th {
+	font-weight: 700;
+	color: #ffffff;
+	padding: 8px 6px;
+	border-left: 1px solid rgba(255, 255, 255, 0.4);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+	background-color: #687483;
+}
+
+.jexcel > thead > tr > td.selected,
+.jexcel > thead > tr > th.selected {
+	color: #687483;
+	border-color: #687483;
+	border-left-color: #fff9f0;
+	background-color: #fff9f0;
+}
+
+.jexcel > tbody > tr:nth-of-type(2n+1) {
+	background-color: #f5f5f5;
+}
+
+.jexcel > tbody > tr > td,
+.jexcel > tfoot > tr > td {
+	padding: 8px 6px;
+	border-top: none;
+}
+
+.jexcel > tbody > tr > td:first-child {
+	background-color: #ffffff;
+}
+
+.jexcel > tbody > tr:nth-of-type(2n+1) > td:first-child {
+	background-color: #f5f5f5;
+}
+
+.jexcel > tbody > tr.selected > td:first-child {
+	background-color: #fff9f0;
+}
+
+.jexcel .highlight {
+	background-color: #fff9f0;
+}
+
+.jexcel .highlight-bottom {
+	border-bottom: 2px solid #ff9900;
+}
+
+.jexcel .highlight-left {
+	border-left: 2px solid #ff9900;
+}
+
+.jexcel .highlight-top.highlight-left {
+	box-shadow: none;
+}
+
+.jexcel .highlight-top {
+	border-top: 2px solid #ff9900;
+	box-shadow: none;
+}
+
+.jexcel .highlight-right {
+	border-right: 2px solid #ff9900;
+}
+
+.jexcel_corner {
+	background-color: #ff9900;
+}
+
+.jexcel_overflow > tbody > tr > td.line-actions {
+	overflow: inherit;
+}
+
+.jexcel .line-actions .dropdown > .btn {
+	min-height: 28px;
+	padding: 3px 8px;
+}
+
+.jexcel .line-actions .dropdown > .btn .glyphicon {
+	font-size: 15px;
+	line-height: 1;
+}
+
+.jexcel .line-actions .btn,
+.jexcel .line-actions .btn .glyphicon {
+	line-height: 1;
+}
+
+.jexcel .line-actions .dropdown-menu {
+	left: 25px;
+	min-width: inherit;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.jexcel .line-actions .dropdown-menu li {
+	display: inline-block;
+}
+
+.jexcel .line-actions .dropdown-menu > li > a {
+	padding: 8px;
+}

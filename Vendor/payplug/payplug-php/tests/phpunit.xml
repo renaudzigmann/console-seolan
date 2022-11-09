@@ -1,0 +1,13 @@
+<phpunit bootstrap="config.php">
+    <filter>
+        <blacklist>
+            <directory suffix=".php">..</directory>
+            <exclude>
+                <directory suffix=".php">../lib</directory>
+            </exclude>
+        </blacklist>
+    </filter>
+    <php>
+        <server name="SERVER_NAME" value="http://localhost"/>
+    </php>
+</phpunit>

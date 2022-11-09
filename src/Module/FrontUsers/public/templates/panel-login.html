@@ -1,0 +1,19 @@
+<%assign var="user" value=$user|default:$it_olines[it]%>
+<%assign var="mod_users" value=$mod_users|default:$it_olines[it]._functionparams.module%>
+<div id="login<%$uniqid%>" class="login">
+  <%include file="Module/FrontUsers.form-login.html"
+    formName="login"
+    formClass="form-login"
+    next=$mod_users->getPanelUrl('home')
+    onerror=$mod_users->getPanelUrl('login')
+    loginLabel="Votre email"|__:'\Seolan\Module\FrontUsers'
+    loginPlaceholder="abcdef@xxxx.fr"
+    passwordLabel="Votre mot de passe"|__:'\Seolan\Module\FrontUsers'
+    passwordPlaceholder=""
+    submitLabel="Connexion"|__:'\Seolan\Module\FrontUsers'
+  %>
+</div>
+<ul class="account-actions">
+  <li><a href="<%$mod_users->getPanelUrl('passwordForgotten')%>"><%"J'ai oublié mon mot de passe"|__:'\Seolan\Module\FrontUsers'%></a></li>
+  <li><a href="<%$mod_users->getPanelUrl('inscription')%>"><%"Inscription"|__:'\Seolan\Module\FrontUsers'%></a></li>
+</ul>

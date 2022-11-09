@@ -1,0 +1,30 @@
+<html>
+<head>
+  <%$header%>
+  <title><%$syslabels.Seolan_Core_General.export_text%></title>
+  <link href="<%$smarty.const.TZR_DEFAULT_CSS%>" rel="stylesheet" type="text/css">
+<%if defined('TZR_USER_CSS')%>
+  <link href="<%$smarty.const.TZR_USER_CSS%>" rel="stylesheet" type="text/css">
+<%/if%>
+<%if defined('TZR_JQUERYUI_CSS')%>
+  <link href="<%$smarty.const.TZR_JQUERYUI_CSS%>" rel="stylesheet" type="text/css">
+<%/if%>
+
+</head>
+<body class="tzr-raw-body" <%if $smarty.request.filename%>onload="document.location='<%$smarty.const.TZR_DOWNLOADER%>?filename=<%$smarty.request.filename%>&amp;originalname=<%$smarty.request.fileoriginalname%>&amp;mime=<%$smarty.request.filemime%>&amp;tempfile=1'"<%/if%>>
+  <h1><%$syslabels.Seolan_Core_General.export_text%></h1>
+  <fieldset>
+  <%if $_message || $smarty.request.message || $br_message || $smarty.session._TZR.message%>
+    <div class="tzr-message" style="border:0px solid green;">
+      <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+      <%$smarty.session._TZR.message%>
+      <%$_message%>
+      <%$br_message%>
+    </div>
+<%/if%>
+  </fieldset>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="button" value="<%$syslabels.Seolan_Core_General.close_text%>" onclick="window.close();">
+  </div>
+</body>
+</html>

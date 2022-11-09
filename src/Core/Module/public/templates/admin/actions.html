@@ -1,0 +1,12 @@
+<%* include liste d'actions d'un module *%>
+<fieldset class="fieldsetAccordion fieldsetAccordionOpen"><legend><%$action_title%></legend>
+<div>
+   <%foreach name=m2 item=m2i from=$actions%>
+   <%if is_object($m2i) && !empty($m2i->name)%>
+   <%if strpos($m2i->xurl, 'javascript:') === false%>
+   <a class="cv8-ajaxlink" href="<%$self%>&<%$m2i->xurl%>" <%if $m2i->needsconfirm%>x-confirm="var ret=confirm('<%$syslabels.Seolan_Core_General.confirm|escape:"quotes"%>')"<%/if%>><%$m2i->name%></a>&nbsp;|&nbsp;
+   <%/if%>
+   <%/if%>
+  <%/foreach%>
+</div>
+</fieldset>

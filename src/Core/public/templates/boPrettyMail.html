@@ -1,0 +1,58 @@
+<html>
+  <head>
+  <%if isset($headers)%><%$headers%><%/if%>
+   <base href="<%$ml_base%>">
+   <%if $ml_styles%>
+   <%include file=$ml_styles%>
+   <%/if%>
+   <%if $ml_custom_styles%>
+   <%include file=$ml_custom_styles%>
+   <%/if%>
+  </head>
+  <body style="margin: 0 !important; padding: 20px 15%">
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="body">
+      <tr>
+        <td align="center">
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="not-tab-subject">
+            <%if $ml_subject%>
+            <tr>
+              <td class="content" style="padding: 15px">
+                <h1><%$ml_subject%></h1>
+		<%if $ml_subtitle%><p><%$ml_subtitle%></p><%/if%>
+              </td>
+            </tr>
+            <%/if%>
+            <tr>
+              <td height="20px"></td>
+            </tr>
+          </table>
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="not-tab-content">
+            <tr>
+              <td class="content" style="padding: 15px">
+                <%$ml_message%>
+              </td>
+            </tr>
+            <tr>
+              <td height="20px"></td>
+            </tr>
+          </table>
+
+          <%if $ml_footer%>
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="not-tab-footer">
+            <tr>
+              <td class="content" style="padding: 15px">
+                <%$ml_footer%>
+              </td>
+            </tr>
+          </table>
+          <%/if%>
+
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

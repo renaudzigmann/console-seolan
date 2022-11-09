@@ -1,0 +1,169 @@
+<%if !$section%>
+  <%assign var=section value=$it_olines[it] %>
+<%/if%>
+
+<div id="skiplan_etatspiste">
+
+    <%if $section.recapOn == 1%>
+    <div class="pistes-recap-container">
+      <div class="pistes-recap" >
+        <div class="etat-pistes-titre">
+          <%if $section.recap.lines_olibelle[0]->raw == 'SKI_ALPIN'%>
+            <%$labels.skiPlanPistesOuvertes|default:'Pistes ouvertes'%>
+          <%else%>
+            <%$labels.skiPlanRemonteesOuvertes|default:'Remontées mécaniques ouvertes'%>
+          <%/if%>
+        </div>
+        <div class="recap">
+            <span class="main-title-1 h-font-chocolate-bold h-align-center h-margin-bottom-0"><%$section.recap.lines_oouvertes_previsions[0]->raw%> / <%if $section.recap.lines_ototal_periode[0]->raw%><%$section.recap.lines_ototal_periode[0]->raw%><%else%><%$section.recap.lines_ototal[0]->raw%><%/if%></span>
+        </div>
+      </div>
+      <div class="pistes-recap">
+        <div class="etat-pistes-titre">
+          <%if $section.recap.lines_olibelle[1]->raw == 'REMONTEES'%>
+            <%$labels.skiPlanRemonteesOuvertes|default:'Remontées mécaniques ouvertes'%>
+          <%else%>
+            <%$labels.skiPlanPistesOuvertes|default:'Pistes ouvertes'%>
+          <%/if%>
+        </div>
+        <div class="recap">
+            <span class="main-title-1 h-font-chocolate-bold h-align-center h-margin-bottom-0"><%$section.recap.lines_oouvertes_previsions[1]->raw%> / <%if $section.recap.lines_ototal_periode[1]->raw%><%$section.recap.lines_ototal_periode[1]->raw%><%else%><%$section.recap.lines_ototal[1]->raw%><%/if%></span>
+        </div>
+      </div>
+    </div>
+    <%/if%>
+
+    <%if $section.smenuOn != 2%>
+    <div class="etat_menu clearfix">
+        <ul>
+            <li><a href="#<%$section.pistes.lines[0].osecteur->link.osecteur->html%>"><%$section.pistes.lines[0].osecteur->link.osecteur->html%></a></li>
+            <%assign var=memoire value=$section.pistes.lines[0].osecteur->link.osecteur->raw%>
+            <%foreach from=$section.pistes.lines item=piste name=foo%>
+            <%if $memoire != $piste.osecteur->link.osecteur->raw && $piste.osecteur->link.osecteur->raw %>
+            <li><a href="#<%$piste.osecteur->link.osecteur->html%>"><%$piste.osecteur->link.osecteur->html%></a></li>
+            <%/if%>
+            <%assign var=memoire value=$piste.osecteur->link.osecteur->raw%>
+            <%/foreach%>
+        </ul>
+    </div>
+    <%/if%>
+    
+    <div class="etat-pistes-legende clearfix">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendepiste"><span class="glyphicon xssp-type-skialpin" aria-hidden="true"></span><%$labels.skiplanLegendepiste%></button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendeetat"><span class="glyphicon xssp-etat" aria-hidden="true"></span><%$labels.skiplanLegendeetat%></button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendelvl"><span class="glyphicon xssp-niveau" aria-hidden="true"></span><%$labels.skiplanLegendelvl%></button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legenderemontee"><span class="glyphicon xssp-type-teleski" aria-hidden="true"></span><%$labels.skiplanLegenderemontee%></button>
+        
+        <%include file="`$smarty.const.TZR_SHARE_DIR`Module/SkiPlan.trinum/pistes_legende_modal.html" %>
+    </div>
+
+    <%if $section.liaisons.lines|@count%>
+    <div class="etat-liaisons">
+        <div class="etat-pistes-titre"><%$labels.skiplanLiaisons %></div>
+        <div class="liaisons-container">
+            <table class="table table-striped etat_tab">
+                <thead>
+                    <tr>
+                        <th><%$labels.skiplanLiaison %></th>
+                        <th><%$labels.skiplanEtat %></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%foreach from=$section.liaisons.lines item=liaison name=liaison %>
+                    <tr>
+                        <td><strong><%$liaison.onom->html %></strong></td>
+                        <td><%if $liaison.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$liaison.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                    </tr>
+                    <%/foreach %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%/if%>
+
+    <div class="etat-pistes clearfix">
+        <%assign var=secteur value=$section.pistes.lines[0].osecteur->link.osecteur->raw%>
+        <%assign var=i value=0%>
+        <%foreach from=$section.pistes.lines item=piste name=foo%>
+        <%math equation="round(y/2)-1" y=$smarty.foreach.foo.total assign=temp%>
+        <%if $smarty.foreach.foo.iteration eq "1"%><div class="etat_col1"><%elseif $smarty.foreach.foo.index eq $temp%></div><div class="etat_col2"><%/if%>
+            <%if $secteur != $piste.osecteur->link.osecteur->raw && $i == 1%>
+            <%assign var=secteur value=$piste.osecteur->link.osecteur->raw%>
+            <%assign var=i value=0%>
+            <%/if%>
+            <%if $secteur == $piste.osecteur->link.osecteur->raw && $i == 0%>
+            <%assign var=i value=1%>
+            <a name="<%$piste.osecteur->link.osecteur->html%>" class="ancre">&nbsp;</a>
+            <div class="etat-pistes-titre"><%$piste.osecteur->link.osecteur->html%></div>
+            <div class="table-responsive pistes">
+                <table class="table table-striped etat_tab">
+                    <thead>
+                        <tr>
+                            <th><%$labels.skiplanPiste %></th>
+                            <th>Type</th>
+                            <th><%$labels.skiplanEtat %></th>
+                            <th><%$labels.skiplanNiveau %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%foreach from=$section.pistes.lines item=piste2 name=foo2%>
+                        <%if $piste2.osecteur->link.osecteur->raw == $piste.osecteur->link.osecteur->raw%>
+                        <tr>
+                            <td><strong><%$piste2.onom->html%></strong></td>
+                            <td><%if $piste2.otype->link.ostylesheet->raw%><span class="glyphicon xssp-type-<%$piste2.otype->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                            <td><%if $piste2.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$piste2.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                            <td><%if $piste2.oniveau->link.ostylesheet->raw %><span class="glyphicon xssp-niveau <%$piste2.oniveau->link.ostylesheet->raw %>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                        </tr>
+                        <%/if%>
+                        <%/foreach%>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <%assign var=y value=0%>
+            <%foreach from=$section.remontees.lines item=remontees name=faa%>
+                <%if $piste.osecteur->link.osecteur->raw == $remontees.osecteur->link.osecteur->raw && $y == 0%>
+                <%assign var=y value=1%>
+
+                <div class="table-responsive remontees">
+                    <table class="table table-striped etat_tab">
+                        <thead>
+                            <tr>
+                                <th><%$labels.skiplanRemontee %></th>
+                                <th>Type</th>
+                                <th><%$labels.skiplanEtat %></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%foreach from=$section.remontees.lines item=remontees2 name=faa2%>
+                            <%if $remontees2.osecteur->link.osecteur->raw == $remontees.osecteur->link.osecteur->raw%>
+                            <tr>
+                                <td><strong><%$remontees2.onom->html%></strong></td>
+                                <td><%if $remontees2.otype->link.ostylesheet->raw%><span class="glyphicon xssp-type-<%$remontees2.otype->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                                <td><%if $remontees2.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$remontees2.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                                <td></td>
+                            </tr>
+                            <%/if%>
+                            <%/foreach%>
+                        </tbody>
+                    </table>
+                </div>
+
+                <%/if%>
+            <%/foreach%>
+
+
+            <%/if%>
+            <%/foreach%>
+        </div>
+    </div>
+<script type="text/javascript" language="javascript">
+    jQuery(function ($) {
+        // Active les tooltip bootstrap
+        $('#skiplan_etatspiste').tooltip({selector: '[data-toggle="tooltip"]'});
+    });
+</script>
+</div> <%* #skiplan_etatspiste *%>
+

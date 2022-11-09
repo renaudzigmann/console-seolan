@@ -1,0 +1,223 @@
+<%if $imod_props.toid == 8001 %>
+<%assign var=xmodmedia value=1%>
+<%else%>
+<%assign var=xmodmedia value=0%>
+<%/if%>
+
+<%if $br_oid%>
+
+<%if '1' == $smarty.request.popupreturn%>
+<script type="text/javascript">
+ TZR.Dialog.openURL("<%$self%>&moid=<%$_moid%>&tplentry=br&oid=<%$br_oid%>&function=display&template=Core.linkedobjectselection.html&tlink=1&popupreturn=2&recipientvarid=<%$smarty.request.recipientvarid%>&"+jQuery.param({openeroptions:<%$smarty.request.openeroptions|@json_encode%>}), null, {overlay:"none"});
+</script>
+<%else%>
+<script type="text/javascript">
+/*<%* workaround : laisser le temps à la modal de s'initialiser *%>*/
+ setTimeout(function(){
+   TZR.xlinkdefValueSelected("<%$smarty.request.recipientvarid%>",
+			     {oid:"<%$br_oid%>",
+			      tlink:"<%$br_tlink|escape:'javascript'%>",
+			      objectproperties:{
+				<%section name=f loop=$br_fields_object%>
+				<%$br_fields_object[f]->field%>:{raw:"<%$br_fields_object[f]->raw|escape:'javascript'%>", text:"<%$br_fields_object[f]->text|escape:'javascript'%>"},
+				<%/section%>
+				tlink:"<%$br_tlink|escape:'javascript'%>"
+			      },
+			      openeroptions:<%$smarty.request.openeroptions|@json_encode%>,
+			     }
+   );
+ },100);
+</script>
+<%/if%>
+
+<%else%>
+
+<script type="text/javascript" language="javascript">
+var objectselectioncontaineruniqid = null;
+ jQuery(document).ready(function(e){
+   if (typeof(v<%$uniqid%>) == "undefined")
+     v<%$uniqid%>={id:"<%$uniqid%>"};
+   objectselectioncontaineruniqid = "<%$uniqid%>";
+   v<%$uniqid%>.moduleMedia=<%if xmodmedia%>true<%else%>false<%/if%>;
+   v<%$uniqid%>.g_openeroptions = <%$smarty.request.openeroptions|@json_encode%>;
+   v<%$uniqid%>.g_recipientvarid = "<%$smarty.request.openeroptions.varid%>";
+   v<%$uniqid%>.g_selectedfields = [];
+   <%section name=h loop=$br_header_fields%>
+   v<%$uniqid%>.g_selectedfields.push("<%$br_header_fields[h]->field%>");
+   <%/section%>
+   TZR.Table.browse["<%$uniqid%>"] = {
+     moid:"<%$_moid%>",
+     g_pagesize:<%$br_pagesize|default:0%>,
+     order:"<%$br_order%>",
+     first:"<%$br_first%>",
+     last:"<%$br_last%>",
+     firstlastpage:"<%$br_firstlastpage%>",
+     firstprev:"<%$br_firstprev%>",
+     firstnext:"<%$br_firstnext%>",
+     f:"<%$br_function%>",
+     template:"Core.linkedobjectlist.html",
+     url:"<%$self%>moid=<%$_moid%>&tplentry=br",
+     fromfunction:"<%$function%>",
+     browseurl:"<%$imod_props.actions.browse->xurl%>",
+     confirmDeleteMessage:null,
+     actionData:null,
+     translation_mode:false,
+     vuniqid:v<%$uniqid%>
+   };
+
+   TZR.addToObjCleaner("tzr-tablist-<%$uniqid%>", v<%$uniqid%>, function(){
+     TZR.cleanObj(v<%$uniqid%>);
+     if (!delete TZR.Table.browse['<%$uniqid%>']){
+       TZR.Table.browse['<%$uniqid%>'] = null;
+     }
+   });
+
+   /*<%* capture du chargement de l'onglet new *%>*/
+   jQuery("#li2-<%$uniqid%> > a").on('click', function(event){
+     event.preventDefault();
+     TZR.Tabs.load(jQuery(this), {cb:function(anchor){
+       v<%$uniqid%>.prepareNewItem.call(v<%$uniqid%>);
+       TZR.Tabs.showTab(anchor);
+     }});
+     return false;
+   });
+   // non plus nécessaire (plus en popup)  TZR.initThesaurusContextMenu();
+   v<%$uniqid%>.prepareNewItem=function(){
+     var jnewcontainer = jQuery("#sc2"+this.id);
+     var jform = jQuery("form", jnewcontainer);
+     var newform = jform[0]; // dom object
+     jQuery("div.tzr-action>input[name='save_and_edit']", jform).remove();
+     var that=this;
+     newform.onsubmit=function(){
+       if(TZR.isFormValidWithFocus(newform,true)){
+
+	        jQuery("input[name='template']", jform).remove();
+	        jQuery("input[name='_nextmode']", jform).remove();
+	        jQuery("input[name='_next']", jform).remove();
+
+          jQuery("<input type='hidden' name='template' value='Core.linkedobjectselection.html'/>").appendTo(jform);
+          jQuery("<input type='hidden' name='popupreturn' value='1'/>").appendTo(jform);
+          jQuery("<input type='hidden' name='recipientvarid' value='"+that.g_recipientvarid+"'/>").appendTo(jform);
+          if (that.moduleMedia){
+            jQuery("<input type='hidden' name='_template' value='Core.linkedobjectselection.html'/>").appendTo(jform);
+          } else {
+            jQuery("<input type='hidden' name='_nextmode' value='std'/>").appendTo(jform);
+          }
+	        /*<%* transmission des options initiales, dont multivalued *%>*/
+	        for(let n in that.g_openeroptions){
+	           var v = that.g_openeroptions[n];
+	           jQuery(`<input type='hidden' name='openeroptions[${n}]' value='${v}'/>`).appendTo(jform);
+          }
+	        TZR.Dialog.openFromForm(newform, null, {overlay:"#sc2"+that.id});
+	        return false;
+        } else {
+	         return false;
+        }
+     };
+   }
+   /* <%* init d'une page : nettoyer les liens - gestion séléction *%> */
+   v<%$uniqid%>.pageLoaded = function(jcont){
+     var that=this;
+      jQuery('a.cv8-ajaxlink', jcont).removeAttr('onclick', '').removeAttr('href', '').removeClass('cv8-ajaxlink');
+      jQuery('.linkable', jcont).css('cursor', 'pointer').on('click', function(event){
+	event.preventDefault();
+	that.objectSelected.call(that, jQuery(this).data('link'));
+	return false;
+      });
+    };
+   /*<%* sélection d'un item *%>*/
+   v<%$uniqid%>.objectSelected = function(data){
+     var joc = jQuery('div.linklist tr[data-oid="'+data.oid+'"]');
+     data.objectproperties = null;
+     data.openeroptions = this.g_openeroptions;
+     TZR.xlinkdefValueSelected(this.g_recipientvarid, data);
+   }
+   /*<%* amenagement initial de la page *%>*/
+   v<%$uniqid%>.pageLoaded.call(v<%$uniqid%>,jQuery('div.linklist'))
+
+ }); // document ready
+
+ // Appelé pour la navigation de page
+v<%$uniqid%>.go_browse = function(id,command,pageSizeDiffOrFirst) {
+   var tabid="#sc1"+id;
+   var tabContainer = jQuery(tabid);
+   if (pageSizeDiffOrFirst == undefined)
+     pageSizeDiffOrFirst=0;
+   var url = TZR.Table.go_browse(id, command, pageSizeDiffOrFirst, true);
+   var sfields = [];
+   v<%$uniqid%>.g_selectedfields.forEach((e,i)=>{sfields.push(`selectedfields[${i}]=${e}`)});
+   url+="&"+sfields.join("&");
+   // ce devrait être un TZR.ajax ..
+   url += "&tlink=1&_uniqid="+id;
+   tabContainer.html(TZR.file_get_contents(url));
+   v<%$uniqid%>.pageLoaded.call(v<%$uniqid%>, tabContainer);
+ }
+ // Recherche
+ v<%$uniqid%>.go_search = function(id, command){
+   if (command == 'clear'){
+     with(TZR.Table.browse[id]){
+       first="0";
+       last="0";
+       firstlastpage="0";
+       firstprev="0";
+       firstnext="0";
+       f="browse";
+     };
+     return this.go_browse(id);
+   }
+
+   var tabid="#sc1"+id;
+   var tabContainer = jQuery(tabid);
+   var form = document.forms['quicksearch'+id];
+   var url = "<%$self%>"+jQuery(form).serialize()+"&"+jQuery.param({selectedfields:v<%$uniqid%>.g_selectedfields})+"&first=0&tlink=1&_ajax=1&_raw=1&_skip=1&_uniqid="+id;
+   var h = TZR.file_get_contents(url);
+   tabContainer.html(h);
+   delete h;
+   v<%$uniqid%>.pageLoaded.call(v<%$uniqid%>, tabContainer);
+   return false;
+ }
+
+//# sourceURL=linkedobjectselection.js
+
+</script>
+<div class="title"><%$smarty.request.openeroptions.fieldlabel|escape:'html'%></div>
+<div class="tzr-action">
+  <button type="button" class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+</div>
+
+<div class="cv8-contenu-center">
+  <div id="tzr-tablist-<%$uniqid%>">
+    <ul class="nav nav-responsive nav-tabs" role="tablist">
+     <li id="li1-<%$uniqid%>" role="presentation" class="active">
+       <a aria-controls="#sc1<%$uniqid%>"
+	  data-toggle="tab"
+	  role="tab"
+	  href="#sc1<%$uniqid%>"
+	  aria-expanded="true"><%$syslabels.Seolan_Core_General.query_text%> - <%$syslabels.Seolan_Core_General.browse_text%> - <%$syslabels.Seolan_Core_General.select_text%></a>
+     </li>
+     <%* si on a accès en écriture sur le module source *%>
+     <%if $modsec_mods[$_moid].rw%>
+     <li id="li2-<%$uniqid%>" role="presentation">
+       <a aria-controls="#sc2<%$uniqid%>"
+	  role="tab"
+	  href="#sc2<%$uniqid%>"
+	  aria-expanded="false"
+	  data-overlay="none"
+	  data-toggle="tab"
+	  data-url="<%$self%>function=insert&tplentry=br&moid=<%$_moid%>&template=Module/Table.new.html&tabsmode=2&skip=1&_nonav=1&_nohistory=1"><%$syslabels.Seolan_Core_General.new_text%></a>
+     </li>
+     <%/if%>
+   </ul>
+
+   <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+     <div id="sc1<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+       <%include file="Core.linkedobjectlist.html"%>
+     </div>
+     <%if $modsec_mods[$_moid].rw%>
+     <div id="sc2<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+     <%/if%>
+   </div>
+  </div>
+</div>
+
+<%/if%>

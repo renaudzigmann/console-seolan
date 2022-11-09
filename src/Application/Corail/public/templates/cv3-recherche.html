@@ -1,0 +1,23 @@
+<!--<%$smarty.template%>-->
+<%assign var="id" value=""|uniqid%>
+<div id="cv3-recherche" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-recherche" href="#recherche<%$id%>"><%label v="recherche_title" t="Recherche"%></a>
+  <h4><%label v="recherche_title" t="Recherche"%></h4>
+  <div id="recherche<%$id%>" class="collapse">
+    <div class="middle">
+    <form name="frmHtdig" method="post" action="<%$self%>" role="search">
+      <input type="hidden" name="config" value="<%$application->htdigconf|default:$tzr.htdigconf%>">
+      <input type="hidden" name="alias" value="<%$tzr.aliassearch%>">
+      <input type="hidden" name="page" value="1">
+      <input type="hidden" name="insidefile" value="application:search.html">
+      <%if !$tzr.htsearch_norestrict && $lang_data eq $smarty.const.TZR_DEFAULT_LANG && $general_langs[1]%>
+      <input type="hidden" name="exclude" value="<%foreach from=$general_langs item="lm"%><%if $lm neq $smarty.const.TZR_DEFAULT_LANG%>_lang=<%$lm%>|<%$lm%>_<%/if%><%/foreach%>">
+      <%elseif !$tzr.htsearch_norestrict && $general_langs[1]%>
+      <input type="hidden" name="restrict" value="_lang=<%$lang_data%>|<%$lang_data%>_">
+      <%/if%>         
+      <input type="text" name="words" placeholder="<%$labels.recherche%>..."/> 
+      <input class="btn" type="submit" name="button" value="<%$labels.recherche_go%>" />
+    </form>
+    </div>
+  </div><!-- fin recherche -->
+</div><!-- fin cv3-recherche -->

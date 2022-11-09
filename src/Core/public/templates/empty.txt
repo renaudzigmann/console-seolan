@@ -1,0 +1,2 @@
+<%if !empty($smarty.request.message)%><%$smarty.request.message|escape:'html'%><%/if%>
+<%if !empty($_message)%><%$_message%><%/if%>

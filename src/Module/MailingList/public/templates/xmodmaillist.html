@@ -1,0 +1,187 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_MailingList_MailingList.send_text%>
+<script type="text/javascript">
+ v<%$uniqid%>.selectDest=function(d,targetoid) {
+   return TZR.Infotree.selectDest.call(TZR.Infotree, d, targetoid, "<%$uniqid%>");
+ }
+ v<%$uniqid%>.notSend=function(oid){
+  document.getElementById('tr_'+oid).style.display="none";
+  document.getElementById('not_send_'+oid).value=oid;
+ }
+ v<%$uniqid%>.newslettermoid="<%$br_mod.newslettermodule%>";
+ v<%$uniqid%>.changeMessageMode=function(v){
+  if(v=='text'){
+   document.getElementById('textmessage').style.display="block";
+   document.getElementById('richmessagediv').style.display="none";
+  }else if(v=='html'){
+   document.getElementById('textmessage').style.display="none";
+   document.getElementById('richmessagediv').style.position="static";
+   document.getElementById('richmessagediv').style.visibility="visible";
+   document.getElementById('richmessagediv').style.display="block";
+  }
+ }
+</script>
+<form name="sendform<%$uniqid%>" action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); var form = this; var res = TZR.checkSenderMail(TZR._self+'_ajax=1&amp;_raw=1&amp;moid=<%$_moid%>&amp;function=checkEmail', document.forms['sendform<%$uniqid%>'].elements['from'].value); if (res===false) { new TZR.Modal.Confirm('<%$syslabels.Seolan_Module_MailingList_MailingList.confirm_send|escape:"quotes"%>', '<%$syslabels.Seolan_Module_MailingList_MailingList.email_not_safe|escape:"quotes"%>', {done:function() { TZR.ajaxSubmitForm(form,undefined,undefined,undefined,undefined);}}).show();} else if(res===true) { return TZR.ajaxSubmitForm(form,undefined,undefined,undefined,'<%$syslabels.Seolan_Module_MailingList_MailingList.confirm_send|escape:"quotes"%>');}else{return false;}; ">
+ <input type="hidden" name="function" value="procSend">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="template" value="Core.message.html">
+ <input type="hidden" name="newspage" value="">
+ <input type="hidden" name="skip" value="1">
+ <%assign var="maxtodisp" value="100"%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.result%> : <%$br_last%> <%$syslabels.Seolan_Module_MailingList_MailingList.answers%></legend>
+  <%if $br_last>$maxtodisp%><br><u><%$syslabels.Seolan_Module_MailingList_MailingList.firstdisp|replace:"xxx":$maxtodisp%></u><br><br><%/if%>
+  <%if $br__countValid < $br_last%><div class="alert alert-info"><%$syslabels.Seolan_Module_MailingList_MailingList.validrecipientscount|sprintf:$br__countValid:$br_last%>.</div><%/if%>
+  <div class="table-responsive">
+  <%include file="Module/MailingList.preselected.html"%>
+  </div>
+  <br>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="button" 
+	   value="<%$syslabels.Seolan_Core_General.back_text%>" 
+	   onclick="jQuery('span.glyphicon.csico-back',v<%$uniqid%>.modulecontainer).parents('button').click();">
+  </div>
+ </fieldset>
+
+ <fieldset>
+  <legend>Message</legend>
+  <div class="table-responsive">
+  <table class="list2 table table-striped">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.from%> (email)</label></th>
+    <td><input type="text" size="60" name="from" value="<%$br_mod.from%>"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.from%></label></th>
+    <td><input type="text" size="60" name="fromname" value="<%$br_mod.fromname%>"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.subject%></label></th>
+    <td><input type="text" size="60" name="subject" value="<%$br_mod.prefix%>"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.messageformat%></label></th>
+    <td>
+     <select name="messagemode" onchange="v<%$uniqid%>.changeMessageMode(this.value);" id="messagemode">
+      <option value="text"><%$syslabels.Seolan_Core_Field_Field.xtextdef%></option>
+      <option value="html">HTML</option>
+     </select>
+    </td>
+   </tr>
+   <tr>
+    <th colspan="2"><label><%$syslabels.Seolan_Module_MailingList_MailingList.message%></label><br></th>
+   </tr>
+   <tr>
+    <td colspan="2">
+     <div id="richmessagediv" style="position:absolute; visibility:hidden;"><%$messagebox_rich%></div>
+     <textarea rows="20" cols="100" name="message" id="textmessage"><%$_message%></textarea>
+    </td>
+   </tr>
+   <%if $_plugin neq "1"%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.inlinefile%></label></th><td valign="top"><input type="file" size="60" name="htmlfile"></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.attachedfile%></label></th><td valign="top"><input type="file" size="60" name="file"></td>
+    </tr>
+    <input type="hidden" name="mode" value="now">
+    <%if $br_mod.newslettermodule%>
+     <%if !empty($brtpl_lines_oid)%>
+      <tr>
+       <th valign="top"><label><%$syslabels.Seolan_Core_General.template%></th>
+       <td>
+	<select name="tpl">
+	 <%section name=i loop=$brtpl_lines_oid%>
+	  <option value="<%$brtpl_lines_oid[i]%>"><%$brtpl_lines_otitle[i]->html%></option>
+	 <%/section%>
+	</select>
+       </td>
+      </tr>
+     <%/if%>
+     <tr>
+      <th valign="top"><label><%$syslabels.Seolan_Module_MailingList_MailingList.newslettertosend%></label></th>
+      <td valign="top">
+	<div class="form-group">
+	<button class="btn btn-default" type="button" onclick="v<%$uniqid%>.selectDest('tzr-itoid-title','newspage');"><%$syslabels.Seolan_Module_MailingList_MailingList.selectnewspage%></button>
+	<label><%$syslabels.Seolan_Core_General.language%><%$syslabels.Seolan_Core_General.i18ncolon%></label>
+	<select name="newsletterlang">
+	  <%section name=lang loop=$lang_code%>
+	  <option value="<%$lang_code[lang]%>"<%if $lang_code[lang]==$lang_def%> selected<%/if%>><%$lang_text[lang]|escape:"quotes"%></option>
+	  <%/section%>
+	</select>
+	</div>
+	<div class="form-group"><label><%$syslabels.Seolan_Module_MailingList_MailingList.selectednewspage%><%$syslabels.Seolan_Core_General.i18ncolon%></label><span id="tzr-itoid-title"></span></div>
+      </td>
+     </tr>
+    <%/if%>
+   <%/if%>
+   <%if $br_mod.faxfield%>
+    <tr>
+     <th valign="top"><label>Envoyer par fax</label></th><!--TT-->
+     <td valign="top">
+       <div class="radio"><label><input type="radio" name="sendfax" value="failover"> Quand le contact n'a pas d'email</label></div><br><!--TT-->
+       <div class="radio"><label><input type="radio" name="sendfax" value="both"> Par fax et par email</label></div><br><!--TT-->
+       <div class="radio"><label><input type="radio" name="sendfax" value="none" checked> Jamais</label></div><br><!--TT-->
+       <div class="radio"><label><input type="radio" name="sendfax" value="faxonly">Par fax seulement</label></div><br><!--TT-->
+     </td>
+    </tr>
+    <tr>
+     <th valign="top"><label>Résolution</label></th><!--TT-->
+     <td valign="top">
+      <select name="faxquality">
+       <option value="//STD" selected>Basse</option><!--TT-->
+       <option value="">Haute</option><!--TT-->
+      </select>
+     </td>
+    </tr>
+   <%/if%>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_MailingList_MailingList.send_params%></legend>
+  <div class="table-responsive">
+  <table class="list2 table table-striped">
+      <%if $br__noduplicate%>
+      <tr>
+          <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.noduplicatesend%></label></th>
+          <td>
+              <select name="noduplicate">
+                <option value="1" <%if $br__noduplicate == 1%>selected<%/if%>><%$syslabels.Seolan_Core_General.yes%></option>
+                <option value="0"  <%if $br__noduplicate == 2%>selected<%/if%>><%$syslabels.Seolan_Core_General.no%></option>
+      </select>
+          </td>
+      </tr>
+      <%/if%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.priority%></label></th>
+    <td>
+     <select name="priority">
+      <option value="1">Highest</option>
+      <option value="2">High</option>
+      <option value="3" selected>Normal</option>
+      <option value="4">Low</option>
+      <option value="5">Lowest</option>
+     </select>
+    </td>
+   </tr>
+   <tr>
+     <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.date_due%></label></th>
+     <td><div class="form-group"><%$br__dateTimeExe->html%></div></td>
+   </tr>
+   <%if $imod_props.ar%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_MailingList_MailingList.ar%></label></th>
+     <td>
+      <select name="ar">
+       <option value="1"><%$syslabels.Seolan_Core_General.yes%></option>
+       <option value="0" selected><%$syslabels.Seolan_Core_General.no%></option>
+      </select>
+     </td>
+    </tr>
+   <%/if%>
+  </table>
+ </fieldset>
+ </div>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Module_MailingList_MailingList.send%>"></div>
+</form>
+<script type="text/javascript">v<%$uniqid%>.changeMessageMode(document.getElementById('messagemode').value);</script>

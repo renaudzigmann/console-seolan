@@ -1,0 +1,33 @@
+<?php
+\Seolan\Core\Labels::$LABELS['Seolan_Module_WebResa_WebResa']
+= array(
+        'modulename'=>'Webresa.fr interface',
+        'agenceid'=>'Agence ID',
+        'codeflux'=>'Flux type',
+        'codefluxall'=>'All offers',
+        'codefluxsite'=>'Site offers',
+        'codefluxsiteextended'=>'Site offers extended (past dates)',
+        'codesite'=>'Webresa site code',
+        'configgroup'=>'Webresa configuration',
+        'configgroupasso'=>'Webresa configuration - Associated modules',
+        'fluxurl'=>'Flux url',
+	'iptodeclare'=>'Ip to declare',
+        'moduleagence'=>'Agences Module',
+        'moduleattributs'=>'Attributs Module',
+        'modulepays'=>'Countries Module', 
+	'noimportimages'=>'Do not import images',
+	'onlinebookingurl'=>'Online booking iframe url',
+        'uiquery_searchondate'=>'Search on start date',
+        'uiquery_searchondate_flexi'=>'Search on less or more x days',
+	'importoptionstarifs'=>'Import departures options and prices',
+        'tableprefix'=>'Tables prefix',
+        'task_missing'=> 'Automated Flux importation task created',
+        'useiframe'=>'Use onlinebooking iframe',
+	'wrlinktodetails'=> 'See more',
+	'wrfieldlabel.prix_minimum'=> 'From',
+	'wrfieldcomplement.prix_minimum'=> '&euro;',
+	'wrfieldcomplement.prix_maximum'=> '&euro;',
+	'wrfieldcomplement.prix'=> '&euro;',
+	'wrfieldcomplement.duree'=> 'Day(s)',
+	'zz'=>'zz'
+);

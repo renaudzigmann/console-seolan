@@ -1,0 +1,1 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree/public/templates/defaulttemplates/page/disp/text-image.html"%>

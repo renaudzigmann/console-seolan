@@ -1,0 +1,54 @@
+<html>
+ <head>
+  <%$header%>
+  <base href="<%$tzr.societe_url%>">
+  <style>
+   body {
+    font-size: 11px;
+    font-family:  Verdana, Arial, sans-serif, Times New Roman,Helvetica;
+    background: white;
+   }
+   li {
+    color : #444444;
+    font-style: normal;
+   }
+   table.list2{
+    border:0px solid gray;
+    text-align:left;
+   }
+   table.list2 td,th {
+    color : #444444;
+    font-style: normal;
+    vertical-align:top;
+    padding:3px 5px 3px 5px;
+   }
+   table.list2 th{
+    background-color:#E3E1F6;
+    text-align:right;
+   }
+  </style>
+ </head>
+ <body>
+  <%if $brt_odisp->filename%>
+   <!-- cas d'un masque d'édition dédié -->
+   <%assign var="filename" value=$brt_odisp->filename%>
+   <%include file=$filename%>
+  <%else%>
+   <table class="list2">
+    <%section name=fields loop=$br_fields_object %>
+     <%if !$br_fields_object[fields]->sys && $br_fields_object[fields]->field!=$imod_props.processedfield && $br_fields_object[fields]->field!=$imod_props.archivefield%>
+      <tr>
+       <th><label><%$br_fields_object[fields]->fielddef->label|wordwrap:40:"<br />\n"%></label></th>
+       <td><%$br_fields_object[fields]->html%></td>
+      </tr>
+     <%/if%>
+    <%/section%>
+    <%if $labels.coordonnees_nl1%>
+     <tr><th colspan=2><%$labels.coordonnees_nl1%><br><%$labels.coordonnees_nl2%></th></tr>
+    <%else%>
+     <tr><th colspan=2><%$tzr.OEM4%> <%$tzr.OEM1%> <%$tzr.OEM2%> / <%$tzr.OEM3%></th></tr>
+    <%/if%>
+   </table>
+  <%/if%>
+ </body>
+</html>

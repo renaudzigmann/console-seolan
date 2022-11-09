@@ -1,0 +1,82 @@
+<%assign var="title" value="`$syslabels.Seolan_Core_General.query_text`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="cv8-quicksearch form-inline clearfix">
+<form action="<%$self%>" method="post" name="search<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="procQuery">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="clearrequest" value="1">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="template" value="Module/Table.browse.html">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.query_text%></legend>
+  <div class="table-responsive">
+  <table class="table list2">
+   <%if $queries_lines_oid %>
+    <tr><td colspan="2"><a href="#storedqueries"><%$syslabels.Seolan_Module_Table_Table.stored_query%></a></td></tr>
+   <%/if%>
+   <tr class="form-group">
+    <th><label><%$syslabels.Seolan_Core_General.query_text%></label></th>
+    <td>
+     <input type="radio" class="radio" name="operator" value="AND" <%if $br_operator eq "AND"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.and%>
+     <input type="radio" class="radio" name="operator" value="OR" <%if $br_operator eq "OR"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.or%>
+    </td>
+   </tr>
+   <%section name=fields loop=$br_fields_object%>
+    <tr class="form-group">
+     <th><label><%$br_fields_object[fields]->fielddef->label%></label></th>
+     <td><%$br_fields_object[fields]->html%></td>
+    </tr>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ <%if $imod_props.stored_query and $imod_sec.rw%>
+  <fieldset>
+   <legend>Actions</legend>
+   <div class="table-responsive">
+   <table class="table list2">
+    <tr class="form-group">
+     <th><label><%$syslabels.Seolan_Module_Table_Table.storequery%></label></th>
+     <td><input type="text" value="" name="_storename"></td>
+    </tr>
+    <tr class="form-group">
+     <th><label><%$syslabels.Seolan_Core_General.group%></label></th>
+     <td><input type="text" value="" name="_storegroup"></td>
+    </tr>
+   </table>
+   </div>
+  </fieldset>
+ <%/if%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>">
+ </div>
+</form>
+
+<%if $queries_lines_oid %>
+ <a name="storedqueries"></a>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Table_Table.stored_query%></legend>
+  <div class="table-responsive">
+  <table class="table list2">
+   <%section name=i loop=$queries_lines_oid%>
+    <%if $queries_lines_ogrp[i]->html!=$queries_lines_ogrp[$smarty.section.i.index_prev]->html%>
+     <tr><td><label><%$queries_lines_ogrp[i]->html%></label></td><td colspan="10"></td></tr>
+    <%/if%>
+    <tr class="form-group">
+     <td><a class="cv8-ajaxlink" href="<%$self%>&function=procQuery&moid=<%$_moid%>&template=Module/Table.browse.html&_storedquery=<%$queries_lines_oid[i]%>&tplentry=br"><%$queries_lines_otitle[i]->html%></a></td>
+     <td><%$queries_lines_rem[i]%></td>
+     <td>
+      <a class="cv8-ajaxlink" href="<%$self%>&function=procQuery&moid=<%$_moid%>&template=Module/Table.browse.html&_storedquery=<%$queries_lines_oid[i]%>&tplentry=br"><%$syslabels.Seolan_Core_General.view%></a>
+      <%if $modsec_mods[$_moid].rw%>
+       <a class="cv8-ajaxlink" href="<%$self%>&template=Module/Table.browse.html&_function=delStoredQuery&moid=<%$_moid%>&oidr=<%$queries_lines_oid[i]%>&_next=<%$here|escape:"url"%>&tplentry=br"><%$syslabels.Seolan_Core_General.delete%></a>
+      <%/if%>
+     </td>
+    </tr>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+<%/if%>
+</div>

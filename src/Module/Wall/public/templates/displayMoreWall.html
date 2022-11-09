@@ -1,0 +1,74 @@
+<%section name=i loop=$br_lines_oid%>
+<div class="wall-info <%if $br_lines_oPUBLISH[i] && $br_lines_oPUBLISH[i]->raw != 1%>napp-dataline<%/if%>">
+  <div class="wall-actions" data-postid="<%$br_lines_oid[i]%>">
+ 
+    <div class="btn-group btn-group-dropdown-menu">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<span class="glyphicon csico-ellipsis-h" aria-hidden="true"></span>
+      </button>
+      <ul class="dropdown-menu" id="wall-action-<%$br_lines_oid[i]%>">
+	<%foreach from=$br_lines__actions[i] item=action key=ia%>
+	<li>
+	  <a class="accessible cv8-ajaxlink" x-confirm="<%if $action.confirm %>var ret=TZR.confirmDelete();<%/if%>" title="<%$action.title%>" href="<%$action.url%>">
+	    <%$action.text%>&nbsp;<%$action.title%>
+	  </a>
+	</li>
+	<%/foreach%>
+	<%if $br_replytow !== false && $br_lines_oOWN[i]->raw != $uid%>
+	<li>
+	  <a class="accessible" title="" href="#" onclick="TZR.Table.wallReplyTo('<%$br_lines_oid[i]%>', '<%$uniqid%>', this); return false;">
+	    <%$syslabels.Seolan_Module_Wall_Wall.reply%>&nbsp;<%$syslabels.Seolan_Module_Wall_Wall.reply_text%>
+	  </a>
+	</li>
+	<%/if%>
+      </ul>
+    </div>
+  </div>
+  <div class="wall-publisher clearfix">
+    <%* lien vers le user ? non en général c'est de l'admin cela *%>
+    <%if $br_lines_oOWN[i]->link.ologo->raw%>
+    <img src="<%$br_lines_oOWN[i]->link.ologo->resizer%>&geometry=40x40^&crop=40x40">
+    <%/if%>
+    <div class="wall-name">
+      <%$br_lines_oOWN[i]->link.ofullnam->html%>
+    </div>
+    <div class="wall-date">
+      <%$br_lines_oUPD[i]->html%>
+    </div>
+  </div>
+
+  <div class="wall-content"  id="wall-content<%$uniqid%><%$br_lines_oid[i]|replace:':':''%>">
+    <%$br_lines_ocontent[i]->html%>
+  </div>
+  <%if $br_lines__mtags[i]%>
+  <div class="wall-tags">
+    <%$br_lines__mtags[i]%>
+  </div>
+  <%/if%>
+  <%if $br_lines__responses[i]>0%>
+  <div class="wall-responses">
+    <span class="glyphicon csico-arrow_right"></span><a data-options='{"backdrop":"true"}' data-url="<%$self%>&moid=<%$_moid%>&template=Module/Wall.browseResponses.html&tplentry=br&function=browseResponses&oid=<%$br_lines_oid[i]%>" onclick="TZR.Dialog.openFromAnchor(this); return false;" href="#"><%$br_lines__responses[i]%> <%$syslabels.Seolan_Module_Wall_Wall.responses%></a>
+  </div>
+  <%/if%>
+  
+</div>
+<%/section%>
+<%if !empty($br_more_url) %>
+<%if !empty($smarty.request.moreContainer) %><%* initialement dans le gabarit première page *%>
+<%assign var="moreContainer" value=$smarty.request.moreContainer%>
+<%/if%>
+<div class="wall-info wall-more" style="border:none" id="wall-more-<%$uniqid%>">
+  <a class="btn btn-primary" 
+     title="<%$syslabels.Seolan_Module_Wall_Wall.more|escape:'quotes'%>" 
+     href="#" 
+     onclick="TZR.Table.wallMore('<%$br_more_url%>&uniqid=<%$uniqid%>&moreContainer=<%$moreContainer|escape:'url'%>', this, '<%$moreContainer%>');return false;"><%$syslabels.Seolan_Module_Wall_Wall.more%></a>
+</div>
+<%/if%>
+<%if !empty($smarty.request.oid) %>
+<script type="text/javascript">
+  var target = jQuery("#wall-content<%$uniqid%><%$smarty.request.oid|replace:':':''%>");
+  if (target.length>0){
+  scrollToElement(target);
+  }
+</script>
+<%/if%>

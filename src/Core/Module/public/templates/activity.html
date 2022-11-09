@@ -1,0 +1,18 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_Module_Module.infos_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.activity_text%></legend>
+ <div class="table-responsive">
+   <table class="table table-striped cv8_tablelist">
+     <thead>
+       <tr><th>Date</th><th>Nature</th><th>Utilisateur</th><th>Document</th></tr><!--TT-->
+     </thead>
+     <tbody>
+       <%section name=i loop=$br_lines_oid%>
+       <%if $br_lines_oid[i]%>
+       <tr><td><%$br_lines_odateupd[i]->html%></td><td><%$br_lines_oetype[i]->html%></td><td><%$br_lines_ouser[i]->html%></td><td><a href="<%$self%>&oid=<%$br_lines_oobject[i]->raw%>&function=goto1&moid=<%$_moid%>&template=Core/empty.html" class="cv8-ajaxlink"><%$br_lines_oobject[i]->text%></a></td></tr>
+       <%/if%>
+       <%/section%>
+     </tbody>
+   </table>
+ </div>
+</fieldset>

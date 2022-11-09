@@ -1,0 +1,39 @@
+<%if !$__notoolbar%>
+  <%include file="Core.header/ajax.html"%>
+<%/if%>
+<%include file="Module/Table.functions.html"%>
+
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" id="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <fieldset>
+    <%if $__legend%>
+      <legend><%$__legend%></legend>
+    <%/if%>
+    <div class="row-striped">
+      <%section name=fields loop=$br_fields_object%>
+        <%if !$br_fields_object[fields]->sys && !in_array($br_fields_object[fields]->field, $smarty.request._linkedfields)%>
+          <%call fieldline field=$br_fields_object[fields]%>
+        <%/if%>
+      <%/section%>
+    </div>
+  </fieldset>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="hidden" form="editform<%$uniqid%>" name="template" value="Core.empty.html">
+    <input type="submit" value="<%$__save_text|default:$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+  <div style="display:none" class="alert alert-danger error tzr-message"></div>
+  <input type="hidden" name="_function" value="<%$__function|default:'procInsert'%>">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <input type="hidden" name="skip" value="<%$__skip|default:1%>">
+</form>
+
+
+<script type="text/javascript">
+      TZR.activeDependency(document.editform<%$uniqid%>);
+  <%if !$__function%>
+      TZR.addValidator([document.editform<%$uniqid%>, 'ajaxProcInsertCtrl', 'module-container', '<%$tzr.error_color%>', 'Form']);
+  <%/if%>
+</script>

@@ -1,0 +1,64 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Core_General.import_text`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$title%>
+<div class="cv8-contenu-center">
+  <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.import_text%></legend>
+    <form name="import<%$uniqid%>" action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <input type="hidden" name="nav" value="1">
+      <input type="hidden" name="function" value="import">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="tplentry" value="br">
+      <input type="hidden" name="template" value="Core.message.html">
+      <div class="table-responsive">
+	<table class="table table-striped">
+	  <tr>
+	    <th><label><%$import__field->fielddef->label%></label></th>
+	    <td><%$import__field->html%></td>
+	  </tr>
+	    <tr>
+	      <th><label><%$syslabels.Seolan_Core_Field_Field.file_text%></label></th><td><input name="file" type="file"></td></tr>
+	  <tr>
+	    <th><label><%$syslabels.Seolan_Core_Module_Module.procedure%></label></th>
+	    <td>
+	      <select name="spec" onchange="v<%$uniqid%>.changeSpec();">
+		<%section name=i loop=$import_lines_oid%>
+		<option value="<%$import_lines_oID[i]->raw%>"><%$import_lines_oID[i]->raw%></option>
+		<%/section%>
+		<option value="default"><%$syslabels.Seolan_Core_General.default%></option>
+	      </select>
+	    </td>
+	  </tr>
+	  
+	  <tr class="specs<%$uniqid%>">
+	    <th>
+	      <label><%$syslabels.Seolan_Core_DataSource_DataSource.field%></label>
+	    </th>
+	    <td>
+	      <select name="fieldsname">
+		<option value="label"><%$syslabels.Seolan_Core_DataSource_DataSource.field_label%></option>
+		<option value="sql">SQL</option>
+	      </select>
+	    </td>
+	  </tr>
+	  <tr class="specs<%$uniqid%>">
+	    <th><label><%$syslabels.Seolan_Core_Module_Module.import_linestoskip%></label></th>
+	    <td><input type="text" name="linestoskip" value="1"></td>
+	  </tr>
+	</table>
+      </div>
+      <div id="tzr-action<%$uniqid%>" class="tzr-action">
+	<input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+	<input type="button" onclick="TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:'<%$back%>'});" value="<%$syslabels.Seolan_Core_General.cancel_text%>">
+      </div>
+    </form>
+  </fieldset>
+
+<script type="text/javascript">
+ v<%$uniqid%>.changeSpec=function(){
+   if(document.forms['import<%$uniqid%>'].spec.value=="default")
+     document.querySelectorAll('tr.specs<%$uniqid%>').forEach(e=>e.style.display="");
+   else
+     document.querySelectorAll('tr.specs<%$uniqid%>').forEach(e=>e.style.display="none");
+  }
+ v<%$uniqid%>.changeSpec();
+</script>

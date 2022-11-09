@@ -1,0 +1,132 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ <%* structure identique à Module/Table.browse.html pour utilisation de table.js*%>
+ TZR.Table.browse['<%$uniqid%>'] = {
+   g_pagesize:<%if $br_pagesize%><%$br_pagesize%><%else%>0<%/if%>,
+   order:'<%$br_order%>',
+   first:'<%$br_first%>',
+   last:'<%$br_last%>',
+   firstlastpage:'<%$br_firstlastpage%>',
+   firstprev:'<%$br_firstprev%>',
+   firstnext:'<%$br_firstnext%>',
+   f:'<%$br_function%>',
+   template:'<%$template%>',
+   url:"<%$self%>moid=<%$_moid%>&tplentry=br",
+   fromfunction:'<%$function%>',
+   browseurl:'<%$imod_props.actions.browse->xurl%>',
+   selectedfields:[],
+   nb_selectedfields:0,
+   modulecontainer:v<%$uniqid%>.modulecontainer,
+ };
+ v<%$uniqid%>.g_pagesize=<%if $br_pagesize%><%$br_pagesize%><%else%>0<%/if%>;
+ TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>", v<%$uniqid%>, function(){
+   TZR.cleanObj(v<%$uniqid%>);
+   if (!delete TZR.Table.browse['<%$uniqid%>']){
+     TZR.Table.browse['<%$uniqid%>'] = null;
+   }
+     jQuery(window).off("scroll.fixedAddToUserSelection<%$uniqid%>");
+   TZR.Media.cleanKeyboardNavigation("<%$uniqid%>");
+ });
+ TZR.Media.initKeyboardNavigation("<%$uniqid%>");
+</script>
+
+<%include file="Module/Table.quickquery.html" queryparameters=0 querytemplate="Module/Media.browse.html"%>
+<%include inline file="Module/Media.topbar.html" pagerId="pager-top"|cat:$uniqid%>
+<%* wip : bouton ajout sélection, flottant *%>
+<%if $imod_mod->secure('','addToUserSelection')%>
+<button
+    style="display:none"
+    id="fixedAddToUserSelection"
+    type="button"
+    onclick="TZR.Table.addToSelection('<%$imod_mod->_moid%>', '<%$uniqid%>'); return false;"
+    class="btn btn-primary"><%$syslabels.Seolan_Core_Module_Module.addtoselection_text%></button>
+<script type="text/javascript">
+ jQuery(window).off('scroll.fixedAddToUserSelection<%$uniqid%>');
+ jQuery(window).on('scroll.fixedAddToUserSelection<%$uniqid%>', function() {
+   if(jQuery(window).scrollTop() == 0){
+     jQuery("#fixedAddToUserSelection").fadeOut("fast");
+   } else {
+     jQuery("#fixedAddToUserSelection").fadeIn("slow");
+   }
+ }); 
+</script>
+	    
+<%/if%>
+<div class="cv8-contenu-center">
+ <div class="cv8-phototeque_result">
+  <form name="browse<%$uniqid%>" action="<%$self%>" method="post">
+   <input type="hidden" name="_function" value="">
+   <input type="hidden" name="fromfunction" value="">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="template" value="proc.html">
+   <input type="hidden" name="tplentry" value="br">
+   <input type="hidden" name="message" value="">
+   <input type="hidden" name="_selectedok" value="ok">
+   <input type="hidden" name="value" value="1">
+   <input type="hidden" name="_next">
+   <input type="hidden" name="marker" value="selectstart">
+   <%if $brt_odisp->filename%>
+   <%include file=$brt_odisp->filename%>
+   <%else%>
+   <ul class="imagelist" id="imagelist<%$uniqid%>">
+    <%section name=i loop=$br_lines_oid%>
+     <%include file="Module/Media.browseMedia.html" personalize_classes=$br_lines_imagelistclass[i]%>
+     <%/section%>
+   </ul>
+   <%/if%>
+  </form>
+ </div>
+</div>
+
+<%if ($br_last>$br_firstnext && $br_pagesize>1) || ($br_last<=$br_firstnext && $br_last-$br_first>1)%>
+<%include inline file="`$smarty.const.TZR_SHARE_DIR`Module/Media.topbar.html" pagerId="pager-bottom"|cat:$uniqid%>
+<%/if%>
+
+<script type="text/javascript">
+
+ TZR.Event.add("<%$uniqid%>",'keydown',function(e,id,p){
+  if(e.altKey){
+   if(e.keyCode==65){
+    TZR.checkBoxes(document.forms['browse<%$uniqid%>'],true);
+    return false;
+   }else if(e.keyCode==69){
+    TZR.Media.applyfunction("<%$uniqid%>","editSelection","",{template:"Module/Media.editSelection.html"},true,true);
+    return false;
+   }
+  }
+ });
+ 
+ // Selection de la fiche sur clic masque/titre, de la ligne sur double clic masque/titre et
+ // empeche la selection de l'image dans le navigateur suite au double clic
+ jQuery('div.imagelist_img',v<%$uniqid%>.modulecontainer).mousedown(function(){
+   return false;
+ });
+ jQuery('div.imagelist-text',v<%$uniqid%>.modulecontainer).on("click", function(e){
+   
+   e.stopImmediatePropagation();
+   
+   if (!e.shiftKey && !e.crtlKey && !e.metaKey){
+     TZR.Media.selectMedia(this);
+   }	
+   if (e.shiftKey && !e.ctrlKey && !e.metaKey){
+       TZR.Media.selectMediaLine(this);
+   }
+     if (e.shiftKey && (e.ctrlKey || e.metaKey)){
+	 TZR.Media.selectMediaPage(this);
+     }
+
+   return true;
+   
+ });
+ // dialog, popover actions
+
+ TZR.Media.infosInit(v<%$uniqid%>.modulecontainer);
+ TZR.Media.previewInit(v<%$uniqid%>.modulecontainer);
+
+ // Drag & drop de fichier pour inserer de nouvelles fiches
+ TZR.addProperDragEventsTo(jQuery(v<%$uniqid%>.modulecontainer).find('>div.cv8-contenu-center'),'<%$syslabels.Seolan_Core_General.drophere|escape:javascript%>').on('drop',function(e){
+   if(!TZR.dragEventContainsFiles(e)) return;
+   v<%$uniqid%>.modulecontainer.droppedinfos={files:e.dataTransfer.files,from:"<%$uniqid%>",bdx:"<%$bdxprefix%>_<%$bdx-1%>"};
+   TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:'<%$self%>&moid=<%$_moid%>&_function=insert&template=Module/Media.new.html&tplentry=br&droppedfile=0&droppedfrom=<%$uniqid%>'});
+ });
+</script>

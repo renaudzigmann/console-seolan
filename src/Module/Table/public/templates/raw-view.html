@@ -1,0 +1,19 @@
+<%if $brt_odisp->filename%>
+<%assign var="filename" value=$brt_odisp->filename%>
+<%include file=$filename%>
+<%else%>
+<fieldset><legend><%$syslabels.Seolan_Core_General.view_text%></legend>
+<div class="table-responsive">
+<table class=list2>
+	<%section name=fields loop=$br_fields_object %>
+<%if !$br_fields_object[fields]->sys %>
+	<tr >
+	<th ><label><%$br_fields_object[fields]->label|wordwrap:"50":"<br>"%></label></th>
+	<td><%$br_fields_object[fields]->html%></td>
+	</tr>
+<%/if%>
+<%/section%>
+</table>
+</div>
+</fieldset>
+<%/if%>

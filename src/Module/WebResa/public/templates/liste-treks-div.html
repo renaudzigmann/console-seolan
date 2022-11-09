@@ -1,0 +1,106 @@
+<%if $admini%>
+<%assign var=ts value="Module/InfoTree.viewsection.html"%>
+<%else%>
+ <link href="<%$smarty.const.TZR_SHARE_URL%>css8/xmodwebresa.css" rel="stylesheet" media="all" type="text/css"> 
+ <%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%>
+<%/if%>
+<%assign var=section value=$it_olines[it]%>
+ <div class="cv8d-browsediv cv8d-webresadiv cv8d-browsediv-<%$section._functionparams.moid%>">
+<%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+<%capture assign=pager%>
+  <div class="cv8d-pagelist">
+   <%section name=p loop=$section.pages%>
+    <%if $section.first==$section.pages[p]%>
+     <a class="active-page" href="#" onclick="return false;"><%$smarty.section.p.index+1%></a>
+     <%else%>
+     <a href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$section.pages[p]%> " onclick="TZR.jQueryLoad({target:jQuery(this).parents('div.cv8d-browsediv:first'),url:'<%$self%>moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$section.pages[p]%> div.cv8d-browsediv:first>*'}); return false;"><%$smarty.section.p.index+1%></a>
+    <%/if%>
+   <%/section%>
+  </div>
+ <%/capture%>
+ <%$pager%>
+<%/if%>
+<%*** filtres et tri ***%>
+<%if $section.filterfields || $section.sortfields || $section.pagesizes%>
+  <div class="cv8d-browseform">
+<%if $admini%>
+    <div id="formquery<%$uniqid%>">
+<%else%>
+    <form id="formquery<%$uniqid%>"  action="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=0" method="post" >
+<%/if%>
+<%foreach key=field item=filterfield from=$section.filterfields%>
+      <div class="cv8_inlineblock cv8d-filter cv8-filter-item<%$field->fielddef->name%>">
+        <label><%$filterfield->fielddef->label%></label>
+        <%$filterfield->html%>
+      </div>
+<%/foreach%>
+<%*** tri ***%>
+<%if $section.sortfields %>
+      <div class="cv8_inlineblock cv8d-sort">
+        <select name="sectionopts[<%$it_itoid[it]%>][order]">
+          <option value="<%$section.defaultOrder%>"><%$syslabels.Seolan_Module_InfoTree_InfoTree.sortby%></option>
+<%foreach key=field item=options from=$section.sortfields%>
+          <option value="<%$field%>"<%$options.selected%>><%$options.label%></option>
+<%/foreach%>
+        </select>
+      </div>
+<%/if%>
+<%*** pagesize variable ***%>
+<%if $section.pagesizes%>
+      <div class="cv8_inlineblock cv8d-pagesize">
+        <%$syslabels.Seolan_Module_Table_Table.pagesize%>
+        <select name="sectionopts[<%$it_itoid[it]%>][pagesize]">
+<%foreach item=pagesize from=$section.pagesizes%>          
+          <option value="<%$pagesize%>"<%if $pagesize==$section.pagesize%> selected="selected"<%/if%>><%$pagesize%></option>
+<%/foreach%>
+        </select>
+      </div>
+<%/if%>
+      <div class="fin_float"></div>
+      <input type="submit" name="sectionopts[<%$it_itoid[it]%>][insidefilter]" value="<%$syslabels.Seolan_Module_Table_Table.newquery%>" onclick="TZR.jQueryLoad({
+      target:jQuery('#formquery<%$uniqid%>').parents('div.cv8d-browsediv:first'),
+      url: '<%$self%>moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=0&sectionopts[<%$it_itoid[it]%>][insidefilter]=1&'+jQuery('#formquery<%$uniqid%>').find(':input').serialize()+' div.cv8d-browsediv:first>*'});return false;">
+<%if $admini%>
+    </div>
+<%else%>
+    </form>
+<%/if%>
+  </div>
+<%/if%>
+
+<%*** object list ***%>
+<%foreach key=i item=oid from=$section.lines_oid %>
+<%if $admini && $section._functionparams.params.__linktodetail_oidit%>
+<%assign var="url" value="`$self`moid=`$it_moid`&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=`$section._functionparams.params.__linktodetail_oidit`&oid=`$oid`&from[oidit]=`$it_cat_mit.oid`&from[itoid]=`$it_itoid[it]`" %>
+<%elseif $section._functionparams.params.__linktodetail_oidit%> 
+<%assign var="url" value="`$self`alias=`$section._functionparams.params.__linktodetail`&oid=`$oid`&from[alias]=`$it_cat_mit.oalias->raw`&from[itoid]=`$it_itoid[it]`&keywords=`$section.lines_tlink[$i]`" %>
+<%/if%>
+ <div class="cv8d-object">
+    <%assign var="mainimg" value=$section.lines_ssmod[$i].__ssmod[0].lines_omedia[0] %>
+      <%if $mainimg->resizer%>    
+      <div class="cv8d-fieldvalue cv8d-field-<%$mainimg->field%>">
+     <a href="<%$url%>"><%$mainimg->html%></a>
+    </div>
+   <%/if%>
+   <%foreach item=field from=$section.header_fields%>
+    <%assign var="thefield" value=$section["lines_o<%$field->field%>"][$i]%>
+   <%if $field->field eq 'commentaire'%>
+   <%assign var="truncate" value=1 %>
+   <%else%>
+   <%assign var="truncate" value=0 %>
+   <%/if%> 
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Module/WebResa.disp-field.html" truncate=$truncate field=$thefield%>
+   <%/foreach%>
+   <%if $url%>
+    <div class="cv8-linktodetails" >
+     <%assign var="lblkey" value="wrlinktodetails"%>
+     <a href="<%$url%>" class="cv8-ajaxlink cv8d-object-link"><%$labels[$lblkey]|default:$syslabels.Seolan_Module_WebResa_WebResa[$lblkey]%></a>
+    </div>
+   <%/if%>
+   <div class="fin_float"></div>
+  </div>
+<%/foreach%>
+<%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+  <%$pager%>
+<%/if%>
+</div>

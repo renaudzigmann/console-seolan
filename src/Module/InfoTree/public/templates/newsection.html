@@ -1,0 +1,52 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_InfoTree_InfoTree.add_a_section%>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="insertsection">
+ <input type="hidden" name="template" value="Module/InfoTree.viewpage.html">
+ <input type="hidden" name="uniqid" value="<%$uniqid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="oidit" value="<%$it_oidit%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="tplentry" value="it">
+ <input type="hidden" name="position" value="<%$it_position%>">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="zone" value="<%$smarty.request.zone%>"> 
+ <input type="hidden" name="_next" value="<%$self%>function=viewpage&moid=<%$_moid%>&oidit=<%$it_oidit%>&template=Module/InfoTree.viewpage.html&tplentry=it">
+ <%section name=it loop=$it_olines_oid%>
+  <%if $tp_oedit->filename%>
+   <%assign var="filename" value=$tp_oedit->filename%>
+   <%include file="$filename"%>
+  <%else%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.edit_text%></legend>
+    <div class="table-responsive">
+    <table class="table list2" >
+     <%section name=fields loop=$it_olines[it].fields_object %>
+      <tr>
+       <th><label><%$it_olines[it].fields_object[fields]->fielddef->label%></label></th>
+       <td><%$it_olines[it].fields_object[fields]->html%></td>
+      </tr>
+     <%/section%>
+    </table>
+    </div>
+   </fieldset>
+  <%/if%>
+ <%/section%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout%></legend>
+  <div class="table-responsive">
+  <table class="table list2" >
+   <tr>
+    <td>
+     <select name="oidtpl">
+      <%section name=tpl loop=$tple_lines_oid%>
+       <option value="<%$tple_lines_oid[tpl]%>" <%if $tple_lines_oid[tpl] eq $it_oidtpl%>selected<%/if%>><%$tple_lines_otitle[tpl]->html%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+</form>

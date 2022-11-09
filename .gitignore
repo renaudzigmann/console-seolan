@@ -1,0 +1,11 @@
+*~
+*.rej
+*.orig
+*#
+.settings
+.project
+.buildpath
+/nbproject/private/
+/Vendor/composer.lock
+/doc/public/*
+/scripts/fontconfig/

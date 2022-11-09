@@ -1,0 +1,105 @@
+<%* browse selection dédié Module/Media *%>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title"><%$sel._modulename%> - <%$syslabels.Seolan_Core_General.selectedobjects%></h4>
+    </div>
+    
+    <div class="modal-body">
+      
+      <%include inline file="Core/Module.selectionalerts.html"%>
+      
+      <div id="selection-sc<%$sel._moid%>">
+
+
+	<%include inline file="Core/Module.selectionmenu.html"%>
+
+	<ul class="nav nav-pills select-tool" role="tablist">
+          <%if !empty($sel._actions)%><%/if%>
+          <%foreach from=$sel._actions item=myaction key=name%>
+          <li><%$myaction%></li>
+          <%/foreach%>
+        </ul>
+	
+	<div class="cv8-panier_content">
+          
+	  <form name="selectionform<%$sel._moid%>" method="post" action="<%$self%>">
+	    <input type="hidden" name="moid" value="<%$sel._moid%>">
+	    <input type="hidden" name="template" value="">
+	    <input type="hidden" name="tplentry" value="br">
+	    <input type="hidden" name="_function" value="">
+	    <input type="hidden" name="_next" value="">
+	    <input type="hidden" name="_selectedok" value="ok">
+	    <input type="hidden" name="smarker" value="selectstart">
+
+	    <div class="table-responsive modal-fixedheight">
+
+	      <ul class="imagelist" id="imagelistsel<%$sel._moid%>">
+
+		<%assign var='browsethumbsize' value=$sel._browsethumbsize%>
+		
+		  <%section name=i loop=$sel.lines%>
+
+		  <%assign var="title" value=""%>
+		  <%section name=h loop=$sel.lines[i].fields_object%>
+		  <%if ($sel.lines[i].fields_object[h]->field neq 'media') && $sel.lines[i].fields_object[h]->fielddef->published%>
+		  <%assign var="fieldname" value="o"|cat:$sel.lines[i].fields_object[h]->field%>
+		  <%assign var="titlenext" value=$sel.lines[i].<%$fieldname%>->html%>
+		  <%assign var="title" value=$title|cat:' '|cat:$titlenext%>
+		  <%/if%>
+		  <%/section%>
+		  <%assign var="title" value=$title|strip_tags:false%>
+		  <%include file="Module/Media.browseMedia.html" 
+		  selection=1 
+		  media=$sel.lines[i].omedia 
+		  mediaoid=$sel.lines[i].oid
+		  actions=$sel.actions[i]
+		  title=$title
+		  publish=$sel.lines[i].oPUBLISH
+		  selected=$sel.lines[i]._selected
+		  mediahref="<%$self%>&moid=<%$sel._moid%>&function=displayMedia&oid=<%$sel.lines[i].oid%>&template=xmodmedia/viewMedia.html&tplentry=br&skip=1&_raw=2&_ajax=1&resize=640x640%3E"
+		  %>
+		  <%/section%>
+		</ul>
+	    </div>
+	  </form>
+          
+	</div>
+      </div>
+      
+    </div>
+    <div class="modal-footer">
+      <button type="button" data-dismiss="modal" class="btn btn-default cvx-cancel"><%$syslabels.Seolan_Core_General.close_text%></button>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+ jQuery('#selection-sc<%$sel._moid%> div.imagelist_img,div.imagelist_text').mousedown(function(){
+   return false;
+ }).click(function(e){
+   if(e.target!=e.currentTarget) return;
+   TZR.Media.selectMedia(this);
+   TZR.SELECTION.updateChecked('<%$sel._moid%>');
+ }).dblclick(function(e){
+   if(e.target!=e.currentTarget) return;
+   TZR.Media.selectMediaLine(this);
+   TZR.SELECTION.updateChecked('<%$sel._moid%>');
+ });
+
+ TZR.SELECTION.downloadselected<%$sel._moid%>=function(oid){
+   var f=document.forms['selectionform<%$sel._moid%>'];
+   var oids=[];
+   jQuery(':checkbox:checked',f).each(function(){
+     oids.push(jQuery(this).closest('.imagelist-item').data('oid'));
+   });
+   if (!oids.length) {
+     return alert('<%$syslabels.Seolan_Core_General.error_select_object|escape:"quotes"%>');
+   }
+   TZR.Media.downloadMedia(<%$sel._moid%>,oids);
+   TZR.SELECTION.ModalClose.call(TZR.SELECTION);
+ }
+</script>

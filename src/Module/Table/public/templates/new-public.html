@@ -1,0 +1,95 @@
+<%if !$smarty.request.tabsmode%>
+ <%if empty($title)%><%assign var="title" value=$syslabels.Seolan_Core_General.new_text%><%/if%>
+ <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%else%>
+ <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" nonav=1 nohistory=1 nodata=1%>
+ <script type="text/javascript">
+  v<%$uniqid%>.submitForm=function(f){
+   return TZR.ajaxSubmitForm(f,jQuery(v<%$uniqid%>.div).parents('div.ui-tabs-panel:first'));
+  }
+ </script>
+<%/if%>
+
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="<%if empty($smarty.request.tabsmode)%>return TZR.ajaxSubmitForm(this);<%else%>return TZR.ajaxSubmitForm(this,jQuery(v<%$uniqid%>.div).parents('div.ui-tabs-panel:first'));<%/if%>">
+ <%if $brt_oedit->filename%>
+  <%assign var="filename" value=$brt_oedit->filename%>
+  <%include file=$filename%>
+ <%else%>
+  <%if $br__groups%>
+  <%foreach key=group item=fields from=$br__groups %>
+  <%if $group!='_systemproperties'%>
+  <fieldset>
+    <legend><%$group%></legend>
+    <div class="table-responsive">
+      <table class="list2" >
+	<%section name=f loop=$fields %>
+	<tr id="cont-<%$fields[f]->field%>">
+	  <th <%if $fields[f]->fielddef->acomment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$fields[f]->fielddef->acomment|escape:'html'%>"<%/if%>><label><%$fields[f]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+	  <td><%$fields[f]->html%></td>
+	</tr>
+	<%/section%>
+      </table>
+    </div>
+  </fieldset>
+  <%/if%>
+  <%/foreach%>
+  <%else%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.general%></legend>
+    <div class="table-responsive">
+    <table class="list2" >
+     <%section name=fields loop=$br_fields_object%>
+      <%if !$br_fields_object[fields]->sys && ($br_fields_object[fields]->field neq $smarty.request._linkedfield)%>
+       <tr id="cont-<%$br_fields_object[fields]->field%>">
+	<th <%if $br_fields_object[fields]->fielddef->acomment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$br_fields_object[fields]->fielddef->acomment|escape:'html'%>"<%/if%>><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+	<td><%$br_fields_object[fields]->html%></td>
+       </tr>
+      <%/if%>
+     <%/section%>
+    </table>
+    </div>
+   </fieldset>
+  <%/if%>
+  <%if $br_oPUBLISH && $imod_sec.rwv%>
+   <fieldset class="fieldsetAccordionOpen">
+    <legend><%$syslabels.Seolan_Core_General.systemproperties_text%></legend>
+    <div class="table-responsive">
+    <table class="list2" >
+     <tr>
+      <th><label><%$br_oPUBLISH->fielddef->label%></label></th>
+      <td><%$br_oPUBLISH->html%></td>
+     </tr>
+    </table>
+    </div>
+   </fieldset>
+  <%/if%>
+ <%/if%>
+ <%if !$smarty.capture.action_handled%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="hidden" name="template" value="Core.layout/raw.html">
+    <input type="hidden" name="_nonav" value="1">
+    <input type="hidden" name="_nohistory" value="1">
+    <input type="hidden" name="template" value="Core.layout/raw.html">
+    <input type="hidden" name="insidefile" value="Core.message.html">
+    <input type="hidden" name="_next" value="">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+ <%/if%>
+ <input type="hidden" name="_nextmode" value="">
+ <input type="hidden" name="_function" value="procInsert">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="skip" value="1">
+ <%if $smarty.request._linkedfield && $smarty.request._parentoid%>
+  <input type="hidden" name="<%$smarty.request._linkedfield%>" value="<%$smarty.request._parentoid%>"/>
+  <input type="hidden" name="_parentoid" value="<%$smarty.request._parentoid%>"/>
+  <input type="hidden" name="_linkedfield" value="<%$smarty.request._linkedfield%>"/>
+ <%/if%>
+</form>
+<script type="text/javascript">
+ 
+ TZR.fieldsetAccordion(jQuery(document.editform<%$uniqid%>));
+ TZR.activeDependency(document.editform<%$uniqid%>);
+</script>

@@ -1,0 +1,29 @@
+.uploadQueueItem {
+	font: 11px Verdana, Geneva, sans-serif;
+	border: 1px solid #E5E5E5;
+	background-color: #F5F5F5;
+	margin-bottom: 5px;
+	padding: 2px;
+	width: 350px;
+}
+.uploadError {
+	border: 2px solid #FBCBBC !important;
+	background-color: #FDE5DD !important;
+}
+.uploadQueueItem .uploadCancel {
+	float: right;
+}
+.uploadProgress {
+	background-color: #FFFFFF;
+	border-top: 1px solid #808080;
+	border-left: 1px solid #808080;
+	border-right: 1px solid #C5C5C5;
+	border-bottom: 1px solid #C5C5C5;
+	margin-top: 5px;
+	width: 100%;
+}
+.uploadProgressBar {
+	background-color: #0099FF;
+	width: 1px;
+	height: 3px;
+}

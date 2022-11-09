@@ -1,0 +1,23 @@
+<script type="text/javascript">
+ if (TZR.Table.browse['<%$uniqid%>'] === undefined) {
+   TZR.Table.browse['<%$uniqid%>'] = {browseurl:'<%$imod_props.actions.browse->xurl|escape:"url"%>'};
+ }
+ <%if $imod_props.unfoldedgroupsnumber > 1%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"),
+		       0,
+		       "fieldset:gt(<%$imod_props.unfoldedgroupsnumber-2%>)");
+ <%else%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"));
+ <%/if%>
+ v<%$uniqid%>.completeSubModule=function(url,link){
+   v<%$uniqid%>.tableToComplete = jQuery(link).siblings('.cv8_tablelist');
+   jQuery(link).remove();
+   TZR.jQueryPost({url:url, target:v<%$uniqid%>.tableToComplete, noautoscroll:true, cb:function(responseText,textStatus,XMLHttpRequest){
+     jQuery('.cv8_tablelist>tbody>tr', responseText).not(':first').appendTo(jQuery('tbody:first', v<%$uniqid%>.tableToComplete));
+     jQuery('.cv8_competesubmodule', responseText).insertAfter(v<%$uniqid%>.tableToComplete);
+     jQuery('.sumlisttot1', v<%$uniqid%>.tableToComplete).remove();
+   }});
+ }
+
+</script>
+

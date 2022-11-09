@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Home>
+  <Item type="Theme" ID="N31403">
+    <Titre>Formalités administratives</Titre>
+    <Item type="Dossier" ID="F1119"><Titre>Déclaration</Titre></Item>
+    <Item type="Dossier" ID="F1926"><Titre>Immatriculation</Titre></Item>
+    <Item type="Dossier" ID="F1120"><Titre>Statuts</Titre></Item>
+    <Item type="Dossier" ID="N21962"><Titre>Modification - dissolution</Titre></Item>
+    <Item type="Dossier" ID="F11966"><Titre>Agrément</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N31404">
+    <Titre>Fonctionnement</Titre>
+    <Item type="Dossier" ID="F1121"><Titre>Dirigeants</Titre></Item>
+    <Item type="Dossier" ID="N22150"><Titre>Bénévoles</Titre></Item>
+    <Item type="Dossier" ID="F1127"><Titre>Constitution de partie civile</Titre></Item>
+    <Item type="Dossier" ID="F21899"><Titre>Organisation d’un événement</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N31405">
+    <Titre>Financement</Titre>
+    <Item type="Dossier" ID="F3180"><Titre>Subventions</Titre></Item>
+    <Item type="Dossier" ID="F2722"><Titre>Dons</Titre></Item>
+    <Item type="Dossier" ID="N22179"><Titre>Activités commerciales</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N31406">
+    <Titre>Associations spécifiques et fondations</Titre>
+    <Item type="Dossier" ID="N31028"><Titre>Fondations</Titre></Item>
+    <Item type="Dossier" ID="F1390"><Titre>Associations de parents d’élèves</Titre></Item>
+    <Item type="Dossier" ID="F1319"><Titre>Associations de propriétaires</Titre></Item>
+    <Item type="Dossier" ID="F1126"><Titre>Associations de consommateurs</Titre></Item>
+  </Item>
+</Home>

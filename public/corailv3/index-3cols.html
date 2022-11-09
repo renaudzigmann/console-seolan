@@ -1,0 +1,44 @@
+<!-- B.1 BColonne de gauche -->
+<div class="cv3-main-gauche">
+<div class="cv3-col-gauche">
+<%* <h1><%$it_cat_mit.otitle->html%></h1> *%>
+<%* <h1><%$it_cat_mit.otitle->html%></h1> *%>
+<%if $it_cat_mit.oalias->html neq $tzr.corailv3_home%><h1><%$path_stack[1].otitle->html%></h1>
+<%else%>
+<div class="spacerh1"></div>
+<%/if%>
+<%include file="Application/MiniSite/public/templates/navigation.html"%>
+<%include file="Application/MiniSite/public/templates/cv3-newsletter.html"%>
+</div><!-- fin col gauche --></div><!-- fin main gauche -->
+						 
+<!-- B.2 CONTENU -->
+<div class="cv3-main-contenu" id="3cols">
+<div class="cv3-titrepage"><h1><%$it_cat_mit.otitle->html%></h1></div>
+<div class="tzr-page-content cv3-col-contenu" id="tzr-page-content">
+<%if $smarty.request.insidefile %><%include file=$smarty.request.insidefile%><%else%>
+<%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+<%if $it_olines[it]._dynquery and !$done %>
+<%assign var="v1" value=$it_olines[it]._dynquery%>
+<%assign var="done" value=1%>
+<%if $v1.fields_fieldvalue[0] %>
+<table border=0 >
+<form name=myform action="<%$self%>" method=post>
+<input type=hidden name="oidit" value="<%$it_oidit%>">
+<%section name=f loop=$v1.fields_fieldvalue %>
+<tr><td valign=top><%$v1.fields_fieldname[f]%></td><td><%$v1.fields_fieldvalue[f]%></td></tr>
+<%/section%>
+<tr><th colspan=2></th></tr>
+<tr><td colspan=2><input type="submit" name=submit value="<%$labels.query_text%>" ></td></tr>
+</form>
+</table>
+<%/if%>
+<%/if%>
+<%if file_exists($filename) %><%include file="$filename"%><%/if%>
+<%/section%>
+<%/if%>
+</div></div>
+<!-- B.3 Colonne de droite -->
+<div class="cv3-main-droite">
+<div class="cv3-col-droite">
+<%include file="Application/MiniSite/public/templates/cv3-news.html"%>
+</div></div>

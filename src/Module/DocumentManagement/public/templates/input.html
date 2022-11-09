@@ -1,0 +1,31 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.new_text%>
+<%include file="Module/Table.functions.html"%>
+<%if $br_here->tpl.oedit->filename%>
+ <%include file=$br_here->tpl.oedit->filename%>
+<%else%>
+ <%include file="Module/DocumentManagement.template-new.html"%>
+<%/if%>
+<script type="text/javascript">
+  <%if isset($smarty.request.droppedfile) && isset($smarty.request.droppedfrom)%>
+    var droppedinfos=v<%$uniqid%>.modulecontainer.droppedinfos;
+    if(droppedinfos && droppedinfos.files && droppedinfos.from=="<%$smarty.request.droppedfrom%>"){
+      if(droppedinfos.files[<%$smarty.request.droppedfile%>]){
+        <%if $brt_oopts->decoded.droppedfilesin%>
+          var $cont=jQuery('#cont-<%$brt_oopts->decoded.droppedfilesin%> div.uploadCont');
+        <%else%>
+          var $cont=jQuery(v<%$uniqid%>.modulecontainer).find('div.uploadCont');
+        <%/if%>
+        if($cont.length){
+          $cont.data('uploader').bind('postInit',function(){
+            this.addFile(droppedinfos.files[<%$smarty.request.droppedfile%>]);
+          });
+          if(droppedinfos.files.length-1><%$smarty.request.droppedfile%>){
+            document.editform<%$uniqid%>._next.value='<%$self%>&moid=<%$_moid%>&_function=input&template=Module/DocumentManagement.input.html&doid=<%$smarty.request.doid%>&tplentry=br&_parentoid=<%$smarty.request._parentoid%>&oid=<%$smarty.request.oid%>&droppedfile=<%$smarty.request.droppedfile+1%>&droppedfrom=<%$smarty.request.droppedfrom%>';
+          }else{
+            document.editform<%$uniqid%>._next.value='<%$self%>&function=back&n='+droppedinfos.bdx;
+          }
+        }
+      }
+    }
+  <%/if%>
+</script>

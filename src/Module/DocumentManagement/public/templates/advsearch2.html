@@ -1,0 +1,38 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.search_text%>
+<%*include file="Module/DocumentManagement.top.html"*%>
+<fieldset><legend><%$syslabels.Seolan_Core_General.query_text%></legend>
+<form action="<%$self%>" method="post" name="search" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="search">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="template" value="Module/DocumentManagement.advsearch2.html">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="text" name="query" size="30" value="<%$br_query%>">
+ <br>
+ <input name="deepsearch" value="1" type="checkbox" <%if $br_deepsearch%>checked<%/if%> id="deepsearch"/>&nbsp;<label for="deepsearch">Recherche approfondie incluant le contenu des fichiers</label>
+ <br>
+ <div class="tzr-action">
+  <input class="tzr-docmgt-searchbox-submit" type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>">
+ </div>
+</form>
+</fieldset>
+<%if !empty($br_docs) %>
+ <%* tableau des resultats *%>
+ <fieldset class="tzr-docmgt-fd">
+  <legend><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.results_text%></legend>
+  <%assign var="Directory" value=""%>
+  <%foreach from=$br_docs item=it key=i%>
+   <%if $Directory neq $it->parentsoid[0]%>
+    <%assign var="Directory" value=$it->parentsoid[0]%>
+    <%assign var="parent" value=$it->parents[0]%>
+    <div class="tzr-docmgt-blockfullwidth">
+     <a class="tzr-hottip-c cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&oid=<%$parent->oid%>&tplentry=br" bt-xTitle="Type: <%$parent->tpl.otitle->html|escape:'html'%><br><%$parent->fields.oUPD->html%><br><%$parent->fields.oOWN->text|escape:'html'%>"><%$parent->icon->html%></a>
+     <a href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&oid=<%$parent->oid%>&tplentry=br" class="cv8-ajaxlink tzr-docmgt-block-title"><%$parent->parents[0]->title%> > <%$parent->title%><%if $parent->countdocs%>#<%$parent->countdocs%><%/if%></a>
+    </div>
+   <%/if%>
+   <div class="tzr-docmgt-doc1">
+    <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=goto1&oid=<%$it->oid%>&tplentry=br"><%$it->smallicon%></a>
+    <span  class="tzr-hottip-c" bt-xTitle="Type: <%$it->tpl.otitle->html|escape:'html'%><br><%$it->fields.oUPD->html%><br><%$it->fields.oOWN->text|escape:'html'%>"><%$it->short%></span><%$it->docs%>
+   </div>
+  <%/foreach%>
+ </fieldset>
+<%/if%>

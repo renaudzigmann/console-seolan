@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Home>
+  <Item type="Theme" ID="N19810">
+    <Titre>Papiers - Citoyenneté</Titre>
+    <Item type="Dossier" ID="N359"><Titre>État-civil</Titre></Item>
+    <Item type="Dossier" ID="N360"><Titre>Passeport</Titre></Item>
+    <Item type="Dossier" ID="N47"><Titre>Élections</Titre></Item>
+    <Item type="Dossier" ID="F19134"><Titre>Papiers à conserver</Titre></Item>
+    <Item type="Dossier" ID="N358"><Titre>Carte d'identité</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19805">
+    <Titre>Famille</Titre>
+    <Item type="Dossier" ID="N156"><Titre>Allocations familiales</Titre></Item>
+    <Item type="Dossier" ID="N15660"><Titre>Naissance</Titre></Item>
+    <Item type="Dossier" ID="N142"><Titre>Mariage</Titre></Item>
+    <Item type="Dossier" ID="N144"><Titre>Pacs</Titre></Item>
+    <Item type="Dossier" ID="N54"><Titre>Scolarité</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19811">
+    <Titre>Social - Santé</Titre>
+    <Item type="Dossier" ID="F265"><Titre>Carte vitale</Titre></Item>
+    <Item type="Dossier" ID="N549"><Titre>Chômage</Titre></Item>
+    <Item type="Dossier" ID="N19811"><Titre>Handicap</Titre></Item>
+    <Item type="Dossier" ID="N19775"><Titre>RSA</Titre></Item>
+    <Item type="Dossier" ID="N392"><Titre>Personnes âgées</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19806">
+    <Titre>Travail</Titre>
+    <Item type="Dossier" ID="N19871"><Titre>CDD</Titre></Item>
+    <Item type="Dossier" ID="F13971"><Titre>Concours</Titre></Item>
+    <Item type="Dossier" ID="N381"><Titre>Retraite</Titre></Item>
+    <Item type="Dossier" ID="N19611"><Titre>Démission</Titre></Item>
+    <Item type="Dossier" ID="F1643"><Titre>Période d'essai</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19808">
+    <Titre>Logement</Titre>
+    <Item type="Dossier" ID="N20360"><Titre>Allocations logement</Titre></Item>
+    <Item type="Dossier" ID="F1986"><Titre>Permis de construire</Titre></Item>
+    <Item type="Dossier" ID="F10007"><Titre>Logement social</Titre></Item>
+    <Item type="Dossier" ID="N339"><Titre>Fin de bail</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19812">
+    <Titre>Transports</Titre>
+    <Item type="Dossier" ID="N367"><Titre>Carte grise</Titre></Item>
+    <Item type="Dossier" ID="N530"><Titre>Permis de conduire</Titre></Item>
+    <Item type="Dossier" ID="N31200"><Titre>Contrôle technique</Titre></Item>
+    <Item type="Dossier" ID="N18918"><Titre>Infractions</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19803">
+    <Titre>Argent</Titre>
+    <Item type="Dossier" ID="N20373"><Titre>Crédit immobilier</Titre></Item>
+    <Item type="Dossier" ID="N247"><Titre>Impôts</Titre></Item>
+    <Item type="Dossier" ID="N19803"><Titre>Consommation</Titre></Item>
+    <Item type="Dossier" ID="N20376"><Titre>Livret A</Titre></Item>
+    <Item type="Dossier" ID="N19803"><Titre>Assurance</Titre></Item>
+    <Item type="Dossier" ID="N99"><Titre>Surendettement</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19807">
+    <Titre>Justice</Titre>
+    <Item type="Dossier" ID="F1420"><Titre>Casier judiciaire</Titre></Item>
+    <Item type="Dossier" ID="F1435"><Titre>Plainte</Titre></Item>
+    <Item type="Dossier" ID="F18074"><Titre>Aide juridictionnelle</Titre></Item>
+    <Item type="Dossier" ID="N277"><Titre>Saisie</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19804">
+    <Titre>Étranger</Titre>
+    <Item type="Dossier" ID="N110"><Titre>Titres de séjour</Titre></Item>
+    <Item type="Dossier" ID="F2191"><Titre>Attestation d’accueil</Titre></Item>
+    <Item type="Dossier" ID="N11165"><Titre>Regroupement familial</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N19809">
+    <Titre>Loisirs</Titre>
+    <Item type="Dossier" ID="N18944"><Titre>Animaux</Titre></Item>
+    <Item type="Dossier" ID="N550"><Titre>Permis bateau</Titre></Item>
+    <Item type="Dossier" ID="N19104"><Titre>Tourisme</Titre></Item>
+    <Item type="Dossier" ID="N553"><Titre>Permis de chasser</Titre></Item>
+  </Item>
+</Home>

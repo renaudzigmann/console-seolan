@@ -1,0 +1,24 @@
+<div class="cv3-3cols clearfix">
+  <%section name=corailsection loop=3%>
+    <%assign var=i value=$smarty.section.corailsection.iteration%>
+    <%assign var=img value="oimg`$i`"%>
+    <%assign var=lnk value="oimglnk`$i`"%>
+    <%assign var=url value="oimgurl`$i`"%>
+    <%assign var=leg value="oimgleg`$i`"%>
+    <%assign var=txt value="otxt`$i`"%>
+    
+    <div class="cols<%$i%>" >
+      <div class="top"></div>
+        <%if $it_olines[it].$img->resizer%>
+          <div class="image">
+            <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].$img url=$it_olines[it].$url lnk=$it_olines[it].$lnk leg=$it_olines[it].$leg titsec=$it_olines[it].otitsec srcsetId='img_tiers'%>
+          </div>
+        <%/if%>
+        <%if $it_olines[it].$leg->html%><div class="titre"><%$it_olines[it].$leg->html%></div><%/if%>
+        <div class="txt"><%$it_olines[it].$txt->html%></div>
+      <div class="bas"></div>
+    </div>
+    
+  <%/section%>
+</div>
+

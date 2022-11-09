@@ -1,0 +1,127 @@
+<script type="text/javascript">
+ v<%$uniqid%>.changeWeek=function(week) {
+  var tab=week.split("-");
+  v<%$uniqid%>.jQueryLoad('<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayWeek<%$br_calendar_mode%>&tplentry=br&template=Module/Calendar.displayWeek<%$br_calendar_mode%>.html&week='+tab[0]+'&year='+tab[1]);
+ }
+</script>
+
+
+<div class="cal-calendar">
+<button class="btn btn-default" role="button" data-toggle="collapse" href="#cal-calendar-table" aria-expanded="true">Calendrier</button>
+<div id="cal-calendar-table" class="collapse in">
+<table class="table cal-calendar">
+  <thead>
+    <tr>
+     <th class="cal-prev">
+      <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=<%$function%>&tplentry=br&template=<%$template%>&day=1&month=<%$br_prev_month%>&year=<%$br_prev_year%>"><%$syslabels.Seolan_Core_General.previous%></a>
+     </th>
+     <th colspan="5"><%$br_month_list[$br_month]%></th>
+     <th class="cal-next" colspan="2">
+      <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=<%$function%>&tplentry=br&template=<%$template%>&day=1&month=<%$br_next_month%>&year=<%$br_next_year%>"><%$syslabels.Seolan_Core_General.next%></a>
+     </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+     <td class="cal-calendar_week"><%$syslabels.Seolan_Module_Calendar_Calendar.we%></td>
+     <%foreach from=$syslabels.Seolan_Module_Calendar_Calendar.daymin item=text%>
+      <td class="cal-calendar_day"><%$text%></td>
+     <%/foreach%>
+    </tr>
+    <%counter start=0 assign=cpt%>
+    <%foreach name="cal" from=$br_cal_contents item=day%>
+     <%if $smarty.foreach.cal.iteration%7==1%>
+      <tr<%if $br_week_cal_list[$cpt].week==$br_week && $function!="displayMonth" && $function!="displayYear"%> class="cal-calendar_current_week"<%/if%>>
+       <td class="cal-calendar_week">
+        <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayWeek<%$br_calendar_mode%>&tplentry=br&template=Module/Calendar.displayWeek<%$br_calendar_mode%>.html&week=<%$br_week_cal_list[$cpt].week%>&year=<%$br_week_cal_list[$cpt].year%>"><%$br_week_cal_list[$cpt].week%></a>
+       </td>
+       <%counter%>
+     <%/if%>
+     <td class="cal-<%$day.day_cal_type%>">
+      <a class="cv8-ajaxlink" <%if !is_null($day.notes) || !is_null($day.events)%>style="text-decoration:underline;"<%/if%> href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayDay<%$br_calendar_mode%>&tplentry=br&template=Module/Calendar.displayDay<%$br_calendar_mode%>.html&day=<%$day.day%>&month=<%$day.month%>&year=<%$day.year%>"><%$day.day%></a>
+     </td>
+     <%cycle values=",,,,,,</tr>"%>
+     
+    <%/foreach%>
+    <%if $cpt==5%>
+     <tr><td colspan="8" class="cal-calendar_week">&nbsp;</td></tr>
+    <%/if%>
+    </tbody>
+   </table>
+   </div>
+</div>
+
+<div class="cal-selection">
+  <button class="btn btn-default" role="button" data-toggle="collapse" href="#cal-selection" aria-expanded="false"><%$syslabels.Seolan_Module_Calendar_Calendar.see%></button>
+  <div id="cal-selection" class="collapse">
+    <form name="selection<%$uniqid%>">
+    <div class="form-group">
+      <select name="dateWeek"><%html_options options=$br_week_list selected=$br_week%></select>
+      <input type="button" name="we" value="OK" onclick="v<%$uniqid%>.changeWeek(this.form.dateWeek.value)">
+    </div>
+    <div class="form-group">
+      <select name="dateMonth"><%html_options options=$br_month_list selected=$br_month%></select>
+      <input type="button" name="mo" value="OK" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayMonth&tplentry=br&template=Module/Calendar.displayMonth.html&day=1&month='+this.form.dateMonth.value+'&year=<%$br_year%>');">
+    </div>
+    <div class="form-group">
+      <%html_select_date prefix="date" start_year="2000" end_year="2037" time="$br_year-01-01" display_days=false display_months=false%>
+      <input type="button" name="ye" value="OK" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayYear&tplentry=br&template=Module/Calendar.displayYear.html&day=1&month=1&year='+this.form.dateYear.value);">
+    </div>
+    </form> 
+  </div>
+</div>
+
+<div class="cal-fastadd">
+  <button class="btn btn-default" role="button" data-toggle="collapse" href="#cal-fastadd" aria-expanded="false"><%$syslabels.Seolan_Module_Calendar_Calendar.fastadd%></button>
+  <div id="cal-fastadd" class="collapse">
+  <%if !$br_group_of_diary && $br_calendar_mode=="" && $br_diary.rwsecure%>
+    <form name="fastadd<%$unqid%>" method="post" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+      <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+      <input type="hidden" name="_function" value="saveFastEvt">
+      <input type="hidden" name="_next" value="<%$self%>moid=<%$smarty.request.moid%>&_function=<%$function%>&oid=<%$br_diary.KOID%>&template=<%$template%>&tplentry=br&adddate">
+
+      <div class="form-group">
+        <input class="cal-fast_text" id="fa<%$uniqid%>-text" type="text" name="text" onblur="TZR.isIdValid('fa<%$uniqid%>-text');" placeholder="Nom de l'&eacute;v&eacute;nement" required>
+      </div>
+      <div class="form-group">
+	<input id="fa<%$uniqid%>-date" type="date" name="date" value='<%"$br_month/$br_day/$br_year"|date_format:"%d/%m/%Y"%>' size="10" maxlength="10" onblur=" TZR.isIdValid('fa<%$uniqid%>-date');" required>
+    
+	<script type="text/javascript">
+	 TZR.addValidator(['cal-fast_date',/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	</script>
+	<input id="fa<%$uniqid%>-hour" class="cal-fast_hour" type="time" name="begin" size="5" maxlength="5" onblur="TZR.formatHour(this,2); TZR.isIdValid('fa<%$uniqid%>-hour');" placeholder="Heure" required>
+	<script type="text/javascript">
+	  TZR.addValidator(['fa<%$uniqid%>-hour',/^(([0-1][0-9])|(2[0-3])|[0-9]):[0-5][0-9]$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	</script>
+  </div>
+       
+  <div class="form-group">
+	<h5><%$syslabels.Seolan_Module_Calendar_Calendar.category%></h5>
+	<select class="cal-fast_cat" name="cat">
+	 <%foreach from=$br_categories key=key item=cat%>
+	  <option value="<%$key%>"><%$cat.name%></option>
+	 <%/foreach%>
+	</select>
+  </div>
+       
+  <%if $br_diary.OWN==$uid%>
+       <h5><%$syslabels.Seolan_Module_Calendar_Calendar.visibility%><%$syslabels.Seolan_Core_General.i18ncolon%></h5>
+       <div class="checkbox">
+         <label for="fa<%$uniqid%>-PR"><input id="fa<%$uniqid%>-PR" type="radio" value="PR" name="visib" <%if $br_diary.defvisi=="PR" || empty($br_diary.defvisi)%>checked<%/if%>><%$syslabels.Seolan_Module_Calendar_Calendar.private%></label>
+       </div>
+       <div class="checkbox">
+       <label for="fa<%$uniqid%>-OC"><input id="fa<%$uniqid%>-OC" type="radio" value="OC" name="visib" <%if $br_diary.defvisi=="OC"%>checked<%/if%>><%$syslabels.Seolan_Module_Calendar_Calendar.occupy%></label>
+       </div>
+       <div class="checkbox">
+       <label for="fa<%$uniqid%>-PU"><input id="fa<%$uniqid%>-PU" type="radio" value="PU" name="visib" <%if $br_diary.defvisi=="PU"%>checked<%/if%>><%$syslabels.Seolan_Module_Calendar_Calendar.public%></label>
+       </div>
+      <%/if%>
+      <div class="form-group"><button class="btn btn-primary" type="submit"><%$syslabels.Seolan_Module_Calendar_Calendar.add%></button></div>
+
+    </form>
+  <%/if%>
+  </div>
+</div>
+
+

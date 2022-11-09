@@ -1,0 +1,41 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Media_Media.importonfly%>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="_function" value="procImportOnFly">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="_next" value="<%$back%>"/>
+ <input type="hidden" name="skip" value="1">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Media_Media.importonfly%></legend>
+  <div class="table-responsive">
+  <table class="table table striped list2">
+   <tr>
+    <th><%$syslabels.Seolan_Module_Media_Media.medias%></th>
+    <td><%$br_omedias->html%></td>
+   </tr>
+   <%if $br_hashd%>
+   <tr>
+    <th><%$syslabels.Seolan_Module_Media_Media.hdmedia%></th>
+    <td><input type="checkbox" name="hdmedia" value="1"></td>
+   </tr>
+   <%/if%>
+   <tr>
+    <th><%$br_ouniqname->fielddef->label%></th>
+    <td><input type="checkbox" name="uniqname" value="1"></td>
+   </tr>
+   <tr>
+    <th><%$br_opublishauto->fielddef->label%></th>
+    <td><input type="checkbox" name="publishauto" value="1"></td>
+   </tr>
+   <tr>
+    <th><%$br_ocollection->fielddef->label%></th>
+    <td><%$br_ocollection->html%></td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+ </div>
+</form>

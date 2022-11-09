@@ -1,0 +1,203 @@
+<%assign var="sc1" value="sc1"|cat:$uniqid%>
+<%assign var="sc2" value="sc2"|cat:$uniqid%>
+<script type="text/javascript">
+ var v<%$uniqid%>={
+   g_moid:null,
+   currentInsertMoid:null,
+   id:"<%$uniqid%>",
+   sc1id:"#<%$sc1%>",
+   sc2id:"#<%$sc2%>",
+   browsebaseurl:"<%$smarty.request.browsebaseurl|escape:'javascript'%>",
+   g_recipient:"<%$smarty.request.recipientid|escape:'javascript'%>",
+   <%if $smarty.request.callback%>
+   callback:"<%$smarty.request.callback|escape:'html'%>",
+   <%else%>
+   callback:"goLink",
+   <%/if%>
+   g_location:TZR.Dialog.getOptions().location,
+   // Fonction de retour pour les popup ouvertes par fck
+   gofck:function(fname,a,external,link){
+     CKEDITOR.tools.callFunction("<%$smarty.request.CKEditorFuncNum%>",link);
+     TZR.Dialog.closeDialog();
+   },
+   goLink:function(link/*filename;mime;originalname*/
+		  ,a/*file anchor*/
+		  ,external
+		  ,ahref
+   ){
+     // hidden field
+     if (link != undefined){
+       jQuery('#'+this.g_recipient+'-from').val(link);
+     }
+     if (external != undefined){ // external file
+       if (jQuery('#'+this.g_recipient+'-external').length){
+	 // external file allowed on target
+	 jQuery('#'+this.g_recipient+'-external').val(external);
+       } else {
+	 // add external file input
+	 jQuery('#'+this.g_recipient).after('<input id="'+g_recipient+'-external" type="hidden" name="tzr_video_HID[external]">');
+       }
+     }
+     // image
+     jQuery('#'+this.g_recipient+'-tdbrowsemods').html(jQuery(a).detach());
+     // title
+     jQuery('#'+this.g_recipient+'-tdtitle input').val(jQuery(a).attr('title'));
+     // toggle elements
+     jQuery('#'+this.g_recipient+'-tdbrowsemods, #'+this.g_recipient+'-trcancel').show();
+     jQuery('#'+this.g_recipient+'-tdfile, #'+this.g_recipient+'-tdexternal').hide();
+     TZR.Dialog.closeDialog();
+   },
+   // Appelé pour la navigation de page
+   go_browse:function(command,pagesizediff) {
+     var url="";
+     var pagesize=this.g_pagesize;
+     var first=this.g_first;
+     var last=this.g_last;
+     if(command=='start') {
+       first='0';
+       last=this.g_last;
+       pagesize=this.g_pagesize+pagesizediff;
+     }
+     if(command=='end') {
+       first=this.g_firstlastpage;
+     last=this.g_last;
+       pagesize=this.g_pagesize+pagesizediff;
+     }
+     if(command=='prev') {
+       first=this.g_firstprev;
+       last=this.g_last;
+       pagesize=this.g_pagesize+pagesizediff;
+     }
+     if(command=='next') {
+       first=this.g_firstnext;
+       last=this.g_last;
+       pagesize=this.g_pagesize+pagesizediff;
+     }
+     if(command=='seek') {
+       first=pagesizediff;
+       last=this.g_last;
+     }
+     if(pagesize<=0) pagesize=0;
+     url+='&first='+first;
+     url+='&last='+last;
+     url+='&pagesize='+pagesize;
+     url+="&_raw=1&_ajax=1";
+     var form = document.forms["quicksearch"+this.id];
+     if(command=='clear') {
+       url=url.replace('procQueryFiles','browseFiles');
+       first=0;
+       last='';
+       form.elements['clearrequest'].value=1;
+       form.elements['_function'].value='browseFiles';
+     }
+     jQuery(this.sc1id).html(TZR.file_get_contents(TZR._self+jQuery(form).serialize()+url));
+   },
+   // Prepare une insertion
+   insertNew:function(a){
+     if (typeof(this.g_moid) == "undefined" || this.g_moid == null
+	 || (this.g_moid != null  && this.g_moid == this.currentInsertMoid)){  <%* tant que même module on recharge pas *%>
+       return;
+     }
+     var tab = jQuery(this.sc2id);
+     this.currentInsertMoid = this.g_moid;
+     tab.html(TZR.file_get_contents(TZR._self+"function=insert&tplentry=br&moid="+this.g_moid+"&template=Module/Table.new.html&_skip=1&_nonav=1&_ajax=1&_raw=1&_nohistory=1&_uniqid="+this.id));
+     
+     var jform = jQuery('form[name^="editform"]',tab);
+     var newform = jform[0];
+     // déplacement du bouton sauver et ajout du attr form sur le form editform : tzr-action n'est pas dans le form 
+     jform.attr('id', 'editform'+this.id);
+     jQuery("input[type='submit'][name!='save']", tab).remove();
+     jQuery("input[type='submit'][name='save']", tab).clone().prependTo("#tzr-actions"+this.id).addClass('btn').addClass('btn-primary').attr('form', jform.attr('id'));
+     jQuery("input[type='submit'][name='save']", tab).remove();
+     
+     // validation => retour sur la liste (en attendant mieux ?)
+     var that = this;
+     newform.onsubmit=function(){
+       if(TZR.isFormValidWithFocus(newform,true)){
+	 // configuration du formulaire d'insertion
+	 jQuery("input[name='template']", jform).remove();
+	 jQuery("input[name='_nextmode']", jform).remove();
+	 jQuery("input[name='_next']", jform).remove();
+	 jQuery("<input type='hidden' name='template' value='Core.source-file.html'/>").appendTo(jform);
+	 jQuery("<input type='hidden' name='_nextmode' value='std'/>").appendTo(jform);
+	 // ajout de l'ajaxoid (ou ecrasement) pour revenir sur le bon module
+	 var loc = that.location+"&ajaxmoid="+this.currentInsertMoid;
+	 jQuery("<input type='hidden' name='_next' value='"+that.g_location+"'/>").appendTo(jform);
+	 TZR.Dialog.openFromForm(newform, null, {overlay:this.sc2id,'location':that.g_location});
+	 return false;
+       } else {
+	 return false;
+       }
+     };
+
+     tab.tab('show')
+   },
+   // Recherche
+   go_procquery:function(queryform){
+     // à voir document quicksearch ...
+     jQuery(this.sc1id).html(TZR.file_get_contents(TZR._self+jQuery(queryform).serialize()));
+     return false;
+   },
+   // Charge un module
+   loadModule: function(moid){
+     if(moid=="")
+       return;
+     jQuery(this.sc1id).load(this.browsebaseurl+"&moid="+moid+"&_uniqid="+this.id);
+     jQuery("#tzr-tablist-"+this.id).css('display', '');
+     jQuery('a[href="'+this.sc1id+'"]').tab('show');
+   }
+ };
+ jQuery(function(){
+   <%if $smarty.request.ajaxmoid%>
+   v<%$uniqid%>.loadModule.call(v<%$uniqid%>, "<%$smarty.request.ajaxmoid%>");
+   <%/if%>
+   TZR.addToObjCleaner("tzr-tablist-<%$uniqid%>", v<%$uniqid%>, function(){
+     TZR.cleanObj(v<%$uniqid%>);
+   });
+ });
+</script>
+
+<div class="title"><%$smarty.request._modaltitle|escape:'html'%></div>
+
+<div class="tzr-action" id="tzr-actions<%$uniqid%>">
+  <button style="display:none" type="button" id="savebutton<%$uniqid%>" class="btn btn-primary" data-dismiss="modal"><%$syslabels.Seolan_Core_General.save_text%></button>
+  <button type="button" id="close<%$uniqid%>" class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+</div>
+
+<%if $mod_lines_oid%>
+
+<div class="form-group">
+  <label><%$syslabels.Seolan_Core_General.module%><%$syslabels.Seolan_Core_General.i18ncolon%></label>
+  <select name="module" onchange="v<%$uniqid%>.loadModule.call(v<%$uniqid%>, this.value);">
+    <option value="">----</option>
+    <%section name=br loop=$mod_lines_oid%>
+    <%if !$smarty.request.photoonly || $mod_mods[br]->mosaic%>
+    <option value="<%$mod_lines_oid[br]%>" <%if $mod_lines_oid[br]==$smarty.request.ajaxmoid%>selected<%/if%>>
+      <%$mod_lines_name[br]%>
+    </option>
+    <%/if%>
+    <%/section%>
+  </select>
+</div>
+<%/if%>
+
+<div id="tzr-tablist-<%$uniqid%>" style="display:none">
+  
+  <ul class="nav nav-responsive nav-tabs" role="tablist">
+    <li class="active" role="presentation">
+      <a href="#<%$sc1%>" data-controls="#<%$sc1%>" data-toggle="tab" role="tab"><%$syslabels.Seolan_Core_General.query_text%> - <%$syslabels.Seolan_Core_General.browse_text%> - <%$syslabels.Seolan_Core_General.select_text%></a>
+    </li>
+    <%if $modsec_mods[$_moid].rw%>
+    <li role="presentation">
+      <a href="#<%$sc2%>"  data-controls="#<%$sc1%>" data-toggle="tab" role="tab"
+	 onclick="return v<%$uniqid%>.insertNew.call(v<%$uniqid%>, this);"><%$syslabels.Seolan_Core_General.new_text%></a>
+    </li>
+    <%/if%>
+  </ul>
+  
+  <div id="tzr-tabcontentcontainer<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+    <div id="<%$sc1%>" class="tzr-tabcontent tab-pane active" role="tabpanel"></div>
+    <div id="<%$sc2%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+  </div>
+  
+</div>

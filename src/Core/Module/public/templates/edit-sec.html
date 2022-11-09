@@ -1,0 +1,93 @@
+<%if $_message || $smarty.request.message || $br_message || $smarty.session._TZR.message%>
+<div class="tzr-message">
+  <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+</div>
+<%/if%>
+
+<%$refreshFunction=$smarty.request.function|default:"secEditSimple"%>
+<%$idusers=$uniqid|cat:'users'%>
+<%$idgroups=$uniqid|cat:'groups'%>
+<div class="title"><%$syslabels.Seolan_Core_General.security_rules%></div>
+<div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="<%if empty($smarty.request.type) || $smarty.request.type=='users'%>active<%/if%>"><a href="#<%$idusers%>" aria-controls="<%$idusers%>" role="tab" data-toggle="tab"><%$syslabels.Seolan_Core_General.users_text%></a></li>
+    <li id="<%$uniqid%>grptab" role="presentation" class="<%if $smarty.request.type=='groups'%>active<%/if%>"><a href="#<%$idgroups%>" aria-controls="<%$idgroups%>" role="tab" data-toggle="tab"><%$syslabels.Seolan_Core_General.groups_text%></a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane <%if empty($smarty.request.type) || $smarty.request.type=='users'%>active<%/if%>" id="<%$idusers%>">
+      <%include file="Core/Module.edit-sec-form.html" type="users"%>
+    </div>
+    <div role="tabpanel" class="tab-pane <%if $smarty.request.type=='groups'%>active<%/if%>" id="<%$idgroups%>">
+      <%include file="Core/Module.edit-sec-form.html" type="groups"%>      
+    </div>
+  </div>
+</div>
+<div class="tzr-action">
+    <button class="btn btn-default" type="button" data-dismiss="modal" ><%$syslabels.Seolan_Core_General.close_text%></button>
+
+<script type="text/javascript">
+ var editSec = {
+   uniqid:"<%$uniqid%>",
+   setOption:function(button){
+     var url = jQuery(button).data('url');
+     var withgrp = jQuery(button).prop('checked');
+     if (withgrp)
+       url = url + "&withEmptyGrps=1"
+     url+='&_'+(new Date().toString());
+     TZR.Dialog.openURL(url, null, {overlay:"auto"});
+   },
+   deleteCurrent:function(elm){
+     var parent = jQuery(elm).parents('tr');
+     var uid = parent.data('uid');
+     var oid = parent.data('oid'); 
+     var formName = parent.data('targetformname');
+     var form = jQuery("form[name='"+formName+"']");
+     jQuery("input[name='uid\[\]']", form).remove();
+     jQuery("input[name='oid\[\]']", form).remove();
+     var newuid = jQuery("<input type='hidden'>");
+     newuid.attr("value", uid);
+     newuid.attr("name", "uid[]");
+     newuid.appendTo(form);
+     var newoid = jQuery("<input type='hidden'>");
+     newoid.attr("value", oid);
+     newoid.attr("name", "oid[]");
+     newoid.appendTo(form);
+     jQuery('select[name="level"]>option[value="default"]', form).attr("selected", "selected");
+     jQuery("button.aclSubmitButton", form).trigger(TZR.click_event);
+     return false;
+   },
+   selectCurrent:function(){
+     line = jQuery(line);
+     var uid = line.data('uid');
+     var type = line.data('xxx');
+     
+   }
+ };
+ // à reporter dans genericX.js,   TZR.xlinkdef_treeview
+ TZR.xlinkdef_treeview.getInstance = function(field, parentContainer){
+   var res = jQuery("ul.xlinkdef_treeview:data(namefield)", parentContainer).filter(
+     function(i,o){
+       return jQuery(o).data("namefield")==field;
+     }
+   );
+   return (res.length==1)?jQuery(res[0]):null;
+ };
+ // sert pas ?
+ TZR.xlinkdef_treeview.clearAll = function(field, parentContainer){
+   var that = this;
+   var container = this.getInstance(field, parentContainer);
+   var old = container.data("selected");
+   old = [...old]; // clone, pour boucle + effacement !
+   for(var i=0; i<old.length; i++){
+     that.deleteItem(old[i], container);
+   };
+ };
+ <%if empty($smarty.request.type) && ($countGrp >= $countUser)%>
+ jQuery(document).ready(function(){
+   jQuery("#<%$uniqid%>grptab>a").trigger('click');
+ });
+ <%/if%>
+</script>

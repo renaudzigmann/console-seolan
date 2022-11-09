@@ -1,0 +1,39 @@
+<%include file="Module/CartV2.shop-steps.html"%>
+
+<form name="shopvalidate" action="<%$shop->getStepUrl('payment')%>" method="post">
+
+  <%* Demandes supplémentaires à faire au client (remarques, emballage cadeau, assurance...) *%>
+  <%foreach from=$shop->getStepValidateFields() key=fieldname item=label%>
+  <%assign var=ofieldname value="o`$fieldname`"%>
+  <%if $section.form.$ofieldname->html%>
+  <div class="form-group field-<%$fieldname%> remark">
+    <label><%$label%></label>
+    <%$section.form.$ofieldname->html%>
+  </div>
+  <%/if%>
+  <%/foreach%>
+
+  <%* Acceptation des conditions de vente *%>
+  <div class="form-group">
+    <input type="checkbox" id="contratok" name="contratok" />
+    <label for="contratok">
+      <%"J'accepte les conditions générales de vente (CGV)"|__:'\Seolan\Module\Cart\CartV2'%>
+    </label>
+  </div>
+
+  <div class="shop-actions">
+    <a class="btn btn-default" href="<%$shop->getStepUrl('address')%>">&laquo; <%$shop->getStepLabel('address')%></a>
+    <input type="submit" class="btn btn-warning need-accept-cgv" value="<%$shop->getStepLabel('payment')%> &raquo;">
+  </div>
+
+</form>
+<script type="text/javascript">
+  jQuery(function($){
+    $('.need-accept-cgv').on('click',function(){
+      if (!$('#contratok').is(':checked')) {
+        alert('<%label v=alert_cgv t="Vous devez accepter les conditions générales de vente" selector=xmodcart escape=quotes%>');
+        return false;
+      }
+    });
+  });
+</script>

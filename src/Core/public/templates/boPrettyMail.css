@@ -1,0 +1,218 @@
+<style>
+body {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 13px;
+	line-height: 18px;
+	color: #545e6a;
+	margin: 0;
+	padding: 0;
+	background-color: #f0f0f0;
+}
+
+.body {
+	background-color: #f0f0f0;
+}
+
+body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+
+img { -ms-interpolation-mode: bicubic; max-width: 100%; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+table, td { border-collapse: collapse !important; }
+
+
+
+
+a,
+table a,
+p a {
+	font-family: helvetica, arial, sans-serif;
+	color: #cc0033;
+	text-decoration: underline;
+}
+
+a:visited {
+	color: #cc0033;
+}
+
+a:hover {
+	color: #545e6a;
+}
+
+h1 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 20px;
+	color: #545e6a;
+	margin: 0 0 15px 0;
+	padding: 0;
+}
+
+
+h2 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 16px;
+	color: #cc0033;
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+h3 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 14px;
+	color: #545e6a;
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+h4 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 14px;
+	color: #cc0033;
+	margin: 0 0 10px 0;
+	padding: 0;
+	
+}
+
+h5 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 13px;
+	color: #545e6a;
+	margin: 0 0 6px 0;
+	padding: 0;
+}
+
+h6 {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 12px;
+	color: #cc0033;
+	margin: 0 0 6px 0;
+	padding: 0;
+}
+
+p {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 0;
+	margin: 0 0 15px 0;
+}
+
+ul {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 12px;
+	list-style-image: none;
+	list-style-type: square;
+	line-height: 17px;
+	margin: 0 0 15px 20px;
+	padding: 0;
+}
+
+ul li {
+	padding: 0 0 5px 0;
+}
+
+ul ul {
+	margin: 5px 0 0 20px;
+	padding: 0;
+}
+
+table {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 12px;
+}
+
+hr {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+
+
+.not-tab-subject .content {
+	color: #ffffff;
+	background-color: #cc0033;
+}
+
+.not-tab-subject h1 {
+	font-weight: bold;
+	color: #ffffff;
+	font-size: 18px;
+	line-height: 23px;
+	margin: 0 0 5px 0;
+}
+
+.not-tab-subject p {
+	margin: 0;
+}
+
+.not-tab-subject a,
+.not-tab-subject table a,
+.not-tab-subject p a {
+	color: #ffffff;
+}
+
+.not-tab-content .content {
+	background-color: #ffffff;
+}
+
+.not-tab-content table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 15px;
+}
+
+.not-tab-content table > thead > tr > th,
+.not-tab-content table > tbody > tr > th,
+.not-tab-content table > tfoot > tr > th,
+.not-tab-content table > thead > tr > td,
+.not-tab-content table > tbody > tr > td,
+.not-tab-content table > tfoot > tr > td {
+	text-align: left;
+	padding: 8px;
+	line-height: 1.42857143;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+}
+
+.not-tab-content table > thead > tr > th {
+	color: #ffffff;
+	background-color: #687483;
+}
+
+
+.not-tab-content table > thead > tr > th {
+	vertical-align: bottom;
+	border-bottom: 2px solid #ddd;
+}
+
+.not-tab-content table > tbody > tr:nth-of-type(odd) {
+	background-color: #f9f9f9;
+}
+
+
+.not-tab-footer {
+	text-align: center;
+}
+
+
+
+
+@media screen and (max-width: 576px) {
+    body {
+        padding: 20px 5% !important;
+    }
+}
+
+blockquote {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: #545454;
+    word-break: break-all;
+    word-wrap: break-word;
+    border: 1px solid #ccc;
+}
+
+</style>

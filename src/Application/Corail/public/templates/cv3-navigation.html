@@ -1,0 +1,58 @@
+<!--<%$smarty.template%>-->
+<%if !$tzr.corailv3_disable_left_nav AND $it_cat_mit.oalias->html neq $tzr.corailv3_home && !empty($lm_lines_oid)%>
+<%assign var="id" value=""|uniqid%>
+<nav id="cv3-navigation" class="cv3-block" role="navigation">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-navigation" href="#navigation<%$id%>"><%label v="navigation_menu" t="Menu"%></a>
+  <h4><%label v="navigation_menu" t="Menu"%></h4>
+  <div id="navigation<%$id%>" class="collapse">
+    <div class="middle">
+
+<!-- Menu Left -->
+<%assign var="jumpt" value="-1"%>
+<%section name=ilm loop=$lm_lines_oid%><%strip%>
+  <%assign var="classA" value=""%>
+  <%assign var="href" value=$self|cat:$lm_lines_selfurl[ilm]|cat:$lm_lines_ocurl[ilm]->html%>
+  <%assign var="title" value=$lm_lines_ocusttitle[ilm]->html%>
+  <%assign var="level" value=$lm_lines_level[ilm]%>
+  <%assign var="levelNext" value=$lm_lines_level[$smarty.section.ilm.index_next]%>
+  <%assign var="indent" value="\n"%>
+
+  <%if $lm_lines_oid[ilm]|in_array:$path_oidup%>
+    <%assign var="classA" value="path"%>
+    <%if $it_cat_mit.oid eq $lm_lines_oid[ilm]%><%assign var="classA" value="path active"%><%/if%>
+  <%/if%>
+  <%section loop=$level name="indent"%>
+    <%assign var="indent" value=$indent|cat:'  '%>
+  <%/section%>
+
+  <%* Si le saut est négatif c'est qu'il y a un sous menu : début d'une liste *%>
+  <%if $jumpt < 0%>
+    <ul class="navlist">
+  <%/if%>
+
+  <%assign var="jumpt" value=$level-$levelNext%>
+
+  <%* Ligne du menu *%>
+  <%$indent%><!-- <%$level%> --><li><a class="<%$classA%>" title="<%$title%>" href="<%$href%>"><%$lm_lines_otitle[ilm]->html%></a>
+
+  <%* Si le niveau suivant n'est pas plus grand on ferme listItem, sinon il faut pas fermer car début d'un sous menu *%>
+  <%if !($jumpt < 0)%></li><%/if%>
+
+  <%* Pour chaque niveau de saut on referme la liste, et le listItem si ce n'est pas le tout dernier (car non ouvert au debut) *%>
+  <%if $jumpt > 0 %>
+    <%section name=foo loop=$jumpt%>
+      </ul>
+      <%if !($smarty.section.foo.last && $smarty.section.ilm.last)%></li><%/if%>
+    <%/section%>
+  <%/if%>
+
+<%/strip%><%/section%>
+
+<!--/ Menu Left -->
+
+    </div>
+    <div class="link"><a href="/sitemap.html"><%label v="navigation_sitemap" t="Plan du site"%></a></div>
+  </div><!-- fin navigation -->
+</nav><!-- fin cv3-navigation -->
+<%/if%>
+

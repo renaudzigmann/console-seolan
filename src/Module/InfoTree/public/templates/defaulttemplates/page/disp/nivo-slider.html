@@ -1,0 +1,58 @@
+<%assign var="width"  value=$it_olines[it].owidth->raw|default:600%>
+<%assign var="height" value=$it_olines[it].oheight->raw|default:250%>
+<%assign var="geometry" value="`$width`x`$height`%3C"%>
+<%assign var="crop" value="`$width`x`$height`"%>
+<%if $admini%>
+ <img src="<%$it_olines[it].oimg1->resizer%>&amp;geometry=<%$geometry%>&amp;crop=<%$crop%>&amp;gravity=Center" alt="" />
+<%else%>
+ <div class="cv3-slider">
+  <div class="nivoSlider" style="width:<%$width%>px;height:<%$height%>px;">
+   <%assign var=jump value=4%>
+   <%section name=foo loop=$jump%>
+    <%assign var=img value="oimg`$smarty.section.foo.iteration`"%>
+    <%assign var=lnk value="oimglnk`$smarty.section.foo.iteration`"%>
+    <%assign var=url value="oimgurl`$smarty.section.foo.iteration`"%>
+    <%assign var=leg value="oimgleg`$smarty.section.foo.iteration`"%>
+    <%if $it_olines[it].$img->raw%>
+     <img src="<%$it_olines[it].$img->resizer%>&amp;geometry=<%$geometry%>&amp;crop=<%$crop%>&amp;gravity=Center" alt="<%$it_olines[it].$img->title|escape%>" title="<%$it_olines[it].$img->title|escape%>" /> 
+    <%/if%>
+   <%/section%>
+  </div>
+ </div>
+ <%* Si possible : mettre ces 2 scripts et le link dans le head *%>
+ <script language="javascript" type="text/javascript" src="/js/nivo-slider/jquery.nivo.slider.pack.js"></script> 
+ <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/js/nivo-slider/nivo-slider.css" /> 
+ <script type="text/javascript">
+ //<![CDATA[
+  jQuery(window).load(function() {
+   jQuery('.nivoSlider').nivoSlider({
+    effect: 'fade', // Specify sets like: 'random,fold,fade,sliceDown'
+    slices:15, // For slice animations
+    boxCols: 8, // For box animations
+    boxRows: 4, // For box animations
+    animSpeed:400, // Slide transition speed
+    pauseTime:3000, // How long each slide will show
+    startSlide:0, // Set starting Slide (0 index)
+    directionNav:true, // Next & Prev navigation
+    directionNavHide:true, // Only show on hover
+    controlNav:true, // 1,2,3... navigation
+    controlNavThumbs:false, // Use thumbnails for Control Nav
+    controlNavThumbsFromRel:false, // Use image rel for thumbs
+    controlNavThumbsSearch: '.jpg', // Replace this with...
+    controlNavThumbsReplace: '_thumb.jpg', // ...this in thumb Image src
+    keyboardNav:true, // Use left & right arrows
+    pauseOnHover:true, // Stop animation while hovering
+    manualAdvance:false, // Force manual transitions
+    captionOpacity:0.8, // Universal caption opacity
+    prevText: 'Prev', // Prev directionNav text
+    nextText: 'Next', // Next directionNav text
+    beforeChange: function(){}, // Triggers before a slide transition
+    afterChange: function(){}, // Triggers after a slide transition
+    slideshowEnd: function(){}, // Triggers after all slides have been shown
+    lastSlide: function(){}, // Triggers when last slide is shown
+    afterLoad: function(){} // Triggers when slider has loaded
+   });
+  });
+ //]]>
+ </script>
+<%/if%>

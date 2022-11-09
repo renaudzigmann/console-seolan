@@ -1,0 +1,320 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Core_Module_Module.sendacopyto`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$title%>
+
+<%if isset($selector__userfield)%><%$userselector=false%><%else%><%$userselector=true%><%/if%>
+
+<script type="text/javascript">
+v<%$uniqid%>.confirmSend=function(){
+ var tconfirm2="";
+ var tconfirm3="";
+ var tconfirm4="";
+ var emptyto = false;
+ tconfirm="<%$syslabels.Seolan_Core_Module_Module.objecttosend%> : ";
+ <%section loop=$donnee_lines_oid name="d"%>
+  tconfirm+="<%$donnee_lines_link[d]|strip_tags:false|escape:"javascript"%>"<%if !$smarty.section.d.last%>+", "<%/if%>;
+ <%/section%>
+
+   <%if !$userselector%>
+   tmp=v<%$uniqid%>.getSelected("dest_groups[]");
+   if(tmp[0]!="")
+     tconfirm2+="\n<%$syslabels.Seolan_Core_Module_Module.sendto%> (<%$syslabels.Seolan_Core_Module_Module.grouplist%>) : "+tmp[0];
+   if(tmp[1]!="")
+     tconfirm2+="\n<%$syslabels.Seolan_Core_Module_Module.sendto%> (<%$syslabels.Seolan_Core_Module_Module.userlist%>) : "+tmp[1];
+   if (tmp[0]=="" && tmp[1]=="")
+     emptyto=true;
+
+   <%else%>
+   tmp=v<%$uniqid%>.getSelected2("dest[]");
+   if(tmp!="")
+     tconfirm2+="\n<%$syslabels.Seolan_Core_Module_Module.sendto%> : "+tmp;
+   if (emptyto && tmp != '')
+     emptyto=false;
+   
+   <%/if%>
+   
+   tmp=document.forms['editform<%$uniqid%>'].dest_aemails.value;
+   if(tmp!=""){
+     emptyto=false;
+     tconfirm2+="\n<%$syslabels.Seolan_Core_Module_Module.sendto%> (<%$syslabels.Seolan_Core_Module_Module.otherlist%>) : "+tmp;
+   }
+ 
+   <%if !$userselector%>
+  tmp=v<%$uniqid%>.getSelected("cc_groups[]");
+  if(tmp[0]!="") tconfirm3+="\n<%$syslabels.Seolan_Core_Module_Module.sendcc%> (<%$syslabels.Seolan_Core_Module_Module.grouplist%>) : "+tmp[0];
+  if(tmp[1]!="") tconfirm3+="\n<%$syslabels.Seolan_Core_Module_Module.sendcc%> (<%$syslabels.Seolan_Core_Module_Module.userlist%>) : "+tmp[1];
+ <%else%>
+  tmp=v<%$uniqid%>.getSelected2("cc[]");
+  if(tmp!="") tconfirm3+="\n<%$syslabels.Seolan_Core_Module_Module.sendcc%> : "+tmp;
+ <%/if%>
+ tmp=document.forms['editform<%$uniqid%>'].cc_aemails.value;
+ if(tmp!="") tconfirm3+="\n<%$syslabels.Seolan_Core_Module_Module.sendcc%> (<%$syslabels.Seolan_Core_Module_Module.otherlist%>) : "+tmp;
+
+ <%if !$userselector%>
+  tmp=v<%$uniqid%>.getSelected("bcc_groups[]");
+  if(tmp[0]!="") tconfirm4+="\n<%$syslabels.Seolan_Core_Module_Module.sendbcc%> (<%$syslabels.Seolan_Core_Module_Module.grouplist%>) : "+tmp[0];
+  if(tmp[1]!="") tconfirm4+="\n<%$syslabels.Seolan_Core_Module_Module.sendbcc%> (<%$syslabels.Seolan_Core_Module_Module.userlist%>) : "+tmp[1];
+ <%else%>
+  tmp=v<%$uniqid%>.getSelected2("bcc[]");
+  if(tmp!="") tconfirm4+="\n<%$syslabels.Seolan_Core_Module_Module.sendbcc%> : "+tmp;
+ <%/if%>
+ tmp=document.forms['editform<%$uniqid%>'].bcc_aemails.value;
+ if(tmp!="") tconfirm4+="\n<%$syslabels.Seolan_Core_Module_Module.sendbcc%> (<%$syslabels.Seolan_Core_Module_Module.otherlist%>) : "+tmp;
+
+ if(tconfirm2!="") tconfirm+="\n"+tconfirm2;
+ if(tconfirm3!="") tconfirm+="\n"+tconfirm3;
+ if(tconfirm4!="") tconfirm+="\n"+tconfirm4;
+   tconfirm+="\n\n\n<%$syslabels.Seolan_Core_Module_Module.confirm_send|escape:"javascript"%>";
+   if(!emptyto){ 
+     if(confirm(tconfirm)){
+       setTimeout("TZR.ajaxSubmitForm(document.forms['editform<%$uniqid%>']), 0"); // timeout fix CKEditor pb
+     }
+   }else{
+     alert("<%$syslabels.Seolan_Core_Module_Module.nomailrecipient|escape:'javascript'%>");
+   }
+ return false;
+ }
+ <%if !$userselector%>
+ <%* champ user *%>
+ v<%$uniqid%>.getSelected=function(name){
+   
+   var destid = "<%$selector_udest->varid%>";
+   var ccid = "<%$selector_ucc->varid%>";
+   var bccid = "<%$selector_ubcc->varid%>";
+   var id = null;
+
+   var emails=[];
+
+   switch(name){
+     case "dest_groups[]":
+       id = destid;
+       break;
+     case "cc_groups[]":
+       id = ccid;
+       break;
+     case "bcc_groups[]":
+       id = bccid;
+       break;
+   }
+   if (id != null){
+     <%if $selector__treeview%>
+     var sel = TZR.UserSelector.getTreeviewSelectedList(id);
+     <%else%>
+     var sel = TZR.UserSelector.getSelectedList(id);
+     <%/if%>
+     emails = sel.names;
+   }
+   return [[], emails.join(",")];
+ }
+ <%else%>
+ /* <%* cas treeview selecteur d'utilisateur ET treeviewmode *%> */
+ v<%$uniqid%>.getSelected=function(name){
+   var emails=[];
+   var emailsu=[];
+  
+   jQuery('li[x-name="'+name+'"]',this.modulecontainer).each(function(){
+     var span=jQuery("span:first span:first",this);
+     if(span.hasClass("selected")) emails.push(span.text());
+     else if(span.hasClass("hselected")){
+       jQuery('.selected',this).each(function(){
+	 emailsu.push(jQuery(this).text());
+       });
+     }
+   });
+   return [emails.join(";"),emailsu.join(";")];
+ }
+ <%/if%>
+v<%$uniqid%>.getSelected2=function(name){
+   var emails="";
+   var dest=document.forms['editform<%$uniqid%>'].elements[name];
+   if(!dest) return "";
+   l=dest.options.length;
+   for(i=0;i<l;i++) {
+     if(dest.options[i].selected) {
+       if(dest.options[i].text!="---") emails+=dest.options[i].text;
+       if(i==(l-1)) emails=emails.substr(0,emails.length-2);
+     } 
+   }
+   return emails;
+ }
+ //# sourceURL=Core/Module.sendacopyto.js
+
+</script>
+<form name="editform<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return v<%$uniqid%>.confirmSend();">
+ <input type="hidden" name="nav" value="1">
+ <input type="hidden" name="function" value="procSendACopyTo">
+ <input type="hidden" name="moid" value="<%$imod_props._moid%>">
+ <input type="hidden" name="skip" value="1">
+ <%if isset($smarty.request.nextnext)%>
+ <input type="hidden" name="_next" value="<%$smarty.request.nextnext|escape:'html'%>">
+ <%else%>
+ <input type="hidden" name="_next" value="<%$back%>">
+ <%/if%>
+ <%if !empty($smarty.request.oid)%><input type="hidden" name="oid" value="<%$smarty.request.oid|escape:'html'%>"><%/if%>
+ <%if !empty($smarty.request._selected)%>
+  <input type="hidden" value="ok" name="_selectedok"/>
+  <%foreach from=$smarty.request._selected item=it1 key=oid name=f1%>
+   <input type="hidden" name="_selected[<%$oid|escape:'html'%>]" value="1">
+  <%/foreach%>
+ <%/if%>
+ <%if $imod_props.sendacopytofiles != true%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_Module_Module.objecttosend%></legend>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+	<tr>
+	  <th><%$syslabels.Seolan_Core_Module_Module.sendinmail%><%$syslabels.Seolan_Core_General.i18ncolon%></th>
+	</tr>
+      </thead>
+      <tbody>
+      <%section loop=$donnee_lines_oid name="d"%>
+      <tr>
+	<td>
+	  <ul class="ul-list-img"><li><div class="checkbox"><input type="checkbox" value="1" name="sendinmail[<%$donnee_lines_oid[d]%>]" checked></div></li><li><a target="sendacopy" href="<%$fullself%>&moid=<%$donnee_moid%>&function=goto1&_direct=1&&tplentry=br&oid=<%$donnee_lines_oid[d]%>"><%$donnee_lines_tlink[d]%></a></li></ul>
+	</td>
+      </tr>
+      <%/section%>
+      </tbody>
+    </table>
+  </div>
+  </fieldset>
+ <%/if%>
+  <%if !empty($files_tab)%>
+  <fieldset>
+   <legend><%$syslabels.Seolan_Core_General.files%></legend>
+   <div class="table-responsive">
+     <table class="list2 table table-striped">
+       <tr>
+	 <th><%$syslabels.Seolan_Core_Module_Module.sendfile%></th>
+	 <td>
+	   <%section loop=$files_tab name="d"%>
+	   <%if !empty($files_tab[d])%>
+	   <div class="margin-bottom clearfix filescontainer">
+	     <div class="form-group">
+	       <label><%$donnee_lines_tlink[d]%></label>
+	       <%if !$imod_props.sendacopytofiles%>
+	       <span><a href="#" onclick="jQuery(this).parents('div.filescontainer').find('input[type=\'checkbox\']').attr('checked',true); return false;"><%$syslabels.Seolan_Core_General.all%></a> / <a href="#" onclick="jQuery(this).parents('div.filescontainer').find('input[type=\'checkbox\']').attr('checked',false); return false;"><%$syslabels.Seolan_Core_General.none%></a></span>
+	       <%/if%>
+	     </div>
+	     <%section loop=$files_tab[d] name="f"%>
+	     <div class="checkbox">
+	       <label>
+		 <input <%if $imod_props.sendacopytofiles%>checked<%/if%> type="checkbox" name="filestosend[<%$files_tab[d][f].url%>]" value="on" id="<%$smarty.section.d.iteration%>-<%$smarty.section.f.iteration%>"><%$files_tab[d][f].name%> (<%$files_tab[d][f].filesize|getStringBytes%>)
+	       </label>
+	     </div>
+	     <%/section%>
+	   </div>
+	   <%/if%>
+	   <%/section%>
+	 </td>
+       </tr>
+       
+     <tr>
+      <th><%$syslabels.Seolan_Core_Module_Module.sendfileas%></th>
+      <td>
+       <div class="radio"><label><input type="radio" name="sendfileas" value="link" id="sendfileaslink" <%if !$imod_props.sendacopytofiles%>checked<%/if%>><label for="sendfileaslink"><%$syslabels.Seolan_Core_Module_Module.links%></label></div><br>
+       <div class="radio"><input type="radio" name="sendfileas" value="linkzip" id="sendfileaslinkzip"<%if $imod_props.sendacopytofiles%>checked<%/if%>>
+       <%$syslabels.Seolan_Core_Module_Module.linkzip%> <%"`$smarty.const.TZR_PAGE_EXPIRES/60/60` h"%></label></div><br>
+       <div class="radio"><input type="radio" name="sendfileas" value="attachment" id="sendfileasattachment">
+       <%$syslabels.Seolan_Core_Module_Module.attachments%> (<%"`$smarty.const.TZR_SENDACOPY_MAXSIZE/1000000` Mo"|string_format:$syslabels.Seolan_Core_Module_Module.mailmaxsize%>)</label></div><br>
+      </td>
+     </tr>
+     </table>
+     
+   </div>
+  </fieldset><!-- /files_tab -->
+  <%else if $imod_props.sendacopytofiles%>
+  <fieldset><legend><%$syslabels.Seolan_Core_General.files%></legend></fieldset>
+  <div class="alert alert-info"><%$syslabels.Seolan_Core_Module_Module.emptyset%></div>
+  <%/if%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.recipients%></legend>
+  <div class="table-responsive">
+  <table class="table table-striped list2">
+   <tr>
+    <th><%$syslabels.Seolan_Core_Module_Module.sendto%></th>
+    <td>
+     <table class="table">
+      <tr>
+	<td>
+	  <%if !$userselector && $selector_udest%>
+	  <%$selector_udest->html%>
+	  <%else%>
+	  <%include file="Core.users-selector-tree.html" directory_module=$brm_directory_module htmlonly=true inputname="dest" selected=$brus_selected_to%>
+	  <%/if%>
+       </td>
+       <td>
+	 <textarea placeholder="<%$syslabels.Seolan_Core_General.email_text|escape:'html'%>" name="dest_aemails" cols="40" rows="2"><%$brus_selected_dest_aemails%></textarea></td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+   <!-- CC  -->
+   <tr>
+    <th ><a href="#" alt="Add carbon copy recipient" onclick="showHide('cctable');return false;" ><%$syslabels.Seolan_Core_Module_Module.sendcc%></a></th>
+    <td>
+     <table id="cctable" class="table" style="visibility:hidden;position:absolute" >
+      <tr>
+	<td>
+	  <%if !$userselector && $selector_ucc%>
+	  <%$selector_ucc->html%>
+	  <%else%>
+	  <%include file="Core./users-selector-tree.html" directory_module=$brm_directory_module htmlonly=true inputname="cc" selected=$brus_selected_cc%>
+	  <%/if%>
+	</td>
+       <td><textarea  placeholder="<%$syslabels.Seolan_Core_General.email_text|escape:'html'%>" name="cc_aemails" cols="40" rows="2"><%$brus_selected_cc_aemails%></textarea></td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+   <!-- BCC  -->
+   <tr>
+    <th><a href="#" alt="Add Blind carbon copy recipient" onclick="showHide('bcctable');return false;" ><%$syslabels.Seolan_Core_Module_Module.sendbcc%> </a></th>
+    <td>
+     <table id="bcctable" class="table" style="visibility:hidden;position:absolute" >
+      <tr>
+	<td>
+	  <%if !$userselector && $selector_ubcc%>
+	  <%$selector_ubcc->html%>
+	  <%else%>
+	  <%include file="Core./users-selector-tree.html" directory_module=$brm_directory_module htmlonly=true inputname="bcc" selected=$brus_selected_bcc%>
+	  <%/if%>
+       </td>
+       <td><textarea placeholder="<%$syslabels.Seolan_Core_General.email_text|escape:'html'%>" name="bcc_aemails" cols="40" rows="2"><%$brus_selected_bcc_aemails%></textarea></td>
+      </tr>
+     </table>
+    </td>
+   </tr>
+   <tr><th><%$syslabels.Seolan_Core_Module_Module.sendack%></th><td><select name="ar"><option value="1"><%$syslabels.Seolan_Core_General.yes%></option><option value="0" selected><%$syslabels.Seolan_Core_General.no%></option></select></td></tr>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_Module_Module.sendmessage%></legend>
+  <div class="table-responsive">     
+  <table class="table table-striped list2">
+   <tr><th><%$syslabels.Seolan_Core_Module_Module.sendsubject%></th><td><input type="text" name="asubject" size="40" value="<%$tzr.sendacopyto_subject|default:$mailDefaults_subject|strip_tags:false%>"></td></tr>
+   <tr><th colspan="2"><%$syslabels.Seolan_Core_Module_Module.sendmessage%></th></tr>
+   <tr><td colspan="2"><%$messagebox_rich%></td></tr>
+   <%if !empty($tpl_lines_oid)%>
+    <tr>
+     <th><%$syslabels.Seolan_Core_Module_Module.modele%></th>
+     <td>
+      <select name="tpl">
+       <option value=""><%$syslabels.Seolan_Core_General.default%></option>
+       <%section loop=$tpl_lines_oid name="t"%>
+	<option value="<%$tpl_lines_oid[t]%>"><%$tpl_lines_otitle[t]->html%></option>
+       <%/section%>
+      </select>
+     </td>
+    </tr>
+   <%/if%>
+  </table>
+  </div>
+ </fieldset>
+
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <button class="btn btn-primary" type="submit" name="submit"><%$syslabels.Seolan_Core_General.send_text%></button>
+ </div>
+</form>
+<%if $userselector%><%include file="Core./users-selector-tree.html" jsonly=true%><%/if%>

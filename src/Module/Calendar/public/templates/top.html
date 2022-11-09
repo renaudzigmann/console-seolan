@@ -1,0 +1,61 @@
+<script type="text/javascript">
+  v<%$uniqid%>.addConsolidation=function(t){
+    var c=TZR.file_get_contents("<%$self%>moid=<%$_moid%>&oid=<%$br_diary.KOID%>&_function=paramsConsolidation&cmoid="+t+"&template=Module/Calendar.paramsConsolidation.html&tplentry=br&_uniqid=<%$uniqid%>&ajaxnext=<%$here|escape:"url"%>");
+    TZR.dispFullScreenContent(c);
+    document.consolidateform.target.value=t;
+  }
+  v<%$uniqid%>.changeColor=function(c,a){
+    document.consolidateform.color.value=c;
+    document.getElementById("colssubmit").style.display="inline";
+    jQuery("#colorchooser a").css({border:"0px solid black",width:"20px",height:"20px"});
+    jQuery(a).css({border:"2px solid black",width:"16px",height:"16px"});
+  }
+  v<%$uniqid%>.delConsolidation=function(oid){
+    if(confirm("<%$syslabels.Seolan_Module_Calendar_Calendar.confirmconsdel|escape:"javascript"%>")){
+      jQuery(document.getElementById("cons<%$uniqid%>-"+oid)).remove();
+      document.editconsolidation<%$uniqid%>.elements["del["+oid+"]"].value=1;
+      TZR.ajaxSubmitForm(document.editconsolidation<%$uniqid%>);
+    }
+  }
+  v<%$uniqid%>.addSub=function(moid,oid){
+    if(oid){
+      if(!confirm('<%$syslabels.Seolan_Module_Calendar_Calendar.addSubTarget|escape:"javascript"%>')) oid='';
+    }else{
+      oid='';
+    }
+    v<%$uniqid%>.jQueryLoad("<%$self%>&amoid=<%$_moid%>&moid="+moid+"&_function=preSubscribe&tplentry=br&template=Module/Subscription.sub.html&aoid="+oid);
+  }
+</script>
+
+<%if $br_consolidation.list%>
+ <fieldset class="cv8-agendaconso">
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.consolidation%></legend>
+  <form name="editconsolidation<%$uniqid%>" method="post" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+   <input type="hidden" name="_function" value="updateConsolidation">
+   <input type="hidden" name="skip" value="1">
+   <input type="hidden" name="_next" value="<%$here%>">
+   <%foreach from=$br_consolidation.list key=oid item=c%>
+    <input type="hidden" name="del[<%$oid%>]" value="0">
+    <input type="hidden" name="active_HID[<%$oid%>]" value="1">
+    <div class="consolidation" id="cons<%$uniqid%>-<%$oid%>" stsyle="background-color:<%$br_diariesprop.$oid.color%>">
+     <input type="checkbox" class="checkbox" name="active[<%$oid%>]" value="1" <%if $br_consolidation.active.$oid%>checked<%/if%> <%if $br_consolidation.list.$oid.compulsory%>disabled<%/if%>>
+      <div class="color" style="background-color:<%$br_diariesprop.$oid.color%>;">&nbsp;</div>
+      <%$br_diariesprop.$oid.name%>
+      <%if is_numeric($oid)%>
+       <a class="cv8-ajaxlink" href="<%$br_diariesprop[$oid].generalurl%>"><%$syslabels.Seolan_Core_General.view%></a>
+      <%else%>
+       <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&_function=<%$function%>&tplentry=br&template=<%$template%>&day=<%$br_day%>&month=<%$br_month%>&year=<%$br_year%>&oid=<%$oid%>"><%$syslabels.Seolan_Core_General.view%></a>
+      <%/if%>
+      <%if !$br_consolidation.list.$oid.compulsory && !$br_consolidation.list.$oid.notdeletable%>
+       <a href="javascript:v<%$uniqid%>.delConsolidation('<%$oid%>')"><%$syslabels.Seolan_Core_General.delete%></a>
+      <%/if%>
+     </div>
+    <%/foreach%>
+    
+    <div class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.approve%>"></div>
+   </form>
+  </fieldset>
+ <%/if%>
+ 

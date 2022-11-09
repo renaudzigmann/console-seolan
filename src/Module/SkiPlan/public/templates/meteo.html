@@ -1,0 +1,263 @@
+<%if !$section%>
+  <%assign var=section value=$it_olines[it] %>
+<%/if%>
+
+<%$zones = []%><%* memorisation des zones (dates) des secteurs *%>
+<%assign var='lastSkplid' value='' %>
+<%section loop=$section.meteo.lines name=smeteo%>
+<%assign var='meteo' value=$section.meteo.lines[smeteo]%>
+<%assign var='skplid' value=$meteo.oskplid->raw%>
+<%capture name='zones'%>
+<%if $meteo.otypinf->raw eq 'parametres' %>
+<%if $lastSkplid neq $skplid%><ul class="nav nav-tabs" role="tablist" data-debug="<%$skplid%>"><%/if%>
+    <li role="presentation"<%if $lastSkplid neq $skplid%> class="active"<%/if%>>
+      <a href="#<%$meteo.ozone->raw|@rewriteToAscii %>" aria-controls="<%$meteo.ozone->raw|@rewriteToAscii %>" role="tab" data-toggle="tab">
+        <%if $meteo.oddeb->raw eq 'Y-m-d'|@date:$smarty.now %>
+          <%$labels.skiplanToday|@default:"Today" %>
+        <%elseif $meteo.oddeb->raw eq 'Y-m-d'|@date:$smarty.now+24*3600 %>
+          <%$labels.skiplanTomorrow|@default:"Tomorrow" %>
+        <%else %>
+          <%$meteo.oddeb->raw|@date_format:'%d %B %Y' %>
+        <%/if%>
+      </a>
+    </li>
+    <%assign var='lastSkplid' value=$meteo.oskplid->raw %>
+    <%if $smarty.section.smeteo.last%>
+    <%assign var='nextskplid' value=''%>
+    <%else%>
+    <%assign var='nextmeteo'  value=$section.meteo.lines[$smarty.section.smeteo.index_next]%>
+    <%assign var='nextskplid' value=$nextmeteo.oskplid->raw%>
+    <%/if%>
+    <%if $nextskplid != $skplid%></ul><%/if%>
+    <%/if%>
+    <%/capture%>
+    <%*append var='zones' value=$smarty.capture.zones index=$skplid*%>
+    <%$zones[$skplid][] = $smarty.capture.zones%>
+<%/section%>
+<div class="meteo-container clearfix">
+<%assign var="datemaj" value=""%>
+<%foreach from=$section.meteo.lines item=meteo%>
+  <%if $meteo.odatmaj->raw%><%assign var="datemaj" value=$meteo.odatmaj->raw%><%/if%>
+<%/foreach%>
+<%if $datemaj && $datemaj|@date_format:'%d %B %Y %H:%M'%>
+  <div class="datemaj" style="display:none;"><label><%$syslabels.Seolan_Core_General.last_update%></label><%$datemaj|date_format:'%d %B %Y %H:%M'%></div>
+<%/if%>
+<div class="meteo">
+<%assign var='i' value=0 %>
+<%assign var='lastSkplid' value='' %>
+<%foreach from=$section.meteo.lines item=meteo name=foo%>
+<%assign var='skplid' value=$meteo.oskplid->raw%>
+<%assign var='skplbuffer' value='buffer'|cat:$skplid%>
+<%if $meteo.otypinf->raw eq 'parametres' %>
+  <%if $lastSkplid eq '' || $lastSkplid neq $skplid %>
+    <%if $lastSkplid neq '' %>
+    </div> <%* .tab-content *%>
+    <%/if%>
+    <h2><%$skplid%> - <%$meteo.oalti->html%>m</h2>
+    <%foreach from=$zones[$skplid] item='tab'%><%$tab%><%/foreach%>
+    <div class="tab-content">
+  <%/if %>
+    <div role="tabpanel" class="tab-pane fade<%if $lastSkplid eq '' || $lastSkplid neq $meteo.oskplid->raw %> in active<%/if%>" id="<%$meteo.ozone->raw|@rewriteToAscii %>">
+    <div class="meteo_ciel">
+      <%if $meteo.oecielid->link.opicto2->raw %>
+      <div class="ciel_icon">
+        <img class="img-responsive" src="<%$meteo.oecielid->link.opicto2->resizer %>&geometry=100x100>">
+      </div>
+      <%/if%>
+      <div class="ciel_text">
+        <strong><%$meteo.oleciel->fielddef->label%></strong><br>
+        <%$meteo.oecielid->link.olibelle->html%><br>
+	<%if $meteo.otempe->raw%>
+        <strong><%$meteo.otempe->fielddef->label %></strong><br>
+        <%$meteo.otempe->html %> &deg;C
+	<%/if%>
+      </div>
+    </div>
+    <%if $meteo.oecielai->link.olibelle->raw %>
+    <div class="meteo_ciel">
+      <%if $meteo.oecielai->link.opicto2->raw %>
+      <div class="ciel_icon">
+        <img class="img-responsive" src="<%$meteo.oecielai->link.opicto2->resizer%>&geometry=100x100>">
+      </div>
+      <%/if%>
+      <div class="ciel_text">
+        <strong><%$meteo.oecielam->fielddef->label%></strong><br>
+        <%$meteo.oecielai->link.olibelle->html%><br>
+	<%if $meteo.otempeapm->raw%>
+        <strong><%$meteo.otempeapm->fielddef->label %></strong><br>
+        <%$meteo.otempeapm->html %> &deg;C
+	<%/if%>
+      </div>
+    </div>
+    <%/if %>
+    <%if $meteo.ovrisqa->link.ocode->raw %>
+    <div class="meteo_risk">
+      <%if $meteo.ovrisqa->link.opicto2->raw %>
+      <div class="risk_icon" id="risque-avalanche-icon">
+        <img class="img-responsive" src="<%$meteo.ovrisqa->link.opicto2->resizer%>&geometry=100x100>">
+      </div>
+      <%/if%>
+      <div class="risk_text" id="risque-avalanche-text">
+        <strong><%$meteo.olrisqa->fielddef->label%><br></strong>
+        <%$meteo.ovrisqa->link.ocode->html%>/5 (<%$meteo.ovrisqa->link.olibelle->html%>)<br>
+        <strong><%$meteo.ovrisqar->fielddef->label%></strong> <%$meteo.ovrisqar->html%>
+      </div>
+    </div>
+    <%/if%>
+
+    <!-- Dépliant contenant infos supplémentaires -->
+    <div class="meteo_plus_lien" id="m<%$smarty.section.it.index%>plus">
+      <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapse<%$meteo.ozone->raw|@rewriteToAscii %>" aria-expanded="false" aria-controls="collapse<%$meteo.ozone->raw|@rewriteToAscii %>">
+        <%$labels.skiplanMoreinfo%>
+      </a>
+    </div>
+    <div class="meteo_moins_lien" id="m<%$smarty.section.it.index%>moins">
+      <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapse<%$meteo.ozone->raw|@rewriteToAscii %>" aria-expanded="false" aria-controls="collapse<%$meteo.ozone->raw|@rewriteToAscii %>">
+        <%$labels.skiplanClose%>
+      </a>
+    </div>
+  
+    <div class="collapse" id="collapse<%$meteo.ozone->raw|@rewriteToAscii %>">
+      <div class="meteo_plus" id="m<%$smarty.section.it.index%>">
+        <ul>
+          <%if $meteo.otemperessentie->raw %>
+          <li id="temp-ressentie">
+            <label><%$meteo.otemperessentie->fielddef->label%></label>
+            <%$meteo.otemperessentie->html%> &deg;C
+          </li>
+          <%/if%>
+          <%if $meteo.oRISQUE_ORAGE->raw %>
+          <li id="risque-orage">
+            <label><%$meteo.oRISQUE_ORAGE->fielddef->label%></label>
+            <%$meteo.oRISQUE_ORAGE->html%>
+          </li>
+          <%/if %>
+          <%if $meteo.ohneige->raw %>
+          <li id="hauteur-neige">
+            <label><%$meteo.ohneige->fielddef->label%></label>
+            <%$meteo.ohneige->html%> cm
+          </li>
+          <%/if%>
+          <%if $meteo.ohcneige->raw %>
+          <li id="hc-neige">
+            <label><%$meteo.ohcneige->fielddef->label%></label>
+            <%$meteo.ohcneige->html%> cm
+          </li>
+          <%/if%>
+          <%if $meteo.oQLT_ID->raw %>
+          <li id="qualite-neige">
+            <label><%$meteo.oQLT_ID->fielddef->label%></label>
+            <%$meteo.oQLT_ID->html%>
+          </li>
+          <%/if%>
+          <%if $meteo.olcneige->raw %>
+          <li id="dateheure-chute-neige">
+            <label><%$meteo.olcneige->fielddef->label%></label>
+            <%$meteo.olcneige->raw|date_format:'%d %B %Y %H:%M'%>
+          </li>
+          <%/if%>
+          <%if $meteo.ofvent->raw %>
+          <li id="force-vent">
+            <label><%$meteo.ofvent->fielddef->label%></label>
+            <%$meteo.ofvent->html%> km/h
+          </li>
+          <%/if%>
+          <%if $meteo.oDIRECTION->raw %>
+          <li id="direction-vent">
+            <label><%$meteo.odvent->fielddef->label%></label>
+            <%$meteo.oDIRECTION->html%>
+          </li>
+          <%/if%>
+          <%if $meteo.oVISIBILITE->raw %>
+          <li id="visibilite">
+            <label><%$meteo.ovisib->fielddef->label%></label>
+            <%$meteo.oVISIBILITE->html%>
+          </li>
+          <%/if%>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <%assign var='lastSkplid' value=$meteo.oskplid->raw %>
+<%/if%>
+<%/foreach %>
+<%if $lastSkplid neq '' %>
+  </div> <%* .tab-content *%>
+<%/if%>
+
+</div> <%* #meteo *%>
+<%foreach from=$section.meteo.lines item=meteo name=foo%>
+<%if $meteo.otypinf->raw eq 'bulletin' && ($meteo.oBjour->raw neq "" || $meteo.oBlendemain->raw neq "" ||
+  $meteo.oBsemaine->raw neq "") %>
+  <div class="bulletin">
+    <ul class="bulletin-head">
+      <li><div class="bulletin_titre"><%$labels.skiplanWeatherReport%></div></li>
+      <li>
+        <ul class="nav nav-tabs" role="tablist">
+          <%if $meteo.oBjour->raw %>
+          <li role="presentation" class="active">
+            <a href="#Bjour" aria-controls="Bjour" role="tab" data-toggle="tab"><%$labels.skiplanToday|@default:"Today" %></a>
+          </li>
+          <%/if %>
+          <%if $meteo.oBlendemain->raw %>
+          <li role="presentation">
+            <a href="#Blendemain" aria-controls="Blendemain" role="tab" data-toggle="tab"><%$labels.skiplanTomorrow|@default:"Tomorrow" %></a>
+          </li>
+          <%/if %>
+          <%if $meteo.oBsemaine->raw %>
+          <li role="presentation">
+            <a href="#Bsemaine" aria-controls="Bsemaine" role="tab" data-toggle="tab"><%$labels.skiplanWeek|@default:"Week" %></a>
+          </li>
+          <%/if %>
+        </ul>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <%if $meteo.oBjour->raw %>
+      <div role="tabpanel" class="tab-pane active" id="Bjour">
+        <div class="bulletin_text"><%$meteo.oBjour->html|replace:'\\':'' %></div>
+      </div>
+      <%/if%>
+      <%if $meteo.oBlendemain->raw %>
+      <div role="tabpanel" class="tab-pane" id="Blendemain">
+        <div class="bulletin_text"><%$meteo.oBlendemain->html|replace:'\\':'' %></div>
+      </div>
+      <%/if%>
+      <%if $meteo.oBsemaine->raw %>
+      <div role="tabpanel" class="tab-pane" id="Bsemaine">
+        <div class="bulletin_text"><%$meteo.oBsemaine->html|replace:'\\':'' %></div>
+      </div>
+      <%/if%>
+    </div> <%* .tab-content *%>
+  </div> <%* .bulletin *%>
+<%/if%>
+<%/foreach%>
+
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  $('.meteo_plus_lien .btn').click(function(e){
+    e.preventDefault();
+    var that = $(this).parent();
+    var linkMoins = that.next('.meteo_moins_lien');
+    var meteoPlus = linkMoins.next('.meteo_plus');
+
+    that.css('display', 'none');
+    linkMoins.css('display', 'block');
+    //meteoPlus.css('display', 'block');
+  });
+
+  $('.meteo_moins_lien .btn').click(function(e) {
+    e.preventDefault();
+
+    var that = $(this).parent();
+    var linkPlus = that.prev('.meteo_plus_lien');
+    var meteoPlus = that.next('.meteo_plus');
+
+    that.css('display', 'none');
+    linkPlus.css('display', 'block');
+    //meteoPlus.css('display', 'none');
+  });
+});
+</script>
+
+</div> <%* #meteo-container *%>

@@ -1,0 +1,15 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.tzrinfo%>
+<%foreach from=$checklist_results key=categorie item=table%>
+<fieldset>
+  <legend><%$categorie%></legend>
+  <table>
+    <%foreach from=$table key=test item=result%>
+    <%if is_array($result)%>
+    <tr><th style="background-color:<%$result[0]%>;"><%$test%></th><td style="background-color:<%$result[0]%>;"><%$result[1]%></td></tr>
+    <%else%>
+    <tr><th><%$test%></th><td><%$result%></td></tr>
+    <%/if%>
+    <%/foreach%>
+  </table>
+</fieldset>
+<%/foreach%>

@@ -1,0 +1,38 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset><legend><%$syslabels.Seolan_Module_Lock_Lock.lockeddocs_text%></legend>
+<%if $grps_lines_oid || $users_lines_oid%>
+    <ul class="nav nav-pills module-tool" role="tablist">
+    <li>
+<form method="POST" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+<input type="hidden" name="moid" value="<%$imod_props._moid%>">
+<input type="hidden" name="function" value="index">
+<input type="hidden" name="template" value="Module/Lock.index.html">
+<input type="hidden" name="tplentry" value="br">
+<select name="user" onchange="TZR.ajaxSubmitForm(this.form);">
+<option value="%" <%if $br_user eq "%"%>selected<%/if%>>Tous les utilisateurs</option>
+<%section name=u loop=$users_lines_oid%>
+<option value="<%$users_lines_oid[u]%>" <%if $br_user eq $users_lines_oid[u]%> selected<%/if%>><%$users_lines_ofullnam[u]->text%>
+<%/section%>
+</select>
+</form></li>
+</ul>
+<%/if%>
+<div class="table-responsive">
+   <table class="table table-striped cv8_tablelist">
+    <thead>
+      <tr><th>Actions</th><th>Document</th><th><%$syslabels.Seolan_Core_Field_Field.datemin%></th><th><%$syslabels.Seolan_Core_General.user%></th><th><%$syslabels.Seolan_Core_Field_Field.datemax%></th><th>Module</th></tr>
+    </thead>
+    <tbody>
+      <%section name=i loop=$br_lines%>
+      <tr>
+	<td><A class="cv8-ajaxlink" HREF="<%$self%>&moid=<%$imod_props._moid%>&_function=forceUnlock&oid=<%$br_lines[i].oid%>&tplentry=br&_next=<%$here|escape:"url"%>">Libérer</a></td>
+	<td><%$br_lines[i].link|default:$br_lines[i].oid%></td><td><%$br_lines[i]._lock.DSTART|date_format:"%d/%m/%Y %H:%M:%S":""%></td>
+	<td><%$br_lines[i]._lock.OWN.user%></td><td><%$br_lines[i]._lock.DEND|date_format:"%d/%m/%Y %H:%M:%S":""%></td>
+	<td><%$br_lines[i]._module|default:''%></td>
+      </tr>
+      <%/section%>
+    </tbody>
+   </table>
+</div>
+</fieldset>
+

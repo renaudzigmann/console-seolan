@@ -1,0 +1,13 @@
+<%if $ql_lines_oid[0]%>
+<div id="cv3-quick-link">
+	<h4><%$labels.quick_link_titre%></h4>
+	<ul>
+	
+	<%section name="i" loop=$ql_lines_oid%>
+	<li><%$ql_lines_olien[i]->html%></li>
+	<%/section%>
+		
+	</ul>
+</div>
+<%/if%>
+

@@ -1,0 +1,28 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.delete_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.general_text%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>"">
+  <input type="hidden" name="oid" value="<%$br_oid%>">
+  <input type="hidden" name="_function" value="del">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <table class="list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Project_Project.arch%></label></th>
+    <td><input type="text" value="" name="arch"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Project_Project.delmods%></label></th>
+    <td><input class="checkbox" type="checkbox" value="1" name="delmods"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Project_Project.delusers|wordwrap:50:"<br>"%></label></th>
+    <td><input class="checkbox" type="checkbox" value="1" name="delusers"></td>
+   </tr>
+  </table>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.delete_text%>">
+  </div>
+ </form>
+</fieldset>

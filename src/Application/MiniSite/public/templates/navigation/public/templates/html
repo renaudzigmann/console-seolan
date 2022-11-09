@@ -1,0 +1,36 @@
+<%if !$tzr.corailv3_disable_left_nav AND $it_cat_mit.oalias->html neq $tzr.corailv3_home && !empty($lm_lines_oid)%>
+<div id="cv3-navigation" class="cv3-block">
+<div class="middle">
+<%assign var="jump" value="-1"%>
+<%section name=i loop=$lm_lines_oid%>
+<%* Si le saut est negatif :  debut d une liste *%>
+<%if ($jump<0)%>
+<ul class="navlist"><%/if%>
+<%* debut element de la liste *%><!-- <%$lm_lines_level[i]%> -->
+<li>
+<%if $lm_lines_oid[i]|in_array:$path_oidup %>
+<a class="path <%if $it_cat_mit.oid eq $lm_lines_oid[i]%>active<%/if%>" href="<%$self%><%$lm_lines_selfurl[i]%><%$lm_lines_ocurl[i]->html%>"><%$lm_lines_otitle[i]->html%></a>
+<%else%>
+<a href="<%$self%><%$lm_lines_selfurl[i]%><%$lm_lines_ocurl[i]->html%>"><%$lm_lines_otitle[i]->html%></a>
+<%/if%>
+<%*calcule du saut: difference avec le niveau suivant *%>
+<%if $lm_lines_level[i.index_next]%>
+<%assign var="levelNext" value=`$lm_lines_level[i.index_next]`%>
+<%else%>
+<%assign var="levelNext" value="0" %>
+<%/if%>
+<%math equation="x-y" x=`$lm_lines_level[i]` y=`$levelNext` assign="jump"%>
+<%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+<%if !($jump<0) %></li><%/if%>
+<%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+<%if $jump > 0 %>
+<%section name=foo loop=$jump%>
+</ul>
+<%if !$smarty.section.foo.last and !$smart.section.i.last%></li><%/if%>
+<%/section%>
+<%/if%>
+<%/section%>
+</div>
+</div>
+<!-- fin navigation -->
+<%/if%>

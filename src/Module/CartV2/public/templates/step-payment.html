@@ -1,0 +1,39 @@
+<%assign var=order    value=$section.order%>
+<%assign var=customer value=$order->customer%>
+
+<%if !$smarty.request.order%>
+  <%include file="Module/CartV2.shop-steps.html"%>
+<%/if%>
+
+<%include file="Module/CartV2.shop-order.html"%>
+
+<%if $order->is_payable%>
+
+  <hr>
+  <h2><%"Choisissez un moyen de paiement"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+
+  <%* Formulaires générés par XModMonetique *%>
+  <div class="monetique-payment-forms">
+  <%foreach from=$section.payment_forms key=key item=form%>
+    <%if $form.0 eq 'ok' and $form.2%>
+      <%include file=$form.2%>
+    <%/if%>
+  <%/foreach%>
+  </div>
+
+  <%* Paiement par chèque *%>
+  <%if $shop->payment_by_check_enabled%>
+  <a href="<%$shop->getStepUrl('payment')%>&amp;paymentStatus=check<%if $smarty.get.order%>&amp;order=<%$smarty.get.order%><%/if%>" class="btn btn-warning">
+    <%"Payer cette commande par chèque"|__:'\Seolan\Module\Cart\CartV2'%>
+  </a>
+  <%/if%>
+
+<%else%>
+  <div class="shop-actions">
+    <%$order->actions%>
+  </div>
+<%/if%>
+
+<hr>
+<h2><%"Rappel de vos coordonnées"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+<%include file="Module/CartV2.shop-customer.html"%>

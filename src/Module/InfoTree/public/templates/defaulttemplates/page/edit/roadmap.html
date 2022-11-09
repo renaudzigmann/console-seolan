@@ -1,0 +1,15 @@
+<%include file="Module/Table.functions.html"%>
+<fieldset>
+  <legend>Nom du lieu d'arrivée</legend>
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].otitsec %>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend><%$it_olines[it].olat->fielddef->label%> / <%$it_olines[it].olng->fielddef->label%> du lieu d'arrivée</legend>
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].olat %>
+    <%call fieldline field=$it_olines[it].olng %>
+ </div>
+</fieldset>

@@ -1,0 +1,259 @@
+
+/* Section fonction SLIDER */
+
+/*
+	AnythingSlider v1.8+ Default theme
+	By Chris Coyier: http://css-tricks.com
+	with major improvements by Doug Neiner: http://pixelgraphics.us/
+	based on work by Remy Sharp: http://jqueryfordesigners.com/
+        Redesigned for XSALTO by Bruno Barroyer
+*/
+
+/* donne les dimensions du slider = 410px en hauteur par défaut et 100% en largeur */
+.cv8d-slider { 
+	clear: both;
+	width: 100%;
+	height: 410px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	list-style: none;
+	list-style-image: none;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.cv8d-slider a {
+	border: none;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background-color: transparent;
+}
+
+.cv8d-slider .cv8d-slider-panel {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.cv8d-slider-wrapper {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.cv8d-slider-image {
+	text-align: center;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.cv8d-slider-image img {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	border: none;
+}
+
+.cv8d-slider-image a {
+	display: block;
+	text-align: center;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	border: none;
+	text-decoration: none;
+}
+
+.cv8d-slider-details {
+	display: block;
+	width: 90%;
+	color: #333333;
+	padding: 10px 5%;
+	background: url(/tzr/templates/images8/section-slider/fond_blanc_trans.png) repeat top left;
+}
+
+.cv8d-slider-details .cv8d-fieldvalue:first-child {
+	font-weight: bold;
+}
+
+.cv8d-slider-details a {
+	color: #ff6600;
+}
+
+.cv8d-slider .more-link { /* lien dans le slider */
+	display: block;
+}
+
+/*****************************
+  SET DEFAULT DIMENSIONS HERE
+ *****************************/
+/* change the ID & dimensions to match your slider */
+.anythingSlider {
+	clear: both;
+	/* Prevent FOUC (see FAQ page) and keep things readable if javascript is disabled */
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/******************
+  SET STYLING HERE
+ ******************
+ =================================
+ Default state (no keyboard focus)
+ ==================================*/
+
+/* Overall Wrapper */
+.anythingSlider-default {
+	margin: 0 0;
+	/* 45px right & left padding for the arrows, 28px @ bottom for navigation */
+	padding: 0 0 30px 0;
+	
+}
+/* slider window - top & bottom borders, default state */
+.anythingSlider-default .anythingWindow {
+	border-top: 5px solid #999999;
+	border-bottom: 5px solid #999999;
+	background-color: #999999;
+}
+/* Navigation buttons + start/stop button, default state */
+.anythingSlider-default .anythingControls a {
+	/* top shadow */
+	background: #999999;
+	color: #ffffff;
+	text-decoration: none;
+	border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+}
+
+.anythingSlider-default .anythingControls a:hover {
+	/* top shadow */
+	background-color: #ff6600
+}
+/* Make sure navigation text is visible */
+.anythingSlider-default .anythingControls a span {
+	visibility: visible;
+}
+/* Navigation current button, default state */
+.anythingSlider-default .anythingControls a.cur {
+	background: #999999;
+	color: #ffffff;
+}
+/* start-stop button, stopped, default state */
+.anythingSlider-default .anythingControls a.start-stop {
+	background: #999999 url(/tzr/templates/images8/section-slider/slider_control_default.png) 15px -460px no-repeat;
+	color: #ffffff;
+}
+/* start-stop button, playing, default state */
+.anythingSlider-default .anythingControls a.start-stop.playing {
+	background: #999999 url(/tzr/templates/images8/section-slider/slider_control_default.png) -90px -460px no-repeat;
+}
+/* start-stop button, default hovered text color (when visible) */
+/* hide nav/start-stop background image shadow on hover - makes the button appear to come forward */
+.anythingSlider-default .anythingControls a.start-stop:hover,
+.anythingSlider-default .anythingControls a.start-stop.hover,
+.anythingSlider-default .anythingControls a.start-stop .anythingControls ul a:hover {
+	background: #999999 url(/tzr/templates/images8/section-slider/slider_control_default.png) 15px -460px no-repeat;
+	color: #ffffff;
+}
+.anythingSlider-default .anythingControls a.start-stop {
+        background-position:15px -460px;
+}
+.anythingSlider-default .anythingControls a.start-stop.playing {
+        background-position:-90px -460px;
+}
+
+/*
+ =================================
+ Active State (has keyboard focus)
+ =================================
+*/
+/* slider window - top & bottom borders, active state */
+.anythingSlider-default.activeSlider .anythingWindow {
+	border-top: 5px solid #999999;
+	border-bottom: 5px solid #ff6600;
+}
+/* Navigation buttons, active state */
+.anythingSlider-default.activeSlider .anythingControls a {
+	/* background image = top shadow */
+	background-color: #999999;
+}
+/* Navigation current & hovered button, active state */
+.anythingSlider-default.activeSlider .anythingControls a.cur,
+.anythingSlider-default.activeSlider .anythingControls a:hover {
+	/* background image removed */
+	background-color: #ff6600;
+}
+/* start-stop button, stopped, active state */
+.anythingSlider-default.activeSlider .anythingControls a.start-stop,
+.anythingSlider-default.activeSlider .anythingControls a.start-stop.playing {
+	background-color: #ff6600;
+	color: #fff;
+}
+/* start-stop button, active slider hovered text color (when visible) */
+.anythingSlider-default.activeSlider .start-stop:hover,
+.anythingSlider-default.activeSlider .start-stop.hover {
+	color: #fff;
+}
+
+
+/************************
+  NAVIGATION POSITIONING
+ ************************/
+/* Navigation Arrows */
+.anythingSlider-default .arrow {
+	top: 40%;
+	position: absolute;
+	display: block;
+}
+
+.anythingSlider-default .arrow a {
+	display: block;
+	width: 45px;
+	height: 140px;
+	margin: -70px 0 0 0; /* half height of image */
+	text-align: center;
+	outline: 0;
+	background: url(/tzr/templates/images8/section-slider/slider_control_default.png) no-repeat;
+}
+/* back arrow */
+.anythingSlider-default .back { left: 0; }
+.anythingSlider-default .back a { background-position: left top; }
+.anythingSlider-default .back a:hover,
+.anythingSlider-default .back a.hover { background-position: left -200px; }
+/* forward arrow */
+.anythingSlider-default .forward { right: 0; }
+.anythingSlider-default .forward a { background-position: right top; }
+.anythingSlider-default .forward a:hover,
+.anythingSlider-default .forward a.hover { background-position: right -200px; }
+/* Navigation Links */
+.anythingSlider-default .anythingControls { outline: 0; display: none; }
+.anythingSlider-default .anythingControls ul { margin: 0 0 0 60px; padding: 0; float: left; }
+.anythingSlider-default .anythingControls ul li { display: inline; margin: 0 0 0 0; padding: 0 0 0 0; }
+.anythingSlider-default .anythingControls ul a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	display: inline-block;
+	text-decoration: none;
+	padding: 2px 8px;
+	height: 18px;
+	margin: 0 1px 0 0;
+	text-align: center;
+	outline: 0;
+}
+/* navigationSize window */
+.anythingSlider-default .anythingControls .anythingNavWindow {
+	overflow: hidden;
+	float: left;
+}
+/* Autoplay Start/Stop button */
+.anythingSlider-default .anythingControls .start-stop {
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	padding: 2px 5px;
+	width: 40px;
+	height: 18px;
+	text-align: center;
+	text-decoration: none;
+	float: none;
+	z-index: 100;
+	outline: 0;
+}

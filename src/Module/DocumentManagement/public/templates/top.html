@@ -1,0 +1,62 @@
+  <%if $br_here->countdirs>0 || $br_here->countdocs>0%>
+      <form method="post" action="<%$self%>" class="form-inline clearfix">
+        <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+        <input type="hidden" name="template" value="Module/DocumentManagement.index2.html">
+        <input type="hidden" name="_function" value="index">
+        <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+        <input type="hidden" name="tplentry" value="br">
+	<ul class="ul-list-inline module-tool" role="tablist">
+
+        <!-- S'il y a au moins un document, cela active la possibilité de l'ajouter à la sélection de l'utilisateur -->
+        <%if $imod_mod->secure('','addToUserSelection') && $br_here->countdocs>0%>
+	  <li>
+            <a href="#" class="btn btn-primary" onclick="TZR.DocMngt.addToSelection('<%$imod_mod->_moid%>', '<%$uniqid%>'); return false;"><%$syslabels.Seolan_Core_Module_Module.addtoselection_text%></a>
+          </li>
+	<%/if%>
+
+          <!-- S'il y a au moins deux documents, ou deux dossiers, la possibilité de tri est activée -->
+          <%if $br_here->countdirs>1 || $br_here->countdocs>1%>
+	  <%$fullorder = $br_here->getOption('directoryorder')%>
+	  <%$parts = explode(' ', $fullorder)%>
+	  <%$orderfield = $parts[0]%>
+	  <%$direction = $parts[1]%>
+	  <li>
+            <%$syslabels.Seolan_Core_General.order%>
+	    <select onchange="TZR.ajaxSubmitForm(this.form);" name="directoryorder" size="1">
+	    <option <%if empty($orderfield)%>selected<%/if%>value="default">---</option>
+            <option <%if $orderfield=='title' && (empty($direction) || $direction=='ASC')%>selected <%/if%>value="title"><%$syslabels.Seolan_Core_General.title_text%></option>
+            <option <%if $orderfield=='title' && $direction=='DESC'%>selected <%/if%>value="title DESC"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.titledesc_text%></option>
+            <option <%if $orderfield=='UPD'%>selected <%/if%>value="UPD"><%$syslabels.Seolan_Core_General.last_update%></option>
+            <option <%if $orderfield=='doctype'%>selected <%/if%> value="doctype"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.doctype_text%></option>
+	    <%* à voir *%>
+            <%section loop=$br_dirsorting name=sort%>
+	    <option  <%if $fullorder==$br_dirsorting[sort].order%>selected <%/if%> value="<%$br_dirsorting[sort].order%>"><%$br_dirsorting[sort].name%></option><%/section%>
+            </select>
+	  </li>
+        <%/if%>
+
+	</ul>
+      </form>
+    
+  <%/if%>
+
+    <%if count($br_path)>1%>
+      <div id="tzr-docmgt-path<%$uniqid%>" class="csx-docmgt-path">
+        <%if $br_here %>
+	<label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.pathstofolder_text%><%$syslabels.Seolan_Core_General.i18ncolon%></label>
+        <%else%>
+	<label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.pathstodocument_text%><%$syslabels.Seolan_Core_General.i18ncolon%></label>
+        <%/if%>
+      <%foreach from=$br_path item=path%>
+	 <span class="glyphicon csico-folder"></span><ul>
+        <%foreach from=$path item=node%>
+	<li><a class="cv8-ajaxlink" href="<%$self%>&_parentoid=<%$poid%>&oid=<%$node->oid%>&moid=<%$smarty.request.moid|escape:'url'%>&function=index&template=Module/DocumentManagement.index2.html&tplentry=br"><%$node->title%></a></li>
+        <%assign var=poid value=$node->oid%>
+        <%/foreach%>
+        <%assign var=poid value=""%>
+	</ul>
+      <%/foreach%>
+      </div>
+    <%else%><%* rempli en js en mode arbo *%>
+      <div id="tzr-docmgt-path<%$uniqid%>" class="csx-docmgt-path"></div>
+    <%/if%>

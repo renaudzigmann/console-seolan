@@ -1,0 +1,16 @@
+<!--/htdig_noindex-->
+<!-- B.2 CONTENU -->
+<article class="col-xs-12 col-sm-8 col-sm-pull-0 col-md-8 col-md-pull-0 col-lg-8 col-lg-pull-0 cv3-main-contenu" id="2cols" role="main">
+  <div class="tzr-page-content cv3-col-contenu" id="tzr-page-content">
+    <%include file="viewsection.html"%>
+</div>
+</article>
+<!-- B.1 BColonne de gauche -->
+<!--htdig_noindex-->
+<div class="col-xs-12 col-sm-4 col-sm-push-0 col-md-4 col-md-push-0 col-lg-4 col-lg-push-0 hidden-print cv3-main-gauche">
+  <div class="cv3-col-gauche">
+    <%if $it_cat_mit.oalias->html neq $charte_oRUB_HOME->link.oalias->raw%><h4 class="rubrique"><%$path_stack[1].otitle->html%></h4><%/if%>
+    <%include file="cv3-news.html"%>
+    <%include file="cv3-agenda-col.html"%>
+  </div><!-- fin col gauche -->
+</div><!-- fin main gauche -->

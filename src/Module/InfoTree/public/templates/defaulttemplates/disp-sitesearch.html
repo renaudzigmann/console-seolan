@@ -1,0 +1,57 @@
+<%* recherche solr sur le site *%>
+<%assign var="templateResult" value="Module/InfoTree.defaulttemplates/disp-sitesearch-results.html"%>
+<%assign var="section" value=$it_olines[it]%>
+<%assign var="myid" value=$section._infos.oid|replace:':':''%>
+<div class="sitesearch row">
+  <div class="col-xs-12">
+    <form class="form form-inline"
+	  name="FORM<%$myid%>"
+	  action=""
+	  method="get">
+      <div class="form-group">
+	<div class="input-group">
+	  <input onclick="jQuery(this).css('font-style', '');" class="form-control" type="text" length="64" name="terms" placeholder="<%fieldlabelvalue id=$section._functionparams.params.termsplaceholder%>" value="<%$siteSearch_terms|escape:'html'%>">
+	</div>
+      </div>
+      <button class="btn btn-primary" type="submit"><%fieldlabelvalue id=$section._functionparams.params.golabel%></button>
+      <input type="hidden" name="_" value="<%time()%>">
+      <%if empty($section._functionparams.params.resultalias)%>
+      <input type="hidden" name="_skip" value="1">
+      <input type="hidden" name="_next" value="">
+      <input type="hidden" name="moid" value="<%$section._functionparams.moid%>">
+      <input type="hidden" name="function" value="siteSearch">
+      <input type="hidden" name="template" value="<%$templateResult%>">
+      <%else%>
+      <input type="hidden" name="alias" value="<%$section._functionparams.params.resultalias%>">
+      <%/if%>
+    </form>
+  </div>
+</div>
+
+  <div id="RESULTS<%$myid%>">
+    <%if empty($section._functionparams.params.resultalias) && !empty($siteSearch_terms)%>
+    <%include file=$templateResult%>
+    <%/if%>
+  </div>
+
+  <%if empty($section._functionparams.params.resultalias)%>
+  <script>
+   var form = jQuery("form[name='FORM<%$myid%>']");
+   form.on("submit", function(event){
+     event.preventDefault();
+     var url = "<%$self%>&"+form.serialize();
+     TZR.jQueryLoad({url:url,
+		     cb:function(data){
+		       jQuery("input[name='terms']", form).css("font-style","italic")		     
+		     },
+		     nocheckauth:true,
+		     dataType:"json",
+		     nocache:true,
+		     overlay:form,
+		     target:"#RESULTS<%$myid%>"
+     });
+     return false;
+   });
+  </script>
+  <%/if%>
+  

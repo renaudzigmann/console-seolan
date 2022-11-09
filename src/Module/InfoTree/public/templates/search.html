@@ -1,0 +1,21 @@
+<div class="cv8-quicksearch form-inline clearfix" role="search">
+   <form action="<%$self%>" method="post" name="quicksearch" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="_function" value="procQuery">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="order" value="<%$br_order%>">
+    <input type="hidden" name="template" value="Module/InfoTree.browse.html">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="first" value="0">
+    <input type="hidden" name="clearrequest" value="1">
+    <input type="hidden" name="_next">
+    <div class="form-group">
+     <label><%$syslabels.Seolan_Core_General.title_text%></label>
+     <input type="text" name="title" value="">
+    </div>
+    <div class="form-group">
+     <label><%$syslabels.Seolan_Core_General.alias_text%></label>
+     <input type="text" name="alias" value="">
+    </div>
+    <input type="submit" name="go" value="GO">
+   </form>
+</div>

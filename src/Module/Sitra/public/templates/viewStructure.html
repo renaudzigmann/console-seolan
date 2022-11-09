@@ -1,0 +1,60 @@
+<link rel="stylesheet" type="text/css" href="/csx/src/Module/Sitra/public/templates/jsoneditor/jsoneditor-min.css">
+<script type="text/javascript" src="/csx/src/Module/Sitra/public/templates/jsoneditor/jsoneditor-min.js"></script>
+<style type="text/css">
+.jsoneditor {
+  width: 500px;
+  height: 500px;
+}
+</style>
+<div id="sitraconf-<%$uniqid%>">
+<%include file='Core.header/ajax.html'%>
+<%if $_message || $smarty.request.message || $br_message || $smarty.session._TZR.message%>
+ <div class="tzr-message">
+  <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+ </div>
+<%/if%>
+
+<div id="sitraconftab-<%$uniqid%>" class="stock">
+<%** les onglets pour chaque schema **%>
+  <ul>
+<%foreach key=label item=schema from=$sit_schemas%>
+    <li><a href="#sitraconfschema<%$label%>_<%$uniqid%>"><%$label|@replace:'_':' '%></a></li>
+<%/foreach%>
+  </ul>
+  <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer">
+  
+<%** pour chaque schema **%>
+<%foreach key=label item=schema from=$sit_schemas%>
+    <div id="sitraconfschema<%$label%>_<%$uniqid%>" class="tzr-tabcontent ">
+      <form action="<%$self%>" method="post" name="schemaform<%$label%>_<%$uniqid%>" id="schemaform<%$label%>_<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this,jQuery('#stockcal-<%$uniqid%>').parent());">
+      <fieldset>
+        <legend><%$label%></legend>
+        <div id="jsoneditor<%$label%>_<%$uniqid%>" class="jsoneditor"></div>
+        <script type="text/javascript" >
+        // create the editor
+        var container = document.getElementById("jsoneditor<%$label%>_<%$uniqid%>");
+        var json = <%$schema%>;
+        var editor<%$label%>_<%$uniqid%> = new jsoneditor.JSONEditor(container, {mode: 'tree', search: false}, json);
+        </script>
+        <span class="tzr-action" style="display: inline;margin-left: 35px;">
+          <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+        </span>
+      </fieldset>
+      </form>
+    </div>
+<%/foreach%>
+  </div>
+</div>
+<div class="tzr-message bk-msg"></div>
+
+<script type="text/javascript">
+// tabs produit
+    jQuery("#sitraconftab-<%$uniqid%>").tabs({cache:true});
+    <%if $smarty.request._tabs%>
+    jQuery("#sitraconftab-<%$uniqid%>").tabs('option', 'active', <%$smarty.request._tabs%>);
+    <%/if%>
+</script>
+</div>

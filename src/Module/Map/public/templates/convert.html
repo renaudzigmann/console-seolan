@@ -1,0 +1,43 @@
+<%* conversions *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript" language="javascript">
+</script>
+<fieldset><legend>Convertir un fichier de coordonnées</legend>
+<form action="<%$self%>" name="convert<%$uniqid%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+<input type="hidden" name="skip" value="1"/>
+<input type="hidden" name="function" value="procConvertCoords">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="template" value="Module/Map.convert.html">
+
+<table class="list2">
+<tr>
+<th><label>Fichier en entrée</label></th>
+<td><input type="file" name="infile"></td>
+</tr>
+<tr>
+<th><label>Ou liste de coordonnées</label></th>
+<td><textarea name="incoords" cols="30" rows="10"></textarea></td>
+</tr>
+<tr>
+<th><label>Système de coordonnées en entrée</label></th>
+<td>
+<select name="insrs">
+<option value="MAPSRS:EPSG4326">---</option>
+<%foreach from=$br1_lines_oid item=koid key=i%>
+<option value="<%$koid%>"><%$br1_lines_otitle[$i]->html%></option><%/foreach%></select>
+</td>
+</tr>
+
+<tr>
+<th><label>Système de coordonnées en sortie</label></th>
+<td>
+<select name="tosrs">
+<option value="MAPSRS:EPSG4326">---</option>
+<%foreach from=$br1_lines_oid item=koid key=i%><option value="<%$koid%>"><%$br1_lines_otitle[$i]->html%></option><%/foreach%></select>
+</td>
+</tr>
+</table>
+<div class="tzr-action"><input type="submit" onclick="return TZR.ajaxSubmitForm(this.form);" value="Valider"></div>
+</form>
+</fieldset>

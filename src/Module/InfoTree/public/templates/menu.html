@@ -1,0 +1,91 @@
+<%if empty($prefix)%><%assign var="prefix" value=$smarty.request.tplentry%><%/if%>
+<%if empty($action)%><%assign var="action" value=$smarty.request.action%><%/if%>
+<%if empty($ajaxurl)%><%assign var="ajaxurl" value=$smarty.request.ajaxurl%><%/if%>
+<%if $ajaxurl=="self"%><%assign var=ajaxurl value=$smarty.server.REQUEST_URI%><%/if%>
+<%if !isset($smarty.request._plevel)%>
+<%assign var='plevel' value=0%>
+<%else%>
+<%$plevel=(int)$smarty.request._plevel+1%>
+<%/if%>
+
+<%$oid=$<%$prefix%>_lines_oid%>
+<%$level=$<%$prefix%>_lines_level%>
+<%$alias=$<%$prefix%>_lines_oalias%>
+<%$title=$<%$prefix%>_lines_otitle%>
+<%$sections=$<%$prefix%>_lines_sections%>
+<%$ssrub=$<%$prefix%>_lines_ssrub%>
+<%$icon=$<%$prefix%>_lines_oicon%>
+
+<%section name=i loop=$oid%>
+<%assign var="ajaxsubmenuid" value=$oid[i]|replace:':':''|cat:$smarty.section.i.index%>
+ <%if (!empty($selected) && array_key_exists($oid[i],$selected)) || (!empty($from) && $oid[i]==$from)%>
+  <%assign var="disp" value=false%>
+ <%else%>
+  <%assign var="disp" value=true%>
+ <%/if%>
+ <%if $disp %>
+  <li id="node_<%$oid[i]%>" data-oid="<%$oid[i]%>" data-levels="<%$level[i]%>,<%$plevel%>">
+    <%if $disp%>
+    <%if $ssrub[i]>0 && $level[i]>=$level[$smarty.section.i.index_next]%>
+    <a href="#" class="dropdown-collapse treeMenuAjax" data-url="<%$ajaxurl%>&_plevel=<%$plevel%>&norubric=1&aliastop=&oidtop=<%$oid[i]%>&_raw=1&_silent=1&_skip=1" data-target="#cv8-infotreeSubMenu-ajax-<%$ajaxsubmenuid%>" data-overlay="none"
+       data-togglepage='{"action":"<%$action%>","arguments":["<%$oid[i]%>", 
+       "<%$alias[i]->raw%>",
+       "<%$title[i]->html|escape:'url'%>",
+       "<%$ssrub[i]%>",
+       "<%$sections[i]%>"], "bubble":"true"}'
+       >
+      <%else%>
+      <%strip%>
+      <a href="#" 
+	 data-togglepage='{"action":"<%$action%>","arguments":["<%$oid[i]%>", 
+			  "<%$alias[i]->raw%>",
+	 "<%$title[i]->html|escape:'url'%>",
+	 "<%$ssrub[i]%>",
+	"<%$sections[i]%>"], "bubble":"false"}'>
+	<%/strip%>
+	<%/if%>
+	<%/if%>
+    <%if $plevel < 1%>
+      <%if $icon && !$icon[i]->fielddef->isEmpty($icon[i])%>
+        <%$icon[i]->html%>
+      <%else%>
+        <span class="csico-letter-<%$title[i]->html|trim|substr:0:1|lower%> glyphicon"></span>
+      <%/if%>
+    <%else%>
+        <span class="csico-left-submenu glyphicon"></span>
+	<%/if%>
+	<%assign var="shorttitle" value=$title[i]->html|truncate:25%>
+	<%if $title[i]->html == $shorttitle%>
+	<span><%$shorttitle%></span>
+	<%else%>
+	<span data-toggle="tooltip" data-title="<%$title[i]->html|escape:"html"%>"><%$shorttitle%></span>
+	<%/if%>
+      <%if $ssrub[i]>0 && $level[i]>=$level[$smarty.section.i.index_next]%>
+      <span class="csico-menu-down"></span>
+      <%/if%>
+    <%if $disp%>
+      </a>
+    <%/if%>
+    
+   <%if $ssrub[i]>0 && $level[i]>=$level[$smarty.section.i.index_next]%>
+    <ul id="cv8-infotreeSubMenu-ajax-<%$ajaxsubmenuid%>" class="ajax nav nav-stacked" style="display: none;">
+    </ul> 
+   <%/if%>
+   <%if $level[i] < $level[$smarty.section.i.index_next]%><ul id="cv8-infotreeSubMenu-ajax-<%$ajaxsubmenuid%>" class="ajax nav nav-stacked" style="display: none;"><%/if%>
+   <%if $level[$smarty.section.i.index_next]%>
+    <%assign var="levelNext" value=$level[$smarty.section.i.index_next]%>
+   <%else%>
+    <%assign var="levelNext" value="1"%>
+   <%/if%>
+   <%math equation="x-y" x=$level[i] y=$levelNext assign="jump"%>
+   <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+   <%if $jump>=0%></li><%/if%>
+   <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+   <%if $jump>0%>
+    <%section name=foo loop=$jump%>
+      </ul>
+     </li>
+    <%/section%>
+   <%/if%>
+  <%/if%>
+<%/section%>

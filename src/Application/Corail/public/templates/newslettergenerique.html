@@ -1,0 +1,101 @@
+<!--<%$smarty.template%>-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><%strip%>
+ <%assign var="nlwidth" value=$tzr.newsletter_width|default:730%>
+ <%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:730%>
+ <%math equation="w-(2*m)" w=$nlwidth m=$nlmarginwidth assign="nlcontentwidth" %>
+ <%assign var="nllinklabel" value=$labels.newsletteronline|default:"Si vous ne visualisez pas ce message correctement, <a href=\"%s\">consultez la page en ligne</a>"%>
+ <%assign var="baseurl" value="http://`$server_name`/" %>
+ <%/strip%>
+ <html>
+  <head>
+   <%$header%>
+   <base href="<%$baseurl%>" />
+   <%assign var="nltitle" value="`$tzr.societe` `$it_cat_mit.otitle->html`"|strip_tags  %>
+   <title><%$nltitle%></title>
+   <%if $tzr.newsletter_css && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_css`")%>
+   <%assign var="cssFile" value="file:`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_css`" %>
+   <style type="text/css" media="screen">
+    <%include file=$cssFile%>
+   </style>
+   <%/if%>
+   <link rel="shortcut icon" href="<%$baseurl%>favicon.ico" />
+  </head>
+  <body>
+   <table width="100%" align="center" ><tr><td class="body">
+   <table width="<%$nlwidth%>" align="center" class="tab_lien"><tr><td height="7" colspan="3"></td></tr>
+    <tr><td width="<%$nlmarginwidth%>"></td><td width="<%$nlcontentwidth%>" align="right">
+      <p><%"`$baseurl`/index.php?alias=`$it_cat_mit.oalias->raw`&template=`$smarty.request.template`"|string_format:$nllinklabel%></p>
+     </td>
+     <td width="<%$nlmarginwidth%>"></td>
+    </tr>
+    <tr>
+     <td height="7" colspan="3"></td>
+    </tr>
+   </table>
+   <table width="<%$nlwidth%>" align="center" class="tab_bandeau"><tr><td><img width="<%$nlwidth%>" src="<%$baseurl%><%$tzr.newsletter_image_bandeau%>" alt="<%$nltitle%>" border="0"></td></tr></table><table width="<%$nlwidth%>" align="center" class="tab_newstitre">
+    <tr>
+     <td height="10" colspan="3"></td>
+    </tr>
+    <tr>
+     <td width="<%$nlmarginwidth%>"></td>
+     <td width="<%$nlcontentwidth%>"><p><%$it_cat_mit.otitle->html%></p></td>
+     <td width="<%$nlmarginwidth%>"></td>
+    </tr>
+    <tr>
+     <td height="10" colspan="3"></td>
+    </tr>
+    <%if $tzr.newsletter_image_titrebas && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_image_titrebas`")%>
+     <tr><td colspan="3" class="td_titrebas"><%html_image file="`$baseurl``$tzr.newsletter_image_titrebas`"%></td></tr>
+    <%elseif $tzr.newsletter_image_titrebas%><%* autorise le resizer *%>
+     <tr><td colspan="3" class="td_titrebas"><img src="<%$baseurl%><%$tzr.newsletter_image_titrebas%>" width="<%$nlwidth%>" border="0"></td></tr>
+    <%else%>
+     <tr><td height="10" colspan="3" class="td_titrebas"></td></tr>
+    <%/if%>
+   </table>
+   <table width="<%$nlwidth%>" align="center" class="tab_conteneur">
+    <tr>
+     <td width="<%$nlmarginwidth%>"></td>
+     <td width="<%$nlcontentwidth%>" class="td_contenu">
+      <%* Section Contenu *%>
+      <%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+       <%if $it_olines[it].oid  && file_exists($filename) %><%include file="$filename"%><%/if%>
+      <%/section%>
+      <%* Fin Section Contenu *%>
+     </td>
+     <td width="<%$nlmarginwidth%>"></td>
+    </tr>
+   </table>
+   <%* Bloc partenaire pour l'instant désactivé sur le corail
+   <table width="730" align="center" class="tab_partenaire">
+    <tr>
+     <td height="10" colspan="3"></td>
+    </tr>
+    <tr>
+     <td width="30"></td>
+     <td align="center"><a href="#"><img src="images/partenaire.png" alt="Nom partenaire"></a><a href="#"><img src="images/partenaire.png" alt="Nom partenaire"></a><a href="#"><img src="images/partenaire.png" alt="Nom partenaire"></a><a href="#"><img src="images/partenaire.png" alt="Nom partenaire"></a></td>
+     <td width="30"></td>
+    </tr>
+    <tr>
+     <td height="10" colspan="3"></td>
+    </tr>
+   </table>
+   *%>
+   <table width="<%$nlwidth%>" align="center" class="tab_bas">
+    <tr>
+     <td height="8" colspan="3"></td>
+    </tr>
+    <tr>
+     <td width="<%$nlmarginwidth%>"></td>
+     <td width="<%$nlcontentwidth%>"><p><a href="<%$baseurl%>" ><%$labels.newsletter_siteurl|default:"&bull; Voir notre site : `$baseurl`"%></a>&nbsp;&nbsp;<a href="<%$baseurl%>/tzr/scripts/admin.php?class=\Seolan\Module\MailingList\MailingList&function=genSubscribe&tplentry=sub&moid=<%$smarty.request.nlmoid|default:$tzr.CorailNewsLetter%>&template=Core.layout/raw.html&insidefile=Module/MailingList.unsubscribe.html"><%$labels.newsletter_unsubscribe|default:"&bull; D&eacute;sabonnement"%></a></p></td>
+     <td width="<%$nlmarginwidth%>"></td>
+    </tr>
+    <tr>
+     <td height="8" colspan="3"></td>
+    </tr>
+    <%if $tzr.newsletter_image_bas && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_image_bas`")%>
+     <tr><td colspan="3"><%html_image file="`$baseurl``$tzr.newsletter_image_bas`"%></td></tr>
+    <%/if%>
+   </table>
+</td></tr></table>
+</body>
+</html>

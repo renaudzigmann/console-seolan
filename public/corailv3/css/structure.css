@@ -1,0 +1,32 @@
+/*********************/
+/* PAGE*/
+/*********************/
+*{ padding:0; margin:0; }
+body { font-size: 70%; font-family: Helvetica, Arial, Geneva, sans-serif; background-color:#fff; width: 100%; margin: 0; padding: 0 0 0; text-align:center;} 
+#cv3-page-contenu { font-size: 1em; text-align:left;width:980px; clear: both; margin:0px auto 10px auto; padding: 0px; }
+
+/*********************/
+/* TOP*/
+/*********************/
+.top { text-align: left; width:980px; margin: 0; padding: 0; }
+.cv3-sur-top { background-color: #fff; background-repeat: repeat; background-attachment: scroll; background-position: 0 0; width:980px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; margin: 0; padding: 0 0 0 0; height:20px;}
+.top-image {width:980px; height:141px; background-color:#e7e7e7; background-repeat:no-repeat; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.top-bottom { background-repeat: repeat-y; background-attachment: scroll; background-position: 0 0; width:980px; height:18px; text-align: center; float: left; padding-top: 3px; padding-bottom: 3px; }
+.cv3-chemin { background-repeat: repeat-y; background-attachment: scroll; background-position: left top; text-align: left; width:980px; height: 30px; clear: both; padding:8px 0 5px; }
+
+/*********************/
+/* CONTENU*/
+/*********************/
+.cv3-main { background-repeat:repeat-y; background-position:left top; text-align: left; width:980px; clear: both; padding-bottom: 20px; }
+.cv3-main-droite { background-repeat: no-repeat; background-position: left top; display:inline; float:right; width:225px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; }
+.cv3-main-contenu {display:inline; /*Fix IE marge flottante bug*/; float:left; width:560px; margin:0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.cv3-main-contenu {display:inline; /*Fix IE marge flottante bug*/; float:left; width:560px; margin:0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.cv3-main-gauche {display:inline; float:left; width:195px; margin:0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+/*Images colonne en top midle et bas*/
+
+/*********************/
+/* BAS DE PAGE*/
+/*********************/
+.cv3-basdepagesup { background-position: right bottom; clear:both; width:980px; height: 50px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; padding: 9px 0 5px; }
+.cv3-basdepage { font-size: 100%; background-repeat: repeat-y; background-attachment: scroll; background-position: left bottom; padding: 9px 0 5px; width: 980px; clear: both; overflow: visible !important; }
+

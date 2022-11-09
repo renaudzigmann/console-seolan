@@ -1,0 +1,84 @@
+<div class="modal fade" id="modal-langs-list-<%$uniqid%>" tabindex="-1" role="dialog" aria-labelledby="modal-langs-list-<%$uniqid%>-label">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"><%$syslabels.Seolan_Core_General.saveselectedlang%></h4>
+      </div>
+      <div class="modal-body">
+
+        <%*Liste des langues*%>
+        <fieldset class="fieldsetAccordion fieldsetAccordionOpen">
+          <legend><%$syslabels.Seolan_Core_General.saveselectedlang%></legend>
+          <div class="row lang-list">
+            <div class="all-langs col-xs-12">
+              <input checked id="selall-<%$uniqid%>" type="checkbox">
+              <label for="selall-<%$uniqid%>">
+                <%$syslabels.Seolan_Core_General.select_all%>
+              </label>
+            </div>
+            <div class="lang col-xs-12 col-sm-4 col-md-3">
+              <input type="checkbox" class="selectedlang defaultlang" name="_selectedlangs[]" value="<%$TZR.lang_def.code%>" checked="checked" readonly/>
+              <%$TZR.lang_def.text%> (<%$syslabels.Seolan_Core_General.lang_def%>)
+            </div>
+            <%section name=lang loop=$it_langsort.code%>
+              <%if in_array($it_langsort.code[lang], $it_authorized_languages) && $it_langsort.code[lang] != $lang_def%>
+                <div class="lang col-xs-12 col-sm-4 col-md-3">
+                  <label>
+                    <input type="checkbox" class="selectedlang" name="_selectedlangs[]" value="<%$it_langsort.code[lang]%>" checked="checked"/>
+                    <%$it_langsort.text[lang]%>
+                  </label>
+                </div>
+              <%/if%>
+            <%/section%>
+          </div>
+        </fieldset>
+
+        <%*Liste des champs*%>
+        <fieldset class="fieldsetAccordion fieldsetAccordionClose">
+          <legend><%$syslabels.Seolan_Core_General.saveselectedfields%></legend>
+          <div class="row lang-list" id="selectfield_list">
+            <div class="all-fields col-xs-12">
+              <input id="selallfields-<%$uniqid%>" type="checkbox">
+              <label for="selallfields-<%$uniqid%>">
+                <%$syslabels.Seolan_Core_General.select_all%>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+      <div class="modal-footer">
+        <div class="tzr-action">
+          <input type="button" value="<%$syslabels.Seolan_Core_General.ok%>">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  jQuery(function() {
+    jQuery('form[name="editform<%$uniqid%>"] > fieldset:not(.layout_fieldset)').each(function() {
+      var group = jQuery(this).find('legend').text();
+      var fields = jQuery(this).find('div[id^="cont-"]');
+      var modal = jQuery('#selectfield_list');
+      modal.append('<div class="col-xs-12"><h4>'+group+'</h4></div>');
+      fields.each(function() {
+        var field = jQuery(this).attr('id').replace('cont-', '');
+        var label = jQuery(this).find('label').text();
+        if(field && label) {
+          modal.append(
+            '<div class="field col-xs-12 col-sm-6 col-md-4" id="selectfield-'+field+'">'+
+              '<label>'+
+                '<input type="hidden" name="force_editfields_all[]" value="'+field+'"/>'+
+                '<input type="checkbox" name="force_editfields_selected[]" value="'+field+'"/>'+
+                 label+
+              '</label>'+
+            '</div>'
+          );
+        }
+      });
+    });
+  });
+</script>

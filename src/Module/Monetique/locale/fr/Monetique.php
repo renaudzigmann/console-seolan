@@ -1,0 +1,30 @@
+<?php
+\Seolan\Core\Labels::$LABELS['Seolan_Module_Monetique_Monetique']
+= [
+'amountcall'=>'Montant d\'appel = ',
+'amountresp'=>'Montant de retour = ',
+'cardtype'=>'Type de carte acceptées',
+'commentenrollement'=>'Gestion des enrollements monétique.',
+'enrollementerror'=>'ERREUR',
+'enrollementuserwarning'=>'Vos coordonnées carte bancaire vont être conservées par le serveur bancaire.',
+'enrollme'=>'Enregistrer mes coordonnées carte bancaire pour mes futurs achats',
+'erroramount'=>'Attention : Les montants d\'appel et de retour banque sont différents : ',
+'erroramount'=>'Erreur : Les montants d\'appel et de retour sont différents',
+'errorinsertabonne'=>' ::insertAbonne : Problème d\'insertion de l\'abonné  : ',
+'errorinsertwebpayment'=>' ::insertWebPayment : Problème d\'insertion de la transaction : ',
+'errorupdateabonne'=>' ::editAbonne : Problème de mise à jour de l\'abonné : ',
+'exceptionduplicatecall'=>'Exception levée par duplicateHandling() : ',
+'exceptionpaymentcall'=>'Exception levée par webPaymentHandling() : ',
+'exceptionunknowabonne'=>' Enrollement non trouvée.',
+'exceptionunknowtransaction'=>'Transaction non trouvée.',
+'modulename'=>'Monétique',
+'noamount'=>' Le montant de la commande n\'est pas saisie.',
+'no_ecard'=>'Les E-Cards ou cartes virtuelles ne sont pas autorisées pour ce type de transaction',
+'overmuchresponse'=>'Trop de retours banque pour cette transaction : ',
+'pay'=>'Payer ma commande',
+'siteid'=>'Identifiant de la boutique',
+'urlautoresponse'=>'Url de retour automatique',
+'urlcancelled'=>'Url de retour : Paiement KO',
+'urlpayed'=>'Url de retour : Paiement OK',
+];
+?>

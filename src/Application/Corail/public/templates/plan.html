@@ -1,0 +1,38 @@
+<!--<%$smarty.template%>-->
+<%strip%><div id=plandusite>
+<%* on definit le saut (diference avec l'occurence précedente ) avant de commencer la boucle *%>
+<%assign var="jump" value="-1"%>
+<%section name=i loop=$menu_lines_oid%>
+<%* Si le saut est negatif :  debut d une liste *%>
+<%if ($jump<0)%><ul class="planSite"><%/if%>
+<%* début élement de la liste *%>
+<li>
+<%* si on a du contenu on fait le lien externe ou interne *%>
+<%if $menu_lines_sections[i]%>
+<a class="listetitres<%$menu_lines_level[i]%>" href="<%if $menu_lines_urlext[i]%><%$menu_lines_ourlext[i]->url%>" target="<%$menu_lines_ourlext[i]->target%><%else%><%$self%><%$menu_lines_selfurl[i]%><%$menu_lines_ocurl[i]->html%><%/if%>"><%$menu_lines_otitle[i]->html%></a>
+<%else%><%* sinon pas de lien*%>
+
+<%$menu_lines_otitle[i]->html%>
+<%/if%>
+
+<%*calcule du saut: difference avec le niveau suivant *%>
+<%if $menu_lines_level[$smarty.section.i.index_next]%>
+<%assign var="levelNext" value=$menu_lines_level[$smarty.section.i.index_next]%>
+<%else%>
+<%assign var="levelNext" value="0" %>
+<%/if%>
+<%math equation="x-y" x=$menu_lines_level[i] y=$levelNext assign="jump"%>
+
+<%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+<%if !($jump<0) %></li><%/if%>
+<%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+<%if $jump > 0 %>
+<%section name=foo loop=$jump%>
+</ul>
+
+<%if !$smarty.section.foo.last and !$smarty.section.i.last%></li><%/if%>
+<%/section%>
+<%/if%>
+<%/section%>
+</div>
+<%/strip%>

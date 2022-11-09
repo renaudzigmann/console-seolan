@@ -1,0 +1,27 @@
+{
+    "name": "sitra-tourisme/sitra-api-php",
+    "description": "Apidae API official PHP Client (formerly known as Sitra)",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JoliCode",
+            "email": "coucou@jolicode.com"
+        }
+    ],
+    "repositories": [
+      {
+        "url": "https://github.com/Moustic-Multimedia/extractor",
+        "type": "vcs"
+      }
+    ],
+    "require": {
+        "guzzlehttp/guzzle-services": "^1.1",
+        "mmoreram/extractor": "^1.2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sitra\\ApiClient\\": "src/Sitra/ApiClient",
+            "Sitra\\Tests\\": "tests/"
+        }
+    }
+}

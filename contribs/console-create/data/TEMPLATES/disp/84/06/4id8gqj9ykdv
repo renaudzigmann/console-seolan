@@ -1,0 +1,5 @@
+<%if $smarty.request.template=="xmodinfotree/viewpage.html"%>
+liste
+<%else%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`xmodmedia/browse.html"%>
+<%/if%>

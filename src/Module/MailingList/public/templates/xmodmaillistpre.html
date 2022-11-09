@@ -1,0 +1,58 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_MailingList_MailingList.filter_text%>
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="genSend">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_skiprecipientselection" value="0">
+ <%if $smarty.request.sms%>
+  <input type="hidden" name="template" value="Module/MailingList.sendsms.html">
+  <%assign var="title" value=$syslabels.Seolan_Core_Module_Module.sendsms%>
+ <%elseif $smarty.request.push%>
+  <input type="hidden" name="template" value="Module/MailingList.sendpush.html">
+  <input type="hidden" name="push" value="1">
+  <%assign var="title" value=$syslabels.Seolan_Core_Module_Module.sendpush%>
+ <%else%>
+  <%assign var="title" value=$syslabels.Seolan_Core_Module_Module.send%>
+  <input type="hidden" name="template" value="Module/MailingList.xmodmaillist.html">
+ <%/if%>
+ <fieldset>
+  <legend><%$title%></legend>
+  <div class="table-responsive">
+  <table class="list2 table table-stripped">
+   <tr><th colspan=2><label><%$syslabels.Seolan_Core_Module_Module.filter%></label></th></tr>
+   <%section name=fields loop=$br_fields_object %>
+    <tr>
+     <th ><label><%$br_fields_object[fields]->fielddef->label%></label></th>
+     <td ><%$br_fields_object[fields]->html%></td>
+    </tr>
+   <%/section%>
+   <%if $queries_lines_oid%>
+    <tr><th colspan=2><label><%$syslabels.Seolan_Module_Table_Table.stored_query%></label></th></tr>
+    <tr>
+     <td></td>
+     <td>
+      <select name="_storedquery" >
+       <option value="">---</option>
+       <%section name=i loop=$queries_lines_oid%>
+	<%if $queries_lines_grp[i] != $queries_lines_grp[$smarty.section.i.index_prev]%>
+	 <optgroup label="<%$queries_lines_grp[i]%>">
+	<%/if%>
+	 <option value="<%$queries_lines_oid[i]%>"><%$queries_lines_title[i]%></option>
+	<%if $queries_lines_grp[i] != $queries_lines_grp[$smarty.section.i.index_next]%>
+	 </optgroup>
+	<%/if%>
+       <%/section%>
+      </select>
+     </td>
+    </tr>
+   <%/if%>
+  </table>
+</div>
+  </fieldset>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.continue%>">
+   <%if $smarty.request.sms == 1%><input type="button" onclick="this.form.elements['_skiprecipientselection'].value=1;return TZR.ajaxSubmitForm(this.form);" value="<%$syslabels.Seolan_Core_Module_Module.ignore_step%>"><%/if%>
+  </div>
+</form>
+

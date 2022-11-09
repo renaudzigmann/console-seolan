@@ -1,0 +1,66 @@
+<%* statistiques sur un module geocodé *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript" language="javascript">
+function x_poiList(){
+var on = false;
+try{
+  if (typeof(window.viewmap.mapmngt) != 'undefined'){
+    on=true;
+  }
+}catch(e){
+  on=false;
+}
+if (!on)
+  return;
+ var a = "&query="+arguments[0]+"&value="+arguments[1];
+  jQuery.getJSON("<%$self%>&ajason=ajason&moid=<%$_moid%>&_function=xPoiList&template=empty.txt&tplentry=br&skip=1&_silent=1&layeroid=<%$br_modmap.oid%>"+a,poiList);
+}
+function poiList(res){
+var f = document.getElementById('viewmap');
+//window.viewmap.mapmngt.unsetFilter();
+window.viewmap.mapmngt.applyFilterMarker(res);
+}
+function browse(crit){
+document.forms['browsepois'].elements['fieldidx01'].value = crit;
+document.forms['browsepois'].submit();
+}
+</script>
+<fieldset><legend><%$syslabels.Seolan_Module_Map_Map.statistics%></legend>
+<table class="">
+<tr><td>
+
+<table class="list2">
+<tr><th><%$br_modmap.oname->fielddef->label%></th><td><%$br_modmap.oname->html%></td>
+<td valing="right"></td></tr>
+<tr><th><%$br_modmap.ormoid->fielddef->label%></th><td colspan="3"><%$br_modmap.ormoid->html%></td></tr>
+<tr><th><%$syslabels.Seolan_Module_Map_Map.total%></th><td></td><td></td><td align="right"><b><%$br_statistics.total%></b></td></tr>
+<tr><th><%$syslabels.Seolan_Module_Map_Map.empty%></th><td><%if $br_statistics.empty%><a href="javascript:browse('empty');"><%$syslabels.Seolan_Core_General.browse%></a><%else%><%/if%></td><td></td><td align="right"><b><%$br_statistics.empty%></b></td></tr>
+<tr><th><%$syslabels.Seolan_Module_Map_Map.manual%></th><td><%if $br_statistics.types.M%><a href="javascript:browse('manual')"><%$syslabels.Seolan_Core_General.browse%></a><%else%><%/if%></td><td></td><td align="right"><b><%if $br_statistics.types.M%><a onclick="x_poiList('manual', '', poiList)" href="javascript:void(0)"><%$br_statistics.types.M%></a><%else%>0<%/if%></b></td></tr>
+<tr><th rowspan="99"><%$syslabels.Seolan_Module_Map_Map.geocodageauto%></th><td><%if $br_statistics.types.A%><a href="javascript:browse('auto')"><%$syslabels.Seolan_Core_General.browse%></a><%else%><%/if%></td><td></td><td align="right"><b><%$br_statistics.types.A%></b></td></tr>
+<%foreach from=$br_statistics.accuracy key=k item=v%>
+<tr>
+<td><%if $v.count%><a href="javascript:browse('<%$k%>');"><%$syslabels.Seolan_Core_General.browse%></a><%else%><%/if%></td><td><%$v.label%></td>
+<td align="right"><%if $k && $k!='N/A' && $v.count%><a onclick="x_poiList('accuracy', '<%$k%>', poiList)" href="javascript:void(0)"><%$v.count%></a><%else%><%$v.count%><%/if%></td></tr>
+<%/foreach%>
+</table>
+<form name="browsepois" action="<%$fullself%>" method="POST">
+<input type="hidden" name="skip" value="1"/>
+<input type="hidden" name="function" value="procQuery">
+<input type="hidden" name="moid" value="<%$br_modmap.ormoid->raw%>">
+<input type="hidden" name="_filter" value="<%$br_modmap.orfilter->raw%>">
+<input type="hidden" name="clearrequest" value="1">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="template" value="Module/Table.browse.html">
+<input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+<input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+<input type="hidden" name="fieldidx01" value=""/>
+<input type="hidden" name="fieldidx01_op" value="and"/>
+<input type="hidden" name="_FIELDS[fieldidx01]" value="<%$br_modmap.ofname->raw%>"/>
+</form>
+</td>
+<td style="width:20px"></td>
+<td>
+<iframe id="viewmap" name="viewmap" src="<%$fullself%>&moid=<%$_moid%>&nocache=1&function=simpleMap2&layeroid=<%$br_modmap.oid%>&tplentry=map&template=Module/Map.viewmap.html" style="display:block;margin:0 0 0 0;padding:0 0 0 0;border:none" width="420px" height="420px"/>
+</td></tr>
+</table>
+</fieldset>

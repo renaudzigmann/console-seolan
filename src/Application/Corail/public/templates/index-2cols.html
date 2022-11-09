@@ -1,0 +1,23 @@
+<!--<%$smarty.template%>-->
+<!--/htdig_noindex-->
+<!-- B.2 CONTENU -->
+<article class="col-xs-12 col-sm-6 col-sm-push-6 col-md-9 col-md-push-0 col-lg-8 col-lg-push-4 cv3-main-contenu" id="2cols" role="main">
+	<div class="tzr-page-content cv3-col-contenu" id="tzr-page-content">
+	  <%include file="application:/viewsection.html"%>
+	</div>
+</article>
+
+<!-- B.1 BColonne de gauche -->
+<!--htdig_noindex-->
+<div class="col-xs-12 col-sm-6 col-sm-pull-6 col-md-3 col-md-pull-0 col-lg-4 col-lg-pull-8 hidden-print cv3-main-gauche">
+	<div class="cv3-col-gauche">
+		<%if $it_cat_mit.oalias->html neq $tzr.corailv3_home%><h4 class="rubrique"><%$path_stack[1].otitle->html%></h4><%/if%>
+		<%include file="application:cv3-recherche.html"%>
+		<%include file="application:cv3-navigation.html"%>
+		<%include file="application:cv3-news.html"%>
+		<%include file="application:cv3-social.html"%>
+		<%include file="application:cv3-outils.html"%>
+		<%include file="application:cv3-newsletter.html"%>
+		<%include file="application:cv3-private.html"%>
+	</div><!-- fin col gauche -->
+</div><!-- fin main gauche -->

@@ -1,0 +1,54 @@
+<div class="cv3-gmap clearfix">
+ <h2><%$it_olines[it].otitsec->html%></h2>
+ <ul class="buttons clearfix">
+  <li><a href="#satellite" class="satellite"><span><%$labels.gmap_satellite%></span></a></li>
+  <li><a href="#roadmap"   class="roadmap"><span><%$labels.gmap_roadmap%></span></a></li>
+  <li><a href="#hybrid"    class="hybrid"><span><%$labels.gmap_hybrid%></span></a></li>
+  <li><a href="#terrain"   class="terrain"><span><%$labels.gmap_terrain%></span></a></li>
+ </ul>
+ <div class="gmapRoute">
+  <div class="message" style="display:none;"></div>
+  <div class="route" style="display:none;"></div>
+  <div class="map" id="gmapRoute<%$smarty.section.it.index%>"></div>
+ </div>
+ <form action="#drawRoute">
+  <fieldset>
+   <legend></legend>
+   <ul class="submit-buttons">
+    <li>
+     <input type="text" class="from" name="from" value="<%$labels.gmap_city_start%>" />
+     <%$labels.gmap_calculate_on%>
+    </li>
+    <li><a href="#drawRoute" class="draw"><span><%$labels.gmap_map%></span></a></li>
+    <li><a href="#goGoogle"  class="goGoogle" target="_blank"><span><%$labels.gmap_google%></span></a></li>
+    <li><a href="#centerMap" class="center"><span><%$labels.gmap_center%></span></a></li>
+   </ul>
+   <input type="submit" style="display:none;" />
+  </fieldset>
+ </form>
+
+ <%if !$admini%>
+  <%* Si possible : mettre ces 2 scripts dans le head *%>
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&amp;key=<%$tzr.gmap_api_key%>"></script>
+  <script type="text/javascript" src="tzr/templates/js/cv3-gmap-route.js"></script>
+  <script type="text/javascript">
+   //<![CDATA[
+    jQuery(document).ready(function() {
+     new TZR_gmapRoute().initialize({
+      lat: '<%$it_olines[it].olat->raw|escape%>',
+      lng: '<%$it_olines[it].olng->raw|escape%>',
+      title: '<%$it_olines[it].otitsec->raw|escape%>',
+      wrapperId: 'gmapRoute<%$smarty.section.it.index%>',
+      markerImageUrl: '<%$it_olines[it].oimg1->url%>',
+      labels: {
+       gmap_your_address:             '<%$labels.gmap_your_address|escape:"javascript"%>',
+       gmap_city_start:               '<%$labels.gmap_city_start|escape:"javascript"%>',
+       gmap_alert_unknown_address:    '<%$labels.gmap_alert_unknown_address|escape:"javascript"%>',
+       gmap_alert_incomplete_address: '<%$labels.gmap_alert_incomplete_address|escape:"javascript"%>'
+      }
+     });
+    });
+   //]]>
+  </script>
+ <%/if%>
+</div>

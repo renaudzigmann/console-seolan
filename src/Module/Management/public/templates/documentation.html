@@ -1,0 +1,61 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="cv8-contenu-center clearfix">
+<h2>Générer un fichier de documentation</h2>
+<form name="gendDocumentation<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);"
+ action="<%$self%>" method="GET"
+>
+<div class="form-group">
+<%foreach 
+from=['moid'=>$_moid,'function'=>'procGenDocumentation','_skip'=>1,'template'=>'Core.empty.html'] 
+key="name" 
+item="value"%>
+<input name="<%$name%>" value="<%$value%>" type="hidden">
+<%/foreach%>
+<input name="_next" value="<%$here%>" type="hidden">
+<label>Modules</label>
+<div class="form-group">
+  <label><input class="" type="checkbox" onclick="jQuery('.selectedModule').trigger('click');"> Tout </label>
+</div>
+  <ul class="list-group">
+    <%section name=m loop=$d_modlist.lines_group%>
+    <%if true || in_array($d_modlist.lines_toid[m], [$smarty.const.XMODTABLE_TOID])%>
+    <%if $d_modlist.lines_group[m] != $d_modlist.lines_group[$smarty.section.m.index_prev]%>
+    <li class="list-group-item">
+      <h5><%$d_modlist.lines_group[m]%> : </h5>
+      <%/if%>
+      
+    <label><input class="selectedModule" type="checkbox" value="<%$d_modlist.lines_oid[m]%>" name="moids[]" <%if $d_modlist.lines_json[m] || (isset($d_current.moids) && in_array($d_modlist.lines_oid[m], $d_current.moids)) %>checked<%/if%>> <%$d_modlist.lines_name[m]%> <%if $d_modlist.lines_json[m]%>(json)<%/if%></label>
+    <%if $d_modlist.lines_group[m] != $d_modlist.lines_group[$smarty.section.m.index_next]%></li><%/if%>
+    <%/if%>
+    <%/section%>
+  </ul>
+</div>
+<div class="form-group">
+  <%if $d_jsoninterface%>
+  <label>JSON<input type="checkbox" checked name="json"></label>
+  <%/if%>
+</div>
+<div class="form-group">
+<label>Table des matières <input type="checkbox" value="1" name="toc" <%if isset($d_current.toc)%>checked<%/if%>></label>
+</div>
+<div class="form-group">
+  <label>Niveau</label>
+  <select name="level">
+    <%foreach from=[1,2,3] item=$lev%>
+    <option <%if isset($d_current.level) && $d_current.level == $lev%>selected<%/if%>><%$lev%></option>
+    <%/foreach%>
+  </select>
+</div>
+<div class="form-group">
+  <label>Format</label> <select name="format">
+    <%foreach from=['markdown'=>'Markdown','html5'=>'HTML 5','rtf'=>'Rich Text','odt'=>'Open Office'] item="lf" key="kf"%>
+    <option <%if isset($d_current.format) && $d_current.format==$kf%>selected<%/if%> value="<%$kf%>"><%$lf%></option>
+    <%/foreach%>
+    </select>
+</div>
+<div class="tzr-action">
+<button type="submit" class="btn btn-primary">Générer</button>
+</div>
+</form>
+</div>
+

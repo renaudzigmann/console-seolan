@@ -1,0 +1,81 @@
+<div style="text-align:left; padding:10px;">
+ <%$syslabels.Seolan_Module_Media_Media.downloadformats%> :
+ <form name="downloadform" class="container">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="_function" value="downloadMedias">
+  <input type="hidden" name="skip" value="1">
+  <%section name=i loop=$br_oid%>
+   <input type="hidden" name="oid[]" value="<%$br_oid[i]%>">
+  <%/section%>
+   <div class="export-types row">
+     <%if $br_advanced_dl%>
+       <div class="form-group">
+         <label class="col-xs-12"><%$syslabels.Seolan_Module_Table_Table.export_format_text%></label>
+         <div class="col-xs-12">
+           <label class="radio-inline"><input type="radio" name="dlmime" value="" checked="checked" /><%$syslabels.Seolan_Module_Table_Table.export_origin_text%></label>
+           <label class="radio-inline"><input type="radio" name="dlmime" value="png" /><%$syslabels.Seolan_Module_Table_Table.export_png_text%></label>
+           <label class="radio-inline"><input type="radio" name="dlmime" value="jpg" /><%$syslabels.Seolan_Module_Table_Table.export_jpeg_text%></label>
+         </div>
+       </div>
+       <p class="clearfix"><br></p>
+     <%/if%>
+
+     <div class="form-group export-types">
+       <%if count($br_fmts)%>
+         <%if $br_advanced_dl%><label class="col-xs-12"><%$syslabels.Seolan_Module_Media_Media.size_available%></label><%/if%>
+         <div class="col-xs-12">
+           <%foreach from=$br_fmts item=fmt key=fmtname name=i%>
+             <div class="form-check">
+               <input type="radio" class="form-check-input" id="dlfmt<%$fmtname%>" name="dlfmt" value="<%$fmtname%>" <%if $smarty.foreach.i.first%> checked<%/if%> />
+               <label class="form-check-label font-weight-normal" for="dlfmt<%$fmtname%>"><%$fmt.label%></label>
+             </div>
+
+             <%if $fmtname === 'custom'%>
+               <div class="img-value" style="display: none;">
+                 <div class="form-group">
+                   <div class="col-md-3"><label><%$syslabels.Seolan_Module_Table_Table.export_width_text%><%$syslabels.Seolan_Core_i18ncolon%></label></div>
+                   <div class="col-md-9"><input type="number" name="width" step="1" min="0" class="form-control" value="0" /></div>
+                 </div>
+                 <div class="form-group">
+                   <div class="col-md-3"><label><%$syslabels.Seolan_Module_Table_Table.export_height_text%><%$syslabels.Seolan_Core_i18ncolon%></label></div>
+                   <div class="col-md-9"><input type="number" name="height" step="1" min="0" class="form-control" value="0" /></div>
+                 </div>
+                 <div class="form-check">
+                   <label class="form-check-label">
+                     <input type="checkbox" id="crop<%$uniqid%>" class="form-check-input" name="mode[]" value="crop" />
+                     <%$syslabels.Seolan_Module_Table_Table.export_crop_larger%>
+                   </label>
+                 </div>
+                 <div class="form-check">
+                   <label class="form-check-label">
+                     <input type="checkbox" id="extent<%$uniqid%>" class="form-check-input" name="mode[]" value="extent" />
+                     <%$syslabels.Seolan_Module_Table_Table.export_extent_smaller%>
+                   </label>
+                 </div>
+               </div>
+               <script>
+                 jQuery('form[name=downloadform] input[name=dlfmt]').on('click', function (e) {
+                   jQuery('form[name=downloadform] input[name=dlfmt]').removeClass('active');
+                   jQuery(this).addClass('active');
+
+                   if (jQuery(this).is(':checked') && jQuery(this).val() === 'custom'){
+                     jQuery('form[name=downloadform] .img-value').show(200);
+                   } else {
+                     jQuery('form[name=downloadform] .img-value').hide(200);
+                   }
+                 });
+               </script>
+             <%/if%>
+           <%/foreach%>
+         </div>
+       <%/if%>
+     </div>
+   </div>
+  <br>
+  <div class="tzr-action">
+    <input class="btn btn-primary" id="downselectedbutton" type="button" value="<%$syslabels.Seolan_Module_Media_Media.download_text%>">
+    <button type="button" id="closeselectformatdialog" onclick="jQuery" class="btn bn-default"><%$syslabels.Seolan_Core_General.cancel_text%></button>
+  </div>
+  </div>
+ </form>
+</div>

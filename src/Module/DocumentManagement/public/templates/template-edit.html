@@ -1,0 +1,87 @@
+<%extends file="Module/Table.edit.html"%>
+<%block name=headers%><!-- no headers --> <%/block%>
+<%block name=editFormConfiguration%>
+<!-- std part -->
+<input type="hidden" name="_function" value="<%$__function|default:'procEdit'%>">
+<input type="hidden" name="template" value="Core.empty.html">
+<input type="hidden" name="uniqid" value="<%$uniqid%>">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+<input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+<input type="hidden" name="oid" value="<%$br_oid%>">
+<input type="hidden" name="_parentoid" value="<%$smarty.request._parentoid%>">
+<input type="hidden" name="skip" value="1">
+<!-- specific part -->
+<input type="hidden" name="_move" value="">
+<input type="hidden" name="_copy" value="">
+<input type="hidden" name="targetoid" value="">
+<input type="hidden" name="uniqid" value="<%$uniqid%>">
+<%if $br__lock_editable%>
+<input type="hidden" name="_mode" value="lock">
+<%else%>
+<input type="hidden" name="_mode" value="">
+<%/if%>
+<%if $smarty.request.findex !='index2'%>
+<input type="hidden" name="_next" value="<%$back%>">
+<%else%>
+<input type="hidden" name="_next" value="<%$self%>&function=index2&moid=<%$smarty.request.moid%>&template=Module/DocumentManagement.index3.html&oid=<%$smarty.request.oid%>&tplentry=br">
+<%/if%>
+<%if $imod_props.sendacopyto%>
+<input type="hidden" value="0" name="_sendacopyto[<%$_moid%>]">
+<%/if%>
+<%/block%>
+
+<%block name=otherGroups%>
+<%if $br__lock_editable%>
+<fieldset>
+  <legend>Réservation du document</legend>
+  <div class="row-striped">
+    <div class="row">
+      <div class="row-striped-content">
+	<div class="col-xs-12 col-sm-3 col-lg-2"><label>Date de début de réservation</label></div>
+	<div class="col-xs-12 col-sm-9 col-lg-10"><input type="date" value="<%$br__lock.DSTART|substr:0:10%>" readonly></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row-striped-content">
+	<div class="col-xs-12 col-sm-3 col-lg-2"><label>Date de fin de réservation</label></div>
+	<div class="col-xs-12 col-sm-9 col-lg-10"><input type="date" value="<%$br__lock.DEND|substr:0:10%>" min="<%$br__lock.DSTART|substr:0:10%>" name="_lock[DEND]" required></div>
+      </div>
+    </div>
+  </div>
+</fieldset>
+<%/if%>
+<%/block%>
+<%block name=tzrActions%>
+<%if !$smarty.capture.action_handled%>
+<div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <%if isset($br__duplicate) || isset($smarty.request._duplicate)%>
+    <input type="hidden" name="_duplicate" value="1">
+    <input class="btn btn-primary" type="submit" onclick="this.form._function.value='procEditDup'" value="<%$syslabels.Seolan_Core_General.cloneconfirm_text%>">   
+  <%else%><%* not duplicate *%>
+    <input type="submit"  class="btn btn-primary" onclick="this.form._function.value='procEdit';" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+    <%if $br__lock_editable%>
+      <input type="submit"  class="btn btn-primary" value="<%$syslabels.Seolan_Core_General.saveandunlock_text%>" onclick="this.form._mode.value='unlock';">
+    <%/if%>
+    <%if $imod_props.sendacopyto%>
+      <input  class="btn btn-primary" type="submit" onclick="this.form.elements['_function'].value='procEdit';this.form.elements['_sendacopyto[<%$_moid%>]'].value=1;" value="<%$syslabels.Seolan_Core_General.save_and_sendacopyto%>">
+    <%/if%>
+    <%foreach from=$imod_props.actions item=action%>
+      <%if $action->actionable%>
+        <input type="submit"  class="btn btn-primary"  onclick="this.form._next.value='<%$self%>&<%$action->xurl|escape:"javascript"%>';" value="<%$action->name|escape:"javascript"%>">
+      <%/if%>
+    <%/foreach%>
+  <%/if%>
+</div>
+<%/if%>
+<%/block%>
+<%block name="overloadconfiguration"%>
+<%$tabs['langstatus']=false%>
+<%$tabs['comments']=true%>
+<%* activation des commentaires si prévus dans le module container *%>
+<%if $tabs.comments==true && $br_here->repository->XMCallowComments($br_oid)%>
+<%$tabIsActive['comments']=true%>
+<%$inlineCommentsMoid=$br_here->repository->XMCcommentsMoid()%>
+<%/if%>
+<%/block%>

@@ -1,0 +1,27 @@
+<%assign var="title" value=$syslabels.Seolan_Module_Wall_Wall.module_name%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="wall clearfix">
+<div class="wall-info">
+<div class="wall-actions">
+<%foreach from=$br_actions item=action%>
+<a class="cv8-ajaxlink" 
+<%if $action.confirm %>
+x-confirm="var ret=TZR.confirmDelete();"
+<%/if%>
+title="<%$action.title%>" href="<%$action.url%>"><%$action.text%></a>
+<%/foreach%>
+</div>
+<div class="wall-publisher">
+<%$br_oOWN->html%>
+</div>
+<div class="wall-date">
+<%$br_oUPD->html%>
+</div>
+<div class="wall-content">
+<%$br_ocontent->html%>
+</div>
+<div class="wall-tags">
+<%$br_tags%>
+</div>
+</div>
+</div>

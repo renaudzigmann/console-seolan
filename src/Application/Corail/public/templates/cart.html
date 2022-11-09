@@ -1,0 +1,302 @@
+<!--<%$smarty.template%>-->
+<script type="text/javascript">
+ function validCart(){
+  if(!document.validcmdform.cgv.checked){
+   alert('<%$labels.generic_site_order_alertcgv|escape:"javascript"%>');
+  }else{
+   document.validcmdform.submit();
+  }
+  return false;
+ }
+</script>
+
+<%if $cart_total_articles==0%>
+ <div class="validation">
+  <%$labels.cart_empty%>
+  <br><br>
+  <span class="btCommande"><a href="<%$self%>alias=<%$tzr.corailv3_shopalias%>"><%$labels.generic_site_order_continue%></a></span>
+ </div>
+<%else%>
+ <div id="commande">
+  <form action="<%$self%>" name="modifycart" method="post">
+   <input type="hidden" name="function" value="modifyCart">
+   <input type="hidden" name="moid" value="<%$tzr.corailv3_cart%>">
+   <input type="hidden" name="tplentry" value="cart">
+   <input type="hidden" name="_next" value="<%$self%>function=view&insidefile=cart.html&tplentry=cart&alias=<%$tzr.corailv3_cartalias%>">
+   <h1><%$labels.generic_site_order_label%></h1>
+   <table width="100%" cellspacing="0" cellpadding="0"  >
+    <!-- entete de la commande -->
+    <%if $labels.generic_site_order_help%>
+     <tr class="TRhelp">
+      <td colspan="6"><%$labels.generic_site_order_help%></td>
+     </tr>
+    <%/if%>
+    <tr class="TRtitrage">
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_action%></td>
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_libelle%></td>
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_variant%></td>
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_detailpriceht%></td>
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_number%></td>
+     <td class="TDtitrage"><%$labels.generic_site_order_entete_totalpriceht%></td>
+    </tr>
+    
+    <!-- lignes details -->
+    <%section name=i loop=$cart_lines_oid%>
+     <tr class="TRarticle">
+      <td class="TDarticle1" width="10" style="vertical-align:center; align:center;">
+       <div align="center"><input id="boxcarre" type="checkbox" name="deloid[<%$cart_lines_oid[i]%>][<%$cart_lines_variantoid[i]%>]" value="<%$cart_lines_oid[i]%>"></div>
+      </td>
+      <td class="TDarticle2" width="300"><%$cart_lines_olabelfield[i]%></td>
+      <td class="TDarticle3"><%$cart_lines_variantfield[i]%></td>
+      <td class="TDarticle4">
+       <%if $cart_lines_oldpricefield[i]!=$cart_lines_pricefield[i]%>
+	<strike><%$cart_lines_oldpricefield[i]|string_format:"%.2f"%>&nbsp;&euro;</strike><br>
+	<%$cart_lines_pricefield[i]|string_format:"%.2f"%>&nbsp;&euro;
+       <%else%>
+	<%$cart_lines_pricefield[i]|string_format:"%.2f"%>&nbsp;&euro;
+       <%/if%>
+      </td>
+      <td class="TDarticle5" width="10" align="center">
+       <div align="center"><input id="boxcarre" class="qty" type="text" name="qty[<%$cart_lines_oid[i]%>][<%$cart_lines_variantoid[i]%>]" value="<%$cart_lines_qty[i]%>" size="2" maxlength="3"></div>
+      </td>
+      <td class="TDarticle6"><%$cart_lines_totalfield[i]|string_format:"%.2f"%>&nbsp;&euro;</td>
+     </tr>
+    <%/section%>
+    <!-- recap -->
+    <tr class="TRrecap" id="TRtotalht">
+     <td class="TDrecap1" colspan="5"><%$labels.generic_site_recap_totalht%></td>
+     <td class="TDrecap2"><%$cart_total_cart|string_format:"%.2f"%>&nbsp;&euro;</td>
+    </tr>
+    <%if $cart_total_tva>0%>
+     <tr class="TRrecap" id="TRtotaltva">
+      <td class="TDrecap1" colspan="5"><%$labels.generic_site_recap_totalTVA%></td>
+      <td class="TDrecap2"><%$cart_total_tva|string_format:"%.2f"%>&nbsp;&euro;</td>
+     </tr>
+    <%/if%>
+    <%if $cart_total_delivery>0 %>
+     <tr class="TRrecap" id="TRdelivery">
+      <td class="TDrecap1" colspan="5"><%$labels.generic_site_recap_frais%></td>
+      <td class="TDrecap2"><%$cart_total_delivery|string_format:"%.2f"%>&nbsp;&euro;</td>
+     </tr>
+    <%/if%>
+    <!-- ajout et test des coupons et reductions site web -->
+    <%if $cart_total_coupon%>
+     <tr class="TRrecap" id="TRcoupon">
+      <td class="TDrecap1" colspan="5"><%$labels.generic_site_recap_coupon%>&nbsp;</td>
+      <td class="TDrecap2">- <%$cart_total_coupon|string_format:"%.2f"%>&nbsp;&euro;</td>
+     </tr>
+    <%/if%>
+    <tr class="TRrecap" id="TRtotal">
+     <td class="TDrecap1" colspan="5"><%$labels.generic_site_recap_totalttc%></td>
+     <td class="TDrecap2"><%$cart_total_ttc|string_format:"%.2f"%>&nbsp;&euro;</td>
+    </tr>
+    <%if $cart_coupon_active%>
+     <tr class="TRrecap" id="TRaddcoupon">
+      <td colspan="5" class="TDrecap2">
+       <%$labels.generic_site_order_newcoupon%>
+      </td>
+      <td class="TDrecap2">
+       <input name="coupon" type="text" value="<%$cart_coupon%>" class="inputCoupon" id="textfield" size="10">
+      </td>
+     </tr>
+<%if $cart_coupon_message%>
+     <tr class="TRrecap" id="TRaddcoupon">
+      <td colspan="6" class="TDrecap2">
+       <%$cart_coupon_message%>
+      </td>
+     </tr>
+<%/if%>
+    <%/if%>
+   </table>
+   <div class="validation">
+    <span class="btCommande"><a href="<%$self%>alias=<%$tzr.corailv3_shopalias%>"><%$labels.generic_site_order_continue%></a></span>
+    &nbsp;&nbsp;
+    <span class="btCommande"><a href="#" onclick="document.modifycart.submit(); return false;"><%$labels.generic_site_order_actualize%></a></span>
+    <%if $labels.btcommandcompl%>&nbsp;<%$labels.btcommandcompl%><%/if%>
+   </div>
+  </form>
+ </div>
+
+ <!-- utilisateur -->
+ <br><br>
+ <div id="adresse">
+  <form name="editform" method="post" action="<%$self%>">
+   <input type="hidden" name="function" value="saveUser">
+   <input type="hidden" name="oid" value="<%$cust_oid%>">
+   <input type="hidden" name="nopasswd" value="1">
+   <input type="hidden" name="autolog" value="1">
+   <input type="hidden" name="moid" value="<%$tzr.corailv3_cart%>">
+   <input type="hidden" name="_next" value="<%$self%>&function=view&insidefile=myCart.html&alias=<%$it_cat_mit.oalias->html%>&tplentry=cart">
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr class="TRblocAdresse">
+     <td >
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr class="TRblocAdresseEntete">
+     <td colspan="2"><b><%$labels.generic_site_order_fadr%></b></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_ofullnam->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_ofullnam->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_osname->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_osname->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_oemail->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_oemail->html%></td>
+    </tr>
+    <%if $cust_ocie->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse1"><%$cust_ocie->fielddef->label%></td>
+      <td class="TDblocAdresse2"><%$cust_ocie->html%></td>
+     </tr>
+    <%/if%>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_oadres->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_oadres->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_ocodp->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_ocodp->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_oville->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_oville->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse1"><%$cust_opays->fielddef->label%></td>
+     <td class="TDblocAdresse2"><%$cust_opays->html%></td>
+    </tr>
+    <%if $cust_ophone->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse1"><%$cust_ophone->fielddef->label%></td>
+      <td class="TDblocAdresse2"><%$cust_ophone->html%></td>
+     </tr>
+    <%/if%>
+    <%if $cust_omobile->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse1"><%$cust_ofmobile->fielddef->label%></td>
+      <td class="TDblocAdresse2"><%$cust_ofmobile->html%></td>
+     </tr>
+    <%/if%>
+    <%if $cust_ofax->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse1"><%$cust_ofax->fielddef->label%></td>
+      <td class="TDblocAdresse2"><%$cust_ofax->html%></td>
+     </tr>
+    <%/if%>
+   </table>
+     </td>
+     <td class="TDblocSepare"></td>
+     <td >
+       <table border="0" cellpadding="0" cellspacing="0">
+    <tr class="TRblocAdresseEntete">
+     <td colspan="2"><b><%$labels.generic_site_order_ladr%></b><br><%$labels.generic_site_order_ladr2%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofname->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofname->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofsname->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofsname->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"></td>
+     <td class="TDblocAdresse5"></td>
+    </tr>
+    <%if $cust_ocie->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse4"><%$cust_ofcie->fielddef->label%></td>
+      <td class="TDblocAdresse5"><%$cust_ofcie->html%></td>
+     </tr>
+    <%/if%>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofadre->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofadre->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofcodp->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofcodp->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofvill->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofvill->html%></td>
+    </tr>
+    <tr class="TRblocAdresse">
+     <td class="TDblocAdresse4"><%$cust_ofpays->fielddef->label%></td>
+     <td class="TDblocAdresse5"><%$cust_ofpays->html%></td>
+    </tr>
+    <%if $cust_ophone->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse4"><%$cust_oftel->fielddef->label%></td>
+      <td class="TDblocAdresse5"><%$cust_oftel->html%></td>
+     </tr>
+    <%/if%>
+    <%if $cust_omobile->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse4"></td>
+      <td class="TDblocAdresse5"></td>
+     </tr>
+    <%/if%>
+    <%if $cust_ofax->fielddef->label%>
+     <tr class="TRblocAdresse">
+      <td class="TDblocAdresse4"></td>
+      <td class="TDblocAdresse5"></td>
+     </tr>
+    <%/if%>
+   </table>
+     </td>
+    </tr>
+   </table>
+   <div class="validation">
+  <%if $uid!="USERS:0"%>
+    <span class="btCommande"><a href="javascript:if(TZR.isFormValidWithFocus(document.editform,true)) document.editform.submit();"><%$labels.generic_site_order_modifyuser%></a></span>
+<%else%>
+    <span class="btCommande"><a href="javascript:if(TZR.isFormValidWithFocus(document.editform,true)) document.editform.submit();"><%$labels.generic_site_order_validuser%></a></span>
+<%/if%>
+    <%if $smarty.server.REMOTE_ADDR eq "80.13.99.120" AND $tzr.paypal %>
+    <span class="btCommandeImg" ><a href="<%$self%>function=paypal&amt=<%$cart_total_ttc%>&alias=<%$it_cat_mit.oalias->html%>&oid=<%$ord_oid%>&tplentry=br&_next=<%"`$self`&function=view&insidefile=myCart.html&alias=`$it_cat_mit.oalias->html`&tplentry=cart"|urlencode%>" target="_self"><img border="0" src="https://www.paypal.com/<%if $lang_odata->html eq "FR"%>fr_FR<%else%>en_US<%/if%>/i/btn/btn_xpressCheckout.gif"/></a></span>
+<%/if%>
+
+   </div>
+  </form>
+   
+  <%if $uid!="USERS:0"%>
+   <br><br>
+   <form name="validcmdform" method="post" action="<%$self%>">
+    <input type="hidden" name="function" value="procOrder">
+    <input type="hidden" name="cmdref" value="<%$cart_cmdref%>">
+    <input type="hidden" name="insidefile" value="myPaiement.html">
+    <input type="hidden" name="alias" value="<%$it_cat_mit.oalias->html%>">
+    <table>
+     <%if $cart_oremark->html_active%>
+      <tr>
+       <td colspan="5">
+	<%$labels.generic_site_order_remark%> :
+	<br>
+	<textarea name="rem" cols="45" rows="5"></textarea>
+       </td>
+      </tr>
+     <%/if%>
+     <tr>
+      <td colspan="5">
+       <div class="checkbox"><input type="checkbox" name="cgv" id="checkbox2"></div>
+       <a href="<%$self%>alias=<%$tzr.corailv3_cartcgv%>" target="_blank" ><%$labels.generic_site_order_cgv%></a>
+       <br>
+       <img src="images/transactions.gif" width="128" height="19">
+      </td>
+     </tr>
+    </table>
+    <div class="validation">
+<%if $smarty.session._TZR.paypal.PAYERID%>
+    <span class="btCommandeImg" ><a href="#" onclick="return validCart();" target="_self"><img border="0" src="https://www.paypal.com/<%if $lang_odata->html eq "FR"%>fr_FR<%else%>en_US<%/if%>/i/btn/btn_xpressCheckout.gif"/></a></span>
+<%else%>
+     <span class="btCommande"><a href="#" onclick="return validCart();"><%$labels.generic_site_order_validcart%></a></span>
+<%/if%>
+    </div>
+   </form>
+  <%/if%>
+ </div>
+<%/if%>

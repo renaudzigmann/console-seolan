@@ -1,0 +1,10 @@
+<div class="cs-selection-count">
+  <label class="btn-block"><strong><%$br_record_count%></strong> <%$syslabels.Seolan_Module_Table_Table.exportrecord%></label>
+<%if $br_record_countDetails%>
+<ul class="ul-list-inline list-li-border-left">
+  <%foreach from=$br_record_countDetails item='detail' name='details'%>
+  <li><%$detail.html%></li>
+  <%/foreach%>
+</ul>
+<%/if%>
+</div>

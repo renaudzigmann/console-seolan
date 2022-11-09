@@ -1,0 +1,15 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.comparebase%>
+<form action="<%$self%>" method="post">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="compareBase">
+ 
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Management_Management.comparebase%></legend>
+  <div>Configuration (sera sauvegardée dans le fichier <%$config_path%>) :</div>
+  <textarea name="config" cols="100" rows="6"><%$config_content%></textarea>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>">
+  </div>
+ </fieldset>
+
+</form>

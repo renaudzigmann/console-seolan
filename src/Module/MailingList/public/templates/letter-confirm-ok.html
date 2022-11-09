@@ -1,0 +1,48 @@
+<html>
+ <head>
+  <%$header%>
+  <base href="<%$tzr.societe_url%>">
+  <style>
+   body {
+    font-size: 11px;
+    font-family:  Verdana, Arial, sans-serif, Times New Roman,Helvetica;
+    background: white;
+   }
+   li {
+    color : #444444;
+    font-style: normal;
+   }
+   table.list2{
+    border:0px solid gray;
+    text-align:left;
+   }
+   table.list2 td,th {
+    color : #444444;
+    font-style: normal;
+    vertical-align:top;
+    padding:3px 5px 3px 5px;
+   }
+   table.list2 th{
+    background-color:#E3E1F6;
+    text-align:right;
+   }
+  </style>
+ </head>
+ <body>
+  <table>
+   <tr><td valign="top">
+    <p>Hi<p>
+     <p>This message was automatically generated because we received a confirmation to your subscription on the mailing list of <%$website%>.</p>
+     Cordially yours,
+    </td>
+    <td valign="top">
+     <p>Bonjour,</p>
+     <p>Ce message est g&eacute;n&eacute;r&eacute; par le robot de gestion de mailing list du site <%$website%>. 
+      Nous avons bien re&ccedil;u votre confirmation d'insription &agrave; notre newsletter.</p>
+     <p>Cordialement</p>
+    </td>
+   </tr>
+   <tr><td colspan="2"><%$tzr.OEM4%>&nbsp;<%$tzr.OEM1%>&nbsp;<%$tzr.OEM2%>&nbsp;/&nbsp;<%$tzr.OEM3%></td></tr>
+  </table>
+ </body>
+</html>

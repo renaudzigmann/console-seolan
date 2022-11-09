@@ -1,0 +1,41 @@
+<!--<%$smarty.template%>-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+ <head>
+<%$header%>
+  <title><%$tzr.societe%> <%$nav_olabel->htmlup[0]%></title>
+   <%assign var="cssFileSection" value="file:`$smarty.const.TZR_WWW_DIR`templates/css/sections.css" %>
+   <%assign var="cssFileStructure" value="file:`$smarty.const.TZR_WWW_DIR`templates/css/structure.css" %>
+   <%assign var="cssFileDivers" value="file:`$smarty.const.TZR_WWW_DIR`templates/css/divers.css" %>
+   <%assign var="cssFileNewsletter" value="file:`$smarty.const.TZR_WWW_DIR`templates/css/newsletter.css" %>
+   <%assign var="cssFilePageContent" value="file:`$smarty.const.TZR_WWW_DIR`css/page-content.css" %>
+   <%assign var="cssFileLocal" value="file:`$smarty.const.TZR_WWW_DIR`css/newsletter.css" %>
+
+  <base href="http://<%$server_name%>/" />
+   <style type="text/css" media="screen">
+   <%include file=$cssFileSection%>
+   <%include file=$cssFileStructure%>
+   <%include file=$cssFileDivers%>
+   <%include file=$cssFileNewsletter%>
+   <%include file=$cssFilePageContent%>
+   <%include file=$cssFileLocal%>
+  </style>
+</head>
+ <body class="cv3-body-newsletter">
+  <div id="cv3-page-newsletter">
+   <div class="cv3-newsletter-top"></div>
+   <div class="cv3-newsletter-title"><%$it_cat_mit.otitle->html%></div>
+   <div class="tzr-page-content cv3-newsletter-content" id="tzr-page-content">
+    <%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+    <%if $it_olines[it].oid  && file_exists($filename) %><%include file="$filename"%><%/if%>
+    <%/section%>
+   </div>
+   <div class="cv3-newsletter-bottom"><span class="cv3-newsletter-contenu-bottom">
+   [<a class="navbas" href="http://<%$server_name%>">Site internet</a>] - 
+   [<a class="navbas" href="http://<%$server_name%>/index.php?alias=mentions">Mentions l&eacute;gales</a>] - 
+   [<a class="navbas" href="http://<%$server_name%>/admin.php?class=\Seolan\Module\MailingList\MailingList&function=gen_subscribe&tplentry=sub&moid=<%$tzr.CorailNewsLetter%>&template=Module/MailingList.unsubscribe.html">D&eacute;sinscription en ligne</a>]
+   </span></div> 
+  </div>
+<div id="ref"><img src="http://<%$server_name%><%$smarty.const.TZR_SHARE_SCRIPTS%>marker.php?_marks=newsletter-<%$it_cat_mit.oalias->html%>&_lang=<%$lang_odata->html%>" width="0" height="0"></diV>
+ </body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><%strip%>
+<%if $br_modmap.orkmltpl->html%><%assign var="filename" value=$br_modmap.orkmltpl->filename%><%/if%>
+<tzrmarkerdesc xmlns:tzr="http://www.xsalto.com/maps">
+<%section name=p loop=$br_places%>
+<%if $br_places[p].valid%>
+<%if $filename%>
+<![CDATA[<div id="<%$br_places[p].oid%>" class="gmapinfowin gmapinfowin_<%$br_modmap.oid|replace:':':'_'%>"><%include file="$filename" mode='name'%><%include file="$filename" mode='description'%></div>]]>
+<%else%>
+<![CDATA[<div class="gmapinfowin gmapinfowin__<%$br_modmap.oid|replace:':':'_'%>"><%$br_places[p].name%><br><%$br_places[p].description%></div>]]>
+<%/if%>
+<%/if%>
+<%/section%>
+</tzrmarkerdesc>
+<%/strip%>

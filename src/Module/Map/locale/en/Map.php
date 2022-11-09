@@ -1,0 +1,40 @@
+<?php
+\Seolan\Core\Labels::$LABELS['Seolan_Module_Map_Map']
+= array(
+	'modulename'=>'Cartography',
+	'edit'=>'Edit',
+	'edit_ico'=>"general/edit16.gif",
+	'clear'=>'Clear',
+	'clear_ico'=>'general/new16.gif',
+	'view'=>'View',
+	'view_ico'=>'general/view16.gif',
+	'geocodageauto'=>'Automatic',
+	'key'=>'key',
+	'geocodeurl'=>'Geocode URL',
+	'statistics'=>'Statistics',
+	'accuracy'=>'Accuracy',
+	'accuracieslevels'=>array('N/A'=>'Not computed yet',
+				  '0'=>'Unknown location.',
+				  '1'=>'Country',
+				  '2'=>'Region',
+				  '3'=>'Sub-region',
+				  '4'=>'Town (city, village)',
+				  '5'=>'Post code (zip code)',
+				  '6'=>'Street',
+				  '7'=>'Intersection',
+				  '8'=>'Address',
+				  '9'=>'Premise'
+			    ),
+	'coordinates'=>'Coordinates',
+	'normalview'=>'Normal',
+	'physicalview'=>'Physical',
+	'sattelitview'=>'Satellite',
+	'hybridview'=>'Hybrid',
+	'centerview'=>'Center view',
+	'unknownaddress'=>'Invalid address',
+	'empty'=>'Empty',
+	'total'=>'Total',
+	'manual'=>'Manual',
+	'zz'=>'zz'
+);
+?>

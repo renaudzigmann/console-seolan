@@ -1,0 +1,370 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%include file="Module/Table.functions.html"%>
+<%assign var="advanced" value=$smarty.session.advanced%>
+<%assign var="lockedpage" value=$it_cat_mit.lockedpage%>
+<%assign var="myself" value="`$self`&function=editpage&moid=$_moid&tplentry=it&template=Module/InfoTree.viewpage.html&oidit="%>
+<script type="text/javascript">
+ v<%$uniqid%>.pgs_nb=0;
+ v<%$uniqid%>.pgs_table=[];
+ v<%$uniqid%>.pgs_oid=[];
+ v<%$uniqid%>.emptySelection="<%$syslabels.Seolan_Core_General.no_obj_selected|escape:javascript%>";
+ <%section name=tpl loop=$tpls_lines_oid%>
+ v<%$uniqid%>.pgs_table[v<%$uniqid%>.pgs_nb]='<%$tpls_lines_otab[tpl]->raw%>';
+ v<%$uniqid%>.pgs_oid[v<%$uniqid%>.pgs_nb]='<%$tpls_lines_oid[tpl]%>';
+ v<%$uniqid%>.pgs_nb++;
+ <%/section%>
+ v<%$uniqid%>.pgs_go=function(f,i) {
+   TZR.Infotree.pgs_go.call(v<%$uniqid%>,f,i);
+ }
+ TZR.Infotree.preview = function(moid, itoid){
+   
+   var url = TZR.sprintf("%smoid=%s&template=Core.empty.html&skip=1&function=previewToken", TZR._self, "<%$_moid%>");
+   TZR.jQueryAjax({
+     url:url,
+     mode:'get',
+     dataType:'json',
+     data:{itoid:itoid},
+     cb_args:null,
+     cb_context:TZR.Infotree,
+     cb:this.openPreview
+   });
+   return false;
+ }
+ TZR.Infotree.openPreview = function(resp){
+   if (typeof(resp) != "undefined" && typeof(resp.ok) != "undefined" && resp.ok ){
+     window.open(resp.previewUrl, '_blank');
+   }
+ }
+ v<%$uniqid%>.gopage=function(oidit,complement) {
+   TZR.Infotree.gopage.call(v<%$uniqid%>, oidit, complement, v<%$uniqid%>);
+ }
+ v<%$uniqid%>.applytosection=function(oids,func,template,more,nextmore) {
+   if(template=='Module/InfoTree.viewpage.html'){
+     more += '&_next=<%$myself|escape:"url"%><%$it_oidit%>' + (nextmore ? escape(nextmore) : '' ) + escape(v<%$uniqid%>.getActiveTabParam());
+   } else {
+     more += v<%$uniqid%>.getActiveTabParam();
+   }
+   this.jQueryLoad('<%$self%>&moid=<%$_moid%>&function='+func+'&template=Module/InfoTree.viewpage.html&oidsection='+oids+'&oidit=<%$it_oidit%>&tplentry=it'+more+'#'+oids);
+   return false;
+ }
+ v<%$uniqid%>.deleteselected=function() {
+  var f=document.forms['myform<%$uniqid%>'];
+  if(!TZR.checkBoxesIsChecked(f,null,null,/^_itoidselected/)){
+   alert("<%$syslabels.Seolan_Core_General.no_obj_selected|escape:javascript%>");
+   return false;
+  }
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text|escape:javascript%>')) {
+   f._function.value="delSection";
+   TZR.ajaxSubmitForm(f);
+  }
+  return false;
+ }
+ v<%$uniqid%>.moveselected=function(d) {
+ return TZR.Infotree.moveSelectedSection(d, "<%$uniqid%>");
+ }
+ v<%$uniqid%>.publishSelected=function(d) {
+  var f=document.forms['myform<%$uniqid%>'];
+  if(!TZR.checkBoxesIsChecked(f,null,null,/^_itoidselected/)){
+   alert("<%$syslabels.Seolan_Core_General.no_obj_selected|escape:javascript%>");
+   return false;
+  }
+  f._function.value="publish";
+  if(d) f._pub.value=1;
+  else f._pub.value=0;
+  TZR.ajaxSubmitForm(f);
+  return false;
+ }
+ v<%$uniqid%>.editsection=function(oid) {
+  this.jQueryLoad('<%$self%>&moid=<%$_moid%>&function=editsection&template=Module/InfoTree.editsection.html&oidsection='+oid+'&oidit=<%$it_oidit%>&tplentry=section'+v<%$uniqid%>.getActiveTabParam());
+  return false;
+ }
+ v<%$uniqid%>.editquery=function(oid) {
+  this.jQueryLoad('<%$self%>&moid=<%$_moid%>&function=editquery&template=Module/InfoTree.editquery.html&oidsection='+oid+'&oidit=<%$it_oidit%>&tplentry=section'+v<%$uniqid%>.getActiveTabParam());
+  return false;
+ }
+ v<%$uniqid%>.editfunction=function(oid) {
+  this.jQueryLoad('<%$self%>&moid=<%$_moid%>&function=editfunction&template=Module/InfoTree.editfunction.html&oidsection='+oid+'&oidit=<%$it_oidit%>&tplentry=it'+v<%$uniqid%>.getActiveTabParam());
+  return false;
+ }
+ v<%$uniqid%>.getActiveTabParam=function() {
+ return "&"+TZR.Tabs.activeTabUrl(jQuery("#tzr-tablist-<%$uniqid%>"));
+ }
+ v<%$uniqid%>.getFunctionList=function(moid){
+  v<%$uniqid%>.getTemplatesList("");
+  var jfct=jQuery(document.functionform<%$uniqid%>.elements["section[function]"]);
+  jfct.attr('disabled','disabled');
+  jfct.html('');
+  jfct.append('<option value="">----</option>');
+  if(moid=='') return;
+  for (id in v<%$uniqid%>.sf.modules[moid].functionList) {
+    jfct.append('<option value="'+id+'">'+v<%$uniqid%>.sf.modules[moid].functionList[id]+'</option>');
+  }
+  jfct.removeAttr('disabled');
+ }
+ v<%$uniqid%>.getTemplatesList=function(func){
+  var moid = document.functionform<%$uniqid%>.elements["section[moid]"].value;
+  if(func){
+   var jfct=jQuery(document.functionform<%$uniqid%>.elements["section[function]"]);
+   var classes = v<%$uniqid%>.sf.modules[moid].classes;
+   var reg="";
+   var cl="";
+   for(var i in classes){
+    cl = classes[i].replace(/\\/g, '\\\\');
+    reg+="(("+cl+"::|[^:])"+func+"([ ,]+|$))|";
+   }
+   reg=reg.substr(0,reg.length-1);
+   reg=new RegExp(reg);
+  }else{
+   var reg=/^$/;
+  }
+
+  var jtpl=jQuery(document.functionform<%$uniqid%>.oidtpl);
+  jtpl.find('option').each(function(i, e){
+    var jt=jQuery(this);
+    var tploid = e.value;
+    if (jt.attr('tzrxfunctions') && reg.test(" "+jt.attr('tzrxfunctions'))==false)
+      jt.hide();
+    // template assigné à un module en particulier
+    else if (tploid.length && v<%$uniqid%>.sf.tpl[tploid].length && v<%$uniqid%>.sf.tpl[tploid] != moid)
+      jt.hide();
+    else
+      jt.show();
+  });
+  jtpl.val('');
+ }
+ <%if $imod_sec.$it__editLevel%>
+ /* Edition inplace */
+ v<%$uniqid%>.url="<%$smarty.const.TZR_AJAX8%>?class=_Seolan_Module_InfoTree_InfoTree&function=xmodinfotree_procEditInPlace";
+ v<%$uniqid%>.editParam={
+  placeholder:'',
+  height:'none',
+  onblur:'ignore',
+  submit:'<%$syslabels.Seolan_Core_General.approve|escape:"javascript"%>',
+  cancel:'<%$syslabels.Seolan_Core_General.cancel|escape:"javascript"%>',
+  submitdata:function(value, settings){
+   return {field:jQuery(this).attr('tzr-field'),
+           moid:<%$smarty.request.moid%>,
+           oid:jQuery(this).attr('tzr-oid'),
+           oidit:"<%$it_cat_mit.oid%>"
+          }
+  },
+  callback:function(value, settings){
+   if(value=="secerror"){
+    jQuery(this).html(this.revert);
+    alert('<%$syslabels.Seolan_Core_General.permission_denied|escape:"javascript"%>');
+   }
+  }
+ }
+ v<%$uniqid%>.editParamTextarea=jQuery.extend({type:'textarea',cols:70,rows:6},v<%$uniqid%>.editParam);
+ v<%$uniqid%>.editParamFCKEditor=jQuery.extend({type:'fckeditor',cols:70,rows:6,getfckurl:"<%$smarty.const.TZR_AJAX8%>?class=_Seolan_Field_RichText_RichText&function=xrichtextdef_getFCKEditor"},v<%$uniqid%>.editParam);
+ // Ajoute/supprime un champ dans le formulaire lors de la selection/deselection d'une section 
+ // Le formulaire principal de la page doit être fermé avant les sections
+ // Les sections pouvant avoir des formulaires, ne pas le fermer provoquerait des formulaires imbriqués
+ v<%$uniqid%>.updateSelection=function(el){
+  if(el.checked){
+   if(el.inform) return
+   el.inform=jQuery('<input type="checkbox" name="'+el.name+'" value="on" checked="checked" style="display:none;">');
+   el.inform.appendTo(document.forms['myform<%$uniqid%>']);
+  }else{
+   if(!el.inform) return
+   el.inform.remove();
+   delete el.inform;
+  }
+ }
+
+ <%if ($lang_def==$lang_data)%>
+ // Déplacement des sections via drag & drop
+ v<%$uniqid%>.cancel_drag=function(e){
+   if(e.keyCode==27){
+     e.data.ui.item.data('drop',true);
+     jQuery(e.data.drag).sortable('cancel');
+   }
+ };
+ // 
+  v<%$uniqid%>.sortable_contents=jQuery('#tzr-tabcontentcontainer-<%$uniqid%> fieldset.fieldset-content').sortable({
+   connectWith:'#tzr-tabcontentcontainer-<%$uniqid%> fieldset.fieldset-content',
+   items:'>div.cv8-infotree-section.selectable',
+   distance:10,
+   opacity:0.6,
+   placeholder:"ui-sortable-placeholder",
+   forcePlaceholderSize:true,
+   handle:'li.dragzone',
+   start:function(e,ui){
+    jQuery(document).on('keyup',{drag:this,ui:ui},v<%$uniqid%>.cancel_drag);
+   },
+   stop:function(e,ui){
+    jQuery(document).off('keyup',v<%$uniqid%>.cancel_drag);
+   },
+   update:function(e,ui){
+    if(ui.item.data('drop')){
+     jQuery(this).sortable('cancel');
+     ui.item.removeData('drop');
+     return;
+    }
+    // Quand changement de zone, l'évènement est déclenché par le sortable source et par le sortable destination
+    // On n'en traite qu'un
+    if(ui.sender) return;
+
+    var oidit=ui.item.prev().data('oidit');
+    if(!oidit) oidit='';
+    v<%$uniqid%>.applytosection(
+     ui.item.data('oidit'),
+     'moveSection',
+     'Module/InfoTree.viewpage.html','&dir='+oidit+'&zone='+ui.item.parent().data('zone'),
+     "&"+v<%$uniqid%>.getActiveTabParam()
+    );
+   }
+  });
+ // initialise l'onglet pour le drop (à utiliser plutôt que la fonction anonyme -> le off )
+ v<%$uniqid%>.newZoneDrop = function(evt){
+   var $a=jQuery(this).find('a');
+   var a = jQuery(this);
+   var href = $a.attr('href');
+   var ui = evt.data;
+   jQuery(ui.draggable).insertAfter(jQuery("div.tzr-page-content>fieldset:first>legend", jQuery(href)));
+   v<%$uniqid%>.sortable_contents.sortable("refreshPositions");
+   $a.off('shown.bs.tab', v<%$uniqid%>.newZoneDrop);
+ };
+ // Déplacement d'une section d'une zone à une autre
+  jQuery('ul.nav-tabs>li.li-uzone',v<%$uniqid%>.modulecontainer).droppable({
+   accept:'#tzr-tabcontentcontainer-<%$uniqid%> div.cv8-infotree-section',
+    tolerance:'pointer',
+    over:function(e,ui){
+      var $a=jQuery(this).find('a');
+      // report de la suite sur onglet visible sinon pbs
+      //      $a.on('shown.bs.tab', ui, v<%$uniqid%>.newZoneDrop);
+      $a.on('shown.bs.tab', function(){
+	var href = $a.attr('href');
+	jQuery(ui.draggable).insertAfter(jQuery("div.tzr-page-content>fieldset:first>legend", jQuery(href)));
+	v<%$uniqid%>.sortable_contents.sortable("refreshPositions");
+	$a.off('shown.bs.tab');
+      });
+      $a.trigger('click');
+      e.stopPropagation();
+      return false;
+   }
+  });
+ <%/if%>
+ <%/if%>
+</script>
+<div class="cv8-contenu-center">
+ <div id="tzr-tablist-<%$uniqid%>">
+  <ul class="nav nav-responsive nav-tabs" role="tablist">
+   <%foreach key=zn item=zc from=$it_zones name=z1%>
+    <li role="presentation" class="li-uzone <%if $smarty.foreach.z1.first%>active<%/if%>">
+     <a data-tabname="sc<%$zn%>" href="#sc<%$zn%>-<%$uniqid%>" aria-controls="#sc<%$zn%>-<%$uniqid%>" role="tab" data-toggle="tab" aria-expanded="<%if $smarty.foreach.z1.first%>true<%else%>false<%/if%>"><%if $smarty.foreach.z.total>1 || $zn!="default"%><%$syslabels.Seolan_Module_InfoTree_InfoTree.zone%> <%$zn%><%else%><%$syslabels.Seolan_Core_General.content%><%/if%></a>
+    </li>
+   <%/foreach%>
+   <%foreach key=zn item=zc from=$it_uzones name=z%>
+    <li role="presentation" class="li-uzone">
+     <a  data-tabname="sc<%$zn%>" href="#sc<%$zn%>-<%$uniqid%>" aria-controls="#sc<%$zn%>-<%$uniqid%>" role="tab" data-toggle="tab" aria-expanded="false"><%$syslabels.Seolan_Module_InfoTree_InfoTree.zone_unkown%> <%$zn%></a>
+    </li>
+   <%/foreach%>
+   <li role="presentation"><a data-tabname="sccat" href="#sccat-<%$uniqid%>" aria-controls="#sccat-<%$uniqid%>" role="tab" data-toggle="tab" aria-expanded="false"><%$syslabels.Seolan_Module_InfoTree_InfoTree.topic%></a></li>
+   <%if $imod_props.object_sec && $imod_sec.admin%>
+    <li role="presentation"><a data-tabname="scsec"  href="#scsec-<%$uniqid%>" data-url="<%$self%>function=secEdit&template=Core/Module.edit-sec-tabs.html&moid=<%$imod_props._moid%>&tplentry=br&oid=<%$it_cat_mit.oid%>&_raw=2&skip=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Core_General.security_text%></span></a></li>
+   <%/if%>
+   <%if $lang_def==$lang_data && $imod_sec.$it__editLevel && $lockedpage neq "1" && $it_can_add_section%>
+    <li role="presentation"><a data-tabname="scadd" href="#scadd-<%$uniqid%>" data-url="<%$self%>moid=<%$_moid%>&function=addSection&template=Module/InfoTree.addSection.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&_raw=2&skip=1&parentuniqid=<%$uniqid%>" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_a_section%></span></a></li>
+   <%/if%>
+   <%if $it_is_multi_zone && !empty($it_cat_mit._model)%>
+    <li role="presentation"><a data-tabname="scmodelinfo" href="#scmodelinfo-<%$uniqid%>" data-url="<%$self%>moid=<%$_moid%>&function=pagesUsingModel&model=<%$it_cat_mit.oid%>&tplentry=br&template=Module/InfoTree.pagesUsingModel.html&_raw=2&skip=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Module_InfoTree_InfoTree.pages_using_model%></span></a>
+   <%/if%>
+   <%if !empty($it__langrepli)%>
+    <li><a href="#sc-langrepli-<%$uniqid%>"><%$syslabels.Seolan_Core_General.languages%></a></li>
+   <%/if%>
+  </ul>
+  <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+    
+    <!-- Sections -->
+    <form action="<%$self%>" method="post" name="myform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <input type="hidden" name="_function" value="">
+      <input type="hidden" name="dir" value="">
+      <input type="hidden" name="_pub" value="true">
+      <input type="hidden" name="_tabs" value="1">
+      <input type="hidden" name="_dest" value="">
+      <input type="hidden" name="template" value="Module/InfoTree.viewpage.html">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="oidit" value="<%$it_oidit%>">
+      <input type="hidden" name="tplentry" value="it">
+      <input type="hidden" name="_next" value="<%$self%>&function=editpage&template=Module/InfoTree.viewpage.html&oidit=<%$it_oidit%>&moid=<%$_moid%>&tplentry=it">
+      <input type="hidden" name="marker" value="selectstart">
+    </form>
+    
+    <%foreach name=z1 key=zn item=zc from=$it_zones%><!--  in active -->
+      <div id="sc<%$zn%>-<%$uniqid%>" class="tzr-tabcontent tab-pane fade<%if $smarty.foreach.z1.first%> in active <%/if%>" role="tabpanel">
+      <div class="tzr-page-content" >
+        <%include file="Module/InfoTree.viewzone.html" _zone=$zc%>
+      </div>
+      </div>
+    <%/foreach%>
+    <%foreach key=zn item=zc from=$it_uzones%>
+      <div id="sc<%$zn%>-<%$uniqid%>" class="tzr-tabcontent tab-pane fade" role="tabpanel">
+      <div class="tzr-page-content">
+        <%include file="Module/InfoTree.viewzone.html" _zone=$zc%>
+      </div>
+      </div>
+    <%/foreach%>
+   <!-- Fin sections -->
+
+   <!-- Infos rubriques -->
+      <div id="sccat-<%$uniqid%>" class="tzr-tabcontent tab-pane fade" role="tabpanel">
+
+	<%foreach key=group item=fields from=$it_cat_mit._groups %>
+	<%if $group != '_systemproperties'%>
+	<fieldset>
+	  <legend><%$group%></legend>
+	  <div class="row-striped">
+	    <%section name=f loop=$fields %>
+	    <%assign var="thclasses" value=""%>
+	    <%assign var="fieldicon" value=""%>
+	    <div id="cont-<%$fields[f]->fielddef->field%>" class="row view-field view-field-<%$fields[f]->fielddef->field%>">
+	      <div class="row-striped-content">
+		<%call fieldlabel field=$fields[f]%>
+		<div class="col-xs-12 col-sm-9 col-lg-10"><%$fields[f]->html%></div>
+	      </div>
+	    </div>
+	    <%/section%>
+	  </div>
+	</fieldset>
+	<%/if%>
+	<%/foreach%>
+
+	<fieldset>
+	  <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+	  <div class="row-striped">
+	    <%include file="Module/Table.core-sysfields.html"
+	    fields=$it_cat_mit._groups['_systemproperties']
+	    oid=$it_cat_mit.oid
+	    inline
+	    %>
+	  </div>
+	</fieldset>
+	
+    <%if $imod_sec.$it__editCat%>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+     <input type="submit" value="<%$syslabels.Seolan_Core_General.edit_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>&moid=<%$_moid%>&_function=editCat&template=Module/InfoTree.editcat.html&oid=<%$it_cat_mit.oid%>&tplentry=editcat');">
+    </div>
+    <%/if%>
+   </div>
+   <%if !empty($it__langrepli)%>
+   <div id="sc-langrepli-<%$uniqid%>" class="tzr-tabcontent">
+     <%include file="Module/InfoTree.langStatus.html" langrepli=$it__langrepli%>
+   </div>
+   <%/if%>
+   <!-- Fin infos rubriques -->
+   
+   <div id="scsec-<%$uniqid%>" class="tzr-tabcontent tab-pane fade" role="tabpanel"></div>
+   <div id="scadd-<%$uniqid%>" class="tzr-tabcontent tab-pane fade" role="tabpanel"></div>
+   <div id="scmodelinfo-<%$uniqid%>" class="tzr-tabcontent tab-pane fade" role="tabpanel"></div>
+ </div>
+ </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+ jQuery(function(){
+  <%if $smarty.request._tabs%>
+//   jQuery("#tzr-tablist-<%$uniqid%>").tabs('option', 'active', <%$smarty.request._tabs%>);
+  <%/if%>
+ });
+</script>

@@ -1,0 +1,37 @@
+/* CSS for Linux E-Space */
+
+#cv8-top .cv8-logo {
+    background-image: url(Tux.svg);
+    height: 97px;
+}
+
+#cv8-baspage #cv8-copyright {
+    display: none;
+}
+#cv8-baspage-bg {
+    background-image: url(Tux.svg);
+    background-position: right bottom;
+    padding: 75px 0 60px 0;
+    background-color: #444444;
+}
+body {
+    background-color: #444444;
+    background-image: none;
+}
+
+#cv8-baspage ul li a:link, #cv8-baspage ul li a:visited {
+    color: #ffcc00;
+}
+#cv8-top .cv8-perso ul li a:link, #cv8-top .cv8-perso ul li a:visited {
+    color: #ffcc00;
+    text-decoration: none;
+}
+#cv8-top .cv8-perso ul li {
+    color: #ffff00;
+}
+#cv8-path ul li a:link, #cv8-path ul li a:visited {
+    color: #ffcc00;
+}
+#cv8-path ul li a:hover {
+    color: #ffff00;
+}

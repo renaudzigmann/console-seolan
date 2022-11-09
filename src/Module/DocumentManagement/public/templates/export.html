@@ -1,0 +1,44 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.export_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="_function" value="export">
+  <input type="hidden" name="moid" value="<%$imod_props._moid%>">
+  <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+  <input type="hidden" name="template" value="Core.message.html">
+  <input type="hidden" name="tplentry" value="br">
+  <div class="table-responsive">
+  <table class="list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.ftphost%></label></th>
+    <td><input type="text" name="ftphost" value="localhost"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.ftplogin%></label></th>
+    <td><input type="text" name="ftpuser" value=""></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.ftppass%></label></th>
+    <td><input type="text" name="ftppass" value=""></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.prefix%></label></th>
+    <td><input type="text" name="ftproot" value="export"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.journal%></label></th>
+    <td><input type="checkbox" name="archives" value="1"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.shortnames%></label></th>
+    <td><input type="checkbox" name="trimnames" value="1"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.usernotification%></label></th>
+    <td><input type="checkbox" name="usernotification" value="1"></td>
+   </tr>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit"></div>
+ </form>
+</fieldset>

@@ -1,0 +1,18 @@
+<!--<%$smarty.template%>-->
+<div id="cv3-recherche" class="cv3-block">
+  <h4><%$labels.query_text %></h4>
+  <form id="frmHtdig" name="frmHtdig" method="post" action="/index.php?nocache=1&amp;" role="search" accept-charset="ISO-8859-15">
+    <input name="config" value="<%$tzr.htdigconf%><%$server_name|replace:".":"_"%>" type="hidden">
+    <input name="alias" value="<%$tzr.searchalias|default:"search" %>" type="hidden">
+    <input name="page" value="1" type="hidden">
+    <input name="insidefile" value="search-htdig-results.html" type="hidden">
+    <%if !$tzr.htsearch_norestrict && $lang_data eq $smarty.const.TZR_DEFAULT_LANG && $general_langs[1]%>
+    <input type="hidden" name="exclude" value="<%foreach from=$general_langs item="lm"%><%if $lm neq $smarty.const.TZR_DEFAULT_LANG%>_lang=<%$lm%>|<%$lm%>_<%/if%><%/foreach%>">
+    <%elseif !$tzr.htsearch_norestrict && $general_langs[1]%>
+    <input type="hidden" name="restrict" value="_lang=<%$lang_data%>|<%$lang_data%>_">
+    <%/if%>
+    <input class="form-control" name="words" placeholder="Mots clés..." onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='Votre recherche...';}" type="text">
+    <input type="submit" value="<%$labels.query_text|default:'Rechercher' %>" />
+  </form>
+</div>
+<!--/<%$smarty.template%>-->

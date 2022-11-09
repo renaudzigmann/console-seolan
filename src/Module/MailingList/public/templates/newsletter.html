@@ -1,0 +1,16 @@
+<html>
+<header>
+<%if $it_style%>
+<link rel=stylesheet type="text/css" href="<%$it_mod.style%>">
+<%else%>
+<link rel=stylesheet type="text/css" href="<%$smarty.session._TZR.CSS%>">
+<%/if%>
+</header>
+<body>
+<span class=titre><%$it_cat_mit.title%></span>
+<!-- parcours des sections -->
+<%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+<%if $it_olines[it].oid && file_exists($filename) %><%include file="$filename"%><%/if%>
+<%/section%>
+</body>
+</html>

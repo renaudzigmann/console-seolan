@@ -1,0 +1,136 @@
+<%if $_message || $smarty.request.message || $br_message || $smarty.session._TZR.message%>
+ <div class="tzr-message">
+  <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+ </div>
+<%/if%>
+<%if empty($ssmodi)%><%assign var="ssmodi" value=0%><%/if%>
+<%assign var=browse value=$br___ssmod[$ssmodi]%>
+<div id="tabcontent-<%$uniqid%>-<%$br___ssprops[$ssmodi]._moid%>">
+<%if $browse.lines_oid%>
+  <script>
+    TZR.Table.browse['<%$uniqid%>-<%$br___ssprops[$ssmodi]._moid%>'] = {
+      confirmDeleteMessage:'<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>'
+    };
+  </script>
+  <form name="editssmodform<%$uniqid%>-<%$br___ssprops[$ssmodi]._moid%>" action="<%$self%>" method="post">
+ <div class="table-responsive">
+ <table class="table table-striped cv8_tablelist ">
+  <thead>
+   <tr>
+    <th><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+    <%section name=header loop=$browse.header_fields%>
+     <th><%$browse.header_fields[header]->label%></th>
+    <%/section%>
+   </tr>
+   <tr>
+    <td>
+       <input type="checkbox" onclick="TZR.toggleCheckBoxes(this.form, 'selectstart_<%$br___ssprops[$ssmodi]._moid%>', 'selectend_<%$br___ssprops[$ssmodi]._moid%>');" name="selectall">
+       <input type="hidden" name="marker" value="selectstart_<%$br___ssprops[$ssmodi]._moid%>">
+    </td>
+    <%section name=header loop=$browse.header_fields%>
+     <td nowrap>
+      <%assign var=fieldname value=$browse.header_fields[header]->field%>
+      <%if $br___ssaccess[$ssmodi].rw && $br___ssprops[$ssmodi].multipleedit && ($browse.header_fields[header]->translatable || $lang_def==$lang_data) && ($root || !$browse.header_fields[header]->readonly) && (!$browse._fieldssec[$fieldname] || $browse._fieldssec[$fieldname] == 'rw')%>
+       <a href="#" onclick="TZR.Record.updateSubModule('<%$self%>&function=display&moid=<%$imod_props._moid%>&tplentry=br&template=Module/Table.browsessmajax.html&oid=<%$smarty.request.oid%>&editfield=<%$browse.header_fields[header]->field%>&ssmoidedit=<%$br___ssprops[$ssmodi]._moid%>&ssmoid=<%$br___ssprops[$ssmodi]._moid%>&_uniqid=<%$uniqid%>&skip=1',this);return false;" title="<%$syslabels.Seolan_Module_Table_Table.small_edit_text%>"><%$syslabels.Seolan_Module_Table_Table.small_edit%></a>
+      <%/if%>
+      <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_up_text%>" href="#" onclick="TZR.Record.updateSubModule('<%$self%>&function=display&moid=<%$imod_props._moid%>&tplentry=br&template=Module/Table.browsessmajax.html&oid=<%$smarty.request.oid%>&_order[<%$br___ssprops[$ssmodi]._moid%>]=<%$browse.header_fields[header]->field%>+ASC&ssmoid=<%$br___ssprops[$ssmodi]._moid%>&_uniqid=<%$uniqid%>&skip=1',this);return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_up%></a>
+      <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_up_text%>" href="#" onclick="TZR.Record.updateSubModule('<%$self%>&function=display&moid=<%$imod_props._moid%>&tplentry=br&template=Module/Table.browsessmajax.html&oid=<%$smarty.request.oid%>&_order[<%$br___ssprops[$ssmodi]._moid%>]=<%$browse.header_fields[header]->field%>+DESC&ssmoid=<%$br___ssprops[$ssmodi]._moid%>&_uniqid=<%$uniqid%>&skip=1',this);return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_down%></a>
+     </td>
+    <%/section%>
+   </tr>
+  </thead>
+  <tbody>
+   <%section name=b loop=$browse.lines_oid%>
+    <tr class="<%if $browse.lines_published && $browse.lines_published[b]!=1%>napp <%/if%><%if $browse.lines_trclass[b]%><%$browse.lines_trclass[b]%> <%/if%>">
+     <td >
+      <table class="tzr-compact"><tr>
+       <tr>
+        <td>
+          <input name="_selected[<%$browse.lines_oid[b]%>]" type="checkbox" class="checkbox">
+        </td>
+        <%foreach item=a from=$browse.actions[b]%>
+         <td >
+          <%$a%>
+         </td>
+        <%/foreach%>
+       </tr>
+      </table>
+      <input type="hidden" name="ssoid<%$br___ssprops[$ssmodi]._moid%>[]" value="<%$browse.lines_oid[b]%>">
+     </td>
+     <%section name=header loop=$browse.header_fields%>
+      <td><%$fn="lines_o"|cat:$browse.header_fields[header]->field%><%$browse.$fn[b]->html%></td>
+     <%/section%>
+    </tr>
+   <%/section%>
+  </tbody>
+  <%if $browse.sums%>
+   <tbody class="sumlist">
+    <tr class="sumlistsep"><td colspan="99"></td></tr>
+    <%if $browse.sums.line_page%>
+     <tr class="sumlisttot1">
+      <td><%$syslabels.Seolan_Module_Table_Table.browse_subtotal%></td>
+      <%$browse.sums.line_page%>
+     </tr>
+    <%/if%>
+    <%if $browse.sums.line_tot%>
+     <tr class="sumlisttot2">
+      <td><%$syslabels.Seolan_Module_Table_Table.browse_total%></td>
+      <%$browse.sums.line_tot%>
+     </tr>
+    <%/if%>
+   </tbody>
+  <%/if%>
+ </table>
+  <%if $browse.last > $browse.firstnext%>
+    <script>
+    v<%$uniqid%>.completeSubModule=function(url,link){
+      v<%$uniqid%>.tableToComplete = jQuery(link).siblings('.cv8_tablelist');
+      jQuery(link).remove();
+      TZR.jQueryPost({url:url, target:v<%$uniqid%>.tableToComplete, noautoscroll:true, cb:function(responseText,textStatus,XMLHttpRequest){
+        jQuery('.cv8_tablelist>tbody>tr', responseText).not(':first').appendTo(jQuery('tbody:first', v<%$uniqid%>.tableToComplete));
+        jQuery('.cv8_competesubmodule', responseText).insertAfter(v<%$uniqid%>.tableToComplete);
+        jQuery('.sumlisttot1', v<%$uniqid%>.tableToComplete).remove();
+      }});
+    }
+    </script>
+    <a href="#" onclick="v<%$uniqid%>.completeSubModule('<%$self%>&moid=<%$_moid%>&function=display&tplentry=br&template=Module/Table.browsessmajax.html&oid=<%$br_oid%>&ssmoid=<%$br___ssprops[$ssmodi]._moid%>&_order[<%$br___ssprops[$ssmodi]._moid%>]=<%$browse.order|urlencode%>&first=<%$browse.firstnext%>&skip=1&_uniqid=<%$uniqid%>', this);return false;" class="cv8_competesubmodule">Plus de résultats (<%$browse.firstnext%> / <%$browse.last%>)</a>
+  <%/if%>
+   <input type="hidden" name="marker" value="selectend_<%$br___ssprops[$ssmodi]._moid%>">
+   <input type="hidden" name="tplentry" value="br">
+   <input type="hidden" name="selectedfields" value="all">
+   <input type="hidden" name="_selectedok" value="ok">
+   <input type="hidden" name="moid" value="<%$br___ssprops[$ssmodi]._moid%>">
+  </form>
+  <%if $br___ssprops[$ssmodi].edited eq true%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.save_text%>" onclick="TZR.Record.ssmodsave('<%$uniqid%>','<%$br___ssprops[$ssmodi]._moid%>','<%$self%>&moid=<%$imod_props._moid%>&function=display&template=Module/Table.browsessmajax.html&oid=<%$smarty.request.oid%>&editfield=<%$br___ssprops[$ssmodi].editfield%>&ssmoidsave=<%$br___ssprops[$ssmodi]._moid%>&ssmoid=<%$br___ssprops[$ssmodi]._moid%>&tplentry=br&_uniqid=<%$uniqid%>&skip=1',this);">
+  </div>
+ <%/if%>
+<%else%>
+ <%$syslabels.Seolan_Core_General.nodata%>
+<%/if%>
+<%if $br___ssprops[$ssmodi].edited!=true && $br___ssinsert[$ssmodi] && $br___ssprops[$ssmodi].activate_additem && ($lang_def == $lang_data) %>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="button" value="<%$syslabels.Seolan_Core_General.add_text%>" onclick="TZR.Record.addTabs('<%$uniqid%>','<%$br___ssprops[$ssmodi]._moid%>','<%$self%>&moid=<%$br___ssprops[$ssmodi]._moid%>&function=insert&template=Module/Table.new.html&_linkedfields[]=<%$br___ssprops[$ssmodi].linkedfield%>&_frommoids[]=<%$imod_props._moid%>&_parentoids[]=<%$br_oid%><%$br_urlparms%>&_linkedfield=<%$br___ssprops[$ssmodi].linkedfield%>&_parentoid=<%$br_oid%>&tplentry=br&skip=1&tabsmode=1&_raw=2','<%$syslabels.Seolan_Core_General.add_text%> : <%$br___ssprops[$ssmodi].modulename|escape:"quotes"%>');">
+ </div>
+<%/if%>
+</div>
+<script type="text/javascript">
+ jQuery( document ).ajaxComplete(function(event, xhr, settings) {
+  setTimeout(function(){
+    TZR.SMod.setCount('<%$br___ssprops[$ssmodi]._moid%>','<%$uniqid%>','<%$browse.last%>', event, xhr, settings);
+    }, 100);
+ });
+
+ jQuery('a.cv8-editaction', '#tabcontent-<%$uniqid%>-<%$br___ssprops[$ssmodi]._moid%>').click(function(){
+   var tab = jQuery('#tzr-tablist-<%$uniqid%> li').filter('.active').index();
+   this.href += '&_fromtabs='+(tab+1);
+ });
+
+ <%if is_subclass_of($br___ssprops[$ssmodi].theclass,"\Seolan\Module\Media\Media")%>
+   TZR.Media.infosInit('.tzr-tabcontent');
+ <%/if%>
+</script>

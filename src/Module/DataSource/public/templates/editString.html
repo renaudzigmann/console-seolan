@@ -1,0 +1,43 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if empty($title)%><%assign var="title" value="`$syslabels.Seolan_Core_Module_Module.editset` (`$smarty.request.oid`)"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<form action="<%$self%>" method="post" name="form1<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="function" value="<%$fprefix%>ProcEditString">
+ <input type="hidden" name="boid" value="<%$_boid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$back%>">
+ <input type="hidden" name="field" value="<%$_field%>">
+ <input type="hidden" name="soid" value="<%$_soid%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.edit_text%></legend>
+  <div class="table-responsive">
+  <table class="table list2">
+   <%section name=langs loop=$lang_code%>
+    <tr>
+     <th><%$lang_long[langs]%></th>
+     <td>
+      <input name="label[<%$_snames_lang[langs]%>]" value="<%$_snames[langs]|@htmlentities%>" type="text" size="50" maxlength="80">
+      <input name="oldLabel[<%$_snames_lang[langs]%>]" value="<%$_old_snames[langs]|@htmlentities%>" type="hidden">
+     </td>
+    </tr>
+   <%/section%>
+   <tr>
+    <th>
+     <%$syslabels.Seolan_Core_General.order_text%>
+    </th>
+    <td>
+     <input name="sorder" value="<%$_sorder%>" type="text" size="4" maxlength="4">
+     <input name="oldSorder" value="<%$_old_sorder%>" type="hidden">
+    </td>
+   </tr>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" name="save" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+  </div>
+ </fieldset>
+</form>

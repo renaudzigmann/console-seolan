@@ -1,0 +1,59 @@
+<%assign var="title" value=$syslabels.Seolan_Core_Module_Module.module_properties_text%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+  TZR.fieldsetAccordion(jQuery(".cv8-contenu-center"));
+</script>
+<div class="cv8-contenu-center">
+<%if count($props_functions)>0 %>
+<fieldset class="fieldsetAccordion fieldsetAccordionOpen"><legend>Actions</legend>
+<div>
+<%foreach name=m2 item=m2i from=$props_functions%>
+<%if is_object($m2i) && !empty($m2i->name) && ($m2i->group == "editprop")%>
+<a class="cv8-ajaxlink" href="<%$self%>&<%$m2i->xurl%>" <%if $m2i->needsconfirm%>x-confirm="var ret=confirm('<%$syslabels.Seolan_Core_General.confirm|escape:"quotes"%>')"<%/if%>><%$m2i->name%></a>&nbsp;|&nbsp;
+<%/if%>
+<%/foreach%>
+</div>
+</fieldset>
+<%/if%>
+<form action="<%$self%>" method="post" name="form<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this,undefined,undefined,{cb:home_reloadModules});">
+ <input type="hidden" name="_function" value="procEditProperties">
+ <input type="hidden" name="template" value="editprop.html">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="tplentry" value="props">
+ <input type="hidden" name="_next" value="&moid=<%$smarty.request.moid%>&function=editProperties&template=Core/Module.admin/editprop.html&tplentry=props">
+ <%section name=p loop=$props_options%>
+  <%if $props_options[p].group neq $props_options[$smarty.section.p.index_prev].group%>
+   <fieldset>
+    <legend><%$props_options[p].group%></legend>
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <%if $props_options[p].groupcomment%>
+      <tr><td colspan="2"><%$props_options[p].groupcomment%></td></tr>
+     <%/if%>
+     <%if $props_options[p].group eq "General"%>
+      <tr><th><label>Id</label></th><td><%$smarty.request.moid%></td></tr>
+      <tr><th><label>Module Release</label></th><td><ul><li><%'</li><li>'|implode:$props_version%></li></ul></td></tr>
+      <tr><th><label>Classe</label></th><td><%$imod_props.classname%></td></tr>
+     <%/if%>
+  <%/if%>
+  <tr>
+   <th>
+     <label class="fieldHelp"
+       <%if $props_options[p].comment%> 
+       data-html="true"
+       data-container="body" 
+       data-toggle="tooltip" 
+       data-original-title="[<%$syslabels.Seolan_Core_General.help_text%>]<br><%$props_options[p].comment|escape:'html'%>"
+       <%/if%>
+	><%$props_options[p].label%><%if $props_options[p].comment%><span class="glyphicon csico-infos" aria-hidden="true"></span><%/if%></label></th>
+   <td><%$props_options[p].edit%></td>
+  </tr>
+  <%if $props_options[p].group neq $props_options[$smarty.section.p.index_next].group%>
+    </table>
+    </div>
+   </fieldset>
+  <%/if%>
+ <%/section%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+</form>
+</div>

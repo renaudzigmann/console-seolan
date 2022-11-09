@@ -1,0 +1,30 @@
+<!--<%$smarty.template%>-->
+<div id="cv3-social" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-social" href="#social<%$id%>"><%label v="social_title" t="Réseaux sociaux"%></a>
+  <h4><%label v="social_title" t="Réseaux sociaux"%></h4>
+  <div id="social<%$id%>" class="collapse">
+    <div class="middle">
+      <ul>
+
+        <%foreach from=","|explode:"facebook,twitter,googleplus,linkedin,pinterest,instagram,youtube,vimeo" item="res"%>
+          <%assign var="url" value=$charte_osocial_<%$res%>->raw%>
+          <%if $url%>
+            <li><a href="<%$url%>" target="_blank"><span class="glyphicon csico-<%$res%>"></span><span class="csico-label"><%$res%></span></a></li>
+          <%/if%>
+
+        <%/foreach%>
+
+        <%if $charte_osocial_addthis->raw%>
+          <li class="addthis toolbox"><a href="#" class="addthis_button compact">
+            <span class="csico-addthis"></span><span class="glyphicon csico-label">addthis</span>
+          </a></li>
+        <%/if%>
+
+        <%if $charte_osocial_rss->raw == 1%>
+          <li><a href="/rssnews.xml" target="_blank"><span class="glyphicon csico-rss"></span><span class="glyphicon csico-label">rss</span></a></li>
+        <%/if%>
+
+      </ul>
+    </div>
+  </div><!-- fin social -->
+</div><!-- fin cv3-social -->

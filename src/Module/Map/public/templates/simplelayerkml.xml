@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tzr="http://www.xsalto.com/maps">
+<Document id="<%$website%>">
+<name><![CDATA[<%$website%>]]></name>
+<description><![CDATA[<%$br_modmap.name%>]]></description>
+<Style id="style1">
+      <IconStyle id="style1">
+      <color>FFFFFFFF</color> 
+      <scale>1</scale> 
+      <Icon>
+      <href><%$full_serverhome%><%$br_modmap.oricon1->url%>?foo=.png</href>
+      </Icon>
+      <xsd:annotation><xsd:appinfo><tzr:iconSize><%$br_modmap.oricon1->getWidth()%>X<%$br_modmap.oricon1->getHeight()%></tzr:iconSize></xsd:appinfo></xsd:annotation>
+      <%if $br_modmap.orshad1->url%>
+      <xsd:annotation><xsd:appinfo><tzr:shadowIconUrl><%$full_serverhome%><%$br_modmap.orshad1->url%></tzr:shadowIconUrl></xsd:appinfo></xsd:annotation>
+      <%/if%>
+      <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction" />
+      </IconStyle>
+<LabelStyle>
+  <color>FFFFFFFF</color> 
+  <scale>1.1</scale> 
+  </LabelStyle>
+</Style>
+<Folder id="<%$br_modmap.oid%>">
+<%if $br_modmap.orkmltpl->html%>
+<%assign var="filename" value=$br_modmap.orkmltpl->filename%>
+<%/if%>
+<%section name=p loop=$br_places%>
+<%if $br_places[p].valid%>
+<%if $filename%>
+  <Placemark id="<%$br_browse.lines_oid[p]%>">
+  <styleUrl>#style1</styleUrl>
+  <name><![CDATA[<%include file="$filename" mode='name'%>]]></name>
+  <description><![CDATA[<%include file="$filename" mode='description'%>]]></description>
+  <Point><coordinates><%$br_places[p].latlng%></coordinates></Point>
+  <xsd:annotation><xsd:appinfo><tzr:options><%include file="$filename" mode='annotation'%></tzr:options></xsd:appinfo></xsd:annotation>
+  </Placemark>
+<%else%>
+  <Placemark id="<%$br_browse.lines_oid[p]%>">
+  <styleUrl>#style1</styleUrl>
+  <name><![CDATA[<%$br_places[p].name%>]]></name>
+  <description><![CDATA[<%$br_places[p].description%>]]></description>
+  <Point><coordinates><%$br_places[p].latlng%></coordinates></Point>
+  </Placemark>
+<%/if%>
+<%/if%>
+<%/section%>
+</Folder>
+</Document>
+</kml>

@@ -1,0 +1,9 @@
+<%extends file="Module/Table.view.html"%>
+<%block name=headers%><%/block%>
+<%block name=overloadconfiguration%>
+<%$templatejournal='Module/DocumentManagement.journal.html'%>
+<%if $br_here->repository->XMCallowComments($br_oid)%>
+<%$activateComments=true%>
+<%/if%>
+<%/block%>
+

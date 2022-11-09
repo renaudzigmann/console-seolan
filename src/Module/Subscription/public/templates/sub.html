@@ -1,0 +1,40 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Subscription_Subscription.subscription_text%>
+<div class="cv8-quicksearch form-inline clearfix">
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Subscription_Subscription.subscription_text%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="amoid" value="<%$br_amoid%>">
+  <input type="hidden" name="moid" value="<%$imod_props._moid%>">
+  <input type="hidden" name="_function" value="subscribe">
+  <input type="hidden" name="_next" value="&function=lsSubs&template=Module/Subscription.browse.html&tplentry=br&moid=<%$imod_props._moid%>">
+  <div class="table-responsive">
+    <table class="table list2" >
+    <%if $imod_sec.admin%>
+      <tr class="searchfield cv8_inlineblock form-group">
+      <th><label><%$syslabels.Seolan_Core_General.user_text%> / <%$syslabels.Seolan_Core_General.group_text%></label></th>
+      <td>
+        <select name="user">
+        <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+          <%section name=u loop=$grps_lines_oid%>
+          <option value="<%$grps_lines_oid[u]%>"><%$grps_lines_oGRP[u]->toText()%>
+          <%/section%>
+        </optgroup>
+        <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+          <%section name=u loop=$users_lines_oid%>
+          <option value="<%$users_lines_oid[u]%>" <%if $users_lines_oid[u] eq $br_user%>selected<%/if%>><%$users_lines_ofullnam[u]->toText()%>
+          <%/section%>
+        </optgroup>
+        </select>
+      </td>
+      </tr>
+    <%/if%>
+    <%if $br_aoid%>
+      <tr class="searchfield cv8_inlineblock form-group"><th><label>Objet</label></th><td><%$br_atitle%><input type="hidden" name="aoid" value="<%$br_aoid%>"></td></tr>
+    <%/if%>
+    <tr class="searchfield cv8_inlineblock form-group"><th><label>Détails</label></th><td><input type="checkbox" name="details" value="1"></td></tr>
+    </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action cv8_inlineblock form-group"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+ </form>
+</fieldset>
+</div>

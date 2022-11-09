@@ -1,0 +1,32 @@
+<?php
+\Seolan\Core\Labels::$LABELS['Seolan_Core_Session']
+= array(
+'accountparameter'=>'Use account settings',
+'adminauthcaserror'=>'You are logged on the CAS server but you are not allowed to view this page (<a href="javascript:history.back(-1)">Back</a>).',
+'ldap_password_request_message'=>'If you have questions about your account, contact you system administrator.',
+'forgotten_password'=>'I forgot my password',
+'invalid_period'=>'The user accout has been deactivated',
+'local_account_exists'=>'A local account exists for this alias.',
+'log_in'=>'Log in',
+'login'=>'Login',
+'login-cert_not_accepted'=>'The installed certificat is not associated with your login.',
+'login_not_accepted'=>'Login refused',
+'loginisempty'=>'Please type in your login.',
+'lost_password_noid'=>'No password request registered for this account / expired request.',
+'mail_is_empty'=>'Email address not provided.',
+'max_login_attempts_error'=>'Maximum login attempts reached. Try later.',
+'no_longer_valid'=>'Your account is no longer valid. Please contact the administrator.',
+'password'=>'Password',
+'password_registered_login'=>'You password has been modified. Please login.',
+'passwordexpire_sent'=>'Your password validity period has expired. An email containing a link to change it has been sent.',
+'password_sent'=>'Password was sent',
+'passwordrequest_sent'=>'You will receive shortly an email including the procedure to fill in your password.',
+'passwordrequest_nosent'=>'Inexistant account for this login or empty email.',
+'reauth_lost_post'=>'You have been logged out when entering data. Nothing have been save.',
+'remote_password_request_message'=>'Please, use main the site password request.',
+'unable_to_reset_password'=>'Your request can not be satisfied.',
+'unknown_alias'=>'The id entered does not match any request.',
+'user_failedtoban'=>'Maximum login attempts reached. Connexion rejected. Try later.',
+'password_not_in_platform'=>'The password of your account is not managed on this platform.',
+'zz'=>'');
+?>

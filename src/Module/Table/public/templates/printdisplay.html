@@ -1,0 +1,183 @@
+<html>
+ <head>
+  <%$header%>
+   <style>
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Core/public/css/print.css"%>
+    fieldset{
+      border:none;
+      margin-left:0px;
+      padding-left:0px;
+    }
+    fieldset>legend{
+      border:none;
+      border-bottom:1px solid black;
+      width:100%;
+      text-transform:uppercase;
+      font-size:12pt;
+    }
+    .table-striped > tbody > tr.fieldsgroups{
+      background:none;
+    }
+    .table-striped > tbody > tr.fieldsgroups>th,
+    .table-striped > tbody > tr.fieldsgroups.td {
+      height:2em;
+      border-top:none;
+      border-bottom:1px solid black;
+      text-transform:uppercase;
+      font-size:12pt;
+    }
+    table.bordered {
+      border: 1px solid black;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table.bordered th { text-align:center;border: solid 1px black; padding:2px; vertical-align:top;}
+    table.bordered td { border: solid 1px black; padding:2px; vertical-align:top;}
+    button.btn-viewer{
+      display:none;
+    }
+    @media print{
+      div.ssmodlinks{
+	display:none;
+      }
+      
+    }
+   </style>
+ </head>
+ <body onload="try{window.menubar.visible=true;}catch(e){}window.print();">
+   <h1><%$param_title%></h1>
+   <!-- cas d'un gabarit d'impression ou d'affichage -->
+  <%if $brt_oprint->filename%>
+   <%assign var="filename" value=$brt_oprint->filename%>
+   <%include file=$filename%>
+  <%elseif $brt_odisp->filename%>
+   <%assign var="filename" value=$brt_odisp->filename%>
+   <%include file=$filename%>
+   <%else%>
+   <%if $smarty.request._archive%>
+   <h3>[ Archive <%$smarty.request._archive|date_format:"%d-%m-%Y %H:%M:%S"%> ]</h3>
+   <%/if%>
+   <%if count($br___ssmod) > 0%>
+   <div class="ssmodlinks">
+     <%section name=ssmod loop=$br___ssmod%>
+     <%assign var=browse value=$br___ssmod[ssmod]%>
+     <%if $browse.lines_oid%>
+     <a href="#ssmod<%$smarty.section.ssmod.index%>"><%$br___ssprops[ssmod].modulename%></a>
+     <%/if%>
+     <%/section%>
+   </div>
+   <%/if%>
+   <div class="table-responsive">
+     <table class="table table-striped">
+       <%foreach key=group item=fields from=$br__groups %>
+       <%if $group != '_systemproperties'%>
+       <tr class="fieldsgroups"><th colspan="2"><%$group%></th></tr>
+       <%section name=f loop=$fields %>
+       <tr>
+	 <th><label><%$fields[f]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+	 <td><%$fields[f]->html%></td>
+       </tr>
+       <%/section%>
+       <%/if%>
+       <%/foreach%>
+       
+       <tr class="fieldsgroups">
+	 <th colspan="2"><%$syslabels.Seolan_Core_General.properties_text%></th>
+       </tr>
+       <%$sysfields=$br__groups['_systemproperties']%>
+       <%section name=fs loop=$sysfields%>
+       <%if $sysfields[fs]->field != 'PUBLISH' || isset($modsec_mods[$_moid].rwv)%>
+       <tr>
+	 <th><label><%$sysfields[fs]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+	 <td><%$sysfields[fs]->html%></td>
+       </tr>
+       <%/if%>
+       <%/section%>
+       <%if $smarty.request._archive%>
+       <tr><th><label>Archive date</label></th><td><%$smarty.request._archive|date_format:"%d-%m-%Y %H:%M:%S" %></td></tr>
+       <%/if%>
+       <tr>
+	 <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.oid%></label></td><td><%$br_oid%></th>
+       </tr>
+     </table>
+   </div>
+
+   <!-- droits sur l'objet -->
+   <%if $imod_props.object_sec && $imod_sec.rw%>
+   <fieldset>
+     <legend><%$syslabels.Seolan_Core_General.security_text%></legend>
+     <div class="table-responsive" style="max-height:25vh;scroll-y:auto">
+       <table class="table table-striped">
+	 <thead>
+	   <tr>
+	     <th><%$syslabels.Seolan_Core_General.group_text%> / <%$syslabels.Seolan_Core_General.user_text%></th>
+	     <th><%$syslabels.Seolan_Core_Security.actual_text%></th>
+	   </tr>
+	 </thead>
+	 <tbody>
+	   <%section name=acl loop=$br_acls.acl_uid%>
+	   <%if $br_acls.acl_own[acl].oalias%>
+	   <tr><td><%$br_acls.acl_own[acl].ofullnam->html%> - <%$br_acls.acl_own[acl].oalias->html%> (<%$syslabels.Seolan_Core_General.user_text%>)</td><td><%$br_acls.acl_longlevel[acl]%></td></tr>
+	   <%else%>
+	   <tr><td><%$br_acls.acl_own[acl].oGRP->html%></td><td><%$br_acls.acl_longlevel[acl]%></td></tr>
+	   <%/if%>
+	   <%/section%>
+	 </tbody>
+       </table>
+     </div>
+   </fieldset>
+   <%/if%>
+
+   <!-- commentaires  -->
+   <%if $imod_props.allowcomments%>
+   <fieldset>
+     <legend><%$syslabels.Seolan_Module_Comment_Comment.comments%></legend>
+     <%section name=l loop=$br_com['lines_oid']%>
+     <div class="table-responsive">
+       <table class="table table-striped">	 
+	 <tr><th><label><%$syslabels.Seolan_Module_Table_Table.date%></label></th><td><%$br_com['lines_oCREAD'][l]->html%></td></tr>
+	 <tr><th><label><%$syslabels.Seolan_Module_Table_Table.user%></label></th><td><%$br_com['lines_oOWN'][l]->html%></td></tr>
+	 <tr><th><label><%$syslabels.Seolan_Module_Table_Table.comments%></label></th><td><%$br_com['lines_oCOMMENTAIRE'][l]->html%></td></tr>
+       </table>
+       <%/section%>
+   </fieldset>
+   <%/if%>
+   
+   <%/if%> <%* / template dédié *%>
+   
+   <!-- sous modules -->
+   <%if !$br___ssmod_in_template%>
+   <%section name=ssmod loop=$br___ssmod%>
+   <%assign var=browse value=$br___ssmod[ssmod]%>
+   <%if $browse.lines_oid%>
+   <a name="ssmod<%$smarty.section.ssmod.index%>"></a>
+   <fieldset>
+     <legend><%$br___ssprops[ssmod].modulename%></legend>
+     <div class="table-responsive">
+       <table class="table table-bordered table-striped">
+	 <thead>
+	   <tr>
+	     <%section name=header loop=$browse.header_fields%>
+	     <th><%$browse.header_fields[header]->label%></th>
+	     <%/section%>
+	   <th colspan=4><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+	   </tr>
+	 </thead>
+	 <tbody>
+	 <%section name=b loop=$browse.lines_oid%>
+	   <tr>
+	     <%section name=header loop=$browse.header_fields%>
+	     <td><%$fn="lines_o"|cat:$browse.header_fields[header]->field%><%$br___ssmod[ssmod].<%$fn%>[b]->html%></td>
+	     <%/section%>
+	     <td><a href="<%$self%>&moid=<%$br___ssprops[ssmod]._moid%>&function=display&template=Module/Table.view.html&tplentry=br&oid=<%$browse.lines_oid[b]%>"><%$syslabels.Seolan_Core_General.view_text%></a></td>
+	   </tr>
+	   <%/section%>
+	 </tbody>
+       </table>
+     </div>
+   </fieldset>
+   <%/if%>
+   <%/section%>
+   <%/if%>
+ </body>
+</html>

@@ -1,0 +1,82 @@
+<%if !$cart->items%>
+<div class="alert alert-info">
+  <%"Votre panier est vide"|__:'\Seolan\Module\Cart\CartV2'%>
+</div>
+<a href="<%$self%>alias=<%$shop->alias_shop%>" class="btn btn-default"><%"Retour à la boutique"|__:'\Seolan\Module\Cart\CartV2'%></a>
+<%else%>
+
+<%if $mode eq 'edit'%>
+<form action="<%$self%>" name="modifycart" method="post">
+  <input type="hidden" name="function" value="modifyCart">
+  <input type="hidden" name="moid" value="<%$shop->_moid%>">
+  <input type="hidden" name="_next" value="<%$shop->getStepUrl('cart')%>">
+<%/if%>
+
+<%if $display eq 'table'%>
+<div class="shop-items table-responsive">
+  <table class="table-bordered">
+    <thead><tr>
+        <%foreach from=$shop->cart->columns key=property item=column%>
+        <th class="<%$property%>"><%$column.label%></th>
+        <%/foreach%>
+    </tr></thead>
+    <tbody>
+      <%foreach from=$cart->items key=key item=item%>
+      <tr class="shop-item">
+        <%foreach from=$shop->cart->columns key=property item=column%>
+        <td class="<%$property%> <%$column.type%>"><%$item->html($property, $column, $mode)%></td>
+        <%/foreach%>
+      </tr>
+      <%/foreach%>
+    </tbody>
+  </table>
+</div>
+<%else%>
+<div class="shop-items">
+  <div class="shop-items-head hidden-sm hidden-xs">
+    <div class="row">
+      <div class="shop-head">
+        <%foreach from=$shop->cart->columns key=property item=column%>
+        <div class="<%$property%> <%$column.css%>"><label><%$column.label%></label></div>
+        <%/foreach%>
+      </div>
+    </div>
+  </div>
+  <div class="shop-items-body">
+    <%foreach from=$cart->items key=key item=item%>
+    <div class="row">
+      <div class="shop-item">
+        <%foreach from=$shop->cart->columns key=property item=column%>
+        <div class="<%$property%> <%$column.type%> <%$column.css%>">
+          <label class="hidden-lg hidden-md"><%$column.label%></label>
+	  <%$item->html($property, $column, $mode)%>
+        </div>
+        <%/foreach%>
+      </div>
+    </div>
+    <%/foreach%>
+  </div>
+</div>
+<%/if%>
+
+<%* TOTAL DU PANIER *%>
+<div class="shop-total clearfix">
+  <div class="shop-total-content">
+    <%foreach from=$cart->total.labels key=property item=label%>
+    <%if $cart->total.$property and $cart->total_html($property, $mode)%>
+    <div class="<%$property%>">
+      <label><%$label%></label>
+      <span class="price"><%$cart->total_html($property, $mode)%></span>
+    </div>
+    <%/if%>
+    <%/foreach%>
+  </div>
+  <%if $mode eq 'edit'%>
+    <%include file="Module/CartV2.shop-cart-actions.html"%>
+  <%/if%>
+</div>
+
+<%if $mode eq 'edit'%>
+</form>
+<%/if%>
+<%/if%>

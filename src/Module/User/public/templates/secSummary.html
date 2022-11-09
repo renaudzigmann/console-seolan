@@ -1,0 +1,38 @@
+<%if $br_modules%><%* liste initiale *%>
+ <%if count($br_langs.code)>1%>
+  <%$syslabels.Seolan_Core_General.language%> :
+  <select name="slang" onchange="jQuery('#tzr-tablist-<%$uniqid%>').tabs('url',1,'<%$self%>&moid=<%$_moid%>&function=secSummary&template=Module/User.secSummary.html&tplentry=br&oid=<%$br_oid%>&_uniqid=<%$uniqid%>&_skip=1&slang='+this.value).tabs('load',1);">
+   <%section name="i" loop=$br_langs.code%>
+    <option value="<%$br_langs.code[i]%>"<%if $br_langs.code[i]==$br_slang%> selected<%/if%>><%$br_langs.text[i]%></option>
+   <%/section%>
+  </select> |
+ <%/if%>
+ <a href="#" onclick="v<%$uniqid%>.refreshSummary();return false;"><%$syslabels.Seolan_Core_General.refresh_text%></a>
+ <br><br>
+ <ul id="secsummary-<%$uniqid%>">
+ <%section name="i" loop=$br_modules.lines_oid%>
+  <%if $br_modules.lines_group[i]!=$br_modules.lines_group[$smarty.section.i.index_prev]%>
+   <fieldset>
+    <legend><%$br_modules.lines_group[i]%></legend>
+  <%/if%>
+  <fieldset class="module-acl">
+   <legend href="<%$self%>&moid=<%$_moid%>&function=secSummary&template=Module/User.secSummary.html&tplentry=br&oid=<%$br_oid%>&smoid=<%$br_modules.lines_oid[i]%>&slang=<%$br_slang%>&_uniqid=<%$uniqid%>&_skip=1"><%$br_modules.lines_name[i]%></legend>
+   <div></div>
+  </fieldset>
+  <%if $br_modules.lines_group[i]!=$br_modules.lines_group[$smarty.section.i.index_next]%>
+   </fieldset>
+   <br><br>
+  <%/if%>
+ <%/section%>
+  <script type="text/javascript">
+ v<%$uniqid%>.refreshSummary=function() {
+   TZR.Tabs.load(jQuery(document.getElementById("tab2-<%$uniqid%>")), {refresh:true});
+ }
+   TZR.fieldsetAccordion('#secsummary-<%$uniqid%>',-1,'fieldset.module-acl');
+  </script>
+ <%else%><%* contenu charge dynamiquement *%>
+  <%foreach from=$br_secs item=sec%>
+  <a href="#" onclick="TZR.editSec('<%$self%>','<%$br_smoid%>','<%$sec.oid%>'); return false;"><%$sec.title%></a> : <%$syslabels.Seolan_Core_Security[$sec.lvl]%><%if $br_groups[$sec.who]%> (<%$syslabels.Seolan_Core_Security.inherited%> <%$br_groups[$sec.who]%>)<%/if%><br>
+  <%/foreach%>
+  <%/if%>
+

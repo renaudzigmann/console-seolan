@@ -1,0 +1,18 @@
+<%if $admini%>
+<div class="alert alert-info">Le tunnel de vente ne s'affiche qu'en front-office.</div>
+<%else%>
+
+<%assign var=section   value=$it_olines[it]%>
+<%assign var=fparams   value=$section._functionparams%>
+<%assign var=shop      value=$section.shop%>
+<%assign var=step      value=$section.step%>
+<%assign var=cart      value=$shop->cart%>
+<%assign var=customer  value=$shop->customer%>
+<%assign var=mod_users value=$shop->customers%>
+
+<div class="shop-tunnel">
+  <div class="step step-<%$step%>">
+    <%include file="Module/CartV2.step-`$step`.html"%>
+  </div>
+</div>
+<%/if%>

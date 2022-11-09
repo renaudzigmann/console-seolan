@@ -1,0 +1,109 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.viewmodules%>
+<%if $modules_lines_oid && !$nobody %>
+<div class="cv8-contenu-center clearfix">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.modules_text%></legend>
+  <div class="searchfield cv8_inlineblock form-group">
+    <input type="search" value="" placeholder="<%$syslabels.Seolan_Core_Module_Module.modlistsearch%>" class="all-modules-filter" />
+  </div>
+  <script type="text/javascript">
+  jQuery(function($){
+    var filterChange = function(){
+      var filter = this.value;
+      var $modgroups = $('#cv8-modlist li.root > ul > li > ul').show();
+      $('>li',$modgroups).show();
+      if (!filter.length) return;
+      $('>li',$modgroups).hide().filter(function(i,elem){
+        var dataFilter = $(elem).data('filter');
+        if (!dataFilter) return false;
+        return !isNaN(filter) ? $(elem).data('moid') == filter : dataFilter.match(new RegExp(filter,'gi'));
+      }).show().prev('.line').show();
+    };
+    $('input.all-modules-filter').keyup(filterChange).click(filterChange);
+  });
+  </script>
+  <div class="table-responsive">
+  <table class="table list">
+   <tr>
+    <td>
+     <ul class="simpleTree docsTree" id="cv8-modlist">
+      <li class="root noico">
+       <ul>
+	<%section name=g loop=$modules_groups%>
+	 <li>
+	  <span><%$modules_groups[g]%></span>
+	  <ul>
+	   <%section name=m loop=$modules_lines_oid%>
+	    <%if $modules_lines_group[m] eq $modules_groups[g]%>
+	     <%assign var="om" value=$modules_lines_methods[m] %>
+	     <%assign var="omc" value=$om.moduleclass%>
+	     <li data-moid="<%$modules_lines_oid[m]%>" data-toid="<%$modules_lines_toid[m]%>" data-filter="<%$omc%> <%$modules_lines_name[m]%>" data-mainaction="<%$modules_lines_mainaction[m]%>">
+	      <span><%$modules_lines_name[m]|default:$modules_lines_mod[m]->getLabel()%> [ <%$omc%> <%if !$modules_lines_home[m]%><font color="red">Caché</font><%/if%> <%if $modules_lines_dependant[m]%><font color="red">Dépendant</font><%/if%> ]</span>
+	      <ul>
+		<%foreach name=m2 item=m2i from=$om%>
+		<%if is_object($m2i) && !empty($m2i->name)%>
+		<%if "javascript:" eq $m2i->xurl|substr:0:11%>
+		<%else%>
+		<%if $m2i->target%>
+		<li><a target="<%$m2i->target%>" href="<%$m2i->xurl%>"><%$m2i->name%></a></li>
+		<%else%>
+		<li><a class="cv8-ajaxlink" href="<%$self%>&<%$m2i->xurl%>" <%if $m2i->needsconfirm%>x-confirm="var ret=confirm('<%$syslabels.Seolan_Core_General.confirm|escape:"quotes"%>')"<%/if%>><%$m2i->name%></a></li>
+		<%/if%>
+		<%/if%>
+		<%/if%>
+	       <%/foreach%>
+	      </ul>
+	     </li>
+	    <%/if%>
+	   <%/section%>
+	  </ul>
+	 </li>
+	<%/section%>
+       </ul>
+      </li>
+     </ul>
+    </td>
+   </tr>
+  </table>
+  </div>
+  <script type="text/javascript">
+   jQuery("#cv8-modlist").simpleTree({drag:false});
+   <%if !$smarty.request.noreload%>
+    // Mise à jour du menu
+    home_reloadModules();
+   <%/if%>
+  </script>
+ </fieldset>
+<%/if%>
+
+<%if $root%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Management_Management.add_a_module%></legend>
+  <div class="table-responsive">
+  <table class="table list">
+   <tr>
+    <td>
+     <form action="<%$index%>" method="post">
+     <div class="searchfield cv8_inlineblock form-group">
+      <select name="modurl">
+       <option value="0">---</option>
+       <%foreach from=$module_builder_list key=group item=modules%>
+       <optgroup label="<%$group%>">
+         <%foreach from=$modules item=module%>
+         <option value="moid=<%$sysmods.xmodadmin%>&class=<%$module.classname%>&function=newModule&template=Module/Management.modWizard.html&step=1&newmoid=<%$module.toid%>"><%$module.class_label%></option>
+         <%/foreach%>
+       </optgroup>
+       <%/foreach%>
+      </select>
+     </div>
+     <div id="tzr-action<%$uniqid%>" class="tzr-action cv8_inlineblock form-group">
+       <input type="button" name="Go" value="<%$syslabels.Seolan_Core_General.go_text%>" onclick="if(form.modurl.selectedIndex!=0) v<%$uniqid%>.jQueryLoad('<%$self%>&'+form.modurl.options[form.modurl.selectedIndex].value);"/>
+      </div>
+     </form>
+    </td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+<%/if%>
+</div>

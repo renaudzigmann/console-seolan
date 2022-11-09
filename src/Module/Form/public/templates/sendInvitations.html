@@ -1,0 +1,43 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Form_Form.sendinvitations_text%>
+<fieldset>
+  <%if $smarty.request.reminder==1%>
+  <legend><%$syslabels.Seolan_Module_Form_Form.sendreminder%></legend>
+  <%else%>
+  <legend><%$syslabels.Seolan_Module_Form_Form.sendinvitations%></legend>
+  <%/if%>
+  <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="function" value="procSendInvitations">
+    <%if $smarty.request.reminder==1%>
+    <input type="hidden" name="reminder" value="1">
+    <%/if%>
+    <input type="hidden" name="oid" value="<%$br_oid%>">
+    <input type="hidden" name="_next" value="<%$back%>">
+    <input type="hidden" name="skip" value="1">
+    <div class="table-responsive">
+      <table class="table table-condensed list2">
+	<tr>
+	  <th><label><%$syslabels.Seolan_Module_Form_Form.mail_sender%></label></th>
+	  <td><input type="text" name="sender" value="<%$xuser->email()%>" size="40"></td>
+	</tr>
+	<tr>
+	  <th><label><%$syslabels.Seolan_Module_Form_Form.mail_subject%></label></th>
+	  <td><input type="text" name="subject" value="<%$br_otitle->html|escape:"html"%>" size="40"></td>
+	</tr>
+	<tr>
+	  <th><label><%$syslabels.Seolan_Module_Form_Form.mail_content%></label></th>
+	  <td><textarea name="content" rows="6" cols="70"><%$syslabels.Seolan_Module_Form_Form.mail_default%></textarea></td>
+	</tr>
+      </table>
+    </div>
+  <%if $smarty.request.reminder==1%>
+  <div class="alert alert-info">Les rappels sont envoyés aux destinataires (internes et externes) qui n'ont pas encore répondu au questionnaire.<br> Il n'y a pas de distinction de faite entre les éventuels destinataires ajoutés après l'envoi initial(qui n'ont pas reçu d'invitation) et les destinataires initiaux (qui ont reçu une invitation).</div>
+  <%/if%>
+    <div class="tzr-action">
+      <button class="btn btn-primary" type="submit"><%$syslabels.Seolan_Core_General.send_text%></button>
+      <button class="btn btn-default" type="button" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+	<%$syslabels.Seolan_Core_General.back_text%>
+      </button>
+    </div>
+  </form>
+</fieldset>

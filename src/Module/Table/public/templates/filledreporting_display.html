@@ -1,0 +1,66 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+
+
+<%if $filled_reporting.query|@count > 0%>
+  <div class="current-query clearfix">
+    <%foreach from=$filled_reporting.query name="qf" key="queryField" item="queryVal"%>
+      <%$queryField%> : <%$queryVal%><%if !$smarty.foreach.qf.last%>, <%/if%>
+    <%/foreach%>
+  </div>
+<%/if%>
+
+<form>
+  <input type="hidden" name="function" value="filledReporting_export" />
+  <input type="hidden" name="tplentry" value="br" />
+  <input type="hidden" name="moid" value="<%$_moid%>" />
+  <button class="btn btn-primary" type="submit">
+    <span class="glyphicon csico-download" aria-hidden="true"></span>
+    <%$syslabels.Seolan_Core_General.export_text%>
+  </button>
+</form>
+
+<div id="tzr-tablist-<%$uniqid%>">
+  <%foreach from=$filled_reporting.data key="lang" item="fields" name="reporting"%>
+    <fieldset class="fieldsetAccordion <%if $smarty.foreach.repoting.first%>fieldsetAccordionOpen<%else%>fieldsetAccordionClosed<%/if%>">
+      <legend><%$lang%></legend>
+      <div class="table-responsive">
+        <table class="table table-striped cv8_tablelist">
+          <thead>
+          <tr>
+            <th><%$syslabels.Seolan_Module_Table_Table.filledreporting_field%></th>
+            <th style="text-align: right"><%$syslabels.Seolan_Module_Table_Table.filledreporting_filled%></th>
+            <th style="text-align: right"><%$syslabels.Seolan_Module_Table_Table.filledreporting_total%></th>
+            <th style="text-align: right"><%$syslabels.Seolan_Module_Table_Table.filledreporting_percent%></th>
+            <th style="text-align: right"><%$syslabels.Seolan_Module_Table_Table.filledreporting_browse%></th>
+          </tr>
+          </thead>
+          <tbody>
+          <%foreach from=$fields item="field"%>
+            <%assign var="urlBrowse" value="`$fullself`&moid=`$_moid`&function=filledReporting_browse&template=Module/Table.browse.html&tplentry=br&lang=`$lang`&field=`$field.field`"%>
+            <tr>
+              <td><%$field.label%></td>
+              <td style="text-align: right"><%$field.count%></td>
+              <td style="text-align: right"><%$field.countTotal%></td>
+              <td style="text-align: right"><%(($field.count/$field.countTotal)*100)|@round%>%</td>
+              <td style="text-align: right">
+                <a href="<%$fullself%>&moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&gopage=<%$urlBrowse|@urlencode%>">
+                  <span class="glyphicon csico-log-in"></span>
+                </a>
+              </td>
+            </tr>
+          <%/foreach%>
+          </tbody>
+        </table>
+      </div>
+    </fieldset>
+  <%/foreach%>
+</div>
+
+<script>
+  jQuery(document).ready(function(){
+    TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"))
+  });
+</script>
+
+
+

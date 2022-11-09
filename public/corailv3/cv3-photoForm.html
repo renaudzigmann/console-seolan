@@ -1,0 +1,24 @@
+<%if $tzr.corailv3_photorslt%>
+<div id="cv3-photoSearch">
+<%if $tzr.corailv3_photofulltext%>
+ <form name="phformkw" class="moduleRechercheRapide" action="<%$self%>" method="post" onsubmit="checkFields(this);">
+  <input type="hidden" name="alias" value="<%$tzr.corailv3_photorslt%>">
+  <input type="hidden" name="fulltext" value="1">
+  <input type="text" name="keyword">
+  <script type="text/javascript">inputInit(document.phformkw.keyword,"<%$labels.photo_keyword%>");</script>
+  <input type="submit" value="" style="margin: 4px 0px 0px; position: absolute;" class="button">
+ </form>
+<%/if%>
+<%if $tzr.corailv3_photoquery%>
+ <form name="phform" class="moduleRechercheRapide" action="<%$self%>" method="post" onsubmit="checkFields(this);">
+  <input type="hidden" name="alias" value="<%$tzr.corailv3_photorslt%>">
+  <%section name=f loop=$ph_fields_object%>
+   <%$ph_fields_object[f]->html%>
+   <script type="text/javascript">inputInit(document.phform.<%$ph_fields_object[f]->field%>,"<%$ph_fields_object[f]->fielddef->label%>");</script>
+  <%/section%>
+  <input type="submit" value="" style="margin: 4px 0px 0px; position: absolute;" class="button">
+  <%if $tzr.corailv3_photoadvsearch%><a href="<%$self%>alias=<%$tzr.corailv3_photoadvsearch%>"><%$labels.photo_advsearch%></a><%/if%>
+ </form>
+<%/if%>
+</div>
+<%/if%>

@@ -1,0 +1,108 @@
+<%if $br_threshold==0%>
+ <%assign var=title value="`$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.viewref1` (`$br_datestart->html` > `$br_dateend->html`)"%>
+<%elseif $br_threshold==1%>
+ <%assign var=title value="`$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.viewref2` (`$br_datestart->html` > `$br_dateend->html`)"%>
+<%elseif $br_threshold==5%>
+ <%assign var=title value="`$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.viewref3` (`$br_datestart->html` > `$br_dateend->html`)"%>
+<%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.seenpages_text%></legend>
+  <canvas id="chart"></canvas>
+ <br><br>
+ <table class="table table-condesed table-hover cv8_tablelist cv8_tablelistsorting cv8_tablesorter" id="list<%$uniqid%>">
+  <thead>
+   <tr class="sortable">
+    <th><%$syslabels.Seolan_Core_General.page%></td>
+    <%foreach from=$brt_langs key=lang item=l%>
+     <th><%$lang%></th>
+    <%/foreach%>
+    <th><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.total%></th>
+    <%foreach from=$brt_langs key=lang item=l%>
+     <th>% <%$lang%></th>
+    <%/foreach%>
+   </tr>
+  </thead>
+  <tbody>
+   <%foreach from=$brt_n item=v%>
+    <tr  class="sortable">
+     <td><%$v.name%></td>
+     <%foreach from=$brt_langs key=lang item=l%>
+      <td><%$v.lcnt.$lang%></td>
+     <%/foreach%>
+     <td><%$v.cnt%></td>
+     <%foreach from=$brt_langs key=lang item=l%>
+      <td><%$v.pcnt.$lang%></td>
+     <%/foreach%>
+    </tr>
+   <%/foreach%>
+  </tbody>
+ </table>
+</fieldset>
+<br>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.seenpagesaverage_text%></legend>
+ <table class="table table-condesed table-hover cv8_tablelist cv8_tablelistsorting cv8_tablesorter" id="dlist<%$uniqid%>">
+  <thead>
+   <tr class="sortable">
+    <th><%$syslabels.Seolan_Core_General.page%></td>
+    <%foreach from=$brt_langs key=lang item=l%>
+     <th><%$lang%></th>
+    <%/foreach%>
+   </tr>
+  </thead>
+  <tbody>
+   <%foreach from=$brt_n item=v%>
+    <tr>
+     <td><%$v.name%></td>
+     <%foreach from=$brt_langs key=lang item=l%>
+      <td><%$v.pdcnt.$lang%></td>
+     <%/foreach%>
+    </tr>
+   <%/foreach%>
+  </tbody>
+ </table>
+</fieldset>
+
+<script type="text/javascript">
+  TZR.XTableSorter("list<%$uniqid%>");
+  TZR.XTableSorter("dlist<%$uniqid%>");
+
+  var colors = ['lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightcoral'];
+  var labels = [], datasets = [];
+  <%foreach from=array_keys($brt_langs) key=id item=lang%>
+    datasets[<%$id%>] = {label: '<%$lang%>', type: "bar", backgroundColor: colors.shift(),  data: []};
+  <%/foreach%>
+
+  <%foreach from=$brt_n item=v%>
+    labels.push('<%$v.name%>');
+    <%foreach from=array_keys($brt_langs) key=id item=lang%>
+      datasets[<%$id%>].data.push(<%$v.lcnt.$lang|default:0%>);
+    <%/foreach%>
+  <%/foreach%>
+
+  var ctx = document.getElementById('chart').getContext('2d');
+  Chart.defaults.elements.line.borderWidth = 1;
+  var chartConfig = {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      datasets: {
+        borderWidth: 1
+      },
+      scales: {
+        y: {
+            ticks: {
+              suggestedMin: 0
+            }
+          }
+      }
+    }
+  };
+  var myChart = new Chart(ctx, chartConfig);
+
+</script>

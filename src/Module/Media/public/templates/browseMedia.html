@@ -1,0 +1,98 @@
+<%if $selection == 1%>
+<%else%>
+<%assign var='media' value=$br_lines_omedia[i]%>
+<%assign var='mediaoid' value=$br_lines_oid[i]%>
+<%assign var='actions' value=$br_actions[i]%>
+<%assign var='publish' value=$br_lines_oPUBLISH[i]%>
+<%assign var='browsethumbsize' value=$br__browsethumbsize%>
+<%if $br_translation_mode%>
+<%assign var='previewurl' value=$self|cat:'&_uniqid='|cat:$uniqid|cat:'&moid='|cat:$_moid|cat:'&oid='|cat:$mediaoid|cat:'&tplentry=br&function=displayInfos&template=Module/Media.viewInfos.html&skip=1&_raw=2&_ajax=1&mediaonly=1&LANG_TRAD='|cat:$br_lang_trad|cat:'&LANG_DATA='|cat:$lang_trad%>
+<%else%>
+<%assign var='previewurl' value=$self|cat:'&_uniqid='|cat:$uniqid|cat:'&moid='|cat:$_moid|cat:'&oid='|cat:$mediaoid|cat:'&tplentry=br&function=displayInfos&template=Module/Media.viewInfos.html&skip=1&_raw=2&_ajax=1&mediaonly=1'%>
+<%/if%>
+<%/if%>
+<%if $media->isPDF%><%$hasPreview=true%>
+<%elseif $media->isImage%><%$hasPreview=true%>
+<%elseif $media->isVideo%><%$hasPreview=true%>
+<%else%><%$hasPreview=false%>
+<%/if%>
+  <li class="imagelist-item imagelist-card <%$personalize_classes%><%if $publish->raw eq "2"%> imagelist-unpublish<%/if%>" <%$personalize_datas%>  data-oid="<%$mediaoid%>">
+    <a class="previewmedia" id="bt<%$media->varid%>" <%if $previewurl%> data-previewurl="<%$previewurl%>" href="#"<%/if%> >
+      <div class="imagelist-img <%if !$hasPreview%>defaultMime<%/if%><%if $media->fielddef->isEmpty($media)%> empty <%/if%><%if $media->isVideo%> imagelist_video<%elseif $media->isPDF%> imagelist_pdf<%/if%>">
+        <%if $publish->raw eq "2"%><span class="glyphicon csico-unpublished"></span><%/if%>
+        <%if $media->isPDF%>
+	  <%$media->completeHTML("geometry=<%$browsethumbsize%>")%>
+        <%elseif $media->isImage%>
+          <%$media->completeHTML("geometry=<%$browsethumbsize%>")%>	
+        <%elseif $media->isVideo%>
+	  <%$media->html_preview%>
+	<%else%>
+	<span class="other-media-file" title="<%$media->mime%>">
+	  <%$media->mimepicto%>
+	</span>
+        <%/if%>
+        <%if $media->isVideo%><span class="glyphicon csico-file-movie" aria-hidden="true"></span>
+        <%elseif $media->isPDF%><span class="glyphicon csico-file-pdf" aria-hidden="true"></span>
+        <%/if%>
+      </div>
+    </a>
+
+    <div class="imagelist-text<%if $selected%> active<%/if%>">
+      <label>
+        <%if !$noaction %>
+	<input <%if $selected%>checked<%/if%>
+	class="checkbox1"
+	type="checkbox"
+	value="1" name="_selected[<%$mediaoid%>]"
+	onchange="TZR.Media.highlightImage.call(TZR.Media, jQuery(this).parents('li.imagelist-item'), this.checked);"
+	>
+        <%/if%>
+        <span class="imagelist-title<%if $br_lines_imagelistclass[i]%> <%$br_lines_imagelistclass[i]%><%/if%>">
+          <%if $title%>
+            <span><%$title%></span>
+          <%else%>
+            <%section name=h loop=$br_header_fields%>
+            <%if !($br_header_fields[h]->field eq 'media') && $br_header_fields[h]->published%>
+              <span class="cv8-media-<%$br_header_fields[h]->field%>"><%$br_lines_o<%$br_header_fields[h]->field%>[i]->html|mock_striptags:"<br>"%></span>
+            <%/if%>
+            <%/section%>
+          <%/if%>
+        </span>
+      </label>
+    </div>
+    
+    <%if !$noaction %>
+    
+    <%if !$br_translation_mode && is_object($media) && $media->isImage && ($media->getImageSize('fullwidth')>1500 || $media->getImageSize('fullheight')>1500 ) %><%capture assign="hires"%><li><strong>HR</strong></li><%/capture%><%else%><%assign var="hires" value=""%><%/if%>
+    <%if $br_translation_mode%>
+    <div class="imagelist-action">
+      <ul>
+	<li class="info-lang"><%$lang_long[array_search($lang_trad,$lang_code)]%></li>
+        <%foreach from=$br_actions2[i] item=myaction2%>
+        <li>
+          <%if $myaction2%><%$myaction2%><%/if%>
+        </li>
+        <%/foreach%>
+	<%$hires%>
+      </ul>
+    </div>
+    <%/if%>
+    <div class="imagelist-action">
+      <ul>
+	<%if $br_translation_mode%>
+        <li><%$br_lines_translation_status[i].$lang_data.html%></li>
+	<li class="info-lang"><%$lang_long[array_search($lang_data,$lang_code)]%></li>
+	<%/if%>
+        <%foreach from=$actions item=myaction%>
+        <li>
+          <%if $myaction%><%$myaction%><%/if%>
+        </li>
+        <%/foreach%>
+	<%$hires%>
+      </ul>
+    </div>
+    <%/if%>
+   
+    
+
+</li>

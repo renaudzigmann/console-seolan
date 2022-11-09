@@ -1,0 +1,78 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Module_Management_Management.checkpoints`"%>
+<%assign var="tzrhistoryurl" value="`$self`&moid=`$_moid`&function=browseCheckpoints&template=Module/Management.browseCheckpoints.html"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.confirmRestore=function(){
+   return confirm('<%$syslabels.Seolan_Module_Management_Management.confirmrestore|escape:"javascript"%>');
+ }
+</script>
+<div class="cv8-contenu-center clearfix">
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Management_Management.checkpoints%></legend>
+ <div class="table-responsive">
+  <table class="table cv8_tablelist">
+    <thead>
+    <tr>
+      <th align="center" colspan="1"><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+      <th><%$syslabels.Seolan_Core_General.name%></th>
+      <th><%$syslabels.Seolan_Core_General.created_date%></th>
+      <th><%$syslabels.Seolan_Core_General.tzrversion%></th>
+      <th><%$syslabels.Seolan_Core_General.comment_text%></th>
+      <th><%$syslabels.Seolan_Module_Management_Management.database%></th>
+      <th><%$syslabels.Seolan_Module_Management_Management.datadir%></th>
+      <th><%$syslabels.Seolan_Core_General.size%> (Mo)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%foreach name="i" key="name" item="o" from=$cp_list%>    
+      <tr>
+      <td align="center" colspan="1" nowrap>
+        <a class="cv8-ajaxlink" href="<%$self%>moid=<%$_moid%>&function=restoreCheckpoint&checkpoint=<%$name%>&skip=1&_next=<%$here|escape:"url"%>" x-confirm="var ret=v<%$uniqid%>.confirmRestore();"><%$syslabels.Seolan_Core_General.move%></a>
+        <a class="cv8-ajaxlink" href="<%$self%>moid=<%$_moid%>&function=delCheckpoint&checkpoint=<%$name%>&skip=1&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.delete%></a>
+      </td>
+      <td><%$name%></td>
+      <td><%$o.crea%></td>
+      <td align="right" class="<%if getFullTZRVersion()==$o.version%>tzr-success-message<%else%>tzr-message<%/if%>"><%$o.version%></td>
+      <td><%$o.comment%></td>
+      <td><%if $o.db%><%$syslabels.Seolan_Core_General.yes%> <a href="<%$self%>moid=<%$_moid%>&function=downloadCheckpoint&checkpoint=<%$name%>&db=1&skip=1"><%$syslabels.Seolan_Core_General.download%></a><%else%><%$syslabels.Seolan_Core_General.no%><%/if%></td>
+      <td><%if $o.data%><%$syslabels.Seolan_Core_General.yes%> <a href="<%$self%>moid=<%$_moid%>&function=downloadCheckpoint&checkpoint=<%$name%>&data=1&skip=1"><%$syslabels.Seolan_Core_General.download%></a><%else%><%$syslabels.Seolan_Core_General.no%><%/if%></td>
+      <td align="right"><%$o.size%></td>
+      </tr>
+    <%/foreach%>
+    </tbody>
+   </table>
+  </div>
+</fieldset>
+<br>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Management_Management.newcheckpoint%></legend>
+ <form method="post" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="newCheckpoint">
+  <input type="hidden" name="_next" value="<%$here%>">
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist list2">
+      <tr>
+        <th><%$syslabels.Seolan_Module_Management_Management.database%></th>
+        <td><input type="checkbox" value="1" name="database"></td>
+      </tr>
+      <tr>
+        <th><%$syslabels.Seolan_Module_Management_Management.database_logs%></th>
+        <td><input type="checkbox" value="1" name="logs"></td>
+      </tr>
+      <tr>
+        <th><%$syslabels.Seolan_Module_Management_Management.datadir%></th>
+        <td><input type="checkbox" value="1" name="datadir"></td>
+      </tr>
+      <tr>
+        <th><%$syslabels.Seolan_Core_General.comment_text%></th>
+        <td><input type="text" name="comment" size="100"></textarea>
+      </tr>
+    </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" onclick="if(!this.form.database.checked && !this.form.datadir.checked){alert('<%$syslabels.Seolan_Module_Management_Management.alertcreate|escape:"javascript"%>'); return false;}">
+  </div>
+ </form>
+</fieldset>
+</div>

@@ -1,0 +1,18 @@
+<%if $br_lines_oid%>
+<div class="table-responsive">
+  <table class="table list2">
+    <%section name=i loop=$br_lines_oid%>
+      <tr>
+        <td>
+          <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&function=viewpage&tplentry=it&template=Module/InfoTree.viewpage.html&oidit=<%$br_lines_oid[i]%>">
+            <%if $br_lines_olinkup[i]->raw%><%$br_lines_olinkup[i]->html%> > <%/if%>
+            <%$br_lines_otitle[i]->html%>
+          </a>
+        </td>
+      </tr>
+    <%/section%>
+  </table>
+</div>
+<%else%>
+  <%$syslabels.Seolan_Core_Field_Field.no_result%>
+<%/if%>

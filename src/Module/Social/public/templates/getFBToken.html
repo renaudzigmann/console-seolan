@@ -1,0 +1,64 @@
+<html>
+ <head>
+  <%include file="Core.header/layout.html"%>
+ </head>
+ <body class="tzr-raw-body" style="margin:0; padding:0;">
+  <script>
+    function chooseAccount(name,account,token){
+      if(!token){
+	token=params['access_token'];
+      }
+      if(window.opener["v"+params['_uniqid']]){
+	window.opener["v"+params['_uniqid']].FBAccountChoosen(name,account,token);
+      }
+      self.close();
+    }
+
+    function displayAccounts(user) {
+      if(!user.id || !user.permissions.data[0].publish_actions){
+	//self.close();
+	return;
+      }
+      var userAccounts = document.getElementById('userAccounts');
+      user.name=user.name.replace(/'/g,'');
+      t='- <a href="" onclick="chooseAccount(\''+user.name+'\',\''+user.id+'\'); return false;">'+user.name+'</a><br>';
+      if(user.accounts && user.accounts.data){
+        for(var i in user.accounts.data){
+          page=user.accounts.data[i];
+          if(!page.perms || page.perms.length==0) continue;
+	  page.name=page.name.replace(/'/g,'');
+          t+='- <a href="" onclick="chooseAccount(\''+page.name+'\',\''+page.id+'\',\''+page.access_token+'\'); return false;">'+page.name+'</a><br>';
+        }
+      }
+      userAccounts.innerHTML=t;
+    }
+    var p=location.search.split('&');
+    var params={};
+    for(var i in p){
+      foo=p[i].split('=');
+      if(foo[0].indexOf('?')===0) foo[0]=foo[0].substr(1);
+      params[foo[0]]=foo[1];
+    }
+    p=location.hash.substring(1).split('&');
+    for(var i in p){
+      foo=p[i].split('=');
+      if(foo[0].indexOf('?')===0) foo[0]=foo[0].substr(1);
+      params[foo[0]]=foo[1];
+    }
+    // La redirection de FB doit se faire sur l'url déclaré dans l'appli (a savoir xsalto), de ce fait, on passe l'origine dans l'url de redirection et on redirige dessus.
+    // Cela permet à la popup de communiquer avec l'opener (possible uniquement sur ndd opener=ndd popup)
+    if(params['origin']){
+      location.href=unescape(params['origin'])+location.pathname+location.search.replace(/&origin=[^&]+/,'')+location.hash;
+    }
+    var accessToken = window.location.hash.substring(1);
+    var script = document.createElement('script');
+    script.src = "https://graph.facebook.com/me?"+accessToken+"&fields=permissions,id,name,accounts&callback=displayAccounts";
+    document.body.appendChild(script);
+  </script>
+  <fieldset>
+   <legend><%$syslabels.Seolan_Module_Social_Social.choosefbaccount%></legend>
+   <div id="userAccounts"></div>
+  </fieldset>
+ </body>
+</html>
+				 

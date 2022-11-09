@@ -1,0 +1,48 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="`$syslabels.Seolan_Core_General.edit_text` : `$br_here->title`"%>
+<%include file="Module/DocumentManagement.bdscripts.js"%>
+<%include file="Module/Table.functions.html"%>
+<%include file="Module/DocumentManagement.top.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.deleteselected=function() {
+   var form = document.forms["editform<%$uniqid%>"];
+   // parentoid est renseigné pour les documents seulement
+   return TZR.DocMngt.preDelFiche({_parentoid:"<%$smarty.request._parentoid|escape:'javascript'%>",
+				   oid:form.elements['oid'].value,
+				   moid:form.elements['moid'].value});
+ }
+ v<%$uniqid%>.downloadselected=function() {
+  document.location='<%$self%>function=documentsDownload&moid=<%$_moid%>&oid=<%$br_oid%>&physical=0';
+ }
+ v<%$uniqid%>.moveselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=1&_copy=0&oid='+escape(oid)+'&formname=editform<%$uniqid%>&_parentoid=<%$smarty.request._parentoid%>');
+ }
+ v<%$uniqid%>.copyselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=0&_copy=1&oid='+escape(oid)+'&formname=editform<%$uniqid%>');
+ }
+ v<%$uniqid%>.linkselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=0&_copy=0&oid='+escape(oid)+'&formname=editform<%$uniqid%>');
+ }
+ v<%$uniqid%>.updateSubModule=function(url,link){
+  TZR.jQueryLoad({target:jQuery(link).parents('div.ui-tabs-panel'),url:url});
+ }
+ v<%$uniqid%>.ssmodsave=function(moid,url,button){
+  var f=document.forms['editssmodform<%$uniqid%>-'+moid];
+  if(!TZR.isFormValidWithFocus(f,true)){
+    alert('Some data are not valid.');
+    return false;
+  }
+ }
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"));
+</script>
+
+<%if $br_here->tpl.oedit->filename%>
+ <%include file=$br_here->tpl.oedit->filename%>
+<%else%>
+ <%include file="Module/DocumentManagement.template-edit.html"%>
+<%/if%>
+<script type="text/javascript">
+ jQuery(document).ready(function(){
+   TZR.activeDependency(document.editform<%$uniqid%>);
+   TZR.addValidator([document.editform<%$uniqid%>,'ajaxProcEditCtrl','module-container','<%$tzr.error_color%>','Form']);
+ });
+</script>

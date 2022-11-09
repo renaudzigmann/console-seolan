@@ -1,0 +1,114 @@
+<%assign var="formname" value="formname"|cat:$uniqid%>
+<script type="text/javascript">
+ var act=false;
+ TZR.Table.ExportView = {
+   act:null
+ };
+ TZR.Table.ExportView.changeFmt = function(form, uniqid){
+   if(this.act != null)
+     this.act.style.display="none";
+   var v=form.elements['fmt'].value;
+   this.act = document.getElementById(uniqid+'fieldset'+v);
+   if (this.act != null)
+     this.act.style.display="block";
+ };
+ TZR.Table.ExportView.export = function (form, uniqid){
+   form.submit();
+   TZR.Dialog.closeDialog();
+ };
+ jQuery(document).ready(function(){
+   TZR.Table.ExportView.changeFmt.call(TZR.Table.ExportView, document.forms['<%$formname%>'], '<%$uniqid%>');
+ });
+</script>
+<div class="title"><%$syslabels.Seolan_Core_General.export_text%> - <%$imod_props.modulename%> - <%$br_link%></div>
+<div class="cv8-contenu-center">
+  <form  name="<%$formname%>" action="<%$self%>" method="post">
+    <input type="hidden" name="function" value="exportDisplay"/>
+    <input type="hidden" name="moid" value="<%$_moid%>"/>
+    <input type="hidden" name="tplentry" value="br"/>
+    <input type="hidden" name="oid" value="<%$smarty.request.oid%>"/>
+    <input type="hidden" name="template" value="Module/Table.printdisplay.html"/>
+    <fieldset>
+      <legend><%$syslabels.Seolan_Core_General.options_text%></legend>
+      <div class="table-responsive">
+	<table class="table table-condensed">
+	  <tr>
+	    <th><label>Format</label></th>
+	    <td>
+	      <select name="fmt" onchange="TZR.Table.ExportView.changeFmt.call(TZR.Table.ExportView, this.form, '<%$uniqid%>');">
+		<option value="xl07">Excel 2007</option>
+		<option value="csv">CSV</option>
+	      </select>
+	    </td>
+	  </tr>
+	  <tr>
+	    <th><label><%$syslabels.Seolan_Module_Table_Table.filename_text%></label></th>
+	    <td><input type="text" value="<%$br_tlink|rewriteToFilename|escape:'html'%>" name="fname" size="50"></td>
+	  </tr>
+	</table>
+      </div>
+    </fieldset>
+    
+    <fieldset id="<%$uniqid%>fieldsetcsv" style="display:none;">
+      <legend><%$syslabels.Seolan_Core_General.options_text%> CSV</legend>
+      <div class="table-responsive">
+	<table class="table table-condensed">
+	  <tr>
+	    <th><label><%$syslabels.Seolan_Module_Table_Table.exportcsvfsep%></label></th>
+	    <td><input type="text" name="csvfsep" value=";" maxlength="1" size="1"></td>
+	  </tr>
+	  <tr>
+	    <th><label><%$syslabels.Seolan_Module_Table_Table.exportcsvtextsep%></label></th>
+	    <td><input type="text" name="csvtextsep" value="&quot;" maxlength="1" size="1"></td>
+	  </tr>
+	  <tr>
+	    <th><label><%$syslabels.Seolan_Module_Table_Table.exportcharset%></label></th>
+	    <td>
+	      <select name="csvcharset">
+		<option value="UTF-8" selected>UTF-8</option>
+		<option value="<%$locale.charset%>"><%$locale.charset%></option>
+	      </select>
+	    </td>
+	  </tr>
+	</table>
+      </div>
+    </fieldset>
+    
+    <%if !empty($br___ssmod)%>
+    <fieldset>
+      <legend>Sous modules</legend>
+      <div class="table-responsive">
+	<table class="table table-condensed">
+	  <%section loop=$br___ssmod name="ssmod"%>
+	  <%if !empty($br___ssmod[ssmod].lines_oid)%>
+	  <tr>
+	    <th><label>Champs du module "<%$br___ssprops[ssmod].modulename%>"</label></th>
+	    <td>
+	      <label><%$syslabels.Seolan_Module_Table_Table.fieldstoexport%></label><br>
+	      <select name="options[<%$br___ssprops[ssmod]._moid%>][selectedfields][]" multiple size="10">
+		<%section name="f" loop=$br___ssmod[ssmod].header_fields%>
+		<option value="<%$br___ssmod[ssmod].header_fields[f]->field%>" <%if $br___ssmod[ssmod].header_fields[f]->browsable%>selected<%/if%>><%$br___ssmod[ssmod].header_fields[f]->label%></option>
+		<%/section%>
+	      </select>
+	      <br><br>
+	      <label><%$syslabels.Seolan_Core_General.order%></label><br>
+	      <select name="_order[<%$br___ssprops[ssmod]._moid%>]" size="1">
+		<%section name="f" loop=$br___ssmod[ssmod].header_fields%>
+		<option value="<%$br___ssmod[ssmod].header_fields[f]->field%>"><%$br___ssmod[ssmod].header_fields[f]->label%></option>
+		<%/section%>
+	      </select>
+	      <br><br>
+	    </td>
+	  </tr>
+	  <%/if%>
+	  <%/section%>
+	</table>
+      </div>
+    </fieldset>
+    <%/if%>
+  </form>
+</div>
+<div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <button class="btn btn-primary" type="button" onclick="TZR.Table.ExportView.export.call(TZR.Table.ExportView, document.forms['<%$formname%>'], '<%$uniqid%>'); return false;" ><%$syslabels.Seolan_Core_General.export_text%></button>
+  <button class="btn btn-primary" type="button" onclick="TZR.Dialog.closeDialog();" ><%$syslabels.Seolan_Core_General.close_text%></button>
+</div>

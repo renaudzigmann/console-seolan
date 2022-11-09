@@ -1,0 +1,58 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+<%assign var=section value=$it_olines[it]%>
+<%assign var=sectiondivid value="cv8d-browsemedia-`$it_itoid[it]`"%>
+<script type="text/javascript">
+jQuery(document).ready(function(){browsmediainitpage("<%$sectiondivid%>");});
+function browsmediainitpage(sectiondivid){
+  jQuery('#cv8d-browsemedia-imagelist-<%$it_itoid[it]%> li span.cv8d-media a.nyro').nyroModal()
+}
+</script>
+<%if !isset($smarty.request.contentonly)%><div class="cv8d-browsemedia cv8d-browsemedia-<%$section._functionparams.moid%>" id="<%$sectiondivid%>">
+<%assign var=end value="</div>"%>
+<%else%>
+<%assign var=end value=""%>
+<%/if%>
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html" browsetype="media" sectiondivid="`$sectiondivid`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsepagination.html" assign="pager" section=$section %>
+ <ul class="cv8d-list" id="cv8d-browsemedia-imagelist-<%$it_itoid[it]%>">
+   <%section name=lines loop=$section.lines_oid %>
+   <%assign var="title" value=""%>
+   <%section name=header loop=$section.header_fields%>
+   <%if $section.header_fields[header]->ftype!="\Seolan\Field\File\File" && !$section.header_fields[header]->sys %>
+   <%assign var="foo" value=$it_olines[it]["lines_o<%$section.header_fields[header]->field%>"][lines]->html%>
+     <%if is_a($section.header_fields[header]->ftype, "\Seolan\Field\Link\Link")%>
+     <%assign var="title" value="`$title` `$foo`"%>
+     <%else%>
+     <%assign var="title" value="`$title` `$foo`"|strip_tags:false%>
+     <%/if%>
+    <%/if%>
+   <%/section%>
+   <%assign var="title" value=$title%>
+   <li class="cv8d-object">
+     <span class="cv8d-media">
+       <span></span>
+       <%if $it_olines[it]._functionparams.params.__linktodetail && $it_olines[it]._functionparams.params.__linktodetail_oidit%>
+       <%assign var=classurldetail value="cv8d-media-detail-link"%>
+       <%assign var=urldetail value="`$self`alias=`$it_olines[it]._functionparams.params.__linktodetail`&oid=`$section.lines_oid[lines]`&from[alias]=`$it_cat_mit.oalias->raw`&from[itoid]=`$it_itoid[it]`&keywords=`$it_olines[it].lines_tlink[$i]`"%>
+       <%else%>
+       <%assign var=classurldetail value="nyro"%>
+       <%assign var=complurldetail value="data-gallery=\"cv8d-browsemedia-imagelist-`$it_itoid[it]`\""%>
+       <%assign var=urldetail value="`$self`&moid=`$it_olines[it]._functionparams.moid`&function=displayMedia&oid=`$it_olines[it].lines_oid[lines]`&template=Module/Media.viewMedia.html&tplentry=br&skip=1&_raw=2&_ajax=1"%>
+       <%/if%>
+       <div>
+	 <a class="<%$classurldetail%>" <%$complurldetail%> href="<%$urldetail%>"><%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].lines_omedia[lines] srcsetId='img_demi' %>
+	 </a>
+       </div>
+       <span></span>
+     </span>
+     <span class="cv8d-field-title"><%$title%></span>
+   </li>
+   
+
+   <%/section%>
+ </ul>
+ <%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+ <div class="cv8d-pagelist cv8d-pagelist-bottom"><%$pager%></div>
+ <%/if%>
+ <%$end%>

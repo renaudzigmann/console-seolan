@@ -1,0 +1,440 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Core_General.import_text`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="Advanced Import"%>
+
+<div style="display:none" id="message-confirm" title="">
+  <div id="message-confirm-content"></div>
+</div>
+<div class="panel-group" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title"><a data-toggle="collapse" aria-expanded="true" href="#file-panel"><%$syslabels.Seolan_Module_MultiTable_MultiTable.fileformatselection%></a></div>
+    </div>
+    <div class="panel-collapse collapse in" id="file-panel">
+      <div class="panel-body table-responsive">
+	<form  name="myform1<%$uniqid%>" action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+	  <input type="hidden" name="nav" value="1">
+	  <input type="hidden" name="function" value="advancedImport">
+	  <input type="hidden" name="skip" value="1">
+	  <input type="hidden" name="moid" value="<%$_moid%>">
+	  <input type="hidden" name="tplentry" value="br">
+	  <input type="hidden" name="impstep" value="1">
+	  <input type="hidden" name="template" value="Module/MultiTable.advanced-import.html">
+
+	  <div class="form-group">
+            <label for="file"><%$syslabels.Seolan_Module_MultiTable_MultiTable.filetoimport%></label>
+            <input name="file" type="file" class="form-control-file" id="file" >
+            <small id="fileHelp" class="form-text text-muted"><%$syslabels.Seolan_Module_MultiTable_MultiTable.fileformat%></small>
+	  </div>
+	  
+	  <div class="form-group">
+            <label for="advfmt"><%$syslabels.Seolan_Module_MultiTable_MultiTable.format%></label>
+            <select name="fmt" id="advfmt" onchange="changeFmt(document.forms['myform1<%$uniqid%>'])">
+              <option selected value="xl07"><%$syslabels.Seolan_Module_MultiTable_MultiTable.formatexcel%></option>
+              <option value="csv">CSV</option>
+            </select>
+	  </div>
+	  
+	  <div id="fieldsetcsv" style="display:none">
+	    
+            <h5><%$syslabels.Seolan_Module_MultiTable_MultiTable.optionscsv%></h5>
+            <div class="form-group col-xs-2">
+              <label for="advcsvfieldsep"><%$syslabels.Seolan_Module_MultiTable_MultiTable.fieldseparator%></label>
+              <input name="csvfieldsep" type="text" value=";" maxlength="1" size="1" class="form-control" id="advcsvfieldsep" >
+            </div>
+
+	    <div class="form-group  col-xs-2">
+              <label for="advcsvtextsep"><%$syslabels.Seolan_Module_MultiTable_MultiTable.textseparator%></label>
+              <input name="csvtextsep" type="text" value='"' maxlength="1" size="1" class="form-control" id="advcsvtextsep" >
+            </div>
+	    
+            <div class="form-group  col-xs-2">
+              <label><%$syslabels.Seolan_Module_MultiTable_MultiTable.charset%></label>
+              <select name="csvcharset" class="col-xs-12">
+		<option value="UTF-8" selected>UTF-8</option>
+		<option value="<%$locale.charset%>"><%$locale.charset%></option>
+              </select>
+            </div>
+
+	  </div>
+
+	  <div class="clearfix"></div>
+
+	  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+            <input type="submit" value="<%$syslabels.Seolan_Module_MultiTable_MultiTable.loadfile%>" class="btn">
+	  </div>
+
+	</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<%if $br_sample%>
+
+<form name="myform2<%$uniqid%>" enctype="multipart/form-data" action="<%$self%>" method="post" onsubmit="return checkForm(this, false);">
+  <input type="hidden" name="nav" value="1">
+  <input type="hidden" name="mode" value="check">
+  <input type="hidden" name="function" value="advancedImport">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="impstep" value="2">
+  <input type="hidden" name="template" value="Module/MultiTable.advanced-import.html">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="panel-title"><a data-toggle="collapse" href="#general-settings-panel" aria-expanded="true"><%$syslabels.Seolan_Module_MultiTable_MultiTable.generalsettings%></a></div>
+      </div>
+      <div class="panel-collapse collapse in" id="general-settings-panel">
+	<div class="panel-body table-responsive">
+	  <div class="form-group">
+	    <label for="linestoskip"><%$syslabels.Seolan_Module_MultiTable_MultiTable.linestoskip%></label>
+	    <input id="linestoskip" type="text" value="1" name="linestoskip" length="1" size="1">
+	  </div>
+	  <div class="form-group">
+	    <label for="updateifexists"><%$syslabels.Seolan_Module_MultiTable_MultiTable.updateifexists%></label>
+	    <input id="updateifexists" type="checkbox" checked value="1" name="updateifexists" onchange="updateIfExistsChange(this);">
+	    <%if $br_translatable%>
+	    <div class="form-group">
+	      <label for="langdata"><%$syslabels.Seolan_Module_MultiTable_MultiTable.langdata%></label>
+	      <select id="langdata" multiple size="10" name="ilangdata[]">
+		<%section name=l loop=$br_langs.code%>
+		<option <%if $br_langs.code[l] ==  $br_langdef%>selected<%/if%> value="<%$br_langs.code[l]%>"><%$br_langs.text[l]%></option>
+		<%/section%>
+	      </select>
+	    </div>
+	    <%else%>
+	    <input type="hidden" name="ilangdata[]" value="<%$lang_def%>">
+	    <%/if%>
+	  </div>
+	</div>
+      </div>
+    </div>      
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <div class="panel-title"><a data-toggle="collapse" href="#table-infos-panel"><%$syslabels.Seolan_Module_MultiTable_MultiTable.tableinfo%></a></div>
+	</div>
+	<div class="panel-collapse collapse in" id="table-infos-panel">
+	  <div class="panel-body table-responsive">
+	    <p class="text-info">
+	      <h5><%$syslabels.Seolan_Module_MultiTable_MultiTable.compulsoryfields%></h5>
+	      <%section name=cf loop=$br_compulsoryfields%>
+	      <%$br_compulsoryfields[cf]%><%if !$smarty.section.cf.last%>&nbsp;|&nbsp;<%/if%>
+	      <%/section%>
+	    </p>
+	    
+	    <%if $br_translatable%>
+	    <p class="text-info">
+	      <h5><%$syslabels.Seolan_Module_MultiTable_MultiTable.translatefields%></h5>
+	      <%section name=tf loop=$br_translatablefields%>
+	      <%$br_translatablefields[tf]%><%if !$smarty.section.tf.last%>&nbsp;|&nbsp;<%/if%>
+	      <%/section%>
+	    </p>
+	    <%/if%>
+	    
+	  </div>
+	</div>
+      </div>
+      
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <div class="panel-title"><a data-toggle="collapse" href="#mapping-panel" aria-expanded="true"><%$syslabels.Seolan_Module_MultiTable_MultiTable.fieldsmapping%></a></div>
+	</div>
+	<div class="panel-collapse collapse in" id="mapping-panel">
+	  <div class="panel-body table-responsive">
+	    
+	    <div class="alert alert-info"><%$br_fileinfo.name%>, <%$br_fileinfo.count%> <%$syslabels.Seolan_Module_MultiTable_MultiTable.rows%></div>
+	    <table class="table table-striped table-auto table-condensed">
+	      <thead>
+	      <tr>
+		<th colspan="<%$br_sample_lines%>"><%$syslabels.Seolan_Module_MultiTable_MultiTable.samplerow%></th><th colspan="2"><%$syslabels.Seolan_Module_MultiTable_MultiTable.matchkeys%></th>
+		<th colspan="3"><%$syslabels.Seolan_Module_MultiTable_MultiTable.columnsmapping%></th>
+	      </tr>
+	      <tr>
+		<th></th>
+		<%section name=c1 loop=$br_nbsamplelines%>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.row%> <%$smarty.section.c1.index%></th>
+		<%/section%>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.setormatch%><br/><i><%$syslabels.Seolan_Module_MultiTable_MultiTable.systemkey%></i></th>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.matchingfields%></th>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.import%><input type="checkbox" id="importallcols"></th>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.destinationfieldname%></th>
+		<th><%$syslabels.Seolan_Module_MultiTable_MultiTable.linkedfield%><br><small><%$syslabels.Seolan_Module_MultiTable_MultiTable.createtargetentity%></small></th>
+	      </tr>
+	    </thead>
+	    <%section name=r loop=$br_sample%>
+	    <%assign var=guessed value=0%>
+	    <%section name=t1 loop=$br_fields%>
+	    <%if $br_foundcols[r] == $smarty.section.t1.index%><%assign var=guessed value=1%><%/if%>
+	    <%/section%>
+	    <%assign var=ic value=$smarty.section.r.index%>
+	    <tr>
+	      <th><%$br_colname[r]%></th>
+	      <%section name=c loop=$br_nbsamplelines%>
+	      <%if $br_sample[r][c]%>
+	      <td><%if mb_strlen($br_sample[r][c])>20%><a data-toggle="popover" data-trigger="hover" data-content="<%$br_sample[r][c]|escape:'javascript'%>"><%/if%><%$br_truncsample[r][c]%><%if mb_strlen($br_sample[r][c])>20%></a><%/if%></td>
+	      <%else%>
+	      <td>&nbsp;</td>
+	      <%/if%>
+	      <%/section%>
+	      <td align="center"><input class="oidfield" id="oidfield_<%$ic%>" type="checkbox" value="row:<%$ic%>" name="oidfield"></td>
+	      <td align="center"><input class="keyfield" id="keyfield_<%$ic%>" type="checkbox" value="key" name="keyfield[<%$ic%>]"></td>
+	      <td align="center"><input class="importcol <%if $guessed%>guessed<%/if%>" id="importcol_<%$ic%>" type="checkbox" value="import" name="importcol[<%$ic%>]">
+	      </td>
+	      <td>
+		<select class="tzrfield" name="tzrfield[<%$ic%>]" style="visibility:hidden" id="tzrfield_<%$ic%>">
+		  <option value="">--</option>
+		  <%section name=t loop=$br_fields%>
+		  <%assign var=guess value=0%>
+		  <%if $br_foundcols[r] == $smarty.section.t.index%><%assign var=guess value=1%><%/if%>
+		  <option <%if $guess%>selected guesscol="1"<%else%>guesscol="0"<%/if%> multivalued="<%$br_fields[t]->multivalued%>" ftype="<%$br_fields[t]->ftype%>" value="<%$br_fields[t]->field%>"><%$br_fields[t]->label%></option>
+		  <%/section%>
+		</select>
+		<select style="visibility:hidden" id="tzrfieldoperator_<%$ic%>"  name="tzrfieldoperator[<%$ic%>]" class="tzrfieldoperator">
+		  <option value=""><%$syslabels.Seolan_Module_MultiTable_MultiTable.replace%></option>
+		  <option value="+"><%$syslabels.Seolan_Module_MultiTable_MultiTable.add%></option>
+		  <option value="-"><%$syslabels.Seolan_Module_MultiTable_MultiTable.remove%></option>
+		</select>
+	      </td>
+	      <td>
+		<div style="visibility:hidden" id="srcfield_<%$ic%>_c">
+		  <table class="table table-condensed">
+		    <tr>
+		      <th><%$syslabels.Seolan_Module_MultiTable_MultiTable.matchfield%></th>
+		      <th><%$syslabels.Seolan_Module_MultiTable_MultiTable.create%>&nbsp;*&nbsp;</th>
+		    </tr>
+		    <tr>
+		      <td><select id="srcfield_<%$ic%>"  name="srcfield[<%$ic%>]"></select></td>
+		      <td><input type="checkbox" value="1" name="srcfieldcreate[<%$ic%>]"></td>
+		    </tr>
+		  </table>
+		</div>
+	      </td>
+	    </tr>
+	    <%/section%>
+	  </table>
+	  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+	    <input type="button" onclick = "checkImport(this.form);" value="<%$syslabels.Seolan_Module_MultiTable_MultiTable.checkimport%>">
+	    <input type="submit" value="<%$syslabels.Seolan_Module_MultiTable_MultiTable.proceedimport%>">
+	  </div>
+	  
+	  </div>
+	</div>
+      </div>
+      
+</form>
+
+<%/if%>
+
+</div>
+
+<script type="text/javascript">
+  function checkForm(form, checkonly){
+    if(TZR.ajaxSubmitFormOngoing==form) return true;
+    var updateifexists = form.elements['updateifexists'];
+    var lines = form.elements['linestoskip'].value;
+    lines = parseInt(lines);
+    if (isNaN(lines))
+      form.elements['linestoskip'].value='0';
+    var ok = true;
+    var message = '';
+    if (updateifexists.checked && !oidselected){
+      var one = false;
+      jQuery(".keyfield").each(function(){
+        if (this.checked){
+          one = true;
+        }
+      });
+      if (!one){
+        ok = false;
+        message  = '<%$syslabels.Seolan_Module_MultiTable_MultiTable.checkupdateifexists%><ul><li><%$syslabels.Seolan_Module_MultiTable_MultiTable.systemuniqueid%></li><li><%$syslabels.Seolan_Module_MultiTable_MultiTable.keysfield%></li></ul>';
+      } else {
+        ok = true;
+      }
+    }
+    // verifier que si coché, un champ est selectionne
+    if (ok){
+      var allfields = true;
+      var onefield = false;
+      jQuery(".importcol").each(function(){
+        if (this.checked){
+          onefield = true;
+          var id = this.id;
+          var id2 = id.replace("importcol_", "tzrfield_");
+          if (document.getElementById(id2).value==''){
+            allfields = false;
+          }
+        }
+      });
+      if (!onefield){
+        ok = false;
+        message = '<%$syslabels.Seolan_Module_MultiTable_MultiTable.fieldtoimport%>';
+      }
+      if (!allfields){
+        ok = false;
+        message = '<%$syslabels.Seolan_Module_MultiTable_MultiTable.completefieldsname%>';
+      }
+    }
+    if (!ok){
+      TZR.alert(message, "<%$syslabels.Seolan_Core_General.warning_text%>");
+      return false;
+    }
+    if (checkonly){
+      return true;
+    }
+    var ok = confirm("<%$syslabels.Seolan_Module_MultiTable_MultiTable.confirmimport%>");
+    if (ok){
+      form.elements['mode'].value='real';
+      form.target = '';
+      return TZR.ajaxSubmitForm(form);
+    } else {
+      return false;
+    }
+  }
+  function checkImport(form){
+    var ok = checkForm(form, true);
+    if (ok){
+      form.elements['mode'].value='check';
+      TZR.Dialog.openFromForm(form);
+      return false;
+    }
+  }
+  var act=false;
+  function changeFmt(myform){
+    var v=myform.fmt.value;
+    if(v == "csv"){
+      document.getElementById('fieldsetcsv').style.display="";
+    } else {
+      document.getElementById('fieldsetcsv').style.display="none";
+    }
+  }
+  var fieldslinks = new Array();
+  <%foreach from=$br_links key=fn item=lfs%>
+    <%capture name=tf assign=od%><%strip%>[
+    <%section name=l loop=$lfs%>
+    {ftype:"<%$lfs[l]->ftype%>", field:"<%$lfs[l]->field%>", label:"<%$lfs[l]->label|escape:'javascript'%>"}
+    <%if $semarty.section.l.last%><%else%>,<%/if%>
+  <%/section%>
+  ]<%/strip%><%/capture%>
+  fieldslinks["<%$fn%>"] = <%$od%>;
+  <%/foreach%>
+  function keyFieldSelected(){
+    var s2 = this.id.replace('keyfield', 'importcol');
+    if (this.checked){
+      jQuery("#"+s2).attr('checked', true);
+      jQuery("#"+s2).each(function(){importColSelected.call(this);});
+    }
+  }
+  var oidselected = false;
+  function oidFieldSelected(){
+    var s = this.id;
+
+    jQuery(".oidfield").each(function(){
+      if (this.id == s){
+      } else {
+        jQuery(this).attr('checked', false);
+      }
+    });
+    if (this.checked){
+      oidselected = true;
+      jQuery(".keyfield").each(function(){
+        jQuery(this).attr('checked', false);
+        jQuery(this).css('visibility', 'hidden');
+      });
+      var s2 = this.id.replace('oidfield', 'importcol');
+      jQuery("#"+s2).each(function(){
+        jQuery(this).attr('checked', false);
+        importColSelected.call(this);
+      });
+    } else {
+      oidselected = false;
+      jQuery(".keyfield").each(function(){
+        jQuery(this).css('visibility', 'visible');
+      });
+    }
+  }
+  function importColSelected(){
+    var s = this.id.replace('importcol', 'tzrfield');
+    var s2 = this.id.replace('importcol', 'srcfield');
+    var s3 = this.id.replace('importcol', 'keyfield');
+    var operator = this.id.replace('importcol', 'tzrfieldoperator');
+    if(this.checked){
+      jQuery("#"+s).css('visibility', 'visible');
+      jQuery("#"+s).change();
+    } else {
+      jQuery("#"+s2).html("").css('visibility', 'hidden');
+      jQuery("#"+s3).attr('checked', false);
+      jQuery("#"+s).css('visibility', 'hidden');
+      jQuery("#"+operator).val("").css('visibility', 'hidden');
+      var sel = document.getElementById(s);
+      sel.options[0].selected = true;
+      for(var i=0; i<sel.options.length; i++){
+        if (jQuery(sel.options[i]).attr('guesscol') == 1){
+          sel.options[i].selected = true;
+        }
+      }
+    }
+  };
+ function updateIfExistsChange(elm){
+   if (!elm.checked){
+     jQuery(".tzrfieldoperator").val("").css("visibility", "hidden");
+   } else {
+     jQuery(".tzrfieldoperator").each(function(i, o){
+       var s = this.id;
+       var importCheckBox = document.getElementById(s.replace('tzrfieldoperator','tzrfield'));
+       importFieldSelected.call(importCheckBox);
+     });
+   }
+ }
+  function importFieldSelected(){
+    var s = this.id;
+    var s2 = s.replace('tzrfield', 'srcfield');
+    var operator = s.replace('tzrfield', 'tzrfieldoperator');
+    var field = this.value;
+    var sel = document.getElementById(s);
+    var sel2 = document.getElementById(s2);
+    var updateifexists = (jQuery('#updateifexists:checked').length>0);
+    jQuery("#"+s2).html("");
+    var selected = sel.options[sel.selectedIndex];
+    if (jQuery(selected).attr('ftype') == '\\Seolan\\Field\\Link\\Link'){
+      jQuery("#"+s2+"_c").css('visibility', 'visible');
+      var t = ''+field;
+      var fields = fieldslinks[field];
+      jQuery(fields).each(function(){
+        sel2.options[sel2.options.length] = new Option(this.label, this.field);
+      });
+      if (jQuery(selected).attr('multivalued') == '1' && updateifexists){
+        jQuery("#"+operator).css('visibility', 'visible');
+      }else{
+        jQuery("#"+operator).val('').css('visibility', 'hidden');
+      }
+    } else {
+      jQuery("#"+s2+"_c").css('visibility', 'hidden');
+      jQuery("#"+operator).val('').css('visibility', 'hidden');
+    }
+  }
+  jQuery(document).ready(function(){
+    $('[data-toggle="popover"]').popover();
+    changeFmt(document.forms["myform1<%$uniqid%>"]);
+    jQuery('.importcol').each(function(){
+      jQuery(this).bind('click', importColSelected);
+    });
+    jQuery('.keyfield').each(function(){
+      jQuery(this).bind('click', keyFieldSelected);
+    });
+    jQuery('.tzrfield').each(function(){
+      jQuery(this).bind('change', importFieldSelected);
+    });
+    jQuery('.oidfield').each(function(){
+      jQuery(this).bind('change', oidFieldSelected);
+    });
+    jQuery('#importallcols').bind('click', function(){
+      var c = this.checked;
+      jQuery('.importcol').each(function(){
+        this.checked = c;
+        importColSelected.call(this);
+      });
+    });
+  });
+</script>

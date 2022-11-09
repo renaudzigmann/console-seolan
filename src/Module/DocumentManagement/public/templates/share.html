@@ -1,0 +1,49 @@
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this,this.parentNode);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="procShare">
+ <input type="hidden" name="oid" value="<%$br_doc->oid%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$self%>moid=<%$_moid%>&function=share&oid=<%$br_doc->oid%>&template=Module/DocumentManagement.share.html&tplentry=br&skip=1&_raw=2&_ajax=1">
+ <div class="table-responsive">
+ <table class="cv8_tablelist">
+  <thead>
+   <tr><th></th><th><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.modulename%></th><th><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.defaultsdir_text%></th></tr>
+  </thead>
+  <tbody>
+   <%section name="s" loop=$br_modlist.lines_oid%>
+    <%assign var=moid value=$br_modlist.lines_oid[s]%>
+    <%if $moid!=$_moid %>
+     <%section name="f" loop=$br_dest.$moid%>
+      <%assign var=id value="moid`$moid`_`$br_dest.$moid[f]->oid`"%>
+      <%assign var=id value=$id|replace:":":"_"%>
+      <tr>
+       <td>
+	<input type="hidden" id="id_<%$id%>" name="_share[<%$moid%>][<%$br_dest.$moid[f]->oid%>]" value="<%$br_dest.$moid[f]->oid%>">
+	<a href="#" onclick="TZR.selectDocument('<%$self%>','<%$moid%>','<%$id%>',0);return false;"><%$syslabels.Seolan_Core_General.edit%></a> 
+	<a id="id_TOSHOW<%$id%>" href="#" onclick="jQuery('#id_<%$id%>').val(''); jQuery('#id_INPUT<%$id%>').html(''); return false;"><%$syslabels.Seolan_Core_General.delete%></a></span>
+       </td>
+       <td><%$br_modlist.lines_name[s]%> (<%$br_modlist.lines_group[s]%>)</td>
+       <td id="id_INPUT<%$id%>"><%$br_dest.$moid[f]->title%></td>
+      </tr>
+     <%sectionelse%>
+      <%assign var=id value="moid`$moid`"%>
+      <tr>
+       <td>
+	<input type="hidden" id="id_<%$id%>" name="_share[<%$moid%>][<%$br_dest.$moid[f]->oid%>]" value="<%$br_dest.$moid[f]->oid%>">
+	<a href="#" onclick="TZR.selectDocument('<%$self%>','<%$moid%>','<%$id%>',0);return false;"><%$syslabels.Seolan_Core_General.edit%></a> 
+	<a id="id_TOSHOW<%$id%>" href="#" onclick="jQuery('#id_<%$id%>').val(''); jQuery('#id_INPUT<%$id%>').html(''); return false;"><%$syslabels.Seolan_Core_General.delete%></a></span>
+       </td>
+       <td><%$br_modlist.lines_name[s]%> (<%$br_modlist.lines_group[s]%>)</td>
+       <td id="id_INPUT<%$id%>"></td>
+      </tr>
+     <%/section%>
+    <%/if%>
+   <%/section%>
+  </tbody>
+ </table>
+ </div>
+ <div class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  <input type="button" value="<%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.deleteshare%>" onclick="if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object%>')) v<%$uniqid%>.jQueryLoad('<%$self%>moid=<%$_moid%>&function=del&oid=<%$br_doc->oid%>&delshare=1&physical=1&skip=1&_next=<%$back|escape:"url"%>');">
+ </div>
+</form>

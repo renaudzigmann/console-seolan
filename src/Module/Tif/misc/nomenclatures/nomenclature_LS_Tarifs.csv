@@ -1,0 +1,148 @@
+13.04.01.01;Adulte;
+13.04.01.02;Adulte 1/2 journée;
+13.04.01.03;Adulte 5 ou 6 jours;
+13.04.01.04;Adulte 6 jours;
+13.04.01.05;Adulte 6 jours BS;
+13.04.01.06;Adulte 6 jours HS;
+13.04.01.07;Adulte journée;
+13.04.01.08;Adultes 7 jours;
+13.04.01.09;Autre;
+13.04.01.10;Carte multi-sites;
+13.04.01.11;Carte site saison;
+13.04.01.12;Demandeur d'emploi;
+13.04.01.13;Enfant;
+13.04.01.14;Enfant 1/2 journée;
+13.04.01.15;Enfant 6 jours;
+13.04.01.16;Enfant 7 jours;
+13.04.01.17;Enfant journée;
+13.04.01.18;Enfant/étudiant 6 jours;
+13.04.01.19;Enfant/étudiants journée;
+13.04.01.20;Entrée principale adulte;
+13.04.01.21;Entrée principale adulte groupe;
+13.04.01.22;Entrée principale enfant;
+13.04.01.23;Entrée principale enfant groupe;
+13.04.01.24;Etudiant;
+13.04.01.25;Etudiant (journée et 1/2 journée);
+13.04.01.26;Etudiant 1/2 journée;
+13.04.01.27;Etudiant 6 jours;
+13.04.01.28;Etudiant journée;
+13.04.01.29;Etudiant, lycéen, collégien journée;
+13.04.01.30;Forfait séminaire chambre double;
+13.04.01.31;Forfait séminaire sans hébergement;
+13.04.01.32;Forfait séminaire single;
+13.04.01.33;Forfait séminaire twin;
+13.04.01.34;Gratuit;|GRAT|
+13.04.01.35;Gratuité;|GRATU||GRATU||GRATU||GRATU||GRATU||GRATU||GRATU||GRATU||GRATU||GRATU||GRATU|
+13.04.01.36;Groupe;
+13.04.01.37;Groupe adulte;
+13.04.01.38;Groupe enfant;
+13.04.01.39;Individuel adulte;
+13.04.01.40;Individuel enfant;
+13.04.01.41;Jeune 1/2 journée;
+13.04.01.42;Jeune 6 jours;
+13.04.01.43;Jeune journée;
+13.04.01.44;Journée;
+13.04.01.45;Junior 1/2 journée;
+13.04.01.46;Junior 6 jours;
+13.04.01.47;Junior journée;
+13.04.01.48;Location;
+13.04.01.49;Location matériel;
+13.04.01.50;Logement seul base chambre double;
+13.04.01.51;Parking autocar;
+13.04.01.52;Parking voitures;
+13.04.01.53;Prix maximum conseillé;
+13.04.01.54;Scolaires / Etudiant;
+13.04.01.55;Tarif abonné;|TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB||TARAB|
+13.04.01.56;Tarif de base;|TARBA||TARBA||TARBA||TARBA|
+13.04.01.57;Tarif de base - Adulte Plein tarif;|TARBA||TARBA||TARBA||TARBA||TARBA|
+13.04.01.58;Tarif de référence Maison de la France;|TARBA|
+13.04.01.59;Tarif enfant;|TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN||TAREN|
+13.04.01.60;Tarif Famille nombreuses (Famille nombreuse);|TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN||TARFN|
+13.04.01.61;Tarif groupe (Tarif de groupe);|TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR||TARGR|
+13.04.01.62;Tarif individuel sans réduction;|TARBA|
+13.04.01.63;Visite guidée adulte individuel;
+13.04.01.64;Visite guidée enfant individuel;
+13.04.01.65;Visite guidée groupe adulte;
+13.04.01.66;Visite guidée groupe enfant;
+13.04.01.67;Visite libre adulte individuel;
+13.04.01.68;Visite libre enfant individuel;
+13.04.01.69;Visite libre groupe adulte;
+13.04.01.70;Visite libre groupe enfant;
+13.04.01.71;Supplément;
+13.04.01.72;Remise;
+13.04.01.73;Réduction;
+13.04.01.74;Dégustation;
+13.04.02.01;Prix adulte / jour;
+13.04.02.02;Prix animal / jour;
+13.04.02.03;Prix caravane / jour;
+13.04.02.04;Prix douche;
+13.04.02.05;Prix électricité / jour;
+13.04.02.06;Prix emplacement camping-car;
+13.04.02.07;Prix enfant / jour;
+13.04.02.08;Prix par personne;
+13.04.02.10;Prix tente / jour;
+13.04.02.11;Prix voiture / jour;
+13.04.02.12;Prix voiture caravane / jour;
+13.04.02.13;Prix voiture tente / jour;
+13.04.03.01;Chambre double avec petit déjeuner;|TARBA|
+13.04.03.02;Petit-déjeuner;
+13.04.03.03;Prix par chambre;
+13.04.03.04;Pension complète (Pension complète par personne);
+13.04.03.05;Demi-pension (Demi-pension par personne);
+13.04.04.01;Trois semaines (meublé);|TG3W|
+13.04.04.02;Mid-week (meublé);|TGMID|
+13.04.04.03;Mois (meublé);|TGMOI|
+13.04.04.04;Nuitée (meublé);|TGNUI|
+13.04.04.05;Quinzaine (meublé);|TGQUI|
+13.04.04.06;Semaine (meublé);|TGSEM|
+13.04.04.07;Week-end (meublé);|TGWEE|
+13.04.04.08;Une personne (Chambres d'hôtes) (1 personne (Chambres d'hôtes));|TH1|
+13.04.04.09;Deux personnes  (Chambres d'hôtes) (2 personnes  (Chambres d'hôtes));|TH2|
+13.04.04.10;Trois personnes  (Chambres d'hôtes) (3 personnes  (Chambres d'hôtes));|TH3|
+13.04.04.11;Demi-pension (Chambres d'hôtes);|THDEM|
+13.04.04.12;Pension  (Chambres d'hôtes);|THPEN|
+13.04.04.13;Repas (Chambres d'hôtes);|THREP|
+13.04.04.14;Personne supplémentaire (Chambres d'hôtes);|THSUP|
+13.04.04.15;Location Semaine Samedi/Samedi Basse Saison;
+13.04.04.16;Location Semaine Samedi/Samedi Haute Saison;
+13.04.04.17;Location Semaine Samedi/Samedi Moyenne Saison;
+13.04.04.18;Location Semaine Samedi/Samedi Petites Vacances Scolaires;
+13.04.04.19;Location Week End (2 Nuits) Basse Saison;
+13.04.05.01;A la carte;|CARTE|
+13.04.05.02;Menu adulte;|ADULT|
+13.04.05.03;Menu enfant;|ENFAN|
+13.04.05.04;Tarif à la carte;
+13.04.05.05;Tarif menu;
+13.04.05.06;Repas adulte;
+13.04.05.07;Repas enfant;
+13.04.05.08;Repas groupe;
+13.04.05.09;Menu dégustation;
+13.04.05.10;Menu groupe;
+13.04.06.01;Une semaine 7J/6N en DP (/pers.);|TSEDP|
+13.04.06.02;Une semaine 7J/6N en location (base 4 pers.);|TSELO|
+13.04.06.03;Une semaine 7J/6N en PC (/pers.);|TSEPC|
+13.04.06.04;Un Week-end 2J/1N en DP (/pers.);|TWEDP|
+13.04.06.05;Un Week-end 2J/1N en location (base 4 pers.);|TWELO|
+13.04.06.06;Un Week-end 2J/1N en PC (/pers.);|TWEPC|
+13.04.07.01;Fond adulte 1/2 journée;
+13.04.07.02;Fond adulte journée;
+13.04.07.03;Fond enfant 1/2 journée;
+13.04.07.04;Fond enfant journée;
+13.04.07.05;Fond étudiant journée;
+13.04.07.06;Fond groupe journée;
+13.04.07.07;Piste adulte;
+13.04.07.08;Piste adulte 1/2 journée;
+13.04.07.09;Piste adulte journée;
+13.04.07.10;Piste enfant 1/2 journée;
+13.04.07.11;Piste enfant journée;
+13.04.07.12;Piste enfant ou étudiant 6 jours;
+13.04.07.13;Piste étudiant 1/2 journée;
+13.04.07.14;Piste étudiant journée;
+13.04.07.15;Forfait;
+13.04.07.16;Forfait groupe journée;
+13.04.07.17;Stage enfant;
+13.04.07.18;Stage enfant groupe;
+13.04.07.19;Cours adulte;
+13.04.07.20;Cours adulte groupe;
+13.04.07.21;Cours enfant;
+13.04.07.22;Cours enfant groupe;

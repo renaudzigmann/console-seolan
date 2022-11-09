@@ -1,0 +1,71 @@
+<%assign var="title" value=$syslabels.Seolan_Module_Wall_Wall.module_name%>
+<%include file="Core.header/ajax.html"%>
+<%include file="Module/Table.functions.html"%>
+<script type="text/javascript">
+TZR.Table.wallMore = function(url, elem, container){
+   var jel = jQuery(elem).parent().remove();
+   TZR.jQueryAppendToTarget({target:container,url:url, noautoscroll:true});
+}
+
+TZR.Table.wallReplyTo = function(oid, uniqid, src){
+   var who = jQuery(src).parents('div.wall-info').find('div.wall-publisher');
+   var formcontent = jQuery("#reply-post-form-"+uniqid).clone();
+   var fname='replyto'+uniqid+oid;
+   var actionid = 'replytoaction'+uniqid+oid.replace(':','');
+   jQuery('div.tzr-action', formcontent).attr('id', actionid);
+   jQuery('input[name="replyto"]', formcontent).val(oid);
+   jQuery('form', formcontent).attr('name', fname);
+   jQuery('button[type="submit"]', formcontent).attr('data-fname', fname);
+   jQuery('div.title', formcontent).append(who.text());
+   TZR.Dialog.show(formcontent.html(), {sizeClass:'modal-md'});
+   jQuery("button.btn.btn-primary",
+	  jQuery("#"+actionid)).on('click', function(){
+	    if (TZR.isFormValid(document.forms[fname])){
+	      TZR.ajaxSubmitForm(document.forms[fname]);
+	      TZR.Dialog.closeDialog();
+	    }
+	  });
+   return false;
+ };
+</script>
+<div class="wall clearfix">
+  <%if $imod_mod->secure('','share')%>
+  <ul class="nav nav-pills module-tool" role="tablist">
+    <li>
+      <span><%$br_last%></span> <%$syslabels.Seolan_Module_Wall_Wall.items%></li>
+    <li>
+      <a href="#new-post-form-<%$uniqid%>" data-toggle="collapse" class="collapse" aria-expanded="false"><%$syslabels.Seolan_Module_Wall_Wall.newItem%></a>
+    </li>
+</ul>
+<div id="new-post-form-<%$uniqid%>" class="collapse" aria-expanded="false">
+  <div>
+    <%include file="Module/Wall.newCore.html" tpl="new"%>
+  </div>
+</div>
+<%/if%>
+<div class="wall-wrapper clearfix" id="wall-wrapper-<%$uniqid%>">
+  <%include file="Module/Wall.displayMoreWall.html" moreContainer="#wall-wrapper-`$uniqid`"%>
+</div>
+
+
+
+</div>
+<div style="display:none" id="reply-post-form-<%$uniqid%>">
+  <div class="title"><%$syslabels.Seolan_Module_Wall_Wall.replyto_text%><%$syslabels.Seolan_Core_General.i18ncolon%></div>
+
+  <form action="<%$self%>" name="replyto<%$uniqid%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="template" value="Core.empty.html">
+    <input type="hidden" name="uniqid" value="<%$uniqid%>">
+    <input type="hidden" name="_function" value="procReplyTo">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+    <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+    <input type="hidden" name="_next" value="<%$back%>"/>
+    <input type="hidden" name="replyto" value="">
+    <input type="hidden" name="skip" value="1">
+    <textarea name="content" cols="80" rows="6"></textarea>
+    <div class="tzr-action">
+      <button class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+      <button type="submit" class="btn btn-primary"><%$syslabels.Seolan_Core_General.save_text%></button>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<script type="text/javascript">
+ v<%$uniqid%>.checkForm=function() {
+  var frm=document.edit<%$uniqid%>;
+  if(frm.begin.value>=frm.end.value) {
+    if(frm.begin.oisValid!==false) frm.begin.obackgroundColor=frm.begin.style.backgroundColor;
+    if(frm.end.oisValid!==false) frm.end.obackgroundColor=frm.begin.style.backgroundColor;
+    frm.begin.style.backgroundColor="<%$tzr.error_color%>";
+    frm.end.style.backgroundColor="<%$tzr.error_color%>";
+    frm.begin.oisValid=false;
+    frm.end.oisValid=false;
+    return false;
+  }else{
+    if(frm.begin.obackgroundColor) frm.begin.style.backgroundColor=frm.begin.obackgroundColor;
+    else frm.begin.style.backgroundColor='';
+    if(frm.end.obackgroundColor) frm.end.style.backgroundColor=frm.end.obackgroundColor;
+    else frm.end.style.backgroundColor='';
+  }
+  return TZR.ajaxSubmitForm(frm);
+ }
+</script>
+
+<form name="edit<%$uniqid%>" method="post" action="<%$self%>" onsubmit="return v<%$uniqid%>.checkForm();">
+ <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="_function" value="saveDiary">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$back%>">
+ <fieldset>
+  <legend><%$ins_oname->raw%></legend>
+  <div class="table-responsive">
+  <table class="table table-striped list2">
+   <tr>
+    <th><label><%$ins_obegin->fielddef->label%></label></th>
+    <td><%$ins_obegin->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$ins_oend->fielddef->label%></label></th>
+    <td><%$ins_oend->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.synclinkical%></label></th>
+    <td>
+        <input type="text" value="<%$ins_urlsynch_ical%>">
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.synclinkTB%></label></th>
+    <td>
+        <input type="text" value="<%$ins_urlsynch_caldav%>">
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.synclinkIOS%></label></th>
+    <td>
+     <input type="text" value="<%$ins_urlsynch_ipad%>">
+    </td>
+   </tr>
+  </table>
+  </div>
+  <div class="tzr-action">
+   <%if $uid==$br_diary.OWN%><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"><%/if%>
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="v<%$uniqid%>.jQUeryLoad('<%$back%>');">
+  </div>
+ </fieldset>
+</form>

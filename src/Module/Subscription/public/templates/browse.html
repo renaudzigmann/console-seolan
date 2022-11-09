@@ -1,0 +1,72 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="cv8-quicksearch form-inline clearfix">
+<fieldset>
+ <legend>Abonnements <%$br_user->_cur.fullnam%> <%$br_user->_cur.alias%></legend>
+ <%if ($grps_lines_oid || $users_lines_oid)%>
+  <form method="POST" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+   <input type="hidden" name="moid" value="<%$imod_props._moid%>">
+   <input type="hidden" name="function" value="lsSubs">
+   <input type="hidden" name="template" value="Module/Subscription.browse.html">
+   <input type="hidden" name="tplentry" value="br">
+   <select name="user" class="searchfield cv8_inlineblock form-group">
+    <option value="">--</option>
+    <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+     <%section name=u loop=$grps_lines_oid%>
+      <option value="<%$grps_lines_oid[u]%>" <%if $br_user->_curoid eq $grps_lines_oid[u]%> selected<%/if%>><%$grps_lines_oGRP[u]->toText()%>
+     <%/section%>
+    </optgroup>
+    <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+     <%section name=u loop=$users_lines_oid%>
+      <option value="<%$users_lines_oid[u]%>" <%if $br_user->_curoid eq $users_lines_oid[u]%> selected<%/if%>><%$users_lines_ofullnam[u]->toText()%>
+     <%/section%>
+    </optgroup>
+   </select>
+   <select name="amoid" class="searchfield cv8_inlineblock form-group">
+    <option value="">--</option>
+    <%section name=g loop=$modules_groups%>
+     <optgroup label="<%$modules_groups[g]%>">
+      <%section name=m loop=$modules_lines_oid%>
+       <%if $modules_lines_group[m] eq $modules_groups[g]%>
+	<%assign var="om" value=$modules_lines_methods[m] %>
+	<%assign var="omc" value=$om.moduleclass%>
+	<option value="<%$modules_lines_oid[m]%>" <%if $smarty.request.amoid eq $modules_lines_oid[m]%> selected<%/if%>><%$modules_lines_name[m]%></option>
+       <%/if%>
+      <%/section%>
+     </optgroup>
+    <%/section%>
+   </select>
+   
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.view_text%>">
+  </form>
+ <%/if%>
+ </fieldset>
+</div>
+
+<div class="cv8-contenu-center clearfix">
+<%if count($br_sub) > 0%>
+ <div class="table-responsive">
+  <table class="table table-striped cv8-tablelist">
+    <thead>
+    <tr><th></th><th><%$syslabels.Seolan_Core_Module_Module.module_text%></th><th></th><th></th><th><%$syslabels.Seolan_Core_General.last_update_text%></th></tr>
+    </thead>
+    <%foreach from=$br_sub item=mod key=mmoid%>
+    <%foreach from=$mod.content item=sub key=koid%>
+      <tr>
+      <td><%if $sub.deletable%><a title="<%$syslabels.Seolan_Core_General.delete_text%>" class="cv8-ajaxlink" href="<%$self%>&moid=<%$imod_props._moid%>&function=rmSub&suboid=<%$koid%>&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.delete%></a><%/if%></td>
+      <td><a title="<%$syslabels.Seolan_Module_Subscription_Subscription.lssubs_text%>" class="cv8-ajaxlink" href="<%$self%>&moid=<%$imod_props._moid%>&_function=lsSubs&amoid=<%$mmoid%>&tplentry=br&template=Module/Subscription.browse.html"><%$mod.title%></a></td>
+      <td><%$sub.title%></td>
+      <td><%if $sub.user%><label><%$syslabels.Seolan_Core_General.user_text%> <%$syslabels.Seolan_Module_Subscription_Subscription.subscriber_text%></label> : <a title="<%$syslabels.Seolan_Core_General.view_text%>" class="cv8-ajaxlink" href="<%$self%>&moid=<%$sysmods.xmoduser2%>&_function=goto1&oid=<%$sub.user.oid%>"><%$sub.user.ofullnam->html%></a><%/if%>
+      <%if $sub.group%> <label><%$syslabels.Seolan_Core_General.group_text%> <%$syslabels.Seolan_Module_Subscription_Subscription.subscriber_text%></label> : <a title="<%$syslabels.Seolan_Core_General.view_text%>" class="cv8-ajaxlink" href="<%$self%>&moid=<%$sysmods.xmodgroup%>&_function=goto1&oid=<%$sub.group.oid%>"><%$sub.group.tlink%></a><%/if%></td>
+      <td><%$sub.upd%></td>
+      </tr>
+    <%/foreach%>
+    <%/foreach%>
+  </table>
+</div>
+<%else%>
+<div>
+  <%$syslabels.Seolan_Module_Subscription_Subscription.userabonnementempty_text%>
+</div>
+<%/if%>
+</div>
+

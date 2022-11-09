@@ -1,0 +1,70 @@
+<%* liste de fiches pour selection *%>
+<%if $imod_props.toid == 8001 %>
+<%assign var=xmodmedia value=1%>
+<%else%>
+<%assign var=xmodmedia value=0%>
+<%/if%>
+
+<script type="text/javascript" language="javascript">
+ jQuery(document).ready(function(e){
+   with(TZR.Table.browse[objectselectioncontaineruniqid]){
+     first="<%$br_first%>";
+     last="<%$br_last%>";
+     firstlastpage="<%$br_firstlastpage%>";
+     firstprev="<%$br_firstprev%>";
+     firstnext="<%$br_firstnext%>";
+     f="<%$br_function%>";
+   };
+ });
+</script>
+
+<%include __inline file="Module/Table.quickquery.html"
+modalMode="true"
+modalParams="{uniqid:\"<%$uniqid%>\"}"
+noselection=true
+queryparameters=0%>
+
+<%capture name='pager'%><%include file="Module/Table.topbar.html" gopage="v<%$uniqid%>.go_browse"%><%/capture%>
+
+<%$smarty.capture.pager%>
+
+<%if $xmodmedia%><%* mediatheque *%>
+ <div class="cv8-contenu-center">
+  <div class="cv8-phototeque_result linklist">
+   <ul class="imagelist">
+    <%section name=i loop=$br_lines_oid%>
+    <%capture name=datas assign=datas%>data-link='{"oid":"<%$br_lines_oid[i]%>", "tlink":"<%$br_lines_tlink[i]|escape:'javascript'%>"}'<%/capture%>
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/Media.browseMedia.html"
+		noaction=1
+		personalize_datas=$datas
+		personalize_classes='linkable'%>
+    <%/section%>
+   </ul>
+  </div>
+ </div>
+ <%else%><%* modtable de base *%>
+
+ <div class="cv8-contenu-center clearfix table-reponsive linklist" id="linedlistContents-<%$uniqid%>" style="overflow-x:auto">
+  <table class="table table-striped table-condensed">
+   <thead>
+    <tr>
+     <%section name=header loop=$br_header_fields %>
+      <th><%$br_header_fields[header]->get_label()%></th>
+     <%/section%>
+    </tr>
+   </thead>
+   <tbody>
+    <%section name=lines loop=$br_lines_oid %>
+     <tr class="linkable" data-link='{"oid":"<%$br_lines_oid[lines]%>", "tlink":"<%$br_lines_tlink[lines]|escape:'javascript'%>"}' title="<%$br_lines_tlink[lines]|escape:'javascript'%>">
+      <%section name=header loop=$br_header_fields %>
+       <%assign var="field" value=$br_lines_o<%$br_header_fields[header]->field%>[lines]%>
+       <td class="linker" <%if $field->filename%>data-filename="<%$field->filename%>;<%$field->mime%>;<%$field->originalname%>"<%/if%>><%$field->html%></td>
+      <%/section%>
+     </tr>
+    <%/section%>
+   </tbody>
+  </table>
+ </div>
+<%/if%>
+
+<%$smarty.capture.pager%>

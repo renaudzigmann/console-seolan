@@ -1,0 +1,17 @@
+<div style="display:none" class="alert alert-warning fade in" id="cvx-selection-alert" role="alert">
+  <h4 class="cvx-alert-title"></h4>
+  <p  class="cvx-alert-body"></p>
+  <p>
+    <button type="button" onclick="TZR.SELECTION.alertOk();"  class="btn btn-danger">OK</button>
+  </p>
+</div>
+
+<div style="display:none" class="alert alert-warning alert-dismissible fade in" id="cvx-selection-confirm" role="alert">
+  <button type="button" class="close" aria-label="<%$syslabels.Seolan_Core_General.close%>"></button>
+  <h4 class="cvx-alert-title"></h4>
+  <p  class="cvx-alert-body"></p>
+  <p>
+    <button type="button" onclick="TZR.SELECTION.confirmAction(true);"  class="btn btn-danger"><%$syslabels.Seolan_Core_General.confirm%></button>
+    <button type="button" onclick="TZR.SELECTION.confirmAction(false);"  class="btn btn-danger"><%$syslabels.Seolan_Core_General.cancel%></button>
+  </p>
+</div>

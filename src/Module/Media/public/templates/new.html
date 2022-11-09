@@ -1,0 +1,98 @@
+<!-- Module/InfoTree.new.html -->
+<%if !$smarty.request.tabsmode%>
+<%assign var="title" value="`$syslabels.Seolan_Core_General.new_text`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%else%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" nonav=1 nohistory=1 nodata=1%>
+ <script type="text/javascript">
+  v<%$uniqid%>.submitForm=function(f){
+   return TZR.ajaxSubmitForm(f,jQuery(v<%$uniqid%>.div).parents('div.ui-tabs-panel:first'));
+  }
+ </script>
+<%/if%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+ <form action="<%$self%>" 
+       method="post" 
+       enctype="multipart/form-data" 
+       name="editform<%$uniqid%>" __onsubmit="return TZR.ajaxSubmitForm(this);"
+       onsubmit="event.stopPropagation();<%if empty($smarty.request.tabsmode)%>return TZR.ajaxSubmitForm(this);<%else%>return TZR.ajaxSubmitForm(this,jQuery(v<%$uniqid%>.div).parents('div.ui-tabs-panel:first'));<%/if%>"
+>
+  <%if $br__groups%>
+   <%foreach key=group item=fields from=$br__groups %>
+   <fieldset>
+     <legend><%$group%></legend>
+     <div class="row-striped">
+       <%section name=f loop=$fields %>
+       <%call fieldline field=$fields[f]%>
+       <%/section%>
+     </div>
+   </fieldset>
+   <%/foreach%>
+  <%else%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.general%></legend>
+    <div class="row-striped">
+      <%section name=fields loop=$br_fields_object%>
+      <%if $br_fields_object[fields]->field neq $smarty.request._linkedfield%>
+      <%call fieldline field=$br_fields_object[fields]%>
+      <%/if%>
+      <%/section%>
+    </div>
+   </fieldset>
+  <%/if%>
+  <%if $br_oPUBLISH && $imod_sec.rwv%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.systemproperties_text%></legend>
+    <div class="row-striped">
+      <%call fieldline field=$br_oPUBLISH%>
+    </div>
+   </fieldset>
+  <%/if%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+   <input type="submit" name="save_and_edit" value="<%$syslabels.Seolan_Module_Table_Table.saveedit_text%>">
+  </div>
+  <input type="hidden" name="_function" value="procInsert">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="template" value="Core.empty.html">
+  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+  <input type="hidden" name="_next" value="<%$back%>"/>
+  <input type="hidden" name="skip" value="1">
+ </form>
+</div>
+
+<script type="text/javascript">
+ var uploader=jQuery('#<%$br_omedia->varid%>_cont').data('uploader');
+ if(uploader){
+  uploader.bind('BeforeUpload',function(up,file){
+   if(document.forms['editform<%$uniqid%>'].ref && document.forms['editform<%$uniqid%>'].ref.value==""){
+    document.forms['editform<%$uniqid%>'].ref.value=file.name.substr(0,file.name.lastIndexOf('.'));
+   }
+  });
+ }
+ v<%$uniqid%>.saverecord=function(){
+  jQuery(document.editform<%$uniqid%>).submit();
+ }
+ <%if isset($smarty.request.droppedfile) && isset($smarty.request.droppedfrom)%>
+   var droppedinfos=v<%$uniqid%>.modulecontainer.droppedinfos;
+   if(droppedinfos && droppedinfos.files && droppedinfos.from=="<%$smarty.request.droppedfrom%>"){
+     if(droppedinfos.files[<%$smarty.request.droppedfile%>]){
+       var $cont=jQuery('#cont-media div.uploadCont');
+       if($cont.length){
+         $cont.data('uploader').bind('postInit',function(){
+           this.addFile(droppedinfos.files[<%$smarty.request.droppedfile%>]);
+         });
+         if(droppedinfos.files.length-1><%$smarty.request.droppedfile%>){
+           document.editform<%$uniqid%>._next.value='<%$self%>&moid=<%$_moid%>&_function=insert&template=Module/Media.new.html&tplentry=br&droppedfile=<%$smarty.request.droppedfile+1%>&droppedfrom=<%$smarty.request.droppedfrom%>';
+         }else{
+           document.editform<%$uniqid%>._next.value='<%$self%>&function=back&n='+droppedinfos.bdx;
+         }
+       }
+     }
+   }
+ <%/if%>
+ TZR.fieldsetAccordion(jQuery(v<%$uniqid%>.modulecontainer));
+</script>

@@ -1,0 +1,9 @@
+<div class="table-responsive">
+<table class="table list2">
+<%section name=ii loop=$oo.fields_object %>
+<%if $oo.fields_object[ii]->html%>
+<tr><th><label><%$oo.fields_object[ii]->label%></label></th><td><%$oo.fields_object[ii]->html%></td></tr>
+<%/if%>
+<%/section%>
+</table>
+</div>

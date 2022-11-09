@@ -1,0 +1,45 @@
+<%if !isset($browse.lines_oid) || count($browse.lines_oid)==0%>
+<div class="info info-message"><%$syslabels.Seolan_Core_Module_Module.trashempty%></div>
+<%else%>
+<div class="table-responsive">
+  <table class="table table-striped cv8_tablelist">
+    <thead>
+      <tr>
+	<th><%$syslabels.Seolan_Core_General.user%></th>
+	<%section name='header' loop=$browse.header_fields%>
+	<th><%$browse.header_fields[header]->get_label()%></th>
+	<%/section%>
+	<th> Document / Dossier </th>
+      </tr>
+    </thead>
+    <tbody>
+      <%section name='lines' loop=$browse.lines_oid%>
+      <tr>
+	<td>
+	  <%capture name="actions" assign="actions"%>
+	  <%foreach from=$browse.actions[lines] item='action'%>
+	  <li><%$action%></li>
+	  <%/foreach%>
+	  <%/capture%>
+	  <ul class="ul-list-tools visible-md visible-lg"><%$actions%></ul>
+	  <div class="dropdown visible-xs visible-sm">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon csico-ellipsis-h" aria-hidden="true"></span></button>
+            <ul class="dropdown-menu"><%$actions%></ul>
+	  </div>
+	</td>
+	<%section name='header' loop=$browse.header_fields%>
+	<td>
+	  <%assign var="f" value="lines_o"|cat:$browse.header_fields[header]->field%>
+	  <%$browse.$f[$smarty.section.lines.index]->html%>
+	</td>
+	<%/section%>
+	<td>
+	  <%$browse.lines__doc[lines]->title%>
+	</td>
+      </tr>
+      <%/section%>
+    </tbody>
+  </table>
+</div>
+</div>
+<%/if%>

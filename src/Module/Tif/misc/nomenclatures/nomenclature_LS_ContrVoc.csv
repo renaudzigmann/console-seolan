@@ -1,0 +1,528 @@
+02.01.01.01.01;Travaux d'aiguille;|AIGUI|
+02.01.01.01.02;Archéologie : fouilles;|ARCHE|
+02.01.01.01.03;Astrologie;|ASTLO|
+02.01.01.01.04;Astronomie;|ASTNO|
+02.01.01.01.05;Bijouterie;|BIJOU|
+02.01.01.01.06;Travail du bois;|BOIS|
+02.01.01.01.07;Botanique;|BOTAN|
+02.01.01.01.08;Calligraphie;|CALLI|
+02.01.01.01.09;Céramique;|CERAM|
+02.01.01.01.10;Chant et chorale;|CHANT|
+02.01.01.01.11;Chantiers restaur.;|CHRES|
+02.01.01.01.12;Arts du spectacle;|CIRQ|
+02.01.01.01.13;Danse;|DANSE|
+02.01.01.01.14;Faune - flore;|FAUNE|
+02.01.01.01.15;Gastronomie;|GASTR|
+02.01.01.01.16;Géologie;|GEOL|
+02.01.01.01.17;Informatique;|INFOR|
+02.01.01.01.18;Jeux de société;|JSOCI|
+02.01.01.01.19;Cours de langue;|LANG|
+02.01.01.01.20;Maquettes - aéromod.;|MAQUE|
+02.01.01.01.21;Musique instrumentale;|MUINS|
+02.01.01.01.22;Oenologie;|OENOL|
+02.01.01.01.23;Peintures arts graph.;|PEINT|
+02.01.01.01.24;Philatélie;|PHILA|
+02.01.01.01.25;Photographie;|PHOTO|
+02.01.01.01.26;Poterie;|POTER|
+02.01.01.01.27;Reliure et encadrements;|RELIU|
+02.01.01.01.28;Retraites spirituelles;|RSPIR|
+02.01.01.01.29;Sculpture;|SCULP|
+02.01.01.01.30;Théâtre (Théatre);|THEAT|
+02.01.01.01.31;Tissage;|TISSE|
+02.01.01.01.32;Vannerie;|VANNE|
+02.01.01.01.33;Verrerie;|VERRE|
+02.01.01.02.01;Alpinisme;|ALPIN|
+02.01.01.02.02;Arts martiaux;|AMART|
+02.01.01.02.03;Athlétisme;|ATHLE|
+02.01.01.02.04;Attelage;|ATTEL|
+02.01.01.02.05;Aviron;|AVIR|
+02.01.01.02.06;Badmington;|BADM|
+02.01.01.02.07;Basket;|BASK|
+02.01.01.02.08;Beach Volley;|BEACH|
+02.01.01.02.09;Bodyboard;|BODY|
+02.01.01.02.10;Boxe;|BOXE|
+02.01.01.02.11;Canoé kayak;|CANOE|
+02.01.01.02.12;Canyoning;|CANYO|
+02.01.01.02.13;Cerf volant;|CERFV|
+02.01.01.02.14;Char à voile;|CHAR|
+02.01.01.02.15;Chasse;|CHASS|
+02.01.01.02.16;Chiens de traineau;|CHIEN|
+02.01.01.02.17;Conduite sur glace;|COND|
+02.01.01.02.18;Cyclotourisme;|CYCLO|
+02.01.01.02.19;Danse;|DANSE|
+02.01.01.02.20;Deltaplane;|DELTA|
+02.01.01.02.21;Equitation;|EQUIT|
+02.01.01.02.22;Escalade;|ESCAL|
+02.01.01.02.23;Escrime;|ESCRI|
+02.01.01.02.24;Football;|FOOT|
+02.01.01.02.25;Golf;|GOLF|
+02.01.01.02.26;Gymnastique;|GYM|
+02.01.01.02.27;Handball;|HAND|
+02.01.01.02.28;Hockey sur gazon;|HOGAZ|
+02.01.01.02.29;Hockey sur glace;|HOGLA|
+02.01.01.02.30;Hydrospeed;|HYDSP|
+02.01.01.02.31;Karting;|KART|
+02.01.01.02.32;Kayak de mer;|KAYAK|
+02.01.01.02.33;Moto-cross;|MCROS|
+02.01.01.02.34;Mononautisme;|MNAUT|
+02.01.01.02.35;Monoski;|MOSKI|
+02.01.01.02.36;Multisport;|MULTI|
+02.01.01.02.37;Natation;|NATAT|
+02.01.01.02.38;Parachutisme;|PARA|
+02.01.01.02.39;Parapente;|PARPE|
+02.01.01.02.40;Patinage;|PATIN|
+02.01.01.02.41;Pêche;|PECHE|
+02.01.01.02.42;Ping-pong;|PING|
+02.01.01.02.43;Planeur;|PLANE|
+02.01.01.02.44;Planche à voile;|PLAVO|
+02.01.01.02.45;Plongée;|PLONG|
+02.01.01.02.46;Polo;|POLO|
+02.01.01.02.47;Squash;|QQUAS|
+02.01.01.02.48;Quad;|QUAD|
+02.01.01.02.49;4 x 4;|QUATR|
+02.01.01.02.50;Rafting;|RAFT|
+02.01.01.02.51;Raquettes;|RAQU|
+02.01.01.02.52;Randonnée équestre;|REQUE|
+02.01.01.02.53;Remise en forme;|RFORM|
+02.01.01.02.54;Roller;|ROLLE|
+02.01.01.02.55;Randonnée pédestre;|RPEDE|
+02.01.01.02.56;Rugby;|RUGBY|
+02.01.01.02.57;Scooter de mer;|SCMER|
+02.01.01.02.58;Scooter  de neige;|SCNEI|
+02.01.01.02.59;Saut à l'élastique;|SELAS|
+02.01.01.02.60;Ski alpin;|SKIAL|
+02.01.01.02.61;Ski d'été;|SKIET|
+02.01.01.02.62;Ski de fond;|SKIFO|
+02.01.01.02.63;Ski nautique;|SKINA|
+02.01.01.02.64;Ski de randonnée;|SKIRA|
+02.01.01.02.65;Skwal;|SKWAL|
+02.01.01.02.66;Spéléologie;|SPELE|
+02.01.01.02.67;Surf;|SURF|
+02.01.01.02.68;Surf des neiges;|SURNE|
+02.01.01.02.69;Sports à voile;|SVOIL|
+02.01.01.02.70;Tennis;|TENNI|
+02.01.01.02.71;Tir;|TIR|
+02.01.01.02.72;Tir à l'arc;|TIRAR|
+02.01.01.02.73;Trial;|TRIAL|
+02.01.01.02.74;ULM;|ULM|
+02.01.01.02.75;Via ferrata;|VIAFE|
+02.01.01.02.76;Voile;|VOILE|
+02.01.01.02.77;Volley ball;|VOLLE|
+02.01.01.02.78;Vol à voile;|VOLVO|
+02.01.01.02.79;VTT;|VTT|
+02.01.01.02.80;Water-polo;|WATER|
+02.01.01.02.81;Wave-ski;|WAVE|
+02.01.01.03.01;Accompagnement;|ACCOM|
+02.01.01.03.02;Baptème sportif;|BAPT|
+02.01.01.03.03;Cours;|COURS|
+02.01.01.03.04;Pratique libre;|LIBRE|
+02.01.01.03.05;Location de matériel;|LOCMA|
+02.01.01.03.06;Multiactivités;|MULTI|
+02.01.01.03.07;Stage d'initiation;|STINI|
+02.01.01.03.08;Stage de perfectionnement;|STPER|
+02.01.01.04.01;Bateaux à moteur habitables;|BMOHA|
+02.01.01.04.02;Camping-car;|CAMCA|
+02.01.01.04.03;Croisières fluviales;|CFLEU|
+02.01.01.04.04;Croisières maritimes;|CMARI|
+02.01.01.04.05;House boat (fleuve);|HOUSB|
+02.01.01.04.06;Roulottes;|ROUL|
+02.01.01.04.07;Voiliers habitables;|VOIHA|
+02.01.02.01.01;Bières;|BIERE|
+02.01.02.01.02;Cidre;|CIDR|
+02.01.02.01.03;Fruits de mer;|FDMER|
+02.01.02.01.04;Foie gras;|FOIE|
+02.01.02.01.05;Fromage;|FROMA|
+02.01.02.01.06;Produit apicole;|PRAPI|
+02.01.02.01.07;Salaisons;|SALAI|
+02.01.02.01.08;Spiritueux;|SPIRI|
+02.01.02.01.09;Vins;|VINS|
+02.01.02.02.01;Brasseur;|BRASS|
+02.01.02.02.02;Caveau de dégustation;|CADEG|
+02.01.02.02.03;Coopérative;|COOPE|
+02.01.02.02.04;Groupements de producteur;|GRPRO|
+02.01.02.02.05;Maison de pays;|MAIPA|
+02.01.02.02.06;Négociant -éleveur;|NEGEL|
+02.01.02.02.07;Négociant;|NEGOC|
+02.01.02.02.08;Producteur;|PRODU|
+02.01.02.02.09;Récoltant éleveur;|RECEL|
+02.01.03.01.01;Brocante;|BROCA|
+02.01.03.01.02;Carnaval;|CARNA|
+02.01.03.01.03;Commémoration;|COMME|
+02.01.03.01.04;Compétition sportive;|COMSP|
+02.01.03.01.05;Concert;|CONCE|
+02.01.03.01.06;Conférence;|CONFE|
+02.01.03.01.07;Congres;|CONGR|
+02.01.03.01.08;Défilé Cortège Parade;|DEFCO|
+02.01.03.01.09;Exposition;|EXPOS|
+02.01.03.01.10;Festival;|FESTI|
+02.01.03.01.11;Foire ou salon;|FOISA|
+02.01.03.01.12;Marché;|MARCH|
+02.01.03.01.13;Meeting;|MEETI|
+02.01.03.01.14;Opéra;|OPERA|
+02.01.03.01.15;Pèlerinage et procession;|PELPR|
+02.01.03.01.16;Portes ouvertes;|POROU|
+02.01.03.01.17;Rallye;|RALLY|
+02.01.03.01.18;Récital;|RECIT|
+02.01.03.01.19;Spectacle;|SPECT|
+02.01.03.01.20;Théâtre;|THEAT|
+02.01.03.01.21;Vide greniers Braderie;|VIDGR|
+02.01.03.02.01;Fête du Cinéma;|FETCI|
+02.01.03.02.02;Fête de la musique;|FETMU|
+02.01.03.02.03;Fête Nationale - 14 juillet;|FETNA|
+02.01.03.02.04;Fête de la photo;|FETPH|
+02.01.03.02.05;Journées de l'Accueil;|JOUAC|
+02.01.03.02.06;Journées du Patrimoine;|JOUPA|
+02.01.03.02.07;Tour de France aérien;|TOUFA|
+02.01.03.02.08;Tour de France cycliste;|TOUFC|
+02.01.03.02.09;Tour de France à la voile;|TOUFV|
+02.01.03.03.01;Animaux;|ANIMA|
+02.01.03.03.02;Artisanat;|ARTIS|
+02.01.03.03.03;Art lyrique;|ARTLY|
+02.01.03.03.04;Astronomie;|ASTRO|
+02.01.03.03.05;Athlétisme gymnastique;|ATHGY|
+02.01.03.03.06;Automobile;|AUTOM|
+02.01.03.03.07;Bande dessinée;|BANDE|
+02.01.03.03.08;Carte postale;|CARPO|
+02.01.03.03.09;Cerf volant;|CERFV|
+02.01.03.03.10;Chorale;|CHORA|
+02.01.03.03.11;Cinéma;|CINEM|
+02.01.03.03.12;Cirque;|CIRQU|
+02.01.03.03.13;Comique;|COMIQ|
+02.01.03.03.14;Course à pied;|COUPI|
+02.01.03.03.15;Fanfares bandas;|FANBA|
+02.01.03.03.16;Feux d'artifice;|FEUAR|
+02.01.03.03.17;Fleurs Plantes;|FLEPL|
+02.01.03.03.18;Gastronomie;|GASTR|
+02.01.03.03.19;Historique;|HISTO|
+02.01.03.03.20;Jazz et blues;|JAZBL|
+02.01.03.03.21;Littérature;|LITTE|
+02.01.03.03.22;Marionnette;|MARIO|
+02.01.03.03.23;Médiéval;|MEDIE|
+02.01.03.03.24;Mode;|MODE|
+02.01.03.03.25;Modélisme;|MODEL|
+02.01.03.03.26;Montgolfières;|MONTG|
+02.01.03.03.27;Musique classique;|MUSCL|
+02.01.03.03.28;Musique contemporaine;|MUSCO|
+02.01.03.03.29;Musique folklorique (country);|MUSFO|
+02.01.03.03.30;Musique sacrée;|MUSSA|
+02.01.03.03.31;Musique de variété;|MUSVA|
+02.01.03.03.32;Noël;|NOEL|
+02.01.03.03.33;Peinture;|PEINT|
+02.01.03.03.34;Photographie;|PHOTO|
+02.01.03.03.35;Plantes;|PLANT|
+02.01.03.03.36;Poésie;|POESI|
+02.01.03.03.37;Pop musique (rock, pop, rap, ...);|POPMU|
+02.01.03.03.38;Randonnée;|RANDO|
+02.01.03.03.39;Sculpture;|SCUPL|
+02.01.03.03.40;Sports aériens;|SPOAE|
+02.01.03.03.41;Sport cycliste;|SPOCY|
+02.01.03.03.42;Sport équestre;|SPOEQ|
+02.01.03.03.43;Sports d'hiver;|SPOHI|
+02.01.03.03.44;Sports mécaniques;|SPOME|
+02.01.03.03.45;Sports nautiques;|SPONA|
+02.01.03.03.46;Tauromachie;|TAURO|
+02.01.03.03.47;Tennis;|TENNI|
+02.01.03.03.48;Théâtre de rue;|THERU|
+02.01.03.03.49;Vidéo;|VIDEO|
+02.01.03.03.50;Vin -oenologie;|VINOE|
+02.01.03.04.01;Culturelle;|CULTU|
+02.01.03.04.02;Danse;|DANSE|
+02.01.03.04.03;Insolite;|INSOL|
+02.01.03.04.04;Manifestation commerciale;|MANCO|
+02.01.03.04.05;Musique;|MUSIQ|
+02.01.03.04.06;Nature et détente;|NATDE|
+02.01.03.04.07;Religieuse;|RELIG|
+02.01.03.04.08;Son et Lumière;|SONLU|
+02.01.03.04.09;Sports et loisirs;|SPOLO|
+02.01.03.04.10;Traditions et folklore;|TRAFO|
+02.01.04.01.01;Chambre d'hôtes;|CHOTE|
+02.01.04.01.02;Meublés et Gîtes;|MEUBL|
+02.01.04.01.03;Appartement;|APPAR|
+02.01.04.01.04;Chalet;|CHAL|
+02.01.04.01.05;Châteaux et demeures de prestige;|CHAT|
+02.01.04.01.06;Maison;|MAIS|
+02.01.05.01.01;Hôtels;|HOTEL|
+02.01.05.01.02;Hôtels - restaurant;|HOTRE|
+02.01.06.01.01;Camping à la ferme;|CAMFE|
+02.01.06.01.02;Terrain de camping classé;|CLASS|
+02.01.06.01.03;Parc résidentiel de loisir;|PARC|
+02.01.06.01.04;Camp de tourisme - aire naturelle;|TOUNA|
+02.01.06.01.05;Camp de tourisme saisonnier;|TOUSA|
+02.01.07.01.01;Cyclotouriste;|CYCLO|
+02.01.07.01.02;Equestre;|EQUES|
+02.01.07.01.03;Fluvial;|FLEUV|
+02.01.07.01.04;Maritime;|MARIT|
+02.01.07.01.05;Pédestre;|PEDES|
+02.01.07.01.06;Routier;|ROUTE|
+02.01.07.01.07;Culturel;|CULT|
+02.01.07.01.08;Gastronomique;|GASTR|
+02.01.07.01.09;Historique;|HIST|
+02.01.07.01.10;Insolite;|INSOL|
+02.01.07.01.11;Naturel;|NATUR|
+02.01.07.01.12;Oenologique;|OENO|
+02.01.07.01.13;Religieux;|RELIG|
+02.01.08.01.01;Complexe de loisirs (loisirs regroupés);|ACTIV|
+02.01.08.01.02;Equipements de loisirs;|EQUIP|
+02.01.08.01.03;Balnéothérapie;|BALNE|
+02.01.08.01.04;Bar à thème;|BARTH|
+02.01.08.01.05;Bateaux promenade;|BATPR|
+02.01.08.01.06;Bibliothèque - Médiathèque;|BIBLI|
+02.01.08.01.07;Boulodrome;|BOULO|
+02.01.08.01.08;Bowling;|BOWLI|
+02.01.08.01.09;Casino;|CASIN|
+02.01.08.01.10;Cinéma;|CINEM|
+02.01.08.01.11;Circuit automobile ou moto;|CIRCU|
+02.01.08.01.12;Club enfants;|CLUEN|
+02.01.08.01.13;Club de plage;|CLUPL|
+02.01.08.01.14;Discothèque;|DISCO|
+02.01.08.01.15;Golf;|GOLF|
+02.01.08.01.16;Gymnase;|GYMNA|
+02.01.08.01.17;Hippodrome;|HIPPO|
+02.01.08.01.18;Jeux pour enfants;|JENFA|
+02.01.08.01.19;Mini golf;|MINGO|
+02.01.08.01.20;Montgolfière;|MONGO|
+02.01.08.01.21;Patinoire;|PATIN|
+02.01.08.01.22;Piste de ski alpin;|PIALP|
+02.01.08.01.23;Piste de ski de fond;|PIFON|
+02.01.08.01.24;Piscine;|PISCI|
+02.01.08.01.25;Port de plaisance;|PLAIS|
+02.01.08.01.26;Piste de luge / bobsleigh;|PLBOB|
+02.01.08.01.27;Piste de luge d'été;|PLETE|
+02.01.08.01.28;Plage surveillée;|PLSUR|
+02.01.08.01.29;Piste de roller ou de skate board;|PRSKB|
+02.01.08.01.30;Parcours de Santé;|PSANT|
+02.01.08.01.31;Parc à thèmes;|PTHEM|
+02.01.08.01.32;Salle de billard;|SABIL|
+02.01.08.01.33;Salle de remise en forme;|SAREF|
+02.01.08.01.34;Salle de sport;|SASPO|
+02.01.08.01.35;Salle de squash;|SASQU|
+02.01.08.01.36;Snowboard;|SNOW|
+02.01.08.01.37;Stade;|STADE|
+02.01.08.01.38;Téléphérique touristique;|TELEP|
+02.01.08.01.39;Tennis;|TENNI|
+02.01.08.01.40;Thalassothérapie;|THALA|
+02.01.08.01.41;Tremplin;|TREMP|
+02.01.08.01.42;Trains touristiques;|TRTOU|
+02.01.08.01.43;Vélodrome;|VELOD|
+02.01.08.01.44;Vivarium - Aquarium;|VIVAQ|
+02.01.08.01.45;Yacht Club;|YATCH|
+02.01.08.01.46;Zoo - parc animalier;|ZOOAN|
+02.01.10.01.01;Comités départementaux du tourisme;|CDT|
+02.01.10.01.02;Comités régionaux du tourisme;|CRT|
+02.01.10.01.03;Représentations étrangères (consulats);|ETRAN|
+02.01.10.01.04;Maison de la France;|MDF|
+02.01.10.01.05;Offices de tourisme et Syndicats d'initiative;|OTSI|
+02.01.10.01.06;Pays d'accueil touristiques;|PAYS|
+02.01.10.01.07;Points d'informations touristiques;|PINFO|
+02.01.10.01.08;Services de l'Etat/ Institutions;|SETAT|
+02.01.10.01.09;Services tourisme des villes/Services information des mairies;|STOUR|
+02.01.10.02.01;Agences réceptives;|ARECE|
+02.01.10.02.02;Excursionnistes (dont tour de ville);|EXCUR|
+02.01.10.02.03;Relais Départemental des Gîtes de France;|GITES|
+02.01.10.02.04;Guides;|GUID|
+02.01.10.02.05;Séjours linguistiques;|LANGU|
+02.01.10.02.06;Salles de congrès;|SALLE|
+02.01.10.02.07;Service de réservation loisirs accueil;|SLA|
+02.01.10.02.08;Transporteurs/Autocaristes et loueurs de véhicule;|TRANS|
+02.01.10.03.01;Associations d'information touristique;|ASSO|
+02.01.10.03.02;Autres organismes;|AUTRE|
+02.01.10.03.03;Centre d'information jeunesse;|CIJ|
+02.01.10.03.04;Centrales de réservation;|CRESA|
+02.01.10.03.05;Fédérations dans le domaine culturel;|FECUL|
+02.01.10.03.06;Fédérations dans le domaine des sports et loisirs;|FELOI|
+02.01.10.03.07;Groupements professionnels;|GPROF|
+02.01.10.03.08;Logis de France;|LOGIS|
+02.01.10.03.09;Organismes consulaires;|ORGCO|
+02.01.10.04.01;Agence immobilière;|AGIMO|
+02.01.10.04.02;Dépannage autocar;|DPCAR|
+02.01.10.05.01;Organismes de tourisme institutionnels;|INSTI|
+02.01.10.05.02;Services d'information touristique privés;|PRIVE|
+02.01.10.05.03;Organismes réceptifs;|RECEP|
+02.01.10.05.04;Entreprise;|ENTRE|
+02.01.11.01.01;Classé et contrôlé par la DMF;|MCLAS|
+02.01.11.01.02;Musée d'histoire naturelle;|MHNAT|
+02.01.11.01.03;Musée national;|MNAT|
+02.01.11.01.04;Musée prive;|MPRIV|
+02.01.11.02.01;Alpin;|PALP|
+02.01.11.02.02;Collection de végétaux;|PCOLL|
+02.01.11.02.03;Plantes médicinales / simples;|PMEDE|
+02.01.11.02.04;Potager;|PPOT|
+02.01.11.02.05;Serre et orangerie;|PSERR|
+02.01.11.03.01;Classé ou inscrit (CNMHS);|CNMHS|
+02.01.11.03.02;Non Classé;|NCLAS|
+02.01.11.03.03;Plus beaux villages de France;|PBVF|
+02.01.11.03.04;Petites cités de caractère;|PCARA|
+02.01.11.03.05;Patrimoine mondial UNESCO;|UNESC|
+02.01.11.03.06;Ville d'art et d'histoire;|VILAH|
+02.01.11.04.01;Centre d'interprétation;|CEINT|
+02.01.11.04.02;Musée;|MUSEE|
+02.01.11.04.03;Parc et jardin;|PARC|
+02.01.11.04.04;Site et monument historiques;|SITMO|
+02.01.11.05.01;A l'anglaise;|AANG|
+02.01.11.05.02;Contemporain;|ACONT|
+02.01.11.05.03;De curé / monastique;|ACURE|
+02.01.11.05.04;Exotique;|AEXOT|
+02.01.11.05.05;A la française;|AFRAN|
+02.01.11.05.06;A l'italienne;|AITAL|
+02.01.11.05.07;Japonais;|AJAP|
+02.01.11.05.08;En terrasse;|ATERR|
+02.01.11.06.01;Antique;|ANTIQ|
+02.01.11.06.02;Art nouveau ou Art Déco;|ARTDE|
+02.01.11.06.03;Baroque;|BAROQ|
+02.01.11.06.04;Classique;|CLASS|
+02.01.11.06.05;Contemporain;|CONTE|
+02.01.11.06.06;Gallo-romain;|GALLO|
+02.01.11.06.07;Gothique;|GOTH|
+02.01.11.06.08;Moderne;|MODER|
+02.01.11.06.09;Non Classé;|NCLAS|
+02.01.11.06.10;Préroman;|PRERO|
+02.01.11.06.11;Renaissance;|RENAI|
+02.01.11.06.12;Roman;|ROMAN|
+02.01.11.06.13;Troglodyte;|TROGL|
+02.01.11.06.14;XIXe siècle;|XIX|
+02.01.11.07.01;Aéronautique Espace;|MAERO|
+02.01.11.07.02;Agriculture monde rural;|MAGRI|
+02.01.11.07.03;Archéologie;|MARCH|
+02.01.11.07.04;Maritime;|MARIN|
+02.01.11.07.05;Artisanat;|MARTI|
+02.01.11.07.06;Automates;|MAUTO|
+02.01.11.07.07;Beaux Arts;|MBA|
+02.01.11.07.08;Chasse;|MCHAS|
+02.01.11.07.09;Art moderne / contemporain;|MCONT|
+02.01.11.07.10;Arts décoratifs;|MDECO|
+02.01.11.07.11;Eco Musée;|MECO|
+02.01.11.07.12;Musée pour enfants;|MENFA|
+02.01.11.07.13;Anthropologie;|METHN|
+02.01.11.07.14;Métiers;|METIE|
+02.01.11.07.15;Souvenirs de guerre;|MGUER|
+02.01.11.07.16;Histoire;|MHIST|
+02.01.11.07.17;Militaire;|MILIT|
+02.01.11.07.18;Industrie;|MINDU|
+02.01.11.07.19;Miniature;|MINIA|
+02.01.11.07.20;Littérature;|MLITT|
+02.01.11.07.21;Photographie et cinéma;|MPHOT|
+02.01.11.07.22;Préhistoire;|MPREH|
+02.01.11.07.23;Art sacré;|MSACR|
+02.01.11.07.24;Santé;|MSANT|
+02.01.11.07.25;Sciences et techniques;|MSCIE|
+02.01.11.07.26;Sciences naturelles;|MSNAT|
+02.01.11.07.27;Télécommunications;|MTELE|
+02.01.11.07.28;Arts et traditions populaires;|MTRAD|
+02.01.11.07.29;Transports;|MTRAN|
+02.01.11.07.30;Musique;|MUSIC|
+02.01.11.08.01;Conservatoire;|PACON|
+02.01.11.08.02;Jardin d'agrément;|PAGRE|
+02.01.11.08.03;Jardin botanique;|PAJAR|
+02.01.11.08.04;Arboretum;|PARB|
+02.01.11.08.05;Parc;|PARC|
+02.01.11.09.01;Abbaye;|HABB|
+02.01.11.09.02;Aqueduc;|HAQUE|
+02.01.11.09.03;Arc de triomphe;|HARC|
+02.01.11.09.04;Arène;|HAREN|
+02.01.11.09.05;Basilique;|HBASI|
+02.01.11.09.06;Bastide;|HBAST|
+02.01.11.09.07;Calvaire et enclos paroissiaux;|HCALV|
+02.01.11.09.08;Cathédrale;|HCATH|
+02.01.11.09.09;Chapelle;|HCHAP|
+02.01.11.09.10;Chartreuse;|HCHAR|
+02.01.11.09.11;Château;|HCHAT|
+02.01.11.09.12;Château fort;|HCHFO|
+02.01.11.09.13;Cimetière civil;|HCIME|
+02.01.11.09.14;Cimetière militaire et mémorial;|HCIMI|
+02.01.11.09.15;Citadelle;|HCITA|
+02.01.11.09.16;Cloître;|HCLOI|
+02.01.11.09.17;Collégiale;|HCOLL|
+02.01.11.09.18;Commanderie;|HCOMM|
+02.01.11.09.19;Couvent;|HCOUV|
+02.01.11.09.20;Donjon;|HDONJ|
+02.01.11.09.21;Ensemble fortifié;|HEFOR|
+02.01.11.09.22;Eglise;|HEGLI|
+02.01.11.09.23;Évêché;|HEVEC|
+02.01.11.09.24;Ferme;|HFERM|
+02.01.11.09.25;Fort;|HFORT|
+02.01.11.09.26;Grotte et gouffre;|HGROT|
+02.01.11.09.27;Maison;|HMAIS|
+02.01.11.09.28;Mégalithe;|HMEGA|
+02.01.11.09.29;Mine;|HMINE|
+02.01.11.09.30;Monastère;|HMONA|
+02.01.11.09.31;Mosquée;|HMOSQ|
+02.01.11.09.32;Moulin;|HMOUL|
+02.01.11.09.33;Palais;|HPALA|
+02.01.11.09.34;Pigeonnier;|HPIGO|
+02.01.11.09.35;Pont;|HPONT|
+02.01.11.09.36;Ruines et vestiges;|HRUIN|
+02.01.11.09.37;Site industriel;|HSIND|
+02.01.11.09.38;Site Archéologique;|HSITE|
+02.01.11.09.39;Synagogue;|HSYNA|
+02.01.11.09.40;Temple bouddhique;|HTBOU|
+02.01.11.09.41;Temple;|HTEMP|
+02.01.11.09.42;Tour;|HTOUR|
+02.01.11.09.43;Ville;|HVILL|
+02.01.11.09.44;Voie romaine;|HVOIE|
+02.01.11.10.01;Maison d'artisanat;|CARTI|
+02.01.11.10.02;Arts et traditions populaires;|CEART|
+02.01.11.10.03;Eco Musée;|CECOM|
+02.01.11.10.04;Maison d'écrivain;|CECRI|
+02.01.11.10.05;Industrie;|CEIND|
+02.01.11.10.06;Métier;|CEMET|
+02.01.11.10.07;Environnement et nature;|CENAT|
+02.01.11.10.08;Nouvelles technologies et images;|CENT|
+02.01.11.10.09;Sport;|CESPO|
+02.01.11.10.10;Maison d'artiste;|CMART|
+02.01.11.10.11;Maison de peintre;|CPEIN|
+02.01.12.01.01;Patrimoine naturel;|PNA|
+;Grotte;GRO
+;Site sous-marin;SMA
+;Salin;SAL
+;Littoral;LIT
+;Ile;ILE
+;Cascade;CAS
+;Col;COL
+;Curiosité naturelle;CNA
+;Fleuve, rivière ou canal;FLE
+;Forêt;FOR
+;Glacier;GLA
+;Gorge;GOR
+;Massif;MAS
+;Plage;PLA
+;Plaine, vallée ou delta;VAL
+;Plan d'eau, lac ou étang;EAU
+;Sommet;SOM
+02.01.13.01.01;Bistrot / bar à vin;|BISTR|
+02.01.13.01.02;Brasserie;|BRASS|
+02.01.13.01.03;Cafétéria;|CAFET|
+02.01.13.01.04;Crêperie;|CREPE|
+02.01.13.01.05;Cuisine traditionnelle;|CTRAD|
+02.01.13.01.06;Grill;|GRILL|
+02.01.13.01.07;Pizzeria;|PIZZE|
+02.01.13.01.08;Restauration Rapide;|RESRA|
+02.01.13.01.09;Restauration à thème;|RESTH|
+02.01.13.01.10;Rôtisserie;|ROTIS|
+02.01.13.01.11;Taverne;|TAVER|
+02.01.13.02.01;Auberge de campagne;|AUBCA|
+02.01.13.02.02;Ferme auberge;|FEMAU|
+02.01.13.02.03;Ferme de séjours;|FEMSE|
+02.01.13.02.04;Hotel-restaurant;|HOTRE|
+02.01.13.02.05;Restaurant;|RESTA|
+02.01.13.02.06;Table d'hôtes;|TABHO|
+02.01.13.03.01;Cuisine africaine;|AFRIC|
+02.01.13.03.02;Cuisine asiatique;|ASIAT|
+02.01.13.03.03;Cuisine casher;|CASHE|
+02.01.13.03.04;Cuisine diététique;|DIETE|
+02.01.13.03.05;Cuisine européenne;|EUROP|
+02.01.13.03.06;Fruits de mer;|FDMER|
+02.01.13.03.07;Fromagerie;|FROMA|
+02.01.13.03.08;Cuisine gastronomique;|GASTR|
+02.01.13.03.09;Cuisine méditerranéenne;|MEDIT|
+02.01.13.03.10;Cuisine nord-américaine;|NAMER|
+02.01.13.03.11;Nouvelle cuisine française;|NCFRA|
+02.01.13.03.12;Régionales française;|RLFRA|
+02.01.13.03.13;Cuisine sud-américaine;|SAMER|
+02.01.13.03.14;Cuisine traditionnelle;|TRADI|
+02.01.13.03.15;Triperies;|TRIPE|
+02.01.13.03.16;Cuisine végétarienne;|VEGET|
+02.01.14.01;Auberges de jeunesse;
+02.01.14.02;Centres de jeunes;
+02.01.14.03;Centres de vacances;
+02.01.14.04;Maisons familiales de vacances;
+02.01.14.05;Villages de vacances;

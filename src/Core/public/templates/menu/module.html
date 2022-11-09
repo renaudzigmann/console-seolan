@@ -1,0 +1,100 @@
+<%* menu des modules en colonne de gauche *%>
+<li  class="modulesearch"><%* recherche dans les sous menus - voir fin fichier pour l'activation *%>
+  <div class="form-group">
+    <div class="input-group">
+      <input id="csx-modulesearch" class="form-control" type="text" autocomplete="on" placeholder="<%$syslabels.Seolan_Core_General.modulessearch|escape:'html'%>" value="" list="csx-modulesearch-list">
+      <div class="input-group-addon"><a id="csx-modulesearch-close" href="#" class="btn"><span class="glypicon csico-close"></a></div>
+    </div>
+  </div>
+</li>
+<%$modnames=[]%>
+<%$othermodules=false%>
+
+<li>
+  <a href="#<%$self%>&moid=<%$sysmods.xmodadmin%>&function=modulesList&template=Module/Management.modList.html&tplentry=modules&noreload=1&refresh=1" onclick="home_viewmodule(this); return false;">
+    <span class="csico-triangle-right glyphicon"></span><span><%$syslabels.Seolan_Core_General.viewmodules%></span>
+  </a>
+</li>
+
+<%function name="menuGroup"%>
+<li id="node_grp<%$gi%>" class="modulemenugroup">
+  <a class="dropdown-collapse" href="#" data-togglegroup="1">
+    <span class="csico-triangle-right glyphicon"></span>
+    <span><%$gname%></span>
+    <span class="glyphicon csico-menu-down"></span>
+  </a>
+  <ul class="nav nav-stacked" style="display: none;">
+    <%section name=m loop=$mods_modsbygroup[$gi].lines_oid%>
+    <%$showItem=false%>
+    <%if ($show=="main" && $mods_modsbygroup[$gi].lines_home[m])
+    || ($show=="other" && !$mods_modsbygroup[$gi].lines_home[m])%>
+    <li>
+      <a href="#<%$mods_modsbygroup[$gi].lines_method[m]%>" data-moduleicon="<%$mods_modsbygroup[$gi].lines_iconcssclass[m]%>" data-togglepage='{"action":"home_viewmodule","arguments":[]}'>
+        <span class="csico-triangle-right glyphicon"></span><span class="modulemenuitem"><%$mods_modsbygroup[$gi].lines_name[m]%></span>
+      </a>
+    </li>
+    <%$modnames[]=$mods_modsbygroup[$gi].lines_name[m]%>
+    <%/if%>
+    <%/section%>
+  </ul>
+</li>
+<%/function%>
+
+<%section name=g loop=$mods_groups%>
+
+<%if $mods_modsbygroup[g].hasMainItem%>
+<%call menuGroup show="main" gi=$smarty.section.g.index gname=$mods_groups[g]%>
+<%/if%>
+
+<%/section%>
+
+<%if $mods_othermenu%>
+<li class="other-modules">
+  <a class="dropdown-collapse" href="#"  id="other-modules-item" data-togglegroup="1">
+    <span class="csico-triangle-right glyphicon"></span>
+    <span class=""><%$syslabels.Seolan_Core_General.modulesother%></span>
+      <span class="glyphicon csico-menu-down"></span>
+  </a>
+  <ul class="nav nav-stacked" style="display: none;">
+
+    <%section name=g loop=$mods_groups%>
+    <%if $mods_modsbygroup[g].hasOtherItem%>
+    <%call menuGroup show="other" gi=$smarty.section.g.index gname=$mods_groups[g]%>
+    <%/if%>
+    <%/section%>
+
+  </ul>
+</li>
+<%/if%>
+
+<%if $mods_testmenu%>
+  <li class="testmode-modules">
+    <a class="dropdown-collapse" href="#"  data-togglegroup="1">
+      <span class="csico-triangle-right glyphicon"></span>
+      <span class=""><%$syslabels.Seolan_Core_General.tests_modules%></span>
+      <span class="glyphicon csico-menu-down"></span>
+    </a>
+    <ul class="nav nav-stacked" style="display: none;">
+      <%section name=g loop=$mods_groups%>
+        <%section name=m loop=$mods_modsbygroup[g].lines_oid%>
+        <%if $mods_modsbygroup[g].lines_testmode[m]%>
+        <li>
+	  <a href="#<%$mods_modsbygroup[g].lines_method[m]%>" data-togglepage='{"action":"home_viewmodule","arguments":[]}'>
+            <span class="csico-triangle-right glyphicon"></span><span><%$mods_modsbygroup[g].lines_name[m]%></span>
+          </a>
+        </li>
+        <%/if%>
+        <%/section%>
+      <%/section%>
+    </ul>
+  </li>
+<%/if%>
+
+  <%* recherche dans les sous menus - activation *%>
+<script> TZR.moduleMenu.init();</script>
+<%$s=sort($modnames)%>
+<datalist id="csx-modulesearch-list">
+  <%foreach from=$modnames item=$mname%>
+  <option><%$mname%></option>
+  <%/foreach%>
+</datalist>

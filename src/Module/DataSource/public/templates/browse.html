@@ -1,0 +1,137 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.deletebase=function(boid,selectmode){
+  var f=document.forms['editform<%$uniqid%>'];
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text%>')) {
+   if(selectmode){
+    f._function.value="XDSDel";
+    f.template.value="Core.message.html";
+    f.onsubmit();
+   }else{
+    v<%$uniqid%>.jQueryLoad('<%$self%>moid=<%$smarty.request.moid%>&boid='+boid+'&function=XDSDel&template=Core.message.html');
+   }
+  }
+ }
+ v<%$uniqid%>.exportbases=function(withvalues){
+   var form=document.forms['editform<%$uniqid%>'];
+   if(!TZR.checkBoxesIsChecked(form)){
+     alert(TZR._noobjectselected);
+     return;
+   }
+   location.href="<%$self%>"+jQuery(form).serialize()+"&_function=exportSourcesAndFields&withvalues="+(withvalues?'1':'0');
+ }
+ v<%$uniqid%>.tablesToUML=function(){
+   var form=document.forms['editform<%$uniqid%>'];
+   var formdata = jQuery(form).serialize();
+   // on reste sur une fenêtre native pour avoir l'impression, l'affichage pleine page etc
+   window.open('<%$self%>'+formdata+'&moid=<%$_moid%>&function=tablesToUml&template=Module/DataSource.tablestouml.html&tplentry=br',
+    	       'print',
+	       'width=1200,height=800,scrollbars=yes,location=no,resizable=yes,menubar=yes');
+   return false;
+   
+   TZR.Dialog.openURL('<%$self%>'+formdata+'&moid=<%$_moid%>&function=tablesToUml&template=Module/DataSource.tablestouml.html&tplentry=br');
+   return false;
+ }
+ 
+  var tableList = null;
+  var tableListHiddenClass = 'hidden-search';
+  jQuery(document).ready(function(){
+    tableList = jQuery("table.cv8_tablelist");
+    jQuery("#filter_list").on("keyup", function(event){
+      var q = jQuery(this).val();
+      if (q.length>=3){
+        filterTable(q);
+        
+      } else if (q.length<3){
+        resetTable();
+      }
+    });
+  });
+  function filterTable(search){
+    var exp = new RegExp(search, "i");
+    jQuery("tbody>tr>td:nth-child(3)", tableList).each(
+      function(i, o){
+        if (!exp.test(jQuery(this).html())){
+          jQuery(this).parent().addClass(tableListHiddenClass);
+        }
+      }
+    );
+    jQuery("tbody>tr."+tableListHiddenClass+">td:nth-child(5)", tableList).each(
+      function(i, o){
+        if (exp.test(jQuery(this).html())){
+          jQuery(this).parent().removeClass(tableListHiddenClass);
+        }
+      }
+    );
+    jQuery("."+tableListHiddenClass, tableList).hide();
+  }
+  function resetTable(){
+    jQuery("."+tableListHiddenClass, tableList).show().removeClass(tableListHiddenClass);
+  }
+//# sourceURL=/Module/DataSource/browse.html
+</script>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_DataSource_DataSource.datasources_text%></legend>
+ <form name="editform<%$uniqid%>" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>"%>
+  <input type="hidden" name="_function" value="">
+  <input type="hidden" name="template" value="">
+  <input type="hidden" value="ok" name="_selectedok"/>
+  <input type="hidden" value="selectstart" name="marker"/>
+  <div class="table-responsive">
+  <table class="table cv8_tablelist">
+   <thead>
+    <tr>
+    <tr><td colspan="8"><input size="32" type="text" id="filter_list"  placeholder="<%$syslabels.Seolan_Module_DataSource_DataSource.datasource|escape:'quotes'%>, <%$syslabels.Seolan_Module_DataSource_DataSource.datasourceinfo|escape:'quotes'%>" value=""></td></tr>
+    <tr>
+     <th></th><th></th>
+     <th><%$syslabels.Seolan_Module_DataSource_DataSource.datasource%></th>
+     <th><%$syslabels.Seolan_Module_DataSource_DataSource.datasourcetype%></th>
+     <th><%$syslabels.Seolan_Module_DataSource_DataSource.datasourceinfo%></th>
+     <th><%$syslabels.Seolan_Core_DataSource_DataSource.translatable%></th>
+     <th><%$syslabels.Seolan_Core_General.auto_translate%></th>
+     <th><%$syslabels.Seolan_Core_DataSource_DataSource.tolog%></th>
+    </tr>
+   </thead>
+   <tbody>
+    <%section name=bases loop=$br_lines_sourcecode %>
+     <tr>
+      <td><input type="checkbox" class="checkbox" name="_selected[<%$br_lines_sourcecode[bases]%>]" value="1"/></td>
+      <td style="white-space:nowrap">
+       <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&boid=<%$br_lines_sourcecode[bases]%>&function=XDSContentBrowse&tplentry=br&&template=Module/DataSource.XDSContentBrowse.html" title="<%$syslabels.Seolan_Core_General.browse_text%>"><%$syslabels.Seolan_Core_General.browse%></a>
+       <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&boid=<%$br_lines_sourcecode[bases]%>&function=XDSBrowseFields&template=Module/DataSource.browseFields.html" title="<%$syslabels.Seolan_Core_General.edit_text%>"><%$syslabels.Seolan_Core_General.edit%></a>
+       <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&boid=<%$br_lines_sourcecode[bases]%>&function=XDSEditSourceProperties&template=Module/DataSource.editSource.html" title="<%$syslabels.Seolan_Core_General.properties_text%>"><%$syslabels.Seolan_Core_General.properties%></a>
+       <a href="#" onclick="v<%$uniqid%>.deletebase('<%$br_lines_sourcecode[bases]%>'); return false;" title="<%$syslabels.Seolan_Core_General.delete_text%>"><%$syslabels.Seolan_Core_General.delete%></a>
+       <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&boid=<%$br_lines_sourcecode[bases]%>&function=XDSCreateXModTable&template=Core.message.html" title="<%$syslabels.Seolan_Module_DataSource_DataSource.createxmodtable_text%>"><%$syslabels.Seolan_Module_DataSource_DataSource.createxmodtable%></a>
+      </td>
+      <td><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&boid=<%$br_lines_sourcecode[bases]%>&function=XDSBrowseFields&template=Module/DataSource.browseFields.html"><%$br_lines_source[bases]->getSourceName()%></A></td>
+      <td><%$br_lines_sourcetype[bases]%></td>
+      <td><%$br_lines_source[bases]->getTable()%></td>
+      <%assign var='translatable' value=$br_lines_source[bases]->getTranslatable()%>
+      <td><%if $translatable == 3%><strong title="<%$syslabels.Seolan_Module_DataSource_DataSource.freelang|escape:'javascript'%>">X</strong><%/if%><%if $translatable == 1%>X<%/if%></td>
+      <td><%if $br_lines_source[bases]->getAutoTranslate() %>X<%/if%></td>
+      <td><%if $br_lines_source[bases]->toLog()%>X<%/if%></td>
+     </tr>
+    <%/section%>
+   </tbody>
+  </table>
+  </div>
+ </form>
+</fieldset>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_DataSource_DataSource.insert%></legend>
+ <form name="newxdsform<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="function" value="irun">
+  <input type="hidden" name="step" value="1">
+  <input type="hidden" name="template" value="Module/DataSource.sourceWizard.html">
+  <%$syslabels.Seolan_Module_DataSource_DataSource.sourcetype%> : 
+  <select name="class">
+   <%foreach key=class item=source from=$br_sources%>
+    <option value="<%$source.WIZARD%>"><%$source.SOURCE%></option>
+   <%/foreach%>
+  </select>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" name="btnNewBase" value="<%$syslabels.Seolan_Core_General.approve_text%>">
+  </div>
+ </form>
+</fieldset>

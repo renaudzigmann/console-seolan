@@ -1,0 +1,47 @@
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="`$syslabels.Seolan_Core_General.globalsearch` : \"`$br_query`\""%>
+
+
+<fieldset><legend><%$syslabels.Seolan_Core_General.query_text%></legend>
+<form class="form-inline form-inline-search" action="<%$self%>" method="post" name="search" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="globalSearch">
+ <input type="hidden" name="class" value="<%$br__instanceClassname|default:$smarty.const.TZR_SEARCH_MANAGER%>">
+ <input type="hidden" name="template" value="Library/SolR.result.html">
+ <input type="hidden" name="tplentry" value="br">
+ <div class="form-group">
+ <input type="text" name="query" size="30" value="<%$br_query%>">
+ </div>
+ <div class="checkbox">
+   <label><input name="deepsearch" value="1" type="checkbox" <%if $br_deepsearch%>checked<%/if%> id="deepsearch"/> <%$syslabels.Seolan_Library_SolR_SolR.extensiveSearch%></label>
+ </div>
+ <div class="tzr-action">
+  <input class="tzr-docmgt-searchbox-submit" type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>">
+ </div>
+</form>
+</fieldset>
+
+<div class="cv8-search-result panel-group" role="tablist" aria-multiselectable="true" id="search-result-<%$uniqid%>">
+  <%foreach from=$br_modules item=m key=moid%>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="header_<%$moid%>">
+      <h4 class="panel-title">
+	<a role="button" class="<%if count($br_modules)>1%>collapsed<%/if%>" data-toggle="collapse" data-parent="#search-result-<%$uniqid%>" href="#result_<%$moid%>" aria-expanded="<%if count($br_modules)>1%>false<%else%>true<%/if%>" aria-controls="result_<%$moid%>"><%$m.name%> - <%$m.count%> <%$syslabels.Seolan_Library_SolR_SolR.nbresults%></a>
+      </h4>
+    </div>
+    <div id="result_<%$moid%>" class="panel-collapse collapse <%if count($br_modules)<=1%>in<%/if%>" role="tabpanel" aria-labelledby="header_<%$moid%>" aria-expanded="true">
+      <div class="panel-body">
+	<p>
+	  <a class="btn btn-info" href="#" onclick="TZR.ajaxSubmitForm(document.resultform<%$moid%>);return false;"><%$syslabels.Seolan_Library_SolR_SolR.results|sprintf:$m.count:$m.name%></a>
+	</p>
+	<form action="<%$self%>" method="post" name="resultform<%$moid%>">
+	  <%include file=$m.template%>
+	</form>
+      </div>
+    </div>
+  </div>
+
+  <%foreachelse%>
+  <%$syslabels.Seolan_Core_Field_Field.no_result%>
+  <%/foreach%>
+  
+</div>

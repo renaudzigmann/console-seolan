@@ -1,0 +1,8 @@
+<form name="frmHtdig" method="post" action="/index.php?nocache=1&amp;" role="search" accept-charset="ISO-8859-15">
+  <input name="config" value="<%$tzr.htdigconf%><%$server_name|replace:".":"_"%>" type="hidden">
+  <input name="alias" value="<%$tzr.searchalias|default:"search" %>" type="hidden">
+  <input name="page" value="1" type="hidden">
+  <input name="insidefile" value="search-htdig-results.html" type="hidden">
+  <input class="form-control" name="words" placeholder="Mots clés..." onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='Votre recherche...';}" type="text">
+  <input class="btn btn-primary" value="<%$labels.query_text|default:"Rechercher" %>" type="submit">
+</form>

@@ -1,0 +1,35 @@
+<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="#">
+<span class="glyphicon <%if $smarty.session._TZR.user_selection_items && count($smarty.session._TZR.user_selection_items)>0%>csico-folders<%else%>csico-folder<%/if%>"></span>
+</a>
+<ul class="dropdown-menu">
+  <li class="dropdown-header"><span><%$syslabels.Seolan_Core_General.selectedobjects%></span></li>
+  <%assign var=moids value=''%>
+  <%foreach key=moid item=selection from=$smarty.session._TZR.user_selection%>
+    <%if $moids%>
+      <%assign var=moids value="$moids;$moid"%>
+      <%else%>
+      <%assign var=moids value="$moid"%>
+    <%/if%>
+    <%assign var=modname value=$smarty.session._TZR.user_selection_modnames[$moid]%>
+    <li class="module-selection">
+      <a href="#" title="<%$modname%> - <%$syslabels.Seolan_Core_General.selectedobjects%>" onclick="TZR.SELECTION.Modal.show('<%$moid%>');return false;">
+      <%$modname%><span><%$syslabels.Seolan_Core_General.i18ncolon%><%count($selection)%></span></a>
+    </li>
+  <%/foreach%>
+  <%if count($smarty.session._TZR.user_selection)>=1%>
+      <script>jQuery("#cvx-panier").css('display', '');</script>	
+    <li class="divider" role="separator"></li>
+    <li>
+      <a href="#" title="<%$syslabels.Seolan_Core_Module_Module.emptyselection%>" onclick="TZR.Table.emptySelection(''); return false;">
+      <span class="glyphicon csico-clear-selection"></span><%$syslabels.Seolan_Core_Module_Module.emptyselection%></a>
+    </li>
+    <%else%>
+    <script>jQuery("#cvx-panier").css('display', 'none');</script>
+    <li class="disabled">
+      <a href="#"><%$syslabels.Seolan_Core_Module_Module.selectionisempty%></a>
+    </li>
+  <%/if%>
+</ul>
+<script>TZR.SELECTION.init.call(TZR.SELECTION);</script>
+
+

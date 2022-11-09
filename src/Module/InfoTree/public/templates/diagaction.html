@@ -1,0 +1,105 @@
+<%if !$smarty.request.listonly%>
+<%assign var="diagTitle" value=$smarty.request.diag_title%>
+
+<div class="title"><%$syslabels.Seolan_Module_InfoTree_InfoTree.treebrowser%><%if $syslabels.Seolan_Core_General.$diagTitle%><%$syslabels.Seolan_Core_General.i18ncolon%><%$syslabels.Seolan_Core_General.$diagTitle%><%/if%></div>
+
+<script type="text/javascript">
+
+/*
+ var requestAction = "<%$smarty.request.action%>";
+ var requestModuleid = <%$smarty.request.moduleid|default:0%>;
+ var requestVarname = "<%$smarty.request.varname|default:""%>";
+ var requestForm = "<%$smarty.request.formname|default:""%>";
+ var requestTargetOid = "<%$smarty.request.targetoid|default:"_dest"%>";
+*/
+    function go_action(oid,alias,t) {
+
+      var requestAction = "<%$smarty.request.action%>";
+      var requestModuleid = <%$smarty.request.moduleid|default:0%>;
+      var requestVarname = "<%$smarty.request.varname|default:""%>";
+      var requestForm = "<%$smarty.request.formname|default:""%>";
+      /* input(s) en retrour de selection . ex :  selection newsletter mailinglist */
+      var requestTargetOid = "<%$smarty.request.targetoid|default:"_dest"%>";
+      var titlediv = "<%$smarty.request.titlediv|default:''%>";
+
+      if (requestAction=='fck'){
+	window.opener.CKEDITOR.tools.callFunction("<%$smarty.request.CKEditorFuncNum%>","["+alias+"]",function() {
+	  var element,dialog=this.getDialog();
+	  element=dialog.getContentElement( 'info', 'protocol' );
+	  if(element) element.setValue('');
+	});
+      } else if (requestAction == 'go'){
+	var url ="<%$self%>function=editpage&moid=<%$_moid%>&oidit="+oid+"&tplentry=it&template=Module/InfoTree.viewpage.html";
+	if (resquestModuleid){
+	  v<%$smarty.request.moduleid%>.jQueryLoad(url);
+	} else {
+	  document.location.href=url;
+	}
+      } else if (requestAction == "selectTopic"){
+	if (requestVarname != ""){
+          if (typeof(window[requestVarname]) == 'object')
+            window[requestVarname].value=oid;
+         if (typeof(window[requestVarname+"_title"]) == 'object')
+           window[requestVarname+"_title"]=t;
+	} else {
+          selectedTopic = {
+            oid: oid,
+            title: t,
+            alias: alias
+          };
+	}
+      }else {
+	TZR.Dialog.closeDialog();
+	document.forms[requestForm].elements[requestTargetOid].value=oid;
+	if(requestAction != 'no') {
+	  document.forms[requestForm].elements['_function'].value=requestAction;
+	  TZR.ajaxSubmitForm(document.forms[requestForm]<%if $smarty.request.cb%>,null,null,{cb:<%$smarty.request.cb%>}<%/if%>);
+	}
+	if(titlediv !='') {
+	  o=document.getElementById(titlediv);
+	  o.innerHTML=t;
+	}
+      }
+    }
+
+   </script>
+
+   <ul class="simpleTree topicsTree">
+     <li class="root">
+       <span>
+	 <%if $smarty.request.rootauth%>
+	 <a href="#" onclick="go_action('','','',1,0); return false;"><%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%></a>
+	 <%else%>
+	 <%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%>
+	 <%/if%>
+       </span>
+       <ul>
+
+<%/if%>
+
+<%include file="Module/InfoTree.poptree.html" 
+	 ajaxurl="`$self`&tplentry=mit&function=home&template=Module/InfoTree.diagaction.html&oidtop=`$mit_lines_oid[i]`&moid=`$smarty.request.moid`&listonly=1&_raw=1&_skip=1&norubric=1&nosub=1&rootauth=1" 
+	 publishedonlyselectable=$smarty.request._publishedonlyselectable 
+	 selected=$smarty.request._selected 
+	 from=$smarty.request.from 
+	 nosub=$smarty.request.nosub 
+	 action="go_action" 
+	 prefix="mit"%>
+
+<%if !$smarty.request.listonly%>
+   </ul></li></ul>
+
+    <div id="tzr-action<%$uniqid%> " class="tzr-action col-lg-12">
+      <button class="btn" type="button" class="close" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+    </div>
+
+   <script type="text/javascript">
+    jQuery(function(){
+      var simpleTreeCollection;
+      simpleTreeCollection = jQuery(".simpleTree").simpleTree({drag:true});
+      <%if $smarty.request.oid%>
+      simpleTreeCollection[0].openNode(document.getElementById('node_<%$smarty.request.oid%>'),true);
+      <%/if%>
+    });
+   </script>
+<%/if%>

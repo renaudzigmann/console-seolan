@@ -1,0 +1,21 @@
+<%if $tzr.private_space%>
+<div id="cv3-private">
+<div id="cv3-private-top"></div>
+<div id="cv3-private-middle">
+<%if $uid=="USERS:0"%>
+ <form name="privateform" method="post" action="<%$self%>" class="privateform">
+<input type="hidden" name="_next" value="alias=<%$tzr.private_alias%>">
+<input type="hidden" name="_function" value="procAuth">
+<input type="hidden" name="_class" value="\Seolan\Core\Session">
+<input type="hidden" name="onerror" value="<%$self%>&alias=loginfailed">
+<input type="text" name="login" class="zoneLogin" value="<%$labels.login%>" onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='<%$labels.login%>';}" />
+<input type="password" name="password" class="zoneLogin" value="<%$labels.password%>" onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='<%$labels.password%>';}" />
+<div class="btprivate"><a href="javascript:document.privateform.submit();"><%$labels.connecter%></a></div>
+</form>
+<%else%>
+<div class="btprivate2"><a href="<%$self%>alias=home&function=close&class=\Seolan\Core\Session"><%$labels.deconnecter%></a></div>
+<%/if%>
+</div>
+<div id="cv3-private-bottom"></div>
+</div>
+<%/if%>

@@ -1,0 +1,15 @@
+<h2>Commentaires recents</h2>
+<%section name=k loop=$brcomments_lines_oid%>
+<a href="<%$self%>&class=\Seolan\Module\Blog\Blog&function=displayPost&moid=<%$smarty.request.moid%>&template=blog/displaypost.html&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brcomments_lines_opaperup[k]->raw%>#<%$brcomments_lines_oid[k]%>"><%$brcomments_lines_otitle[k]->html%></a> sur <a href="<%$self%>&class=\Seolan\Module\Blog\Blog&function=displayPost&moid=<%$smarty.request.moid%>&template=blog/displaypost.html&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brcomments_lines_opaperup[k]->raw%>"><%$brcomments_lines_opaperup[k]->link.otitle->text%></a><br/>
+<%/section%>
+<h2>Notes</h2>
+<%section name=k loop=$brposts_lines_oid%>
+<%assign var=month value=$brposts_lines_odatep[k]->raw|date_format:"%m"%>
+<%assign var=year value=$brposts_lines_odatep[k]->raw|date_format:"%Y"%>
+<%if $month neq $pmonth%>
+<p style="border-bottom:1px dashed #444444;"><%$month%>/<%$year%></p>
+<%assign var=pmonth value=$month%>
+</p>
+<%/if%>
+<a href="<%$self%>&class=\Seolan\Module\Blog\Blog&function=displayPost&moid=<%$smarty.request.moid%>&template=blog/displaypost.html&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brposts_lines_oid[k]%>"><%$brposts_lines_otitle[k]->html%></a><br/>
+<%/section%>

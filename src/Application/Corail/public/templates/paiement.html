@@ -1,0 +1,82 @@
+<!--<%$smarty.template%>-->
+<h1><%$labels.generic_site_order_recaporder%></h1>
+<div id="commande">
+ <table width="100%" cellspacing="1" border="0">
+  <tr>
+   <td align=left valign=top style="padding-left:3Opx;">
+    <b><%$syslabels.Seolan_Module_Cart_Cart.ref%></b>:&nbsp;<%$ord_oF0001->html%><br>
+    <b><%$syslabels.Seolan_Module_Cart_Cart.date%>:&nbsp;</b>&nbsp;<%$ord_oF0002->html%><br>
+    <br><br>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding-left:3Opx;" valign="top">
+    <b><u><%$syslabels.Seolan_Module_Cart_Cart.billingaddress%></u></b><br>
+    <b><%$cust_ofullnam->html%> <%$cust_sname%></b>
+    <%if $cust_cie%><br><%$cust_cie%><%/if%>
+    <%if $cust_adres%><br><%$cust_adres%><%/if%>
+    <br><%$cust_codp%>&nbsp;<%$cust_ville%>
+    <br><%$cust_pays%>
+    <%if $cust_phone%><br><%$syslabels.Seolan_Module_Cart_Cart.phone%>:&nbsp;<%$cust_phone%><%/if%>
+    <%if $cust_fax%><br><%$syslabels.Seolan_Module_Cart_Cart.fax%>:&nbsp;<%$cust_fax%><%/if%>
+    <%if $cust_oemail->html%><br><%$syslabels.Seolan_Module_Cart_Cart.email%>:&nbsp;<%$cust_oemail->html%><%/if%>
+   </td>
+   <td style="padding-left:3Opx;" valign="top">
+    <b><u><%$syslabels.Seolan_Module_Cart_Cart.shippingaddress%></u></b>
+    <br><%$cust_fname%> <%$cust_fsname%> 
+    <%if $cust_fcie%><br><%$cust_fcie%><%/if%>
+    <br><%$cust_fadre%>
+    <br><%$cust_fcodp%>&nbsp;<%$cust_fvill%>
+    <br><%$cust_fpays%>
+    <%if $cust_ftel%><br><%$syslabels.Seolan_Module_Cart_Cart.phone%>:&nbsp;<%$cust_ftel%><%/if%>
+   </td>
+  </tr>
+ <tr >
+  <td>
+  <u><b><%$syslabels.Seolan_Module_Cart_Cart.remark%>:</b></u>&nbsp;<%$ord_orem->html|default:"&nbsp;"%><%if $ord_coupon%><br>Coupon:&nbsp;<%$ord_coupon%><%/if%><%if $anyedeliv%><%$labels.droit_ebooks%><%* specifique adverbum*%><%/if%></td></tr>
+  <tr>
+ </table>
+ <br><br>
+ <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr class="TRtitrage">
+   <td class="TDtitrage"><%$labels.generic_site_order_entete_libelle%></td>
+   <td class="TDtitrage"><%$labels.generic_site_order_entete_detailpriceht%></td>
+   <td class="TDtitrage"><%$labels.generic_site_order_entete_number%></td>
+   <td class="TDtitrage"><%$labels.generic_site_order_entete_totalpriceht%></td>
+  </tr>
+  <%section name=i loop=$ordl_lines_oid%>
+   <tr class="TRarticle">
+    <td class="TDarticle2"><%$ordl_lines_olabel[i]->html%></td>
+    <td class="TDarticle4">
+     <div align="center">
+      <span class="blackTD">
+       <%math equation="x*(y/100+1)" x=$ordl_lines_oprice[i]->raw y=$ordl_lines_otva[i]->raw format="%.2f"%> &euro;
+      </span>
+     </div>
+    </td>
+    <td class="TDarticle5">
+     <div align="center"><%$ordl_lines_onb[i]->raw%></div>
+    </td>
+    <td class="TDarticle6">
+     <%math equation="x*(y/100+1)" x=$ordl_lines_ototalp[i]->raw y=$ordl_lines_otva[i]->raw format="%.2f"%> &euro;
+    </td>
+   </tr>
+  <%/section%>
+  <tr class="TRrecap" id="TRdelivery">
+   <td class="TDrecap1" colspan="3"><%$labels.generic_site_recap_frais%></td>
+   <td class="TDrecap2"><%$ord_oF0005->raw|string_format:"%.2f"%> &euro;</td>
+  </tr>
+
+  <%if $ord_disc neq "0"%>
+   <tr class="TRrecap" id="TRtotaltva">
+    <td class="TDrecap1" colspan="3"><%$labels.generic_site_recap_coupon%></td>
+    <td class="TDrecap2">- <%$ord_disc|string_format:"%.2f"%> &euro;</td>
+   </tr>
+  <%/if%>
+  <tr class="TRrecap" id="TRtotal">
+   <td class="TDrecap1" colspan="3"><%$labels.generic_site_recap_totalttc%></td>
+   <td class="TDrecap2"><%$ord_oF0004->html|string_format:"%.2f"%> &euro;</td>
+  </tr>
+ </table>
+</div>
+ 

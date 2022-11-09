@@ -1,0 +1,8 @@
+{<%strip%>
+"_infotreeadmin_sec":<%if $infotreeadmin_sec.admin%>true<%else%>false<%/if%>,
+<%* le profil *%>
+<%capture name="profile" assign="profile"%><%include file="Core.layout/top/profile.html"%><%/capture%>
+"profile":"<%$profile|escape:javascript%>"
+<%* la séléction ?*%> 
+<%/strip%>}
+

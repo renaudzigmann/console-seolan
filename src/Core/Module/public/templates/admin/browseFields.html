@@ -1,0 +1,5 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="admin"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Core/Module.admin/"%><%/if%>
+<%assign var="activesec" value="1"%>
+<%assign var="title" value=""%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/DataSource.browseFields.html" datasourceactions=1%>

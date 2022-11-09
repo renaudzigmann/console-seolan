@@ -1,0 +1,170 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if !isset($title)%><%assign var="title" value=$syslabels.Seolan_Core_Module_Module.browsefields%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+
+
+
+<%if $datasourceactions && $_functions%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core/Module.admin/actions.html" action_title="DataSource Actions" actions=$_functions%>
+<%/if%>
+
+
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);" id="form<%$uniqid%>" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<%$uniqid%>">
+    <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+    <input type="hidden" name="fprefix" value="<%$fprefix%>">
+    <input type="hidden" name="tprefix" value="<%$tprefix%>">
+    <input type="hidden" name="function" value="<%$fprefix%>ProcEditFields">
+    <input type="hidden" name="boid" value="<%$_boid%>">
+    <input type="hidden" name="updateotherorder" value="0">
+    <input type="hidden" name="_next" value="<%$self%>moid=<%$smarty.request.moid%>&function=<%$fprefix%>BrowseFields&template=<%$tprefix%>browseFields.html&boid=<%$_boid%><%if $smarty.request.addOption%>&addOption=<%$smarty.request.addOption%><%/if%>">
+    
+ <div class="cv8-quicksearch form-inline clearfix">     
+      
+    <%assign var="groupsCnt" value=$_groups|@count%>
+    <%if $groupsCnt > 1%>
+    <div id="table<%$uniqid%>_groups" class="form-group">
+      <label for="table<%$uniqid%>_groupfilter"><%$syslabels.Seolan_Core_General.filter%> :</label>
+      <select name="table<%$uniqid%>_group" size="1" aria-controls="table<%$uniqid%>" onchange="TZR.Field.groupFilter('<%$uniqid%>',this.value);" id="table<%$uniqid%>_groupfilter">
+        <option value="">--<%$syslabels.Seolan_Core_General.groups%>--</option>
+        <%section name="g" loop=$_groups%>
+          <option value="group_<%$smarty.section.g.index%>"><%if empty($_groups[g])%><%$syslabels.Seolan_Core_General.general%><%else%><%$_groups[g]%><%/if%></option>
+        <%/section%>
+      </select> 
+      
+    </div>
+    <%/if%>
+    
+    <div id="table<%$uniqid%>_addopts" class="form-group" >
+      <label for="addOption<%$uniqid%>"><%$syslabels.Seolan_Core_General.edit_text%> :</label>
+      <select name="addOption" id="addOption<%$uniqid%>" onchange="TZR.Field.addopts('<%$smarty.request.moid%>','<%$fprefix%>','<%$tprefix%>','<%$_boid%>','v<%$uniqid%>',this.value);">
+      <option value="">---</option>
+	  <%foreach key=fieldtypename item=opts from=$_allOpts%>
+        <optgroup label="<%$fieldtypename%>">
+      <%foreach key=opt item=label from=$opts%>
+      <%if $smarty.request.addOption == "__$opt"%>
+        <%assign var="addOptionLabel" value="$label"%>
+        <option selected="selected" value="__<%$opt%>"> <%$label%></option>
+      <%else%>
+        <option value="__<%$opt%>"><%$label%></option>
+      <%/if%>
+      <%/foreach%>
+		</optgroup>
+      <%/foreach%>
+     </select>
+    </div>
+    
+    <div id="table<%$uniqid%>_search" class="form-group">
+      <label for="search<%$uniqid%>"><%$syslabels.Seolan_Core_General.query_text%> :</label>
+      <input id="search<%$uniqid%>" name="search<%$uniqid%>" type="text" placeholder="<%$syslabels.Seolan_Core_General.query_text%>">
+    </div>
+ </div>
+      
+ <div class="cv8-contenu-center clearfix">
+    <div class="table-responsive">
+      <table class="table table-striped cv8_tablelist cvx-adminTable" id="table<%$uniqid%>" aria-describedby="<%$title%>">
+        <thead>
+          <tr role="row">
+            <th role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" ><%$syslabels.Seolan_Core_General.actions%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.field_label_text|truncate:"40":"..."%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.field_order%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.field%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_General.type%></th>
+          <%if $smarty.request.addOption%>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$addOptionLabel%></th>
+          <%/if%>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.size%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.compulsory%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.browsable%></th>
+	    <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.queryable%></th>
+
+	    <%if $_translatable%> <!-- Afficher la colonne uniquement si l'option "Traduire" est activée -->
+	    <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.translatable_text%></th>
+	    <%/if%>
+
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.multivalued%></th>
+            <th class="sorting" role="columnheader" tabindex="0" aria-controls="table<%$uniqid%>" rowspan="1" colspan="1" aria-label="sort column"><%$syslabels.Seolan_Core_DataSource_DataSource.published%></th>
+          </tr>
+        </thead>
+      <tbody role="alert" aria-live="polite" aria-relevant="all">
+       <%foreach name=fields key=field item=ofield from=$_tableObject%>
+        <tr tzrgroup="<%$_tableGroup[$field]%>">
+          <td>
+	    <ul class="ul-list-tools">
+	      <li><a href="#" data-action="TZR.Field.delete" data-args="<%$uniqid%>,<%$field%>" data-toggle="modal" data-target="#cvx-confirm-delete"><%$syslabels.Seolan_Core_General.del%></span></a></lI>
+	      <%if $activesec%>
+	      <li><a href="#" onclick="return TZR.Field.editSec('<%$uniqid%>','<%$imod_props._moid%>','_field-<%$field%>');"><%$syslabels.Seolan_Core_General.security%></span></a></li>
+	      <%/if%>
+	      <%if $ofield instanceof  \Seolan\Field\StringSet\StringSet%>
+	      <li><a class="cv8-ajaxlink" href="<%$self%>moid=<%$smarty.request.moid%>&function=<%$fprefix%>BrowseStrings&template=<%$tprefix%>browseStrings.html&boid=<%$_boid%>&field=<%$field%>"><%$syslabels.Seolan_Core_Field_Field.stringsetEdit%></a></li>
+              <%/if%>
+	    </ul>
+          </td>
+          
+          <td>
+            <label><a class="cv8-ajaxlink" href="<%$self%>moid=<%$smarty.request.moid%>&function=<%$fprefix%>EditField&template=<%$tprefix%>editField.html&boid=<%$_boid%>&field=<%$field%>"><%$ofield->label%></a></label>
+            <input type="hidden" name="field[<%$field%>]">
+            <%if $ofield->acomment%><div class="tzr-field-acomment"><%$ofield->acomment|escape|nl2br%></div><%/if%>
+          </td>
+          <td><input type="numeric" size="2" class="forder" name="forder[<%$field%>]" data-order="<%$ofield->forder%>" value="<%$ofield->forder%>" style="text-align:right" onchange="TZR.Field.changeOrder('<%$uniqid%>',this);"></td>
+          <td><%$field%></td>
+          <td><%$ofield->getTypeString()%>&nbsp;<%$ofield->getTypeStringAnnotation()%></td>
+      <%if $smarty.request.addOption%>
+            <td><%'/name="addOptions([^\"]*)"/'|preg_replace:"name=\"addOptions[`$field`]\\1\"":$_addOption[$field]%></td>
+      <%/if%>
+          <td><input type="numeric" size="3" name="fcount[<%$field%>]" value="<%$ofield->fcount%>" style="text-align:right;"></td>
+          <td><p align="center"><input type="checkbox" class="radio" name="compulsory[<%$field%>]" <%if $ofield->compulsory%>checked<%/if%>></p></td>
+          <td><p align="center"><input type="checkbox" class="radio" name="browsable[<%$field%>]" <%if $ofield->browsable%>checked<%/if%> ></p></td>
+          <td><p align="center"><input type="checkbox" class="radio" name="queryable[<%$field%>]" <%if $ofield->queryable%>checked<%/if%> ></p></td>
+
+	  <%if $_translatable%> <!-- N'afficher la case à cocher que si l'option "Traduire" est activée -->
+	  <td><p align="center"><input type="checkbox" class="radio" name="translatable[<%$field%>]" <%if $ofield->translatable%>checked<%/if%>></p></td>
+	  <%/if%>
+
+	  <td><p align="center"><input type="checkbox" class="radio"  name="multivalued[<%$field%>]" <%if $ofield->isMultiValuable() == true %> <%if $ofield->multivalued%>checked <%/if%> <%/if%> <%if $ofield->isMultiValuable() == false %>disabled="disabled"<%/if%>    ></p></td>
+          <td><p align="center"><input type="checkbox" class="radio" name="published[<%$field%>]" <%if $ofield->published%>checked<%/if%> ></p></td>
+        </tr>
+        <%/foreach%>
+            
+          </tbody>
+          </table>
+    </div>
+
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+      <input type="reset" value="<%$syslabels.Seolan_Core_General.cancel_text%>">
+    </div>
+ 
+  </form>
+</div>
+
+
+
+<script type="text/javascript">
+jQuery( document ).ready(function(event, xhr, settings) {
+   // document.ready : anciennement ajaxComplete mais ajaxComplete = sur tout appel ajax
+   // ce qui est pas clean ?
+  <%if $smarty.request.addOption%>
+    TZR.AdminTable.initAddCol("<%$uniqid%>","<%$smarty.request.addOption%>");
+  <%/if%>
+});
+v<%$uniqid%>.deletebase=function() {
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text%>')) {
+   this.jQueryLoad('<%$self%>moid=<%$smarty.request.moid%>&boid=<%$_boid%>&function=<%$fprefix%>Del&skip=1&_next=<%"`$self`&moid=`$smarty.request.moid`&function=browse&tplentry=br&template=Module/DataSource.browse.html"|escape:"url"%>');
+  }
+ }
+ v<%$uniqid%>.emptybase=function() {
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text|escape:"quotes"%>')) {
+   this.jQueryLoad('<%$self%>moid=<%$smarty.request.moid%>&boid=<%$_boid%>&function=<%$fprefix%>Clear&skip=1&_next=<%$here|escape:"url"%>');
+  }
+ }
+v<%$uniqid%>.printselected=function() {
+   var url = '<%$self%>&_function=adminPrint&template=Core/Module.admin/report.html&moid=<%$smarty.request.moid%>&tplentry=br'; 
+   try{
+     var win = window.open(url, '_blank');
+     win.focus();
+   }catch(e){
+   }
+ }
+</script>

@@ -1,0 +1,9 @@
+<!--<%$smarty.template%>-->
+<nav class="cv3-navbas" role="navigation">
+	<ul>
+		<li><a href="#top"><%$syslabels.Seolan_Core_General.topofpage%></a></li>
+		<%section name=bm loop=$bm_lines_oid%>
+		<li><a href="<%$self%><%$bm_lines_selfurl[bm]%><%$bm_lines_ocurl[bm]->html%>"><%$bm_lines_otitle[bm]->html%></a></li>
+		<%/section%>
+	</ul>
+</nav>

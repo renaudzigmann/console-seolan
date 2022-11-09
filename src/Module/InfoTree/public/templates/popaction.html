@@ -1,0 +1,73 @@
+<%if !$smarty.request.listonly%>
+   <script type="text/javascript">
+    window.selectedTopic = null;
+     function go_action(oid,alias,t) {
+     <%if $smarty.request.action=='fck'%>
+      window.CKEDITOR.tools.callFunction("<%$smarty.request.CKEditorFuncNum%>","["+alias+"]",function() {
+       var element,dialog=this.getDialog();
+       element=dialog.getContentElement( 'info', 'protocol' );
+       if(element) element.setValue('');
+      });
+     <%elseif $smarty.request.action=='go'%>
+      var url ="<%$self%>function=editpage&moid=<%$_moid%>&oidit="+oid+"&tplentry=it&template=Module/InfoTree.viewpage.html";
+      <%if $smarty.request.moduleid%>
+       window.v<%$smarty.request.moduleid%>.jQueryLoad(url);
+      <%else%>
+       window.location.href=url;
+      <%/if%>
+      <%elseif $smarty.request.action=="selectTopic"%>
+       window.selectedTopic = {oid: oid,title: t,alias: alias};
+       <%if $smarty.request.varname%>
+         if (typeof(window.<%$smarty.request.varname%>) == 'object')
+           window.<%$smarty.request.varname%>.value=oid;
+         if (typeof(window.<%$smarty.request.varname%>_title) == 'object')
+           window.<%$smarty.request.varname%>_title.value=t;
+       <%/if%>
+     <%else%>
+      window.document.<%$smarty.request.formname%>.<%$smarty.request.targetoid|default:"_dest"%>.value=oid;
+      if('<%$smarty.request.action%>'!='no') {
+       window.document.<%$smarty.request.formname%>._function.value='<%$smarty.request.action%>';
+       window.TZR.ajaxSubmitForm(window.document.<%$smarty.request.formname%><%if $smarty.request.cb%>,undefined,undefined,{cb:<%$smarty.request.cb%>}<%/if%>);
+      }
+      if('<%$smarty.request.titlediv%>'!='') {
+       o=window.document.getElementById('<%$smarty.request.titlediv%>');
+       o.innerHTML=t;
+      }
+     <%/if%>
+     TZR.Dialog.closeDialog();
+   };
+   </script>
+   <div class="title"><%$syslabels.Seolan_Module_InfoTree_InfoTree.treebrowser%></div>
+   <ul class="simpleTree topicsTree">
+     <li class="root">
+       <span>
+	 <%if $smarty.request.rootauth%>
+	 <a href="#" onclick="go_action('','','',1,0); return false;"><%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%></a>
+	 <%else%>
+	 <%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%>
+	 <%/if%>
+       </span>
+       <ul>
+	 <%/if%>
+	 
+	 <%include file="Module/InfoTree.poptree.html" publishedonlyselectable=$smarty.request._publishedonlyselectable selected=$smarty.request._selected from=$smarty.request.from nosub=$smarty.request.nosub ajaxurl="`$smarty.server.REQUEST_URI`&oidtop=`$mit_lines_oid[i]`&listonly=1&_raw=1&_silent=1&_skip=1" action="go_action" prefix="mit"%>
+	 
+	 <%if !$smarty.request.listonly%>
+       </ul>
+     </li>
+   </ul>
+
+   <div class="tzr-action">
+     <button onclick="TZR.Dialog.closeDialog();" type="button" class="btn btn-default"><%$syslabels.Seolan_Core_General.cancel_text%></button>
+   </div>
+
+   <script type="text/javascript">
+    jQuery(function(){
+     var simpleTreeCollection;
+     simpleTreeCollection = jQuery(".simpleTree").simpleTree({drag:true});
+    <%if $smarty.request.oid%>
+     simpleTreeCollection[0].openNode(document.getElementById('node_<%$smarty.request.oid%>'),true);
+    <%/if%>
+    });
+   </script>
+<%/if%>

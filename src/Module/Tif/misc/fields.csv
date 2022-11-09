@@ -1,0 +1,331 @@
+"table";"forder";"field";"label[FR]";"ftype";"fcount";"target";"compulsory";"browsable";"multivalued";"published";"queryable";"translatable";"options[checkbox]";"options[readonly]"
+;;;;;;;;;;;;;;
+"CAPAGLOB";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"CAPAGLOB";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_CAPAGLOB";1;1;;1;1;;0;
+"CAPAGLOB";3;"att_type";"Type de la capacité globale";"XLinkDef";;"tzrprefix_LS_CapaciteGlobale";1;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"DC";1;"tzr_type";"Données en provenance de";"XShortTextDef";255;;1;1;;;1;;;
+"DC";2;"dc__title";"Nom";"XShortTextDef";255;;1;1;;1;1;;;
+"DC";3;"dc__description";"Description";"XTextDef";60;;;1;;;;1;;
+"DC";4;"dcterms__abstract";"Résumé";"XTextDef";60;;;1;;;;1;;
+"DC";5;"dc__date";"Date";"XDateDef";;;;1;;;1;;;
+"DC";6;"dcterms__created";"Date de création";"XDateDef";;;;1;;;;;;
+"DC";7;"dcterms__valid";"Date de fin de validité";"XDateDef";;;;1;;;;;;
+"DC";8;"dcterms__modified";"Date de modification";"XDateDef";;;;1;;;;;;
+"DC";9;"dc__identifier";"Identifiant de la ressource";"XShortTextDef";100;;1;1;;1;1;;;
+"DC";10;"ModePaiement";"Mode de paiment";"XLinkDef";;"tzrprefix_LS_ModePaiement";;1;1;;;;0;
+"DC";11;"ObservationModePaiement";"Observations mode de paiement";"XTextDef";60;;;;;;;1;;
+"DC";12;"CapacitesGlobales";"Capacité globale";"XLinkDef";;"tzrprefix_CAPAGLOB";;1;;;;;0;
+"DC";13;"Classification";"Classification";"XLinkDef";;"tzrprefix_LS_Classification";;;1;;1;;;
+"DC";14;"ControlledVocabulary";"Vocabulaire";"XLinkDef";;"tzrprefix_LS_ContrVoc";;;1;;1;;;
+"DC";15;"acvs__ClassificationCategorie";"Classification catégorie";"XLinkDef";;"tzrprefix_LS_Classification";;;1;;1;;;
+"DC";16;"acvs__ClassificationGroupe";"Classification groupe";"XLinkDef";;"tzrprefix_LS_Classification";;;1;;1;;;
+"DC";17;"acvs__ClassificationSousCategorie";"Classification sous catégorie";"XLinkDef";;"tzrprefix_LS_ContrVoc";;;1;;1;;;
+"DC";18;"gitd_typep";"Type de prestation";"XLinkDef";;"tzrprefix_LS_ContrVoc";;;1;;1;;;
+"DC";19;"gitd_enfants";"Enfants";"XBoolDef";;;;;;;1;;;
+"DC";19;"gitd_ts";"Type de structure";"XShortTextDef";10;;;;;;;;;
+;;;;;;;;;;;;;;
+"DMULTIMEDIA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DMULTIMEDIA";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;1;1;1;;0;
+"DMULTIMEDIA";3;"tzr_ispoint";"Spécifique à un point";"XBoolDef";;;;1;;;1;;;
+"DMULTIMEDIA";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Multimedia";;1;;1;1;;0;
+"DMULTIMEDIA";5;"URL";"Fichier";"XFileDef";;;;1;;;1;;;
+"DMULTIMEDIA";6;"URL_img";"Fichier (image)";"XImageDef";;;;1;;;;;;
+"DMULTIMEDIA";7;"URL_url";"Fichier (url)";"XUrlDef";;;;1;;;;;;
+"DMULTIMEDIA";8;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DMULTIMEDIA";9;"LegendeRessource";"Légende";"XShortTextDef";80;;;;;;;1;;
+"DMULTIMEDIA";10;"TailleRessource";"Taille";"XRealDef";5;;;;;;;;;
+"DMULTIMEDIA";11;"att_TailleRessource_unite";"Unité";"XShortTextDef";100;;;;;;;;;
+"DMULTIMEDIA";12;"Hauteur";"Hauteur";"XRealDef";5;;;;;;;;;
+"DMULTIMEDIA";13;"att_Hauteur_unite";"Unité";"XShortTextDef";100;;;;;;;;;
+"DMULTIMEDIA";14;"Largeur";"Largeur";"XRealDef";5;;;;;;;;;
+"DMULTIMEDIA";15;"att_Largeur_unite";"Unité";"XShortTextDef";100;;;;;;;;;
+"DMULTIMEDIA";16;"Duree";"Durée";"XRealDef";3;;;;;;;;;
+"DMULTIMEDIA";17;"att_Duree_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DureeUnite";;;;;;;0;
+"DMULTIMEDIA";18;"TypeMime";"Type mime";"XShortTextDef";255;;;;;;;;;
+"DMULTIMEDIA";19;"Copyright";"Copyright";"XShortTextDef";80;;;;;;;;;
+"DMULTIMEDIA";20;"ObservationMultimedia";"Observation";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DCONTACT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCONTACT";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;1;1;1;;0;
+"DCONTACT";3;"tzr_ismoderesa";"Spécifique à un mode de réservation";"XBoolDef";;;;1;;;1;;;
+"DCONTACT";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Contact";;1;;1;1;;0;
+"DCONTACT";5;"RaisonSociale";"Raison sociale";"XShortTextDef";160;;;1;;1;1;;;
+"DCONTACT";6;"Sigle";"Sigle";"XShortTextDef";10;;;1;;;1;;;
+;;;;;;;;;;;;;;
+"DADRESSE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DADRESSE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DCONTACT";1;1;1;1;1;;0;
+"DADRESSE";3;"Adr1";"Adresse 1";"XShortTextDef";80;;;1;;;;;;
+"DADRESSE";4;"Adr2";"Adresse 2";"XShortTextDef";80;;;1;;;;;;
+"DADRESSE";5;"Adr3";"Adresse 3";"XShortTextDef";80;;;1;;;;;;
+"DADRESSE";6;"CodePostal";"Code postal";"XShortTextDef";10;;;1;;1;1;;;
+"DADRESSE";7;"Commune";"Commune";"XLinkDef";;"tzrprefix_LS_Commune";;1;;1;1;;0;
+"DADRESSE";8;"BureauDistrib";"Bureau de distribution";"XShortTextDef";40;;;;;;;;;
+"DADRESSE";9;"Cedex";"Cedex";"XShortTextDef";10;;;;;;;;;
+"DADRESSE";10;"ProvinceEtat";"Province / Etat";"XShortTextDef";40;;;;;;;;;
+"DADRESSE";11;"Pays";"Pays";"XLinkDef";;"tzrprefix_LS_Pays";;1;;;1;;0;
+;;;;;;;;;;;;;;
+"DPERSONNE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPERSONNE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DADRESSE";1;1;1;;1;;0;
+"DPERSONNE";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Personne";;1;;1;1;;0;
+"DPERSONNE";4;"Civilite";"Civilité";"XLinkDef";;"tzrprefix_LS_Civilite";;1;;;1;;0;
+"DPERSONNE";5;"Prenom";"Prénom";"XShortTextDef";30;;;1;;1;1;;;
+"DPERSONNE";6;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;;;
+"DPERSONNE";7;"Fonction";"Fonction";"XShortTextDef";80;;;1;;;1;1;;
+"DPERSONNE";8;"Service";"Service";"XShortTextDef";80;;;1;;;1;1;;
+;;;;;;;;;;;;;;
+"DMOYENCOM";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DMOYENCOM";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPERSONNE";1;1;1;1;1;;0;
+"DMOYENCOM";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_MoyensCom";;1;;1;1;;0;
+"DMOYENCOM";4;"Coord";"Coordonnées";"XTextDef";60;;;1;;1;1;1;;
+"DMOYENCOM";5;"ObservationDetailMoyenCom";"Observations";"XTextDef";60;;;1;;;;1;;
+;;;;;;;;;;;;;;
+"INFOLEG";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"INFOLEG";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"INFOLEG";3;"ModeGestion";"Mode de gestion";"XLinkDef";;"tzrprefix_LS_ModeGestion";;1;;1;;;0;
+"INFOLEG";4;"SIRET";"N° SIRET";"XShortTextDef";14;;;1;;1;1;;;
+"INFOLEG";5;"APE_NAF";"N° APE / NAF";"XShortTextDef";4;;;1;;;1;;;
+"INFOLEG";6;"RCS";"RCS";"XShortTextDef";12;;;1;;;;;;
+"INFOLEG";7;"NumAgrementLicence";"Agrément de licence";"XShortTextDef";80;;;1;;;;;;
+;;;;;;;;;;;;;;
+"DCLASSEMENT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCLASSEMENT";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DCLASSEMENT";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_TypeClassement";;1;;1;1;;0;
+"DCLASSEMENT";4;"Classement";"Classement";"XLinkDef";;"tzrprefix_LS_Classement";;1;;1;1;;0;
+"DCLASSEMENT";5;"DateClassement";"Date";"XDateTimeDef";;;;1;;;;;;
+"DCLASSEMENT";6;"NumeroClassement";"Numéro";"XShortTextDef";10;;;;;;;;;
+"DCLASSEMENT";7;"Theme";"Thème";"XShortTextDef";80;;;;;;1;1;;
+"DCLASSEMENT";8;"ObservationDetailClassmt";"Observation";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DGEOLOC";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DGEOLOC";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DGEOLOC";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Geolocalisation";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"ZONES";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"ZONES";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;1;1;1;;0;
+"ZONES";3;"tzr_isiti";"Spécifique à un itinéraire";"XBoolDef";;;;1;;;1;;;
+"ZONES";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Zone";;1;;1;1;;0;
+"ZONES";5;"Nom";"Nom";"XLinkDef";;"tzrprefix_LS_ZoneNoms";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"DPOINT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPOINT";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_ZONES";1;1;1;;1;;0;
+"DPOINT";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Point";;1;;1;1;;0;
+"DPOINT";4;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DPOINT";5;"Commune";"Commune";"XLinkDef";;"tzrprefix_LS_Commune";;1;;;1;;0;
+;;;;;;;;;;;;;;
+"DCOOR";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCOOR";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPOINT";1;1;1;1;1;;0;
+"DCOOR";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Coordonnees";;1;;1;1;;0;
+"DCOOR";4;"Longitude";"Longitude";"XShortTextDef";20;;;1;;;;;;
+"DCOOR";5;"Latitude";"Latitude";"XShortTextDef";20;;;1;;;;;;
+"DCOOR";6;"Altitude";"Altitude";"XShortTextDef";20;;;1;;;;;;
+"DCOOR";7;"att_Altitude_altitudeMini";"Altitude min";"XShortTextDef";20;;;1;;;;;;
+"DCOOR";8;"att_Altitude_altitudeMaxi";"Altitude max";"XShortTextDef";20;;;1;;;;;;
+;;;;;;;;;;;;;;
+"DENV";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DENV";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPOINT";1;1;1;;1;;0;
+"DENV";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Environnement";;1;;1;1;;0;
+"DENV";4;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DENV";5;"Distance";"Distance";"XRealDef";5;;;1;;;1;;;
+"DENV";6;"att_Distance_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DistanceUnite";;1;;;;;0;
+"DENV";7;"Commune";"Commune";"XLinkDef";;"tzrprefix_LS_Commune";;;;;1;;0;
+"DENV";8;"ObservationDetailEnvironnement";"Observations";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DCARTE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCARTE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPOINT";1;1;1;1;1;;0;
+"DCARTE";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Carte";;1;;1;1;;0;
+"DCARTE";4;"Numero";"Numéro de carte";"XShortTextDef";20;;;1;;;1;;;
+"DCARTE";5;"Pli";"Pli";"XShortTextDef";50;;;1;;;1;;;
+"DCARTE";6;"Reference";"Référence";"XShortTextDef";50;;;1;;;1;;;
+;;;;;;;;;;;;;;
+"DACCES";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DACCES";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPOINT";1;1;1;;1;;0;
+"DACCES";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Acces";;1;;1;1;;0;
+"DACCES";4;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DACCES";5;"Distance";"Distance";"XRealDef";5;;;1;;;1;;;
+"DACCES";6;"att_Distance_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DistanceUnite";;1;;;;;0;
+"DACCES";7;"ObservationDetailAcces";"Observations";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DPERIODE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPERIODE";2;"tzr_lie";"Lié à";"XLinkDef";"tzrprefix_DC";;1;1;1;;1;;0;
+"DPERIODE";3;"tzr_istarif";"Spécifique à un tarif";"XBoolDef";;;;1;;;1;;;
+"DPERIODE";4;"tzr_ispla";"Spécifique à un planning";"XBoolDef";;;;1;;;1;;;
+"DPERIODE";5;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Periode";;1;;1;1;;0;
+"DPERIODE";6;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DPERIODE";7;"ObservationDetailPeriode";"Observations";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DDATE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DDATE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPERIODE";1;1;1;1;1;;0;
+"DDATE";3;"DateDebut";"Date de début";"XDateTimeDef";;;;1;;1;1;;;
+"DDATE";4;"DateFin";"Date de fin";"XDateTimeDef";;;;1;;1;1;;;
+"DDATE";5;"ObservationDates";"Observations";"XTextDef";60;;;1;;;;1;;
+;;;;;;;;;;;;;;
+"DJOURS";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DJOURS";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DDATE";1;1;1;1;1;;0;
+"DJOURS";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Jours";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"JOURS";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"JOURS";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DJOURS";1;1;1;1;1;;0;
+"JOURS";3;"att_lib_jour";"Code du jour";"XLinkDef";;"tzrprefix_LS_Jour";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"HORAIRES";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"HORAIRES";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_JOURS";1;1;1;1;1;;0;
+"HORAIRES";3;"HoraireDebut";"Horaire de début";"XTimeDef";;;;1;;1;1;;;
+"HORAIRES";4;"HoraireFin";"Horaire de fin";"XTimeDef";;;;1;;1;1;;;
+;;;;;;;;;;;;;;
+"DCLIENTELES";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCLIENTELES";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DCLIENTELES";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Clienteles";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"DCLIENT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCLIENT";2;"tzr_lie";"Lié à";"XLinkDef";"tzrprefix_DCLIENTELES";;1;1;1;;1;;0;
+"DCLIENT";3;"tzr_istarif";"Spécifique à un tarif";"XBoolDef";;;;1;;;1;;;
+"DCLIENT";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Client";;1;;1;1;;0;
+"DCLIENT";5;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DCLIENT";6;"GroupeRef";"Groupe de référence";"XBoolDef";;;;1;;;1;;;
+"DCLIENT";7;"NbPersMin";"Nombre minimum de personnes";"XRealDef";3;;;;;;1;;;
+"DCLIENT";8;"NbPersMax";"Nombre maximum de personnes";"XRealDef";3;;;;;;1;;;
+"DCLIENT";9;"AgeMin";"Age minimum";"XRealDef";2;;;;;;1;;;
+"DCLIENT";10;"AgeMax";"Age maximum";"XRealDef";3;;;;;;1;;;
+;;;;;;;;;;;;;;
+"USAGE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"USAGE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"USAGE";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Usage";;1;;1;1;;0;
+"USAGE";4;"Langue";"Langue";"XShortTextDef";255;;;1;1;1;1;1;;
+;;;;;;;;;;;;;;
+"DMODERESA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DMODERESA";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;1;1;1;;0;
+"DMODERESA";3;"tzr_ispresta";"Spécifique à une prestation";"XBoolDef";;;;1;;;1;;;
+"DMODERESA";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_ModeReservation";;1;;1;1;;0;
+"DMODERESA";5;"Obligatoire";"Réservation obligatoire";"XBoolDef";;;;1;;;1;;;
+"DMODERESA";6;"ObservationModeReservation";"Observations";"XTextDef";60;;;1;;;;1;;
+;;;;;;;;;;;;;;
+"CAPACAPA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"CAPACAPA";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;;1;1;;0;
+"CAPACAPA";3;"Capacite";"Capacité";"XRealDef";10;;;1;;;1;;;
+"CAPACAPA";4;"att_Capacite_classee";"Capacité classée";"XBoolDef";;;;1;;;;;;
+"CAPACAPA";5;"att_Capacite_unite";"Unité";"XLinkDef";;"tzrprefix_LS_CapaciteUnites";;1;;;;;0;
+;;;;;;;;;;;;;;
+"CAPASUP";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"CAPASUP";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;;1;1;;0;
+"CAPASUP";3;"Superficie";"Superficie";"XRealDef";10;;;1;;;1;;;
+"CAPASUP";4;"att_Superficie_classee";"Superficie classée";"XBoolDef";;;;1;;;;;;
+"CAPASUP";5;"att_Superficie_unite";"Unité";"XLinkDef";;"tzrprefix_LS_SuperficiesUnites";;1;;;;;0;
+;;;;;;;;;;;;;;
+"DCAPAPREST";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCAPAPREST";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DCAPAPREST";3;"tzr_ispresta";"Spécifique à une prestation";"XBoolDef";;;;1;;;1;;;
+"DCAPAPREST";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_CapacitePrest";;1;;1;1;;0;
+"DCAPAPREST";5;"DescriptionCapacitePrestation";"Description";"XTextDef";60;;;1;;;;1;;
+;;;;;;;;;;;;;;
+"DCAPAUNIT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DCAPAUNIT";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DCAPAUNIT";3;"tzr_ispresta";"Spécifique à une prestation";"XBoolDef";;;;1;;;1;;;
+"DCAPAUNIT";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Unite";;1;;1;1;;0;
+"DCAPAUNIT";5;"TypeBatiment";"Type de bâtiment";"XLinkDef";;"tzrprefix_LS_TypeBatiment";;1;;1;1;;0;
+"DCAPAUNIT";6;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DCAPAUNIT";7;"Etage";"Etage";"XShortTextDef";80;;;1;;;;;;
+"DCAPAUNIT";8;"SurfaceMoyenne";"Surface moyenne";"XRealDef";10;;;1;;;;;;
+"DCAPAUNIT";9;"att_SurfaceMoyenne_unite";"Unité";"XLinkDef";;"tzrprefix_LS_SuperficiesUnites";;1;;;;;0;
+"DCAPAUNIT";10;"SurfaceMini";"Surface minimum";"XRealDef";10;;;1;;;;;;
+"DCAPAUNIT";11;"att_SurfaceMini_unite";"Unité";"XLinkDef";;"tzrprefix_LS_SuperficiesUnites";;1;;;;;0;
+"DCAPAUNIT";12;"SurfaceMaxi";"Surface maximum";"XRealDef";10;;;1;;;;;;
+"DCAPAUNIT";13;"att_SurfaceMaxi_unite";"Unité";"XLinkDef";;"tzrprefix_LS_SuperficiesUnites";;1;;;;;0;
+"DCAPAUNIT";14;"NbUnites";"Nombre d'unités";"XRealDef";10;;;1;;;;;;
+"DCAPAUNIT";15;"DescriptionUnite";"Description";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DDISP";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DDISP";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DCAPAUNIT";1;1;;1;1;;0;
+"DDISP";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Disposition";;1;;1;1;;0;
+"DDISP";4;"CapaciteMoyenne";"Capacité moyenne";"XRealDef";10;;;1;;;;;;
+"DDISP";5;"CapaciteMini";"Capacité minimum";"XRealDef";10;;;1;;;;;;
+"DDISP";6;"CapaciteMaxi";"Capacité maximum";"XRealDef";10;;;1;;;;;;
+;;;;;;;;;;;;;;
+"DOFFREPRESTA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DOFFREPRESTA";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DOFFREPRESTA";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_OffrePrestation";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"DPRESTA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPRESTA";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DOFFREPRESTA";1;1;;1;1;;0;
+"DPRESTA";3;"tzr_istarif";"Spécifique à un tarif";"XBoolDef";;;;1;;;1;;;
+"DPRESTA";4;"tzr_isprestpla";"Spécifique à une prestation planning";"XBoolDef";;;;1;;;1;;;
+"DPRESTA";5;"Prestation";"Prestation";"XLinkDef";;"tzrprefix_LS_Prestation";;1;;1;1;;0;
+"DPRESTA";6;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DPRESTA";7;"DureePrest";"Durée";"XRealDef";10;;;1;;;;;;
+"DPRESTA";8;"att_DureePrest_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DureeUnite";;1;;;;;0;
+"DPRESTA";9;"NbPrest";"Nombre";"XRealDef";3;;;1;;;;;;
+"DPRESTA";10;"att_NbPrest_unite";"Unité";"XShortTextDef";100;;;1;;;;;;
+"DPRESTA";11;"Inclus";"Inclus";"XBoolDef";;;;;;;;;;
+"DPRESTA";12;"Payant";"Payant";"XBoolDef";;;;;;;;;;
+"DPRESTA";13;"Distance";"Distance";"XRealDef";10;;;;;;;;;
+"DPRESTA";14;"att_Distance_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DistanceUnite";;;;;;;0;
+"DPRESTA";15;"Commune";"Commune";"XLinkDef";;"tzrprefix_LS_Commune";;;;;1;;0;
+"DPRESTA";16;"DetailCapacitePrestation";"Capacité de la prestation";"XLinkDef";;"tzrprefix_DCAPAPREST";;;;;;;0;
+"DPRESTA";17;"DetailCapaciteUnite";"Détails sur les unités";"XLinkDef";;"tzrprefix_DCAPAUNIT";;;;;;;0;
+"DPRESTA";18;"DescriptionPrestation";"Description";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DTARIF";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DTARIF";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;;1;;0;
+"DTARIF";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Tarifs";;1;;1;1;;0;
+"DTARIF";4;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DTARIF";5;"TarifRef";"Tarif de référence";"XBoolDef";;;;1;;;;;;
+"DTARIF";6;"TarifStandard";"Tarif standard";"XRealDef";10;;;1;;;;;;
+"DTARIF";7;"TarifMin";"Tarif minimum";"XRealDef";10;;;1;;;;;;
+"DTARIF";8;"TarifMax";"Tarif maximum";"XRealDef";10;;;1;;;;;;
+"DTARIF";9;"TarifMode";"Mode de tarification";"XLinkDef";;"tzrprefix_LS_TarifMode";;1;;;;;0;
+"DTARIF";10;"TarifDevise";"Devise";"XLinkDef";;"tzrprefix_LS_Devises";;1;;;;;0;
+"DTARIF";11;"TarifTVA";"TVA (Libellé)";"XShortTextDef";255;;;1;;;;;;
+"DTARIF";12;"att_TarifTVA_taux";"Taux de TVA";"XRealDef";5;;;1;;;;;;
+"DTARIF";13;"TarifTranche";"Tranche de revenus";"XRealDef";10;;;;;;;;;
+"DTARIF";14;"DetailClient";"Clientèle concernée";"XLinkDef";;"tzrprefix_DCLIENT";;;;;;;0;
+"DTARIF";15;"DetailPrestation";"Prestation concernée";"XLinkDef";;"tzrprefix_DPRESTA";;;;;;;0;
+"DTARIF";16;"DetailPeriode";"Période d'application des tarifs";"XLinkDef";;"tzrprefix_DPERIODE";;;;;;;0;
+"DTARIF";17;"MontantPourcent";"Montant ou pourcentage";"XLinkDef";;"tzrprefix_LS_MontantPourcent";;;;;;;0;
+"DTARIF";18;"DescriptionTarif";"Description complémentaire";"XTextDef";80;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DDESCRCOMP";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DDESCRCOMP";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DDESCRCOMP";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_DescrComp";;1;;1;1;;0;
+"DDESCRCOMP";4;"Description";"Description";"XTextDef";60;;;1;;;;1;;
+"DDESCRCOMP";5;"att_Description_type";"Type de description affiné";"XLinkDef";;"tzrprefix_LS_Description";;1;;;;;0;
+;;;;;;;;;;;;;;
+"DITI";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DITI";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DITI";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Itineraires";;1;;1;1;;0;
+"DITI";4;"Denivele";"Denivelé";"XRealDef";10;;;1;;;;;;
+"DITI";5;"att_Denivele_type";"Type de denivelé";"XLinkDef";;"tzrprefix_LS_Denivele";;1;;;;;0;
+"DITI";6;"Distance";"Distance";"XRealDef";10;;;1;;;1;;;
+"DITI";7;"att_Distance_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DistanceUnite";;1;;;;;0;
+"DITI";8;"AltitudeMini";"Altitude minimum";"XShortTextDef";20;;;1;;;;;;
+"DITI";9;"AltitudeMaxi";"Altitude maximum";"XShortTextDef";20;;;1;;;;;;
+"DITI";10;"Duree";"Duree";"XRealDef";3;;;;;;1;;;
+"DITI";11;"att_Duree_unite";"Unité";"XLinkDef";;"tzrprefix_LS_DureeUnite";;;;;;;0;
+"DITI";12;"Zone";"Zone";"XLinkDef";;"tzrprefix_ZONES";;;;;;;0;
+"DITI";13;"DescriptionItineraire";"Description";"XTextDef";60;;;;;;;1;;
+;;;;;;;;;;;;;;
+"DPLANNING";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPLANNING";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"DPLANNING";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_Planning";;1;;1;1;;0;
+"DPLANNING";4;"Nom";"Nom";"XShortTextDef";80;;;1;;1;1;1;;
+"DPLANNING";5;"DetailPeriode";"Détail période";"XLinkDef";;"tzrprefix_DPERIODE";;1;;;;;0;
+"DPLANNING";6;"ObservationPlanning";"Observation sur les planning";"XTextDef";60;;;1;;;;1;;
+;;;;;;;;;;;;;;
+"DPRESTAPLA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"DPRESTAPLA";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPLANNING";1;1;;1;1;;0;
+"DPRESTAPLA";3;"DetailPrestation";"Prestation";"XLinkDef";;"tzrprefix_DPRESTA";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"JOURPLA";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"JOURPLA";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DPRESTAPLA";1;1;;1;1;;0;
+"JOURPLA";3;"AnNumJour";"Année – numéro de jour dans l'année";"XShortTextDef";7;;;1;;1;1;;;
+"JOURPLA";4;"Etat";"Etat";"XLinkDef";;"tzrprefix_LS_EtatPlanning";;1;;1;1;;0;
+"JOURPLA";5;"Quantite";"Quantite";"XShortTextDef";10;;;1;;;;;;
+;;;;;;;;;;;;;;
+"PRESTLIEE";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"PRESTLIEE";2;"tzr_lie";"Lié à";"XLinkDef";;"tzrprefix_DC";1;1;;1;1;;0;
+"PRESTLIEE";3;"att_identifier";"Ressource";"XLinkDef";;"tzrprefix_DC";;1;;1;1;;0;
+"PRESTLIEE";4;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_PrestationLiee";;1;;1;1;;0;
+;;;;;;;;;;;;;;
+"MODESPAIEMENT";1;"tzr_dc";"Ressource";"XLinkDef";;"tzrprefix_DC";1;;;;1;;0;1
+"MODESPAIEMENT";2;"tzr_lie";"Lié à";"XLinkDef";;;1;1;1;1;1;;0;
+"MODESPAIEMENT";3;"att_type";"Type";"XLinkDef";;"tzrprefix_LS_ModePaiement";;1;;1;1;;0;
+"MODESPAIEMENT";4;"ObservationModePaiement";"Observation";"XShortTextDef";10;;;1;;;;1;;

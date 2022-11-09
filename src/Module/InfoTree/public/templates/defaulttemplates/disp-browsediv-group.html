@@ -1,0 +1,15 @@
+<ul class="cv8d-browse-group">
+<%foreach key=group_label item=group from=$groups %>
+<li>
+  <div class="cv8d-grouplabel"><%$group_label%></div>
+  <%if $group.lines_oid %>
+  <%foreach key=i item=oid from=$group.lines_oid %>
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-object.html" lines=$group%>
+  <%/foreach%>
+  <%else%><%** !lines_oid **%>
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-group.html" groups=$group%>
+  <%/if%>
+  </div>
+</li>
+<%/foreach%>
+</ul>

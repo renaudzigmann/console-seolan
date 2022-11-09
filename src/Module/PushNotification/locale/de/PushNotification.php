@@ -1,0 +1,20 @@
+<?php
+\Seolan\Core\Labels::$LABELS['Seolan_Module_PushNotification_PushNotification'] = [
+  'modulename' => 'Push-Benachrichtigungen',
+  'createstructure_push' => 'Die Tabelle für Push-Benachrichtigungen erstellen?',
+  'createstructure_device' => 'Die Smartphone-Tabelle erstellen?',
+  'createstructure_recipient' => 'Die Tabelle der Empfänger von Push-Benachrichtigungen erstellen?',
+  'push_table' => 'Tabelle der Push-Benachrichtigungen?',
+  'device_table' => 'Tabelle der smartphones?',
+  'recipient_table' => 'Tabelle der Empfänger von Push-Benachrichtigungen?',
+  'device_mod' => 'Smartphones module',
+  'rcpt_mod' => 'Empfänger module',
+  'delay' => 'Aufbewahrungszeit (in Tagen) für Push-Benachrichtigungen nach deren Versand',
+  'ttl' => 'TTL',
+  'access_token' => 'Zugriffstoken',
+  'task_already_running' => 'Eine Aufgabe, die bereits in Arbeit ist!',
+  'push_sent' => 'Push-Benachrichtigungen gesendet!',
+  'message_to_big' => 'Nachricht an groß',
+  'message_no_data' => 'Keine Daten zu senden!',
+  'send_notification' => 'Push-Benachrichtigungen senden',
+];

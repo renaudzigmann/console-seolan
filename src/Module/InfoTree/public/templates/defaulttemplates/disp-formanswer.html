@@ -1,0 +1,65 @@
+<div class="cv8d-formanswer cv8d-formanswer-<%$it_olines[it]._functionparams.moid%> clearfix">
+ <h1><%$it_olines[it].otitle->html%></h1>
+ <%if $it_olines[it].__error%>
+  <div class="tzr-message"><%$it_olines[it].__error%></div>
+ <%else%>
+  <form action="<%$self%>" method="post" onsubmit="<%if !$smarty.request.tabsmode%>return TZR.isFormValidWithFocus(this,true);<%else%>return false;<%/if%>">
+   <input type="hidden" name="moid" value="<%$it_olines[it]._functionparams.moid%>">
+   <input type="hidden" name="function" value="procAnswer">
+   <input type="hidden" name="skip" value="1">
+   <input type="hidden" name="oid" value="<%$it_olines[it].oid%>">
+   <input type="hidden" name="aoid" value="<%$it_olines[it].__table.oid%>">
+   <%if isset($smarty.request.uid)%>
+   <input type="hidden" name="uid" value="<%$smarty.request.uid%>">
+   <%else%>
+   <input type="hidden" name="email" value="<%$smarty.request.email%>">
+   <%/if%>
+   <input type="hidden" name="key" value="<%$smarty.request.key%>">
+   <input type="hidden" name="_next" value="<%$self%>alias=<%$it_olines[it]._functionparams.params.nextalias%>">
+   <div class="cv8d-field cv8d-field-intro"><%$it_olines[it].ointro->html%></div>
+    <%section name="fields" loop=$it_olines[it].__table.fields_object%>
+     <%if !$it_olines[it].__table.fields_object[fields]->fielddef->sys%>
+     <%if $fgroup neq $it_olines[it].__table.fields_object[fields]->fielddef->fgroup %>
+     <%assign var="fgroup" value=$it_olines[it].__table.fields_object[fields]->fielddef->fgroup%>
+     <h2><%$fgroup%></h2>
+     <%/if%>
+     <%if $it_olines[it].__table.fields_qproperties[fields].type != 'separator'%>
+      <div class="cv8d-field cv8d-field-<%$it_olines[it].__table.fields_object[fields]->fielddef->field%>">
+       <label><%$it_olines[it].__table.fields_object[fields]->fielddef->label%><%$it_olines[it].__table.fields_object[fields]->fielddef->indicator%></label>
+       <div class="cv8d-answer">
+	 <%if !empty($it_olines[it].__table.fields_object[fields]->fielddef->comment)%>
+	 <div class="cv8d-comment"><%$it_olines[it].__table.fields_object[fields]->fielddef->comment%></div>
+	 <%/if%>
+	 <%$it_olines[it].__table.fields_object[fields]->html%>
+       </div>
+      </div>
+      <%else%>
+      <div class="csx-text-separator">
+	<%$it_olines[it].__table.fields_object[fields]->fielddef->comment%>
+      </div>
+      <%/if%>
+     <%/if%>
+    <%/section%>
+<%if $nobody%>
+   <%if $it_olines[it].__captcha%>
+    <div class="cv8d-field cv8d-field-captcha">
+     <label><%$it_olines[it].__captcha.label%> *</label>
+     <div class="cv8d-answer"><%$it_olines[it].__captcha.html%></div>
+    </div>
+   <%/if%>
+<%/if%>
+   <div class="cv8d-field-outro"><%$it_olines[it].ooutro->html%></div>
+   <%if !$smarty.request.tabsmode%>
+    <div class="cv8d-action">
+     <input type="submit" value="<%$it_olines[it].osavelabel->toText()%>">
+     <%if $it_olines[it].oreedit->raw==1%>
+     <input type="submit" value="<%$syslabels.Seolan_Module_Form_Form.saveandclose_text%>" onclick="this.form.close.value=1;">
+     <input type="hidden" name="close" value="2">
+     <%else%>
+     <input type="hidden" name="close" value="1">
+     <%/if%>
+    </div>
+   <%/if%>
+  </form>
+ <%/if%>
+</div>

@@ -1,0 +1,50 @@
+<%if count($lang_code)>1 && $imod_mod->xset->getTranslatable() %><%capture name="lang" assign="lang"%><span class="info-lang"><%*$lang_long[array_search($lang_data,$lang_code)]*%><%$TZR.lang_data.long%></span><%/capture%><%else%><%assign var="lang" value=""%><%/if%>
+
+<div class="modal-img-center">
+
+<%if $smarty.request.big eq '1' or $smarty.request.mediaonly eq '1'%>
+  <%$br_omedia->completeHTML("geometry=850x850%3E")%>
+<%else%>
+  <%$br_omedia->completeHTML()%>
+<%/if%>
+</div>
+
+
+<div>
+  <div class="collapse <%if !$smarty.request.mediaonly%>in<%/if%>" id="mediainfos<%$br_oid|replace:':':''%>">
+    <div class="table-responsive">
+      <table class="table table-striped list2" >
+	<%section name=fields loop=$br_fields_object %>
+	<%if !$br_fields_object[fields]->sys && !in_array($br_fields_object[fields]->field,array('media','mediahd')) && $br_fields_object[fields]->html%>
+	<tr>
+	  <th <%if $br_fields_object[fields]->fielddef->comment%>class="" title="[<%$syslabels.Seolan_Core_General.help_text%>] <%$br_fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>>
+            <label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label>
+	  </th>
+	  <td><%$br_fields_object[fields]->html%></td>
+	</tr>
+	<%/if%>
+	<%/section%>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="title"><%$lang%><%$br_oref->html|default:$br_otitle->html|default:$br_omedia->originalname%></div>
+<div class="tzr-action">
+
+  <div class="pull-left">
+    <button type="button" data-toggle="collapse" class="btn btn-primary" href="#mediainfos<%$br_oid|replace:':':''%>">
+      <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>  
+    </button>
+  </div>
+  
+<button style="display:none" id="<%$uniqid%>prev" class="btn btn-default" type="button"><%$syslabels.Seolan_Core_General.previous%></button>
+<button style="display:none" id="<%$uniqid%>next" class="btn btn-default" type="button"><%$syslabels.Seolan_Core_General.next%></button>
+<button data-dismiss="modal" class="btn btn-default" type="button"><%$syslabels.Seolan_Core_General.close_text%></button>
+<script type="text/javascript">TZR.Media.setListSlide("<%$uniqid%>", "<%$br_oid%>", "<%if $smarty.request.mediaonly%>a.previewmedia<%else%>li>a.mediainfos<%/if%>");</script>
+</div>
+
+
+
+

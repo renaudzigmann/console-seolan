@@ -1,0 +1,3 @@
+<%section name=fields loop=$br_fields_object %>
+<%$br_fields_object[fields]->label%>: <%$br_fields_object[fields]->text%>
+<%/section%>

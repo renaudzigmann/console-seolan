@@ -1,0 +1,51 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<fieldset><legend>Paramètres</legend>
+url  : <%$_url%><br>
+
+  <form name="<%$uniqid%>sub" action="<%$fullself%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="oid" value="<%$br_oid%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="showChangeSet">
+  <input type="hidden" name="_skip" value="1">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="template" value="Module/Replication.showChangeSet.html">
+<div class="tzr-action">
+  <input type="submit" value="Voir">
+<%if $_changeset%>
+  <input type="button" value="Synchroniser" onclick="if (confirm('C\'est du test !!!')){forms['<%$uniqid%>sub'].elements['function'].value='applyChangeSet'; return TZR.ajaxSubmitForm(forms['<%$uniqid%>sub']);}">
+<%/if%>
+
+<input type="button" value="Voir l'init set" onclick="forms['<%$uniqid%>sub'].elements['function'].value='showInitSet'; return TZR.ajaxSubmitForm(forms['<%$uniqid%>sub']);">
+<%if $_initset%>
+  <input type="button" value="Appliquer l'init set'" onclick="if (confirm('C\'est du test !!!')){forms['<%$uniqid%>sub'].elements['function'].value='applyinitset'; return TZR.ajaxSubmitForm(forms['<%$uniqid%>sub']);}">
+<%/if%>
+</div>
+</form>
+
+</fieldset>
+<%if $_initset%>
+<fieldset><legend>InitSet</legend>
+<textarea rows='40' cols='80' style="width:100%">
+<%$_initset%>
+</textarea>
+</fieldset>
+<%/if%>
+<%if $_changeset%>
+<fieldset><legend>Journal</legend>
+<div style="width:100%;height:350px;overflow:auto">
+<table >
+<thead>
+<tr><td></td><td>UPD</td><td>CHRONO</td><td>RQ</td></tr>
+</thead>
+<tbody style="height:350px;overflow:auto">
+<%foreach from=$_changeset key=i item=r%>
+<tr><td><%$i%></td><td><%$r.UPD%></td><td><%$r.CHRONO%></td><td><%$r.RQ%></td></tr>
+<%/foreach%>
+</tbody>
+</table>
+</fieldset>
+<%/if%>
+
+
+
+

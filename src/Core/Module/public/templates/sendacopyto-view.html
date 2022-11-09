@@ -1,0 +1,49 @@
+<%* 
+   legacy, remplacement par sendPrettyMail qui comporte un cadre commun
+*%>
+<html>
+ <head>
+  <%$header%>
+  <base href="<%$tzr.societe_url%>">
+  <%include file="Core/Module.bostylesmessages.css"%>
+ </head>
+ <body>
+  <table align="center">
+   <tr>
+    <td colspan="2" class="no-border"><%if $message%><%$message%><%else%><strong class="text-uppercase">Message</strong><br><%$br_amessage%><%/if%></td>
+   </tr>
+   <%if !empty($br_lines_oid) || !empty($br_oid)%>
+    <tr><td colspan="2" class="no-border"></td></tr>
+    <%if empty($br_lines_oid)%>
+     <tr>
+      <th colspan="2"><a href="<%$fullself%>&moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&gopage=<%"`$fullself`&moid=`$br_moid`&function=goto1&tplentry=br&oid=`$br_oid`"|escape:"url"%>">Voir le document / Display the document</a></th>
+     </tr>
+     <%section name=fields loop=$br_fields_object %>
+      <%if !$br_fields_object[fields]->sys && ($br_fields_object[fields]->field!=$imod_props.processedfield) && ($br_fields_object[fields]->field!=$imod_props.archivefield)%>
+       <tr>
+	<th><label><%$br_fields_object[fields]->fielddef->label|wordwrap:40:"<br />\n"%></label></th>
+	<td><%$br_fields_object[fields]->html%></td>
+       </tr>
+      <%/if%>
+     <%/section%>
+    <%else%>
+     <%section name=i loop=$br_lines_oid%>
+      <tr>
+       <td colspan="2">
+	<a target="sendacopy" href="<%$fullself%>&moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&gopage=<%"`$fullself`&moid=`$br_moid`&function=goto1&tplentry=br&oid=`$br_lines_oid[i]`"|escape:"url"%>"><%$br_lines_link[i]%></a>
+       </td>
+      </tr>
+     <%/section%>
+    <%/if%>
+   <%/if%>
+   <%if $br_files%>
+    <tr><td colspan="2"></td></tr>
+    <tr><td colspan="2"><%$br_filesHeader%></td></tr>
+    <%section name="i" loop=$br_files%>
+     <tr><td colspan="2"><a href="<%$br_files[i].url%>"><%$br_files[i].name%></a></td></tr>
+    <%/section%>
+   <%/if%>
+   <tr><th colspan="2"><a href="<%$tzr.societe_url%>"><%$tzr.societe%> - <%$tzr.societe_url%></a></th></tr>
+  </table>
+ </body>
+</html>

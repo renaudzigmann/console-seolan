@@ -1,0 +1,12 @@
+OK;Libre;
+RQ;Request;
+UN;Fermé à la vente;
+CC;Fermé par reprise de la disponibilité par le prestataire/propriétaire;
+AO;Alloté;
+PO;Option sur OK;
+PR;Option sur RQ;
+SO;Réservation ferme sur OK;
+SR;Réservation ferme sur RQ;
+LL;Liste attente;
+WO;Option de courte durée sur OK;
+WR;Option de courte durée sur RQ;

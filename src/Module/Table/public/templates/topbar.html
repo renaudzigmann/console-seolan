@@ -1,0 +1,29 @@
+   <%if !empty($br_pages)%>
+   <%if !isset($gopage)%>
+   	<%$gopage="TZR.Table.go_browse"%>
+   <%/if%>
+   <nav id="<%$pagerId%>" class="clearfix">
+     <ul class="pagination">
+         <li <%if $br_first eq "0"%>class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" title="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" onclick="<%if $br_first neq "0"%><%$gopage%>('<%$uniqid%>','prev',0);<%/if%> return false;">&laquo;</a></li>
+       <%math equation="max( 0,floor( x / y ) - 5 )" x=$br_first y=$br_pagesize assign="actpage"%>
+       <%math equation="max( 0,floor( x / y ))" x=$br_first y=$br_pagesize assign="actpage1"%>
+       <%math equation=" x * y " x=$actpage1 y=$br_pagesize assign="newfirst"%>
+	<%section name=p loop=$br_pages start=$actpage max=11%>
+        <%if $newfirst==$br_pages[p]%>
+        <li class="active"><a href="#" onclick="<%$gopage%>('<%$uniqid%>','seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+        <%else%>
+        <li><a href="#" onclick="<%$gopage%>('<%$uniqid%>','seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+	<%/if%>
+	<%/section%>
+	</li>
+        <li<%if ($br_last<($br_pagesize+$br_first))%> class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.next_page%>" title="<%$syslabels.Seolan_Module_Table_Table.next_page%>" onclick="<%if ($br_last>($br_pagesize+$br_first))%><%$gopage%>('<%$uniqid%>','next',0);<%/if%> return false;" >&raquo;</a></li>
+     </ul>
+    </nav>
+   <%/if%>
+   <%if $counter%>
+   <ul>
+    <li>
+     <span class="gras"><%$br_last%></span> <%if $br_last<=1%><%$syslabels.Seolan_Module_Table_Table.record%><%else%><%$syslabels.Seolan_Module_Table_Table.records%><%/if%>
+    </li>
+   </ul>
+   <%/if%>

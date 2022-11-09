@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <%include file="Core.header/layout.html"%>
+  </head>
+  <body class="tzr-raw-body" style="margin:0; padding:0;">  <fieldset>
+    <legend><%$syslabels.Seolan_Module_Social_Social.choosetwitteraccount%></legend>
+
+    <%if $twitter_isLoggedOn%>
+
+      <p>Vous êtes actuellement connecté avec ce compte :</p>
+      <img src="<%$twitter_infos->profile_image_url%>"><br />
+      <strong><%$twitter_infos->screen_name%></strong>
+
+      <div class="tzr-action">
+	<input type="submit" value="choisir ce compte" onclick="window.returnValue = '<%$twitter_infos->screen_name|escape:"javascript"%>'; window.close();">
+	<input type="button" value="se connecter à un autre compte" onclick="alert('Reconnectez-vous via twitter.com, puis fermez cette fenêtre afin de resélectionner le compte approprié.'); window.location='https://twitter.com';">
+	<input type="button" value="annuler" onclick="window.close();">
+      </div>
+
+    <%else%>
+
+      Twitter refused connection.
+      <div class="tzr-action">
+        <input type="button" value="fermer" onclick="window.close();">
+      </div>
+
+    <%/if%>
+
+  </body>
+</html>

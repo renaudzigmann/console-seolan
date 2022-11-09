@@ -1,0 +1,33 @@
+<%if $ip_lines_oid[0]%>
+<div id="cv3-news" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-news" href="#news"><%$labels.actualites_linkMobile%></a>
+  <h4><%$labels.actualite_desktopTitle%></h4>
+  <div id="news" class="collapse">
+    <div class="middle">
+      <%section name=ip loop=$ip_lines_oid%>
+        <div class="item unecol clearfix">
+        <%if $ip_lines_oflaok[ip]->raw eq "1"%>
+          <%assign var="imgwidth" value=$ip_lines_oF0003[ip]->width%>
+          <%assign var="imgheight" value=$ip_lines_oF0003[ip]->height%>
+          <%math equation="166*y/x" x=$imgwidth y=$imgheight assign="flaheight" format="%d"%>
+        <%else%>
+
+          <%if $ip_lines_oF0003[ip]->html && $ip_lines_olink[ip]->url%>
+            <a href="<%$ip_lines_olink[ip]->url%>" target="<%$ip_lines_olink[ip]->target%>" title="<%$ip_lines_olink[ip]->toText()|escape:"html"%>"><img class="img-responsive" src="<%$ip_lines_oF0003[ip]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$ip_lines_oF0003[ip]->title|escape:"html"%>"></a>
+          <%elseif $ip_lines_oF0003[ip]->html%>
+            <img class="img-responsive" src="<%$ip_lines_oF0003[ip]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$ip_lines_oF0003[ip]->title|escape:"html"%>">
+        <%/if%>
+
+        <%if $ip_lines_oF0001[ip]->html%><h5><%$ip_lines_oF0001[ip]->html%></h5><%/if%>
+        <%if $ip_lines_oF0002[ip]->html%><p><%$ip_lines_oF0002[ip]->html%></p><%/if%>
+        <%/if%>
+        </div>
+        <%if !$smarty.section.ip.last || !empty($iph_lines_oid)%><div class="separator"></div><%/if%>
+      <%/section%>
+    </div>
+    <%if $charte_oRUB_ACTUS->raw %>
+    <div class="btn btn-default  link"><a href="<%$self%>alias=<%$charte_oRUB_ACTUS->link.oalias->raw%>"><%$labels.actualite_ttelink%></a></div>
+    <%/if%>
+  </div><!-- news -->
+</div><!-- fin cv3-news -->
+<%/if%>

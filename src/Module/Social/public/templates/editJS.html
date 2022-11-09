@@ -1,0 +1,39 @@
+<script type="text/javascript">
+(function(){
+  var f=document.forms['editform<%$uniqid%>']; 
+  jQuery('#cont-fbaccount>td').html('<a href="" onclick="v<%$uniqid%>.FBInit(); return false;"><%$syslabels.Seolan_Module_Social_Social.choosefbaccount%></a>');
+  jQuery('#cont-twitteraccount>td').html('<a href="" onclick="v<%$uniqid%>.TwitterInit(); return false;"><%$syslabels.Seolan_Module_Social_Social.choosetwitteraccount%></a>');
+  <%if $br_ofbok->raw==1 && $br_otwitterok->raw==1%>
+   jQuery(f.elements['publishOnSocial']).hide();
+  <%/if%>
+  v<%$uniqid%>.publishOnSocial=function(){
+    if(confirm('<%$syslabels.Seolan_Module_Social_Social.saveandpublishonsocialconfirm|escape:"javascript"%>')){
+      f.action+='&publishOnSocial=1';
+      return true;
+    }
+    return false;
+  }
+  v<%$uniqid%>.FBInit=function(){
+    var path = 'https://www.facebook.com/dialog/oauth?';
+    var queryParams = ['client_id=<%$imod_props.FBappId%>',
+		       'scope=publish_stream,manage_pages',
+		       'display=popup',
+		       'redirect_uri='+escape('<%$imod_props.FBappUrl%>&origin=<%$domainname|escape:"url"%>&_uniqid=<%$uniqid%>'),
+		       'response_type=token'];
+    var query = queryParams.join('&');
+    var url = path + query;
+    TZR.Dialog.openURL(url);
+  }
+  v<%$uniqid%>.FBAccountChoosen=function(name,account,token){
+    if(jQuery('#cont-fbaccount>td>div').length==0) jQuery('#cont-fbaccount>td').append('<div/>');
+    jQuery('#cont-fbaccount>td>div').html(name+'<input type="hidden" name="fbaccount" value="'+account+'"><input type="hidden" name="fbtoken" value="'+token+'">');
+  }
+  v<%$uniqid%>.TwitterInit=function(){
+    var url = '<%$self%>moid=<%$_moid%>&function=TwitterConnect&template=Module/Social.getTwitterToken.html';
+    var twitterAccount = window.showModalDialog(url,'TwitterConnect','menubar=no, scrollbars=no, width=600, height=400');
+    if (typeof twitterAccount != 'undefined') {
+      jQuery('#cont-twitteraccount>td').html('<input type="text" readonly="readonly" name="twitteraccount" value="'+twitterAccount+'">');
+    }
+  }
+})();
+</script>

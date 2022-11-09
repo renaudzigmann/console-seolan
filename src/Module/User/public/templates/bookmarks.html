@@ -1,0 +1,38 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_Module_Module.bookmark_view_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_Module_Module.bookmark_view%></legend>
+ <div class="table-responsive">
+ <table class="table table table-striped">
+  <thead>
+   <tr>
+    <th>Action</th>
+    <th><%$syslabels.Seolan_Core_General.group_text%></th>
+    <th><%$syslabels.Seolan_Core_General.title_text%></th>
+    <th><%$syslabels.Seolan_Core_General.comment_text%></th>
+    <th><%$syslabels.Seolan_Module_User_User.viewhome%></th>
+    <th><%$syslabels.Seolan_Module_User_User.autostart%></th>
+   </tr>
+  </thead>
+  <tbody>
+   <%foreach key=path item=bk from=$br_bks%>
+    <tr>
+     <td>
+      <nobr>
+       <a href="#" onclick="home_viewbookmark('<%$bk.key%>'); return false;"><%$syslabels.Seolan_Core_General.view%></a>
+       <a class="cv8-ajaxlink" href="<%$self%>&key=<%$bk.key%>&moid=<%$_moid%>&_function=editBookmark&template=Module/User.bookmarks-edit.html&tplentry=br"><%$syslabels.Seolan_Core_General.edit%></a>
+       <a class="cv8-ajaxlink" href="<%$self%>&key=<%$bk.key%>&moid=<%$_moid%>&_function=delBookmark&template=proc.html&tplentry=br&_next=<%$here|escape:"url"%>"><%$syslabels.Seolan_Core_General.delete%></a>
+      </nobr>
+     </td>
+     <td><nobr><%$bk.group%></nobr></td>
+     <td><nobr><%$bk.title%></nobr></td>
+     <td><%$bk.text%></td>
+     <td><%if $bk.viewhome%><%$syslabels.Seolan_Core_General.yes%><%else%><%$syslabels.Seolan_Core_General.no%><%/if%></td>
+     <td><%if $bk.autostart%><%$syslabels.Seolan_Core_General.yes%><%else%><%$syslabels.Seolan_Core_General.no%><%/if%></td>
+    </tr>
+   <%foreachelse%>
+    <tr><td colspan="3"><%$syslabels.Seolan_Core_General.emptylist%></td></tr>
+   <%/foreach%>
+  </tbody>
+ </table>
+ </div>
+</fieldset>

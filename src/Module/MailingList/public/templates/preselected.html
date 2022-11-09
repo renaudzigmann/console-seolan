@@ -1,0 +1,23 @@
+
+  <table class="cv8_tablelist table table-striped">
+    <tr>
+      <%if $br_last<=$maxtodisp%><th width="5">Omettre</th><%/if%>  
+      <%section name=header loop=$br_header_fields%>
+      <th><%$br_header_fields[header]->get_label()%></th>
+      <%/section%>
+    </tr>
+    <%section name=rep loop=$br_lines_oid max=$maxtodisp%>
+    <tr id="tr_<%$br_lines_oid[rep]%>">
+      <%if $br_last<=$maxtodisp%>
+      <td align="center">
+	<input type="hidden" name="oid[]" value="" id="not_send_<%$br_lines_oid[rep]%>">
+	<a href="javascript:v<%$uniqid%>.notSend('<%$br_lines_oid[rep]%>');"><%$syslabels.Seolan_Core_General.delete%></a>
+      </td>
+      <%/if%>
+      <%section name=header loop=$br_header_fields%>
+      <td><%$br_lines_o<%$br_header_fields[header]->field%>[rep]->html%></td>
+      <%/section%>
+    </tr>
+    <%/section%>
+    <%if $br_last>$maxtodisp%><tr><td>...</td></tr><%/if%>
+  </table>

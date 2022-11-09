@@ -1,0 +1,56 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title='Modules'%>
+
+<div class="cv8-contenu-center rgpd">
+  <form action="<%$self%>" method="post" name="rgpdform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="_function" value="procEditModules">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <fieldset>
+      <legend>Modules</legend>
+      <%foreach $br_mods as $group => $mods%>
+        <h4>
+          <a href="" onclick="jQuery(this).parent().next('.group').toggle();
+              jQuery(this).toggleClass('active');
+              return false;">
+            <span class="glyphicon csico-tree-open" aria-hidden="true"></span>
+            <span class="glyphicon csico-tree-close" aria-hidden="true"></span>
+            <%$group%>
+          </a>
+        </h4>
+        <div class="group" style="display:none;">
+          <%foreach $mods as $mod%>
+            <div class="line clearfix">
+              <a href="" onclick="jQuery(this).next('.edit_group').toggle();
+                  jQuery('span:first-child', this).toggleClass('csico-tree-close');
+                  return false;">
+                <span class="glyphicon csico-tree-open <%if $mod->RGPD_personalData%>text-danger<%/if%>" aria-hidden="true"></span>
+                <%$mod->modulename%>
+                <%if $mod->RGPD_personalData%><span class="glyphicon csico-check"></sapn><%/if%>
+                (<%implode(', ', $mod->usedMainTables())%>)
+              </a>
+              <div class="edit_group" style="display:none;">
+                <table class="table table-auto">
+                  <%foreach $mod->rgpdOpts as $opt%>
+                    <tr>
+                      <th>
+                        <label>
+                          <%$opt.label%>
+                        </label>
+                      </th>
+                      <td>
+                        <%$opt.edit%>
+                      </td>
+                    </tr>
+                  <%/foreach%>
+                </table>
+              </div>
+            </div>
+          <%/foreach%>
+        </div>
+      <%/foreach%>
+    </fieldset>
+    <div class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    </div>
+  </form>
+</div>
+

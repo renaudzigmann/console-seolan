@@ -1,0 +1,78 @@
+<input type="hidden" name="function" value="procQuery">
+<input type="hidden" name="moid" value="<%$moid%>">
+<input type="hidden" name="template" value="Module/Media.browse.html">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="clearrequest" value="1">
+<input type="hidden" name="_persistent" value="1">
+  <%section name=i loop=$m.lines_oid%>
+   <input type="hidden" name="oids[<%$m.lines_oid[i]%>]" value="1">
+  <%/section%>
+<div class="cv8-phototeque_result">
+  <%if $m.preview.count != $m.count%>
+    <%$syslabels.Seolan_Library_SolR_SolR.preview|sprintf:$m.preview.count%>
+  <%/if%>
+  <ul class="imagelist">
+  <%section name=i loop=$m.preview%>
+    <li class="cv8_inlineblock">
+      <span class="imagelist_img<%if $m.preview.lines_omedia[i]->isVideo%> imagelist_video<%elseif $m.preview.lines_omedia[i]->isPDF%> imagelist_pdf<%/if%>" data-filename="<%$m.preview.lines_omedia[i]->filename%>;<%$m.preview.lines_omedia[i]->mime%>;<%$m.preview.lines_omedia[i]->originalname%>">
+        <span></span>
+        <a class="cv8-mediahottip" id="bt<%$m.preview.lines_omedia[i]->varid%>" bt-xtitle="<%$self%>&moid=<%$moid%>&function=displayMedia&oid=<%$m.preview.lines_oid[i]%>&template=Module/Media.viewMedia.html&tplentry=br&skip=1&_raw=2&_ajax=1"><%$m.preview.lines_omedia[i]->html_preview%></a>
+        <span></span>
+      </span>
+      <span class="imagelist_text">
+        <div class="imagelist_leg">
+          <span class="imagelist_title<%if $m.preview.lines_oPUBLISH[i]->raw eq "2"%> imagelist_unpublish<%/if%><%if $m.preview.lines_imagelistclass[i]%> <%$m.preview.lines_imagelistclass[i]%><%/if%>">
+          Score: <%$m.lines_score[i]%><br>
+          <%foreach item=field from=$m.preview.header_fields%>
+            <%if !in_array($field->field,array('media')) && $field->published%>
+              <%assign var=line value="lines_o`$field->field`"%>
+              <%if $m.preview.$line[i]->html%><%$m.preview.$line[i]->html%><br><%/if%>
+            <%/if%>
+          <%/foreach%>
+          </span>
+          <div class="imagelist_icon">
+          <%foreach from=$m.preview.actions[i] item=myaction%>
+            <%if $myaction%><%$myaction%><%/if%>
+          <%/foreach%>
+          </div>
+        </div>
+      </span>
+    </li>
+  <%/section%>
+ </ul>
+</div>
+<script type="text/javascript">
+ foo=jQuery('a.cv8-mediahottip','#result_<%$moid%>');
+ TZR.applyHottip(foo,{
+  killTitle:false,
+  trigger:'none',
+  ajaxPath:["jQuery(this).attr('bt-xtitle')"],
+  width:'auto',
+  height:'auto',
+  positions:['top'],
+  spikeLength:0,
+  spikeGirth:0,
+  overlap:'jQuery(this).find(">*:first").innerHeight()/2-5;',
+  postShow:function(b){
+    var a=this;
+    jQuery(b).mouseleave(function(){
+      a._timer=setTimeout(function(){jQuery(a).btOff()},300);
+    }).mouseenter(function(){
+      clearTimeout(a._timer);
+    });
+  }
+ });
+ foo.mouseenter(function(){
+   var a=this;
+   this._timer=setTimeout(function(){jQuery(a).btOn();},300);
+ }).mouseleave(function(){
+   if(this._timer) clearTimeout(this._timer);
+ });
+ TZR.applyHottip(jQuery('a.cv8-mediahottipi','#result_<%$moid%>'),{
+  trigger:'click',
+  ajaxPath:["jQuery(this).attr('bt-xtitle')+'&rand="+TZR.uniqid()+"'"],
+  width:400,
+  height:'auto'
+ });
+</script>
+ 

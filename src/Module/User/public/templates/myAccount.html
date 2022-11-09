@@ -1,0 +1,57 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_User_User.myaccount%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+ <div id="tzr-tablist-<%$uniqid%>">
+  <ul class="nav nav-responsive nav-tabs" role="tablist">
+   <li role="presentation" class="active"><a href="#sc1-<%$uniqid%>" aria-controls="#sc1-<%$uniqid%>" role="tab" data-toggle="tab" aria-expanded="true"><%$syslabels.Seolan_Core_General.general_text%></a></li>
+   <li role="presentation"><a href="#sc2-<%$uniqid%>" aria-controls="#sc2-<%$uniqid%>" data-url="<%$self%>moid=<%$_moid%>&function=getPreferences&template=Module/User.preferences.html&tplentry=br&_raw=2&skip=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><%$syslabels.Seolan_Core_General.preferences_text%></a></li>
+    <li role="presentation"><a href="#sc3-<%$uniqid%>" aria-controls="#sc3-<%$uniqid%>" data-url="<%$self%>function=lsSubs&skip=1&moid=<%$xmodsubmoid%>&template=Module/User.myAccountSubs.html&tplentry=br&_raw=2" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Module_Subscription_Subscription.modulename%></span></a></li>
+    <%if !empty($moid_device)%>
+      <li role="presentation"><a href="#sc4-<%$uniqid%>" aria-controls="#sc4-<%$uniqid%>" data-url="<%$self%>function=getMyDevices&moid=<%$_moid%>&template=Module/Table.browsessmajax.html&tplentry=br&ssmoid=<%$moid_device%>&skip=1&_raw=2&_ajax=1&_uniqid=<%$uniqid%>" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Module_PushNotification_Device_Device.modulename%></span></a></li>
+    <%/if%>
+  </ul>
+  
+  <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+    <div id="sc1-<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+    <form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <%foreach key=group item=fields from=$br__groups%>
+      <%if $group != '_systemproperties'%>
+      <fieldset>  
+        <legend><%$group%></legend>
+        <div class="row-striped">
+          <%section name=f loop=$fields %>
+	  <%if empty($smarty.request._linkedfields) || !in_array($fields[f]->field, $smarty.request._linkedfields)%>
+	  <%call fieldline field=$fields[f]%>
+	  <%/if%>
+          <%/section%>
+        </div>
+      </fieldset>
+      <%/if%>	
+      <%/foreach%>
+      <%if $br__hasEditableFields%>
+      <input type="hidden" name="_function" value="procEditMyAccount">
+      <input type="hidden" name="uniqid" value="<%$uniqid%>">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="skip" value=1>
+      <input type="hidden" name="_next" value="<%$here%>">
+      <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+      </div>
+      <%/if%>
+    </form>
+    </div>
+    
+    <div id="sc2-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+    <div id="sc3-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+    <div id="sc4-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+  </div><%** end tab container ***%>
+  
+ </div>
+</div>
+<script type="text/javascript" language="javascript">
+ TZR.fieldsetAccordion(jQuery('#tzr-tablist-<%$uniqid%> div.cv8-accordion'));
+ TZR.activeDependency(document.editform);
+ try{
+ document.getElementById("chemin<%$uniqid%>").style.display='none';
+ }catch(e){}
+</script>

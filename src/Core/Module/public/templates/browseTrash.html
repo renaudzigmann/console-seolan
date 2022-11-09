@@ -1,0 +1,66 @@
+<%include file="Core.header/ajax.html"%>
+<%include file="Core/Module.browseTrash.js"%>
+<script type="text/javascript">
+ TZR.Archives.labels.trash="<%$syslabels.Seolan_Core_General.trash_text%>";
+ TZR.Archives.labels.delfromtrash="<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:'javascript'%>";
+ TZR.Archives.labels.delAll="<%$syslabels.Seolan_Core_Module_Module.emptytrash|escape:'javascript'%>?";
+ TZR.Table.browse['<%$uniqid%>'] = {
+   g_pagesize:<%if $trash_browse.pagesize%><%$trash_browse.pagesize%><%else%>0<%/if%>,
+   order:'<%$trash_browse.order%>',
+   first:'<%$trash_browse.first%>',
+   last:'<%$trash_browse.last%>',
+   firstlastpage:'<%$trash_browse.firstlastpage%>',
+   firstprev:'<%$trash_browse.firstprev%>',
+   firstnext:'<%$trash_browse.firstnext%>',
+   saveSelectedfieldsAndOrder: false,
+   f:'browseTRash',
+   template:'Core/Module.browseTrash.html',
+   url:"<%$self%>moid=<%$_moid%>&tplentry=trash",
+   fromfunction:null,
+   browseurl:"<%$self%>moid=<%$_moid%>&tplentry=trash&function=browseTrash",
+   selectedfields:null,
+   nb_selectedfields:0,
+   actionData:null,
+   confirmDeleteMessage:null,
+   translation_mode:false
+ };
+ TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>", v<%$uniqid%>, function(){
+   TZR.cleanObj(v<%$uniqid%>);
+   if (!delete TZR.Table.browse['<%$uniqid%>']){
+     TZR.Table.browse['<%$uniqid%>'] = null;
+   }
+ });
+</script>
+<ul class="nav nav-pills module-tool" role="tablist">
+  <li>
+    <span class="gras"><%$trash_browse.last%></span> <%if $trash_browse.last<=1%><%$syslabels.Seolan_Module_Table_Table.record%><%else%><%$syslabels.Seolan_Module_Table_Table.records%><%/if%>
+  </li>
+  <%if $trash_actions.delAll && count($trash_browse.lines_oid)>0%>
+  <li>
+    <button onclick="TZR.Archives.delAllConfirm('<%$trash_actions.delAll|escape:'javascript'%>');" class="btn btn-primary"><%$syslabels.Seolan_Core_Module_Module.emptytrash%></button>
+  </li>
+  <%/if%>
+</ul>
+<%if !empty($trash_browse.pages)%>
+<nav id="" class="clearfix">
+  <ul class="pagination">
+    <li <%if $trash_browse.first eq "0"%>class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" title="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" onclick="<%if $trash_browse.first neq "0"%>TZR.Table.go_browse('<%$uniqid%>','prev',0);<%/if%> return false;">&laquo;</a></li>
+    <%math equation="max( 0,floor( x / y ) - 5 )" x=$trash_browse.first y=$trash_browse.pagesize assign="actpage"%>
+    <%math equation="max( 0,floor( x / y ))" x=$trash_browse.first y=$trash_browse.pagesize assign="actpage1"%>
+    <%math equation=" x * y " x=$actpage1 y=$trash_browse.pagesize assign="newfirst"%>
+    <%section name=p loop=$trash_browse.pages start=$actpage max=11%>
+    <%if $newfirst==$trash_browse.pages[p]%>
+    <li class="active"><a href="#" onclick="TZR.Table.go_browse('<%$uniqid%>','seek',<%$trash_browse.pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+        <%else%>
+    <li><a href="#" onclick="TZR.Table.go_browse('<%$uniqid%>','seek',<%$trash_browse.pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+    <%/if%>
+    <%/section%>
+</li>
+
+<li<%if ($trash_browse.last<($trash_browse.pagesize+$trash_browse.first))%> class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.next_page%>" title="<%$syslabels.Seolan_Module_Table_Table.next_page%>" onclick="<%if ($trash_browse.last>($trash_browse.pagesize+$trash_browse.first))%>TZR.Table.go_browse('<%$uniqid%>','next',0);<%/if%> return false;" >&raquo;</a></li>
+	</ul>
+</nav>
+<%/if%>
+<div class="cv8-contenu-center">
+  <%include file="Core/Module.browseTrash-core.html" browse=$trash_browse%>
+</div>

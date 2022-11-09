@@ -1,0 +1,21 @@
+<%if $ssrubs_lines_oid && ($it_cat_mit.osubmenu->raw eq 1)%>
+  <div class="cv8-phototeque_result">
+    <ul class="imagelist imagelist-collection">
+      <%section name=i loop=$ssrubs_lines_oid%>
+        <li class="imagelist-item imagelist-card">
+          <a href="#" onclick="home_viewpage('<%$ssrubs_lines_oid[i]%>','<%$ssrubs_lines_oalias[i]->raw%>','<%$ssrubs_lines_otitle[i]->html|escape:"quotes"%>','<%$ssrubs_lines_ssrub[i]%>','<%$ssrubs_lines_sections[i]%>'); return false;">
+            <div class="imagelist-img">
+              <%if $ssrubs_lines_opicto[i]->filename%>
+                <img alt="" src="<%$ssrubs_lines_opicto[i]->resizer%>&amp;geometry=<%$smarty.const.TZR_THUMB_SIZE%>x<%$smarty.const.TZR_THUMB_SIZE%>%3E" >
+              <%else%>
+                <span class="glyphicon csico-th-list"></span><%/if%>
+            </div>
+            <div class="imagelist-text">
+              <span class="text"><%$ssrubs_lines_otitle[i]->html%><br><%$ssrubs_lines_odescr[i]->html%></span>
+            </div>
+          </a>
+        </li>
+      <%/section%>
+    </ul>
+  </div>
+<%/if%>

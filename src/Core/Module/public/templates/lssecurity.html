@@ -1,0 +1,208 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Core_General.security_text`"%>
+<%assign var="tzrhistoryurl" value="`$self`&moid=`$_moid`&function=lssecurity&template=Core/Module.lssecurity.html&tplentry=br"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$title tzrhistoryurl=$tzrhistoryurl%>
+<script type="text/javascript">
+ v<%$uniqid%>.selectAll=function(el){
+  el=jQuery(el);
+  var i=el.closest('table').find('tr').index(el.closest('tr'));
+  el.parents('tr:eq(1)').find('table tr:nth-child('+(i+1)+') input').attr('checked',true);
+ }
+ v<%$uniqid%>.filter=function(){
+   var filterForm=document.forms["lsform<%$uniqid%>"];
+   var editform=document.forms["editform<%$uniqid%>"];
+   var lvl=filterForm.elements['filter_lvl'].value;
+   var lang=filterForm.elements['filter_lang'].value;
+   if(lvl=="all" && lang=="all") jQuery('tr.line',editform).show();
+   else{
+     var selector=[];
+     if(lang!="all") selector.push('.'+lang);
+     if(lvl!="all") selector.push('[value="'+lvl+'"]');
+     jQuery('tr.line',editform).hide();
+     jQuery('input'+selector.join(''),editform).filter('.default').each(function(){
+       jQuery(this).closest('tr.line').show();
+     });
+  }
+ }
+//# sourceURL=Module/lssecurity.js
+</script>
+<div class="cv8-quicksearch form-inline clearfix"> 
+<form action="<%$self%>" method="post" name="lsform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);" class="security-edit">
+ <input type="hidden" name="_function" value="lsSecurity">
+ <input type="hidden" name="template" value="Core/Module.lssecurity.html">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ 
+ <div class="form-group">
+  <label ><%$syslabels.Seolan_Core_General.filter%></label>
+  <select name="filter_lvl" onchange="v<%$uniqid%>.filter(this.value);">
+   <option value="all"><%$syslabels.Seolan_Core_General.all%></option>
+   <%section name=l3 loop=$brg_lines_sec[0][$smarty.const.TZR_DEFAULT_LANG][1]%>
+    <%assign var="t4" value=$brg_lines_sec[0][$smarty.const.TZR_DEFAULT_LANG][1][l3]%>
+    <option value="<%$t4%>"><%$syslabels.Seolan_Core_Security.$t4%></option>
+   <%/section%>
+  </select>
+  <select name="filter_lang" onchange="v<%$uniqid%>.filter();">
+   <option value="all"><%$syslabels.Seolan_Core_General.alllang%></option>
+   <%foreach from=$brg_lines_sec[0] key=l3 item=i3%>
+   <option value="<%$l3%>"><%$l3%></option>
+   <%/foreach%>
+  </select>
+  <input type="checkBox" name="withFO" id="withFO" <%if $smarty.request.withFO==1%>checked<%/if%> value="1" onclick="return TZR.ajaxSubmitForm(document.forms.lsform<%$uniqid%>)">
+  <label for="withFO"><%$syslabels.Seolan_Core_Module_Module.withfo%></label>
+  <input type="checkBox" name="withEmptyGrps" id="withEmptyGrps" <%if $smarty.request.withEmptyGrps==1%>checked<%/if%> value="1" onclick="return TZR.ajaxSubmitForm(document.forms.lsform<%$uniqid%>)">
+  <label for="withEmptyGrps"><%$syslabels.Seolan_Core_Module_Module.emptygroups%></label>
+ </div>
+</form>
+</div>
+
+<div class="cv8-contenu-center">
+<form action="<%$self%>" method="post" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);" class="security-edit">
+ <input type="hidden" name="_function" value="procLsSecurity">
+ <input type="hidden" name="template" value="Core/Module.lssecurity.html">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="_next" value="<%$here%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.groups_text%></legend>
+  <ul class="cv8-infotree-ctree">
+   <li data-oid="root">
+  <div class="table-responsive">
+  <table class="table table-border cv8_tablelist">
+  <thead>
+   <tr>
+    <th><a class="nodepicto" href="#" onclick="var t=jQuery(this).closest('table').find('td>table'); t.filter(':visible').length!=t.length?t.show():t.hide(); return false;"><%$syslabels.Seolan_Module_InfoTree_InfoTree.nodeToggleOpen%></a><%$syslabels.Seolan_Core_General.group_text%></th>
+    <th></th>
+    <%if count($brg_lines_sec[0])>1%><th><%$syslabels.Seolan_Core_Security.selectall%></th><%/if%>
+    <%foreach from=$brg_lines_sec[0] item=r key=lang%>
+     <th ><%$lang%></th>
+    <%/foreach%>
+   </tr>
+   </thead>
+   <tbody>
+   <%section name=i loop=$brg_lines_oid%>
+    <tr class="line">
+     <td><a href="#" onclick="jQuery(this).closest('tr').find('td>table').toggle();return false;"><span class="glyphicon csico-tree-open" aria-hidden="true"></span></a><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$sysmods.xmodgroup%>&function=editSec&template=Module/User.secedit.html&oid=<%$brg_lines_oid[i]%>&tplentry=br"><%$brg_lines_oGRP[i]->text%></a></td>
+     <%foreach from=$brg_lines_sec[i] item=r1 key=lang%>
+      <%assign var="t2" value=$r1[0]%>
+      <%assign var="t3" value=$r1[1]%>
+      <%if $lang eq $smarty.const.TZR_DEFAULT_LANG%>
+       <td>
+	<table>
+	 <tr><td><%$syslabels.Seolan_Core_Security.default%></td></tr>
+	 <%section name=l3 loop=$t3%>
+	  <%assign var="t4" value=$t3[l3]%>
+	  <%if $lang eq $smarty.const.TZR_DEFAULT_LANG%><tr><td><%$syslabels.Seolan_Core_Security.$t4%></td></tr><%/if%>
+	 <%/section%>
+	</table>
+       </td>
+       <%if count($brg_lines_sec[0])>1%>
+	<td>
+	 <table>
+	  <tr><td><input name="selectAll[<%$_moid%>][<%$brg_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" onclick="v<%$uniqid%>.selectAll(this);"></td></tr>
+	  <%section name=l3 loop=$t3%>
+	   <tr><td><input name="selectAll[<%$_moid%>][<%$brg_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" onclick="v<%$uniqid%>.selectAll(this);"></td></tr>
+	  <%/section%>
+	 </table>
+	</td>
+       <%/if%>
+      <%/if%>
+      <td>
+       <table>
+	<tr>
+	 <td>
+	  <input name="nlevel[<%$_moid%>][<%$brg_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" value="default">
+	 </td>
+	</tr>
+	<%section name=l3 loop=$t3%>
+	 <tr>
+	  <td align="center"<%if $t3[l3] eq end($t2)%> class="default"<%/if%>>
+	   <input name="nlevel[<%$_moid%>][<%$brg_lines_oid[i]%>][<%$lang%>]" type="radio" class="<%$lang%> radio<%if $t3[l3] eq end($t2)%> default<%/if%>" value="<%$t3[l3]%>">
+	  </td>
+	 </tr>
+	<%/section%>
+       </table>
+      </td>
+     <%/foreach%>
+    </tr>
+   <%/section%>
+   </tbody>
+  </table>
+  </div>
+ </fieldset>
+ 
+
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.users_text%></legend>
+  <div class="table-responsive">
+  <table class="table table-border cv8_tablelist">
+  <thead>
+   <tr>
+    <th><a href="#" class="nodepicto" onclick="var t=jQuery(this).closest('table').find('td>table'); t.filter(':visible').length!=t.length?t.show():t.hide(); return false;"><%$syslabels.Seolan_Module_InfoTree_InfoTree.nodeToggleOpen%></a><%$syslabels.Seolan_Core_General.user_text%></th>
+    <th></th>
+    <%if count($brg_lines_sec[0])>1%><th><%$syslabels.Seolan_Core_Security.selectall%></th><%/if%>
+    <%foreach from=$bru_lines_sec[0] item=r key=lang%>
+     <th><%$lang%></th>
+    <%/foreach%>
+   </tr>
+  </thead>
+  <tbody>
+   <%section name=i loop=$bru_lines_oid%>
+    <tr class="line">
+     <td><a href="#" onclick="jQuery(this).closest('tr').find('td>table').toggle();return false;"><span class="glyphicon csico-tree-open" aria-hidden="true"></span></a><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$sysmods.xmoduser2%>&function=editSec&template=Module/User.secedit.html&oid=<%$bru_lines_oid[i]%>&tplentry=br"><%$bru_lines_ofullnam[i]->text%>&nbsp;(<%$bru_lines_oalias[i]->text%>)</a></td>
+     
+     <%foreach from=$bru_lines_sec[i] item=r1 key=lang%>
+      <%assign var="t2" value=$r1[0]%>
+      <%assign var="t3" value=$r1[1]%>
+      <%if $lang eq $smarty.const.TZR_DEFAULT_LANG%>
+       <td>
+	<table>
+	 <tr><td><%$syslabels.Seolan_Core_Security.default%></td></tr>
+	 <%section name=l3 loop=$t3%>
+	  <%assign var="t4" value=$t3[l3]%>
+	  <%if $lang eq $smarty.const.TZR_DEFAULT_LANG%><tr><td><%$syslabels.Seolan_Core_Security.$t4%></td></tr><%/if%>
+	 <%/section%>
+	</table>
+       </td>
+       <%if count($bru_lines_sec[0])>1%>
+	<td>
+	 <table>
+	  <tr><td><input name="selectAll[<%$_moid%>][<%$bru_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" onclick="v<%$uniqid%>.selectAll(this);"></td></tr>
+	  <%section name=l3 loop=$t3%>
+	   <tr><td><input name="selectAll[<%$_moid%>][<%$bru_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" onclick="v<%$uniqid%>.selectAll(this);"></td></tr>
+	  <%/section%>
+	 </table>
+	</td>
+       <%/if%>
+      <%/if%>
+      <td>
+       <table>
+	<tr>
+	 <td>
+	  <input name="nlevel[<%$_moid%>][<%$bru_lines_oid[i]%>][<%$lang%>]" type="radio" class="radio" value="default">
+	 </td>
+	</tr>
+	<%section name=l3 loop=$t3%>
+	 <tr>
+	  <td align="center"<%if $t3[l3] eq end($t2)%> class="default"<%/if%>>
+	   <input name="nlevel[<%$_moid%>][<%$bru_lines_oid[i]%>][<%$lang%>]" type="radio" class="<%$lang%> radio<%if $t3[l3] eq end($t2)%> default<%/if%>" value="<%$t3[l3]%>">
+	  </td>
+	 </tr>
+	<%/section%>
+       </table>
+      </td>
+     <%/foreach%>
+    </tr>
+   <%/section%>
+   </tbody>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" >&nbsp;
+ </div>
+</form>
+</div>

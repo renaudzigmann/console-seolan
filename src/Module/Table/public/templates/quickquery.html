@@ -1,0 +1,97 @@
+<script type="text/javascript">
+ jQuery(document).ready(function(){
+   <%if $imod_mod->quickquery%>
+   var container = jQuery("#module-tool-form-<%$uniqid%>");
+   container.on('show.bs.collapse', function(){
+     TZR.Table.loadQuickQuery.call(TZR.Table, jQuery(this));
+   }).data('quickqueryParameters',
+	   {
+	     moid:"<%$_moid%>",
+	     uniqid:"<%$uniqid%>",
+	     options:{
+	      _querytemplate:"<%$querytemplate|default:$br__querytemplate|default:'Module/Table.browse.html'%>",
+	       order:escape("<%$br_order%>"),
+	       pagesize:"<%$br_pagesize%>",
+	       _function:"<%$br_function%>",
+	       _persistent:"<%$smarty.request._persistent%>",
+	       _queryparametersbutton:"<%$queryparameters%>",
+	       _quickquery_open:"<%$br_quickquery_open%>"
+	     },
+	     modalMode:<%$modalMode|default:'false'%>,
+       modalParams:<%$modalParams|default:'null'%>,
+	     <%if $br__qq._oids%>
+	     oids:"<%implode(',', $br__qq._oids)%>",
+	     <%else%>
+	     oids:null,
+	     <%/if%>
+	     <%if $br__submodules_searchselected|@count > 0%>
+	     submodules_searchselected:[
+	       <%foreach name="ssms" from=$br__submodules_searchselected item="v"%>
+	       "<%$v%>"<%if !$smarty.foreach.ssms.last%>,<%/if%>
+	       <%/foreach%>
+	     ],
+	     <%else%>
+	     submodules_searchselected:null,
+	     <%/if%>
+	     <%if $br__langstatus%>
+	     langstatus:{
+	       <%foreach from=$br__langstatus item="v" key="k" name="lgsta"%>
+	       "<%$k%>":"<%$v%>"<%if !$smarty.foreach.lgsta.last%>,<%/if%>
+	       <%/foreach%>
+	     },
+	     <%else%>
+	     langstatus:null,
+	     <%/if%>
+	     queryfields:[
+	       <%if $br_queryfields|@count > 0%>
+	       <%foreach name=cqf1 from=$br_queryfields item=field%>
+	       {
+		 <%if is_array($field->value)%>
+		 <%$values=[]%><%foreach from=$field->value item=$value%><%$values[]=addslashes($value)%><%/foreach%>
+		 value:["<%'","'|implode:$values%>"],
+		 <%else%>
+		 value:"<%$field->value%>",
+		 <%/if%>
+		 field:"<%$field->fielddef->field|escape:'javascript'%>",
+		 op:"<%$field->op%>",
+		 fmt:"<%$field->fmt%>"
+	       }
+	       <%if !$smarty.foreach.cqf1.last%>,<%/if%>
+	       <%/foreach%>
+	       <%/if%>
+	     ]
+	   }
+   );
+   <%if $br_quickquery_open%>
+   jQuery("#module-tool-button-<%$uniqid%>").trigger('click');
+   container.addClass("in");
+   container.attr("aria-expanded", true);
+   <%/if%>
+   <%/if%>
+ });
+</script>
+
+<ul class="nav nav-pills module-tool" role="tablist">
+  <li>
+    <span><%$br_last%></span>&nbsp;<%if $br_last<=1%><%$syslabels.Seolan_Module_Table_Table.record%><%else%><%$syslabels.Seolan_Module_Table_Table.records%><%/if%>
+  </li>
+  <li>
+    <%if $imod_mod->quickquery%><a id="module-tool-button-<%$uniqid%>"  href="#module-tool-form-<%$uniqid%>" data-toggle="collapse"><%$syslabels.Seolan_Module_Table_Table.quickquery%></a><%/if%>
+  </li>
+  <%if !$noselection && $imod_mod->secure('','addToUserSelection')%>
+  <li class="hidden-xs">
+    <a href="#" onclick="TZR.Table.addToSelection('<%$imod_mod->_moid%>', '<%$uniqid%>'); return false;"><%$syslabels.Seolan_Core_Module_Module.addtoselection_text%></a>
+  </li>
+  <%/if%>
+</ul>
+<%if $br_queryfields|@count > 0%>
+<div class="current-query clearfix">
+  <%foreach name=cqf from=$br_queryfields item=field%>
+  <%$field->fielddef->label%><%$syslabels.Seolan_Core_General.i18ncolon%><%$field->getQueryText()%><%if !$smarty.foreach.cqf.last%>, <%/if%>
+  <%/foreach%>
+</div>
+<%/if%>
+<div id="module-tool-form-<%$uniqid%>"
+     class="collapse"
+     aria-expanded="false"
+></div>

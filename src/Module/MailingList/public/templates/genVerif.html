@@ -1,0 +1,18 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_MailingList_MailingList.genverif_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_MailingList_MailingList.genverif_text%></legend>
+ <form action="<%$self%>" method="post">
+  <input type="hidden" name="_function" value="procVerif">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="template" value="proc.html">
+  <input type="hidden" name="nocache" value="1">
+  <table class="list2">
+   <tr>
+    <td>
+     <p><%$syslabels.Seolan_Module_MailingList_MailingList.genverif_expli%></p>
+     <input type="submit" value="OK" name="OK">
+    </td>
+   </tr>
+  </table>
+ </form>
+</fieldset>

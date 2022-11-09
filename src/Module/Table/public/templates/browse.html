@@ -1,0 +1,227 @@
+<%if $function!='browse' && empty($title)%><%assign var="title" value="`$syslabels.Seolan_Core_General.result_text`"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script language="javascript" type="text/javascript">
+ TZR.Table.browse['<%$uniqid%>'] = {
+   moid:"<%$_moid%>",
+   g_pagesize:<%$br_pagesize|default:0%>,
+   order:'<%$br_order|escape:'javascript'%>',
+   first:'<%$br_first%>',
+   last:'<%$br_last%>',
+   firstlastpage:'<%$br_firstlastpage%>',
+   firstprev:'<%$br_firstprev%>',
+   firstnext:'<%$br_firstnext%>',
+   f:'<%$br_function%>',
+   template:'<%$template%>',
+   url:"<%$self%>moid=<%$_moid%>&tplentry=br",
+   fromfunction:'<%$function%>',
+   browseurl:'<%$imod_props.actions.browse->xurl%>',
+   // surcharge des actions en mode traduction on doit afficher 2 messages <>
+   <%if $br_translation_mode%>
+   confirmDeleteMessage:'<%$syslabels.Seolan_Core_General.confirm_delete_object_alllang|escape:"quotes"%>',
+   actionData:{"LANG_TRAD":"", "LANG_DATA":"<%$lang_def%>"}, // a finir, doit passer à la fonction !
+   translation_mode:true,
+   <%else%>
+   actionData:null,
+   confirmDeleteMessage:'<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>',
+   translation_mode:false,
+   <%/if%>
+   confirmFullDeleteTitle:"<%$syslabels.Seolan_Module_Table_Table.full_delete|escape:"quotes"%>",
+   confirmFullDeleteMessage:"<%$syslabels.Seolan_Module_Table_Table.full_delete_explain|escape:"quotes"%>",
+   modulecontainer:v<%$uniqid%>.modulecontainer
+ };
+
+ <%if $custom_delete_message%>
+ TZR.Table.browse['<%$uniqid%>'].confirmDeleteMessage = "<%$custom_delete_message%>";
+ <%/if%>
+ 
+ // a remonter dans TZR.Table (voir aussi les actions dans Module/MailingLst
+ v<%$uniqid%>.sendSelectedPush = function(){
+   var form = document.forms['browse<%$uniqid%>'];
+   if (TZR.checkBoxesIsChecked(form)){
+     TZR.applyFunction(document.forms['browse<%$uniqid%>'], {_next:'', _function:'genSend', fromfunction:'<%$function%>', template:'Module/MailingList.sendpush.html', selectedfields:'', push:'1'});
+   } else{
+     TZR.jQueryLoad({target:this.modulecontainer, url:"<%$self%>moid=<%$_moid%>&_function=genSendPre&template=Module/MailingList.xmodmaillistpre.html&tplentry=br&push=1"});
+   }
+ }
+ 
+ // surcharge pour effacer ausso TZR.Table.browse['<%$uniqid%>]
+ TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>", v<%$uniqid%>, function(){
+   TZR.cleanObj(v<%$uniqid%>);
+   if (!delete TZR.Table.browse['<%$uniqid%>']){
+     TZR.Table.browse['<%$uniqid%>'] = null;
+   }
+ });
+</script>
+
+<%include inline file="Module/Table.quickquery.html" queryparameters=1%>
+
+
+<%include inline file="Module/Table.topbar.html" recordCount=false pagerId="pager`$uniqid`"%>
+
+<div class="cv8-contenu-center clearfix browse-module-<%$_moid%>">
+  <form name="browse<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="_function" value="">
+    <input type="hidden" name="fromfunction" value="">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="selectedfields" value="all">
+    <input type="hidden" name="template" value="proc.html">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="message" value="">
+    <input type="hidden" name="_selectedok" value="ok">
+    <input type="hidden" name="value" value="1">
+    <%section name=s loop=$br_editfields%>
+      <input type="hidden" name="editfields[]" value="<%$br_editfields[s]%>">
+    <%/section%>
+    <%if $brt_odisp->filename%>
+      <%include file=$brt_odisp->filename%>
+    <%else%>
+      <div class="table-responsive">
+      <%if $br_translation_mode%><%$syslabels.Seolan_Module_Table_Table.browse_translation_mode_message|sprintf:$lang_trad%><%/if%>
+      <table class="table table-striped cv8_tablelist">
+        <thead>
+          <tr><%*premiere ligne entete *%>
+            <th width="5"><%* selecteur de champs *%>
+	      <a href="#" title="<%$syslabels.Seolan_Core_General.fieldselector|escape:'html'%>" onclick="TZR.Table.submitSelectedFields('<%$uniqid%>');return false;"><span aria-hidden="true" class="glyphicon csico-property"></span></a>
+            </th>
+            <%if $br_translation_mode%>
+              <th width="5"></th>
+              <th align="center"><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+              <%/if%>
+            <th align="center"><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+              <%section name=header loop=$br_header_fields %>
+              <th <%if $br_header_fields[header]->add_browse_class%>class="<%$br_header_fields[header]->getBrowseCssClass()%>"<%/if%>><%$br_header_fields[header]->get_label()%></th>
+              <%/section%>
+          </tr>
+          <tr><%* deuxième ligne entete *%>
+            <td nowrap>
+              <input type="checkbox" onclick="TZR.toggleCheckBoxes(this.form);" name="selectall">
+              <input type="hidden" name="marker" value="selectstart">
+            </td>
+            <%if $br_translation_mode%>
+              <td width="5"></td>
+              <td align="center"><span class="flag"><%$TZR.lang_trad.long%></span></td>
+            <%/if%>
+            <td align="center"><%if $br_translation_mode%><span class="flag"><%$TZR.lang_data.long%></span><%/if%></td>
+
+            <%section name=header loop=$br_header_fields%>
+              <td nowrap  <%if $br_header_fields[header]->add_browse_class%>class="<%$br_header_fields[header]->getBrowseCssClass()%>"<%/if%>>
+                <%assign var=fieldname value=$br_header_fields[header]->field%>
+                <%if ($modsec_mods[$_moid].rw && $br_header_fields[header]->field!='PUBLISH' || $modsec_mods[$_moid].rwv) && $imod_props.multipleedit && (($br_header_fields[header]->translatable && !$br_translation_mode) || $lang_def==$lang_data) && ($root || !$br_header_fields[header]->readonly) && (!$br__fieldssec[$fieldname] || $br__fieldssec[$fieldname] == 'rw') && (!is_a($br_header_fields[header],'\Seolan\Field\File\File') || !$br_header_fields[header]->multivalued)%>
+                  <a href="#" onclick="TZR.Table.go_browse('<%$uniqid%>', 'edit', '<%$br_header_fields[header]->field%>'); return false;" title="<%$syslabels.Seolan_Module_Table_Table.small_edit_text%>"><%$syslabels.Seolan_Module_Table_Table.small_edit%></a>
+                <%/if%>
+                <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_up_text%>" href="#" onclick="TZR.Table.updateBrowseProperties('<%$uniqid%>', 'order', {order:'<%$br_header_fields[header]->field%> ASC'}); return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_up%></a>
+                <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_down_text%>" href="#" onclick="TZR.Table.updateBrowseProperties('<%$uniqid%>', 'order', {order:'<%$br_header_fields[header]->field%> DESC'}); return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_down%></a>
+              </td>
+            <%/section%>
+          </tr>
+        </thead>
+        <tbody>
+          <%section name=lines loop=$br_lines_oid%>
+            <%assign var=oid value=$br_lines_oid[lines]%>
+            <%* debut de ligne *%>
+            <%$lineclass=''%>
+            <%if isset($br_lines_published) && $br_lines_published[lines]!=1%>
+              <%$lineclass="napp"%>
+            <%/if%>
+            <%if !empty($br_lines_trclass[lines])%>
+              <%assign var=lineclass value="`$lineclass` `$br_lines_trclass[lines]`"%>
+            <%/if%>
+            <tr<%if $lineclass neq ''%> class="<%$lineclass%>"<%/if%>>
+              <td>
+                <input type="hidden" name="oid[]" value="<%$br_lines_oid[lines]%>">
+                <input name="_selected[<%$br_lines_oid[lines]%>]" type="checkbox" <%if $br_lines_selected[lines]%>checked<%/if%>>
+              </td>
+              <%if $br_translation_mode%>
+                <td><%$br_lines_translation_status[lines].$lang_data.html%></td>
+                <td><%* table des actions 2 lang trad *%>
+                  <table class="tzr-compact">
+                    <tr>
+                      <%foreach name=linesactions2 from=$br_actions2[lines] key=actiontype item=myaction2%>
+                        <td align="center"><%if $myaction2%><%$myaction2%><%/if%></td>
+                      <%/foreach%>
+                    </tr>
+                  </table>
+                </td>
+                <%* fin de table des actions 2 lang trad *%>
+              <%/if%>
+
+              <td><%* table des actions standard (langue de base)*%>
+                <%if count($br_actions[$smarty.section.lines.index]) eq 1%>
+                  <%* dans le cas d'une seule icone on l'affiche *%>
+                  <ul class="ul-list-tools">
+                    <%foreach from=$br_actions[lines] item=myaction%>
+                      <li><%if $myaction%><%$myaction%><%/if%></li>
+                      <%/foreach%>
+                  </ul>
+                <%else%>
+                  <%* dans le cas d'un écran assez large on affiche les icones *%>
+		  <%strip%>
+                  <ul class="ul-list-tools visible-md visible-lg">
+		    <%foreach from=$br_actions[lines] item=myaction%>
+		    <li><%if $myaction%><%$myaction%><%/if%></li>
+                    <%/foreach%>
+                  </ul>
+		  <%/strip%>
+                  <%* dans le cas d'un écran mobile on affiche une dropdown *%>
+                  <div class="dropdown visible-xs visible-sm">
+		    <%strip%>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon csico-ellipsis-h" aria-hidden="true"></span></button>
+                    <ul class="dropdown-menu">
+                      <%foreach from=$br_actions[lines] item=myaction%>
+		      <li><%if $myaction%><%$myaction%><%/if%></li>
+                      <%/foreach%>
+                    </ul>
+		    <%/strip%>
+                  </div>
+                <%/if%>
+              </td><%* fin de table des actions *%>
+
+              <%section name=header loop=$br_header_fields%>
+                <td <%if $br_header_fields[header]->add_browse_class%>class="<%$br_header_fields[header]->getBrowseCssClass()%>"<%/if%>><%$br_lines_o<%$br_header_fields[header]->field%>[lines]->html%></td>
+              <%/section%>
+            </tr>
+          <%/section%>
+        </tbody>
+        <%* ajout de lignes de total *%>
+        <%if isset($br_sums)%>
+      <%if $br_translation_mode%><%assign var=scolspan value=4%><%else%><%assign var=scolspan value=2%><%/if%>
+      <tbody class="sumlist">
+        <tr class="sumlistsep"><td colspan="99"></td></tr>
+          <%if $br_sums.line_page%>
+          <tr class="sumlisttot1">
+            <td colspan="<%$scolspan%>"><%$syslabels.Seolan_Module_Table_Table.browse_subtotal%></td>
+            <%$br_sums.line_page%>
+          </tr>
+        <%/if%>
+        <%if $br_sums.line_tot%>
+          <tr class="sumlisttot2">
+            <td colspan="<%$scolspan%>"><%$syslabels.Seolan_Module_Table_Table.browse_total%></td>
+            <%$br_sums.line_tot%>
+          </tr>
+        <%/if%>
+      </tbody>
+    <%/if%>
+  </table>
+</div>
+<%/if%>
+<%if $br_editfields%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input class="btn btn-primary" type="submit" name="Save" value="<%$syslabels.Seolan_Core_General.save_text%>"
+   onclick="TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'<%$back%>',_function:'procEdit',fromfunction:'<%$function%>',enctype:'multipart/form-data'});"></div>
+<%/if%>
+</form>
+</div>
+<div class="cv8-quicksearch cv8-quicksearch-bottom clearfix" style="display:none;" id="cv8-quicksearch-bottom-<%$uniqid%>">
+  <div class="outils form-group">
+    <div id="bottombar<%$uniqid%>"></div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" language="javascript">
+
+  <%if ($br_last>$br_firstnext && $br_pagesize>15) || ($br_last<=$br_firstnext && $br_last-$br_first>15)%>
+  jQuery('#bottombar<%$uniqid%>').html(jQuery('#pager<%$uniqid%>').html());
+  jQuery('#cv8-quicksearch-bottom-<%$uniqid%>').show();
+  <%/if%>
+</script>

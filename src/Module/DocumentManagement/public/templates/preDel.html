@@ -1,0 +1,61 @@
+<%* infos confirmation suppression *%>
+<div class="title"><%$syslabels.Seolan_Core_General.delete_text%></div>
+<div class="body">
+<form>
+
+<%if $br_ok%>
+
+<h4><%$br_title%></h4><br>
+<%if $br_messages && $br_messages|@count%>
+<div class="alert alert-info">
+  <%$br_messages|implode:'<br>'%>
+</div>
+<%/if%>
+<%if $br__messageComplement%>
+<div class="alert alert-danger">
+  <%$br__messageComplement%>
+</div>
+<%/if%>
+<%assign var="button1" value=""%>
+<%assign var="button2" value=""%>
+
+<%if $br_linked%>
+
+<%if $br_forcephysical%>
+<div class="alert alert-danger"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.deletelinks_warning%></div>
+<input type="hidden" value="1" id="<%$uniqid%>physical">
+<%capture name="button2" assign="button2"%><button onclick="var phy = jQuery('#<%$uniqid%>physical');phy.val(1);TZR.DocMngt.confirmDelete(phy);" class="btn btn-primary btn-ok"><%$syslabels.Seolan_Core_General.delete_text%></button><%/capture%>
+<%else%>
+<input type="hidden" value="0" id="<%$uniqid%>physical">
+<div class="alert alert-info"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.deletelinks_info%></div>
+<%capture name="button1" assign="button1"%><button onclick="var phy = jQuery('#<%$uniqid%>physical');phy.val(1);TZR.DocMngt.confirmDelete(phy);" class="btn btn-primary btn-ok"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.deleteall%></button><%/capture%>
+<%capture name="button2" assign="button2"%><button onclick="var phy = jQuery('#<%$uniqid%>physical');phy.val(0);TZR.DocMngt.confirmDelete(phy);" class="btn btn-primary btn-ok"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.deletecurrent%></button><%/capture%>
+<%/if%>
+
+<%else%>
+<%capture name="button2" assign="button2"%><button onclick="var phy = jQuery('#<%$uniqid%>physical');phy.val(1);TZR.DocMngt.confirmDelete(phy);" class="btn btn-primary btn-ok"><%$syslabels.Seolan_Core_General.delete_text%></button><%/capture%>
+<input type="hidden" value="1" id="<%$uniqid%>physical">
+<%/if%>
+
+
+<%else%><%* / not ok *%>
+<h4><%$br_title%></h4><br>
+<div class="alert alert-warning">
+<%if $br_messages && $br_messages|@count%>
+<%$br_messages|implode:'<br>'%>
+</div>
+<%/if%>
+
+<%/if%>
+</form>
+</div>
+
+<div class="tzr-action">
+  <%if $br_ok%>
+  <%$button1%><%$button2%>
+  <button class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.cancel_text%></button>
+  <%else%>
+  <button class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+  <%/if%>
+
+</div>

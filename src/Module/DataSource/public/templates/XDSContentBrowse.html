@@ -1,0 +1,253 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.browse_text%>
+<script language="javascript" type="text/javascript">
+ v<%$uniqid%>.g_pagesize=<%if $br_pagesize%><%$br_pagesize%><%else%>0<%/if%>;
+ v<%$uniqid%>.selectedfields=new Array();
+ v<%$uniqid%>.nb_selectedfields=0;
+ <%section name=h loop=$br_header_fields%>
+ v<%$uniqid%>.selectedfields[<%$smarty.section.h.index%>]='<%$br_header_fields[h]->field%>';
+ v<%$uniqid%>.nb_selectedfields++;
+ <%/section%>
+ // Supression des fiches selectionnées
+ v<%$uniqid%>.deleteselected=function() {
+   var f=document.forms['browse<%$uniqid%>'];
+   var e;
+   var selecteds = false;
+   for(var i=0;i<f.elements.length;i++){
+     e = f.elements[i];
+     if (e.name.match('_selected')){
+       if (e.checked == true){
+	 selecteds = true;
+	 break;
+       }
+     }
+   }
+   if (!selecteds){ alert('<%$syslabels.Seolan_Core_General.error_select_object|escape:"quotes"%>');return };
+   if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>')) {
+     f._function.value='XDSContentDel';
+     f._next.value=this.go_browse('urlonly',0)+'&_raw=1';
+     TZR.ajaxSubmitForm(f);
+   }
+ }
+ // Applique une fonction au formulaire  
+ v<%$uniqid%>.applyfunctiontoselection=function(f,msg,data) {
+   var form=document.forms['browse<%$uniqid%>'];
+   if(typeof(msg)!='undefined' && msg!=''){
+     if(!confirm(msg)){
+       return;
+     }
+   }
+   if(data){
+    for(var attr in data){
+     form[attr].value=data[attr];
+    }
+   }
+   form._function.value=f;
+   form._next.value=v<%$uniqid%>.go_browse('urlonly',0);
+   TZR.ajaxSubmitForm(form);
+ }
+ // Traitement sur le formulaire
+ v<%$uniqid%>.go_browse=function(command,pagesizediff,urlonly) {
+   f='<%$function%>';
+   url="<%$self%>&moid=<%$_moid%>&boid=<%$smarty.request.boid%>&tplentry=br";
+   order='<%$br_order%>';
+   pagesize=this.g_pagesize;
+   first='<%$br_first%>';
+   last='<%$br_last%>';
+   urlonly=false;
+   editfield='';
+   if(command=='start') {
+     first='0';
+     last='<%$br_last%>';
+     if(typeof(pagesizediff)=='number') pagesize=pagesize+pagesizediff;
+     else pagesize=eval(pagesize+pagesizediff);
+     pagesize=parseInt(pagesize);
+   }
+   if(command=='clear') {
+     f='browse';
+   }
+   if(command=='urlonly') {
+     urlonly=true;
+   }
+   if(command=='end') {
+     first='<%$br_firstlastpage%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='prev') {
+     first='<%$br_firstprev%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='next') {
+     first='<%$br_firstnext%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='seek') {
+     first=pagesizediff;
+     last='<%$br_last%>';
+   }
+   if(command=='edit') {
+     editfield=pagesizediff;
+   }
+   if(command=='order') {
+     first= 0;
+     last='<%$br_last%>';
+     order=pagesizediff;
+   }
+   if(pagesize<=0) pagesize=0;
+   url=url+'&function='+f;
+   url=url+'&first='+first;
+   if(command!='clear') {
+     url=url+'&last='+last;
+   }
+   url=url+'&order='+escape(order);
+   url=url+'&pagesize='+pagesize;
+   url=url+'&template=Module/DataSource.XDSContentBrowse.html';
+   if(editfield!='') {
+     if(editfield=='all') {
+       url=url+'&editfields=all';
+     } else {
+       url=url+'&editfields[]='+editfield;
+     }
+   }
+   for(i=0;i<this.nb_selectedfields;i++)
+     url=url+'&selectedfields['+i+']='+this.selectedfields[i];
+   if(urlonly) return url;
+   else TZR.jQueryLoad({target:this.modulecontainer,url:url});
+ }
+ v<%$uniqid%>.field_in_list=function(f){
+   for(i=0;i<this.nb_selectedfields;i++)
+     if(this.selectedfields[i]==f) return true;
+   return false;
+ }
+ v<%$uniqid%>.add_field=function(f) {
+   if(this.field_in_list(f)) {
+     found=false;
+     i=0;
+     while(!found && (i<this.nb_selectedfields)) {
+       if(this.selectedfields[i]==f) found=true;
+       else i++;
+     }
+     i++;
+     while(i<this.nb_selectedfields) {
+       this.selectedfields[i-1]=this.selectedfields[i];
+       i++;
+     }
+     this.nb_selectedfields--;
+   } else {
+     this.selectedfields[this.nb_selectedfields]=f;
+     this.nb_selectedfields++;
+   }
+ }
+</script>
+<div class="outils">
+  <ul class="nav nav-pills module-tool">
+    <li>
+      <span class="gras"><%$br_table%> - <%$br_last%></span> <%if $br_last<=1%><%$syslabels.Seolan_Module_Table_Table.record%><%else%><%$syslabels.Seolan_Module_Table_Table.records%><%/if%>
+    </li>
+  </ul>
+
+    <%if !empty($br_pages) %>
+    <%$gopage="v<%$uniqid%>.go_browse"%>
+    <nav id="<%$pagerId%>" class="clearfix">
+      <ul class="pagination">
+        <li <%if $br_first eq "0"%>class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" title="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" onclick="<%if $br_first neq "0"%><%$gopage%>('<%$uniqid%>','prev',0);<%/if%> return false;">&laquo;</a></li>
+	<%math equation="max( 0,floor( x / y ) - 5 )" x=$br_first y=$br_pagesize assign="actpage"%>
+	<%math equation="max( 0,floor( x / y ))" x=$br_first y=$br_pagesize assign="actpage1"%>
+	<%math equation=" x * y " x=$actpage1 y=$br_pagesize assign="newfirst"%>
+	<%section name=p loop=$br_pages start=$actpage max=11%>
+        <%if $newfirst==$br_pages[p]%>
+        <li class="active"><a href="#" onclick="<%$gopage%>('seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+        <%else%>
+        <li><a href="#" onclick="<%$gopage%>('seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+	<%/if%>
+	<%/section%>
+    </li>
+    <li<%if ($br_last<($br_pagesize+$br_first))%> class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.next_page%>" title="<%$syslabels.Seolan_Module_Table_Table.next_page%>" onclick="<%if ($br_last>($br_pagesize+$br_first))%><%$gopage%>('next',0);<%/if%> return false;" >&raquo;</a></li>
+      </ul>
+    </nav>
+    <%/if%>
+
+<div class="cv8-contenu-center">
+ <form name="browse<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="_function" value="">
+  <input type="hidden" name="boid" value="<%$smarty.request.boid%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="selectedfields" value="all">
+  <input type="hidden" name="template" value="proc.html">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="message" value="">
+  <input type="hidden" name="_selectedok" value="ok">
+  <input type="hidden" name="value" value="1">
+  <input type="hidden" name="_next" value="<%$back%>">
+   <div class="table-responsive">
+  <table class="table table-stripped cv8_tablelist">
+   <thead>
+    <tr>
+     <%if $TZR.lang_trad && $br_translatable%><th></th><%/if%> <%* colonne des langues *%>
+     <th width="5"></th> <%* colonne des actions *%>
+     <th align="center" colspan="1"><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+     <%section name=header loop=$br_header_fields %>
+      <th><%$br_header_fields[header]->get_label()%></th>
+     <%/section%>
+    </tr>
+    <tr>
+     <td width="5">
+      <input type="checkbox" onclick="TZR.toggleCheckBoxes(this.form);" name="selectall" class="checkbox">
+      <input type="hidden" name="marker" value="selectstart">
+     </td>
+     <%if $TZR.lang_trad && $br_translatable%><td></td><%/if%>
+     <td align="center" colspan="1"></td>
+     <%section name=header loop=$br_header_fields%>
+      <td nowrap>
+       <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_up_text%>" href="#" onclick="v<%$uniqid%>.go_browse('order','<%$br_header_fields[header]->field%>+ASC');return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_up%></a>
+       <a title="<%$syslabels.Seolan_Module_Table_Table.arrow_down_text%>" href="#" onclick="v<%$uniqid%>.go_browse('order','<%$br_header_fields[header]->field%>+DESC');return false;"><%$syslabels.Seolan_Module_Table_Table.arrow_down%></a>
+      </td>
+     <%/section%>
+    </tr>
+   </thead>
+   <tbody>
+    <%section name=lines loop=$br_lines_oid %>
+     <%* debut de ligne *%>
+     <tr class="<%if $br_lines_published && $br_lines_published[lines]!=1%>napp<%/if%> <%if $br_lines_trclass[lines]%><%$br_lines_trclass[lines]%><%/if%>">
+      <td width="5">
+       <input type="hidden" name="oid[]" value="<%$br_lines_oid[lines]%>">
+       <input name="_selected[<%$br_lines_oid[lines]%>]" type="checkbox" class="checkbox" <%if $br_lines_selected[lines]%>checked<%/if%>>
+      </td>
+      <%if $TZR.lang_trad && $br_translatable%>
+       <td><%if $br_lines_translation_ok[lines]%><%$TZR.lang_data.long%><%/if%></td>
+      <%/if%>
+      <%* table des actions *%>
+      <td>
+       <table class="tzr-compact">
+	<tr>
+	 <td align="center"><a class="cv8-ajaxlink" href="<%$self%>moid=<%$_moid%>&boid=<%$smarty.request.boid%>&function=XDSContentDisplay&oid=<%$br_lines_oid[lines]%>&tplentry=br&template=Module/DataSource.XDSContentDisplay.html"><%$syslabels.Seolan_Core_General.view%></a></td>
+	 <td align="center"><a class="cv8-ajaxlink" href="<%$self%>moid=<%$_moid%>&boid=<%$smarty.request.boid%>&function=XDSContentEdit&oid=<%$br_lines_oid[lines]%>&tplentry=br&template=Module/DataSource.XDSContentEdit.html"><%$syslabels.Seolan_Core_General.edit%></a></td>
+	 <td align="center"><a class="cv8-delaction" href="<%$self%>moid=<%$_moid%>&boid=<%$smarty.request.boid%>&function=XDSContentDel&oid=<%$br_lines_oid[lines]%>"><%$syslabels.Seolan_Core_General.delete%></a></td>
+	</tr>
+       </table>
+      </td>
+      <%* fin de table des actions *%>
+      <%section name=header loop=$br_header_fields%>
+      <td>
+	<%$br_lines_o<%$br_header_fields[header]->field%>[lines]->html%>
+      </td>
+      <%/section%>
+     </tr>
+    <%/section%>
+   </tbody>
+  </table>
+   </div>
+ </form>
+</div>
+<!-- fin de la visualisation en table -->
+<script type="text/javascript" language="javascript">
+ jQuery(v<%$uniqid%>.modulecontainer).find('a.cv8-delaction').click(function(){
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>')) {
+   if(!TZR.checkLinkConfirm(this)) return false;
+   TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:this.href,data:{_next:v<%$uniqid%>.go_browse('urlonly',0)+'&_raw=1'}});
+  }
+  return false;
+ });
+</script>

@@ -1,0 +1,50 @@
+<%if $smarty.get._dialogid == 'jsondatadialog'%><div class="title">JSON API Object</div><%/if%>
+
+<link rel="stylesheet" type="text/css" href="<%$smarty.const.TZR_WWW_CSX%>Vendor/jsoneditor/jsoneditor-min.css">
+<%onejs id="jquery-base" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jsoneditor/" minify=false%>
+jsoneditor-min.js
+<%/onejs%>
+
+<%if $_message || $smarty.request.message || $br_message || $smarty.session._TZR.message%>
+<div class="tzr-message">
+<div class="alert alert-success" role="alert">
+  <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+</div>
+</div>
+<%/if%>
+
+<div class="panel panel-primary">
+  <div class="panel-heading">JSON Endpoint</div>
+  <div class="panel-body">
+    <%$jsondata_jsonEndPoint%> (use ?_META=1 for meta description)
+    <a href="<%$jsondata_jsonEndPoint%>?_pretty=1" download="<%$jsondata_moduleJsonAlias%>_<%$jsondata_oid%>.json" target="_blank">
+      <span class="csico-download">
+    </a>
+
+  </div>
+</div>
+<div class="panel panel-primary">
+  <div class="panel-heading">JSON Data</div>
+  <div class="panel-body">
+    <div id="jsoneditor_<%$uniqid%>" class="jsoneditor"></div>
+  </div>
+</div>
+
+
+<script type="text/javascript" >
+jQuery(function() {
+    // create the editor
+    var container = document.getElementById("jsoneditor_<%$uniqid%>");
+    
+    jQuery.ajax({
+	url: '<%$jsondata_jsonEndPoint%>',
+	success: function(json){
+	    var editor_<%$uniqid%> = new jsoneditor.JSONEditor(container, {mode: 'view', search: true}, json);
+	},
+	cache: true
+    });
+});
+</script>

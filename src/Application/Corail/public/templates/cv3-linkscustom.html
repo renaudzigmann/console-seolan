@@ -1,0 +1,22 @@
+<!--<%$smarty.template%>-->
+<%assign var="id" value=""|uniqid%>
+<div id="cv3-linkscustom" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-linkscustom" href="#linkscustom<%$id%>"><%label t="Liens rapides" v="linkscustom_quickLinks"%></a>
+  <h4><%label t="Liens rapides" v="linkscustom_quickLinks"%></h4>
+  <div id="linkscustom<%$id%>" class="collapse">
+    <div class="middle">
+
+      <%section name=qlm loop=$qlm_lines_oid%>
+        <%if $qlm_lines_level[qlm]==1%>
+          <%if !$smarty.section.qlm.first%></ul><%/if%>
+          <ul>
+            <li><h5><%$qlm_lines_otitle[qlm]->html%></h5></li>
+        <%else%>
+          <li><a href="<%$self%><%$qlm_lines_selfurl[qlm]%><%$qlm_lines_ocurl[qlm]->html%>"><%$qlm_lines_otitle[qlm]->html%></a></li>
+        <%/if%>
+        <%if $smarty.section.qlm.last%></ul><%/if%>
+      <%/section%>
+
+    </div>
+  </div><!-- fin linkscustom -->
+</div><!-- fin cv3-linkscustom -->

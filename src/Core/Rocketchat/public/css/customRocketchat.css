@@ -1,0 +1,39 @@
+/*Permet de cacher la barre de chat dans les conversations*/
+.rcx-css-1uzhohp{
+    display: none;
+}
+/*Permet de mettre les boutons d'actions (emoji, message audio/vidéo, pièce jointe) en noir plutôt quand gris*/
+.rc-message-box__action{
+    color: var(--primary-font-color) !important
+}
+
+/* Permet de cacher l'option "obtenir le lien" dans les option d'un message car pas très pertinent*/
+.rc-popover__item[data-id='permalink']{
+    display:none;
+}
+
+/*Permet d'enlever la fonctionnalité "Signaler" un message car encore trop rudimentaire (obligation de passer par des requêtes mongoDB pour récupérer les messages signalés)*/
+.rc-popover__item[data-id='report-message']{
+    display:none;
+}
+
+button[title='Répertoire']{
+    display:none;
+}
+
+.rcx-button[data-qa='sidebar-search']{
+    display:none;
+}
+
+
+/*Permet d'enlever le bouton "se déconnecter"*/
+.rcx-css-1tbw8nv .rcx-option:last-child {
+    display: none;
+}
+
+/*Permet de corriger un problème de responsive dans "Préférences"*/
+@media all and (max-width: 450px){
+    section.rcx-box div.rcx-box div.rcx-box{
+	display: block !important;
+    }
+}

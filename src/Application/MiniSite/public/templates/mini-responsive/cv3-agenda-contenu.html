@@ -1,0 +1,90 @@
+<%if $it_olines[it] %>
+<!-- Debut cv3-agenda-contenu.html -->
+
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+<%assign var=sectiondivid value="cv8d-browsediv-`$it_itoid[it]`"%>
+<%assign var=section value=$it_olines[it]%>
+
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript" language="javascript">function browsedivinitpage(sectiondivid){}</script>
+
+<%if !isset($smarty.request.contentonly)%>
+  <div class="cv8d-browsediv cv8d-browsediv-<%$section._functionparams.moid%>" id="<%$sectiondivid%>">
+  <%assign var=end value="</div>"%>
+<%else%>
+  <%assign var=end value=""%>
+<%/if%>
+
+<%if false %>
+<!-- Agenda : Formulaire -->
+<a id="show-cv8d-browseform" class="btn btn-info pull-right" style="position:absolute;right:15px;margin-top:-34px;">Effectuer une recherche</a>
+<div id="cv8d-browseform" style="display:none;">
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html"  browsetype="" sectiondivid="`$sectiondivid`"%>
+</div>
+<script>
+// Afficher/Cacher le formulaire
+$("a#show-cv8d-browseform").click(function(e){
+  e.preventDefault();
+  $("div#cv8d-browseform").slideToggle();
+})
+</script>
+<%/if%>
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsepagination.html" assign="pager" section=$section %>
+<%if $pager %><div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div><%/if%>
+  <div id="agendaContenu">
+    <div class="agendaContainer ">
+      <h4 class="titre">Agenda</h4>
+  		<div id="agenda">
+        <%section name=i loop=$it_olines[it].lines_oid%>
+          <%assign var="oid" value=$it_olines[it].lines_oid[i]%>
+          <%if $admini%>
+            <%assign var=evtUrl value="`$self`&moid=`$it_moid`&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=`$section._functionparams.params.__linktodetail_oidit`&oid=`$oid`&from[oidit]=`$it_cat_mit.oid`&from[itoid]=`$it_itoid[it]`"%>
+          <%else%>
+            <%assign var=evtUrl value="`$self`&alias=`$section._functionparams.params.__linktodetail`&oid=$oid&from[alias]=`$it_cat_mit.oalias->raw`&from[itoid]=`$it_itoid[it]`&keywords=`$section.lines_tlink[$i]`"%>
+          <%/if%>
+
+          <div class="row newsMiniSite">
+            <%if $it_olines[it].lines_oimage[i]->resizer%>
+            <div class="images">
+              <%$it_olines[it].lines_oimage[i]->html %>
+            </div>
+            <%/if%>
+            <div class="description" style="margin-top: 8px">
+              <div class="titre titreItem"><%$it_olines[it].lines_otitle[i]->toText()%></div>
+              <%assign var=date1time value=$it_olines[it].lines_ostart[i]->raw|strtotime%>
+              <%assign var=date2time value=$it_olines[it].lines_oend[i]->raw|strtotime%>
+              <%assign var=day1 value="d"|date:$date1time%>
+              <%assign var=month1 value="m"|date:$date1time%>
+              <%assign var=day2 value="d"|date:$date2time%>
+              <%assign var=month2 value="m"|date:$date2time%>
+              <%if $day1 neq $day2 and $month1 neq $month2 %>
+                <div class="date1"><span class="color"><%$day1%> </span><%$month1|@getFrenchMonth|substr:0:4%><%if $it_olines[it].lines_oend[i]->raw%> au <span class="color"><%$day2%> </span><%$month2|@getFrenchMonth|substr:0:4%><%/if%></div>
+              <%else%>
+                <div class="date1">Le <span class="color"><%$day1%> </span><%$month1|@getFrenchMonth%><%if $agline.oend->raw%><%/if%></div>
+              <%/if%>
+              <div class="theme"><%$it_olines[it].lines_otheme[i]->html%></div>
+              <div class="type"><%$it_olines[it].lines_otype[i]->html%></div>
+              <div class="intro descItem"><%$it_olines[it].lines_ointro[i]->toText()%></div>
+              <div class="en savoir plus">
+                <a href="<%$evtUrl%>" type="button" class="btn btn-default btAgenda">+</a>
+              </div>
+            </div>
+          </div>
+
+        <%/section%>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12">
+            <a href="/index.php?nocache=1&amp;alias=agenda" class="btn btn-default btAgendatte"><%$labels.agenda_toutes_les_dates|default:"Toutes les dates"%></a>
+          </div>
+        </div>
+  	</div>
+  	</div>
+</div>
+
+<%if $pager %><div class="cv8d-pagelist cv8d-pagelist-bottom"><%$pager%></div><%/if%>
+
+
+<%$end%>
+<!-- Debut cv3-agenda-contenu.html -->
+<%/if%>

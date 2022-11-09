@@ -1,0 +1,6 @@
+<%if isset($br_selection) && $br_selection._template%>
+    <!-- <%$br_selection._template%> -->
+    <%include file=$br_selection._template sel=$br_selection%> 
+<%else%><%* cas ou on appelle une selection vide (après effacementt par exemple) *%>
+<span class="emptyselection" style="display:none">selection is empty</span>
+<%/if%>

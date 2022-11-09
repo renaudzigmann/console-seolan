@@ -1,0 +1,11 @@
+<%if $home_tasks%>
+ <div class="cv8-home-tasks">
+  <%foreach name=ii key=moid item=line from=$home_tasks%>
+   <div class="cv8-home-task"><%$line%></div>
+  <%/foreach%>
+ </div>
+<%else%>
+ <script type="text/javascript">
+  jQuery('#cv8-module-<%$smarty.section.it.index%>').removeClass('cv8-module').addClass('cv8-module-withoutbg');
+ </script>
+<%/if%>

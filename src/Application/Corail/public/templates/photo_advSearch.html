@@ -1,0 +1,17 @@
+<!--<%$smarty.template%>-->
+<div class="cv3-photoAdvSearch">
+<form method="post" action="<%$self%>">
+<input type="hidden" name="alias" value="<%$tzr.corailv3_photorslt%>">
+<table>
+<%section name=fields loop=$br_fields_object %>
+<tr>
+<th ><label><%$br_fields_object[fields]->fielddef->label%></label></th>
+<td ><%$br_fields_object[fields]->html%></td>
+</tr>
+<%/section%>
+<tr>
+<th></th>
+<td><input class="submit" type="submit" value="Rechercher"></td>
+</tr>
+</table>
+</div>

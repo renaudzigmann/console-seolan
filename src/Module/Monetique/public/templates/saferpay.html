@@ -1,0 +1,13 @@
+<div class="xmodmonetique">
+  <%if $sp_noECard%>
+    <div>
+      <img src="/csx/src/Module/Monetique/public/logo/NO_E_CARD.png" title="<%$syslabels.xmodmonetique.no_ecard%>">
+    </div>
+  <%/if%>
+  <div>
+    <form method="POST" action="<%$sp_redirectUrl%>">
+      <input type="image" src="/csx/src/Module/Monetique/public/logo/CB.jpg" title="CB">
+      <input type="submit" value="<%$labels.mntq_bqvalidate|default:'[Payer ma commande]'%>">
+    </form>
+  </div>
+</div>

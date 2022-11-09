@@ -1,0 +1,163 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.yearly_stats%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.yearly_stats%></legend>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.seenpagespermonth%></legend>
+  <table class="table table-condesed table-hover cv8_tablelist cv8_tablelistsorting cv8_tablesorter" id="yearly<%$uniqid%>">
+   <thead>
+    <tr class="sortable">
+     <th><%$syslabels.Seolan_Core_General.year%></th>
+     <th><%$syslabels.Seolan_Core_General.language%></th>
+     <th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th>
+     <th><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.total%></th>
+    </tr>
+   </thead>
+   <tbody>
+    <%foreach from=$brt_y item=vals%>
+     <tr>
+      <%foreach name=j from=$vals item=v%>
+       <td><%$v%></td>
+      <%/foreach%>
+     </tr>
+    <%/foreach%>
+   </tbody>
+  </table>
+  <script type="text/javascript">TZR.XTableSorter("yearly<%$uniqid%>");</script>
+  <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="function" value="browseMarksPeriod">
+   <input type="hidden" name="template" value="Module/FrontOfficeStats.browseMarksPeriod.html">
+   <input type="hidden" name="tplentry" value="br">
+   <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.details_text%>
+    <select name="date" onchange="TZR.ajaxSubmitForm(this.form);">
+     <option value="now">----</option>
+     <option value="now"><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.forthelast30days%></option>
+     <%section name=i loop=$brt_yl%>
+      <option value="<%$brt_yl[i]%>-12-01">12/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-11-01">11/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-10-01">10/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-09-01">09/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-08-01">08/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-07-01">07/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-06-01">06/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-05-01">05/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-04-01">04/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-03-01">03/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-02-01">02/<%$brt_yl[i]%></option>
+      <option value="<%$brt_yl[i]%>-01-01">01/<%$brt_yl[i]%></option>
+     <%/section%>
+    </select>
+   </div>
+  </form>
+ </fieldset>
+ <br>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.seenpagesperdayaverage_text%></legend>
+  <table class="table table-condesed table-hover cv8_tablelist cv8_tablelistsorting cv8_tablesorter" id="daily<%$uniqid%>">
+   <thead>
+    <tr class="sortable">
+     <th><%$syslabels.Seolan_Core_General.year%></th>
+     <th><%$syslabels.Seolan_Core_General.language%></th>
+     <th>01</th><th>02</th><th>03</th><th>04</th><th>05</th><th>06</th><th>07</th><th>08</th><th>09</th><th>10</th><th>11</th><th>12</th>
+     <th><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.total%></th>
+    </tr>
+   </thead>
+   <tbody>
+    <%foreach from=$brt_d item=vals%>
+     <tr>
+      <%foreach name=j from=$vals item=v%>
+       <td><%$v%></td>
+      <%/foreach%>
+     </tr>
+    <%/foreach%>
+   </tbody>
+  </table>
+  <script type="text/javascript">TZR.XTableSorter("daily<%$uniqid%>");</script>
+ </fieldset>
+ <br>
+</fieldset>
+<br><br>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.forthelast30days_text%></legend>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.seenpagesperday_text%></legend>
+   <canvas id="chart"></canvas>
+  <br><br>
+  <table class="table table-condesed table-hover cv8_tablelist cv8_tablelistsorting cv8_tablesorter" id="month<%$uniqid%>">
+   <thead>
+    <tr class="sortable">
+     <th><%$syslabels.Seolan_Core_General.date%></td>
+     <%foreach from=$brt_langs key=lang item=l%>
+      <th><%$lang%></th>
+     <%/foreach%>
+     <th><%$syslabels.Seolan_Module_FrontOfficeStats_FrontOfficeStats.total%></th>
+     <%foreach from=$brt_langs key=lang item=l%>
+      <th>% <%$lang%></th>
+     <%/foreach%>
+    </tr>
+   </thead>
+   <tbody>
+    <%foreach from=$brt_m item=v%>
+     <tr>
+      <td><%$v.ts%></td>
+      <%foreach from=$brt_langs key=lang item=l%>
+       <td><%$v.lcnt.$lang%></td>
+      <%/foreach%>
+      <td><%$v.cnt%></td>
+      <%foreach from=$brt_langs key=lang item=l%>
+       <td><%$v.pcnt.$lang%></td>
+      <%/foreach%>
+     </tr>
+    <%/foreach%>
+   </tbody>
+  </table>
+ </fieldset>
+</fieldset>
+
+<script type="text/javascript">
+  TZR.XTableSorter("month<%$uniqid%>");
+
+  var colors = ['lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightcoral'];
+  var dates = [], datasets = [];
+  <%foreach from=array_keys($brt_langs) key=id item=lang%>
+      datasets[<%$id%>] = {label: '<%$lang%>', type: "bar", backgroundColor: colors.shift(),  data: []};
+  <%/foreach%>
+  datasets[<%$id + 1%>] = {label: 'Total', type: "bar", data: []};
+
+  <%foreach from=$brt_m item=v%>
+    dates.push('<%$v.ts%>');
+    <%foreach from=array_keys($brt_langs) key=id item=lang%>
+      datasets[<%$id%>].data.push(<%$v.lcnt.$lang|default:0%>);
+    <%/foreach%>
+    datasets[<%$id + 1%>].data.push(<%$v.cnt|default:0%>);
+  <%/foreach%>
+
+  var ctx = document.getElementById('chart').getContext('2d');
+  Chart.defaults.elements.line.borderWidth = 1;
+  var chartConfig = {
+    type: 'bar',
+    data: {
+      labels: dates,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      datasets: {
+        borderWidth: 1
+      },
+      scales: {
+        x: {
+            type: 'time',
+            display: true
+          },
+        y: {
+            ticks: {
+              suggestedMin: 0
+            }
+          }
+      }
+    }
+  };
+  var myChart = new Chart(ctx, chartConfig);
+</script>

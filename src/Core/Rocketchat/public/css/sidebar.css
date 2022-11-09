@@ -1,0 +1,6 @@
+.rcx-sidebar{
+    width: 100% !important;
+    max-width: 100% !important;
+    transition: none !important;
+    transform: translate(0,0) !important;
+}

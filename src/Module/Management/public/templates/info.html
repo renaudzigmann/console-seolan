@@ -1,0 +1,14 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.info%>
+<div class="cv8-contenu-center clearfix">
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Management_Management.info%></legend>
+ <div class="table-responsive">
+   <table class="table table-striped cv8_tablelist">
+  <tr>
+   <th><%$syslabels.Seolan_Module_Management_Management.workspacesize_text%></th>
+   <td><%$br_workspacesize.0/1000000|number_format%> Go (<%$br_workspacesize.1|date_format:"%d/%m/%Y"%>)</td>
+  </tr>
+ </table>
+ </div>
+</fieldset>
+</div>

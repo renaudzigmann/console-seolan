@@ -1,0 +1,33 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="row">
+  <table class="table table-striped cv8-tablelist">
+    <thead>
+      <tr>
+	<th></th>
+	<%section name=header loop=$br_header_fields %>
+	<th><%$br_header_fields[header]->get_label()%></th>
+	<%/section%>
+      </tr>
+    </thead>
+    <tbody>
+      <%section name=i loop=$br_lines_oid%>
+      <tr<%if $br_lines_published && $br_lines_published[i]!=1%> class="napp"<%/if%>>
+	<td>
+	  <div class="table-responsive">
+	    <table class="tzr-compact">
+	      <tr>
+		<td><a class="cv8-ajaxlink cv8-viewaction" href="<%$self%>&moid=<%$_moid%>&function=exportDisplay&oid=<%$br_lines_oid[i]%>&template=Module/Media.exportView.html&tplentry=br"><%$syslabels.Seolan_Core_General.view%></a></td>
+		<td><a class="cv8-ajaxlink cv8-editaction" href="<%$self%>&moid=<%$_moid%>&function=exportEdit&oid=<%$br_lines_oid[i]%>&template=Module/Media.exportEdit.html&tplentry=br"><%$syslabels.Seolan_Core_General.edit%></a></td>
+		<td><a class="cv8-ajaxlink cv8-delaction" href="<%$self%>&moid=<%$_moid%>&function=exportDel&oid=<%$br_lines_oid[i]%>&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.delete%></a></td>
+	      </tr>
+	    </table>
+	  </div>
+	</td>
+	<%section name=header loop=$br_header_fields %>
+	<td><%$br_lines_o<%$br_header_fields[header]->field%>[i]->html%></td>
+	<%/section%>
+      </tr>
+      <%/section%>
+    </tbody>
+  </table>
+</div>

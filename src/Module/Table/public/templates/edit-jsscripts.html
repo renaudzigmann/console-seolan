@@ -1,0 +1,18 @@
+<script type="text/javascript">
+ if (TZR.Table.browse['<%$uniqid%>'] === undefined) {
+   TZR.Table.browse['<%$uniqid%>'] = {browseurl:'<%$imod_props.actions.browse->xurl|escape:"url"%>'};
+ }
+ <%if $imod_props.unfoldedgroupsnumber > 1%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"),
+		       0,
+		       "fieldset:gt(<%$imod_props.unfoldedgroupsnumber-2%>)");
+ <%else%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"));
+ <%/if%>
+ <%if !empty($br_authorized_languages)%>
+ jQuery(document).ready(function(){
+   v<%$uniqid%>.allLangsConfirmMess = '<%$syslabels.Seolan_Core_General.saveselectedlangswarning|escape:"quotes"%>';
+   TZR.Table.saveSomeLangsInitialize(jQuery("#modal-langs-list-<%$uniqid%>"), v<%$uniqid%>);
+ });
+ <%/if%>
+</script>

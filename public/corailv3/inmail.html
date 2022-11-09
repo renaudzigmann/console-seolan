@@ -1,0 +1,110 @@
+<html>
+<%$header%>
+ <%section name=i loop=$ordl_lines_oid%>
+<%if $ordl_lines_EDELIV[i]%><%assign var="anyedeliv" value="1"%>
+<%/if%>
+ <%/section%>
+<body onload="window.print()">
+<p align=center>
+<table width="100%" cellpadding=5 cellspacing=5>
+ <tr bgcolor="#e5e5e5">
+  <td width="48%" valign=top  style="border: solid 1px black;"><%$labels.corporate_address%></td> 
+  <td width="48%" style="border: solid 1px black;">
+   <b><u><%$syslabels.Seolan_Module_Cart_Cart.billingaddress%></u></b><br>
+   <b><%$cust_ofullnam->html%> <%$cust_sname%></b>
+   <%if $cust_cie%><br><%$cust_cie%><%/if%>
+   <%if $cust_adres%><br><%$cust_adres%><%/if%>
+   <br><%$cust_codp%>&nbsp;<%$cust_ville%>
+   <br><%$cust_pays%>
+   <%if $cust_phone%><br><%$syslabels.Seolan_Module_Cart_Cart.phone%>:&nbsp;<%$cust_phone%><%/if%>
+   <%if $cust_fax%><br><%$syslabels.Seolan_Module_Cart_Cart.fax%>:&nbsp;<%$cust_fax%><%/if%>
+   <%if $cust_oemail->html%><br><%$syslabels.Seolan_Module_Cart_Cart.email%>:&nbsp;<%$cust_oemail->html%><%/if%>
+  </td>
+ </tr>
+<tr></tr>
+ <tr bgcolor="#f7f7f7">
+  <td width="48%"  align=left valign=top>
+    <b><%$syslabels.Seolan_Module_Cart_Cart.ref%></b>:&nbsp;<%$ord_oF0001->html%><br>
+    <b><%$syslabels.Seolan_Module_Cart_Cart.date%>:&nbsp;</b>&nbsp;<%$ord_oF0002->html%><br>
+    <b>Date impression:</b>&nbsp;<%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%><br>
+    <b><%$syslabels.Seolan_Module_Cart_Cart.orderstatus%>:</b>&nbsp;<%$ord_oF0003->html|default:"Non renseign&eacute;"%><br>
+    <b><%$syslabels.Seolan_Module_Cart_Cart.paymentstatus%>:</b>&nbsp;<%$ord_paid|default:"Non renseign&eacute;"%>
+  </td>
+  <td width="48%" >
+<%if $cust_fname%>
+   <b><u><%$syslabels.Seolan_Module_Cart_Cart.shippingaddress%></u></b>
+   <br><%$cust_fname%> <%$cust_fsname%>
+   <%if $cust_fcie%><br><%$cust_fcie%><%/if%>
+   <br><%$cust_fadre%>
+   <br><%$cust_fcodp%>&nbsp;<%$cust_fvill%>
+   <br><%$cust_fpays%>
+   <%if $cust_ftel%><br><%$syslabels.Seolan_Module_Cart_Cart.phone%>:&nbsp;<%$cust_ftel%><%/if%>
+<%/if%>
+  </td>
+ </tr>
+ <tr bgcolor="#f7f7f7">
+  <td  colspan=2>
+  <u><b><%$syslabels.Seolan_Module_Cart_Cart.remark%>:</b></u>&nbsp;<%$ord_orem->html|default:"&nbsp;"%><%if $ord_coupon%><br>Coupon:&nbsp;<%$ord_coupon%><%/if%><%if $anyedeliv%><%$labels.droit_ebooks%><%* specifique adverbum*%><%/if%></td></tr>
+</table>
+<br>
+
+<table  align=center width="100%" border=1 cellpadding=2 cellspacing=0>
+<tr style="background-color:gray; color:white;">
+ <th width=20%><%$labels.xmodcart_ref%></th>
+ <th width=50%><%$labels.xmodcart_label%></th>
+ <th><%$labels.xmodcart_unit_price_ht%></th>
+ <th><%$labels.xmodcart_units%></th>
+ <th><%$labels.xmodcart_totalht%></th>
+</tr>
+<tr>
+ <%section name=i loop=$ordl_lines_oid%>
+<tr bgcolor=<%cycle values="silver,#f7f7f7"%>>
+     <td><%$ordl_lines_ref[i]%></td><td><%$ordl_lines_olabel[i]->html%>
+<%if $ordl_lines_EDELIV[i]%>
+<b>EBOOK</b>: <A HREF="<%$ordl_lines_oEDELIV[i]->raw%>"><%$syslabels.Seolan_Core_General.download_text%></A>
+<%/if%>
+</td>
+     <td align=right><%$ordl_lines_oprice[i]->raw|string_format:"%.2f"%>&nbsp;&euro;</td>
+     <td align=center><%$ordl_lines_onb[i]->raw%></td>
+     <td align=right><%$ordl_lines_ototalp[i]->raw|string_format:"%.2f"%>&nbsp;&euro;</td>
+</tr>
+<%/section%>
+<%if $ord_oF0005->html%>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.delivery%>&nbsp;</b></td>
+<td align=right><%$ord_oF0005->raw|string_format:"%.2f"%>&nbsp;&euro;</td>
+</tr>
+<%/if%>
+<%if $ord_tva%>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.totalht%>&nbsp;</b></td>
+<td align=right><%$ord_ototalht->raw|string_format:"%.2f"%>&nbsp;&euro;</td>
+</tr>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.tva%>&nbsp;</b></td>
+<td align=right><%$ord_otva->raw|string_format:"%.2f"%>&nbsp;&euro;</td>
+</tr>
+<%/if%>
+<%if $ord_disc%>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.total_discount%></b></td>
+<td align=right><b><%$ord_odisc->raw|string_format:"%.2f"%>&nbsp;&euro;</b></td>
+</tr>
+<%/if%>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.total%>&nbsp;</b></td>
+<td align=right><b><%$ord_oF0004->raw|string_format:"%.2f"%>&nbsp;&euro;</b></td>
+</tr>
+<%if $ord_apaid && ($ord_apaid neq $ord_oF0004->html)%>
+</tr>
+<tr bgcolor="#e5e5e5">
+<td colspan=4 align=right><b><%$syslabels.Seolan_Module_Cart_Cart.alreadypaid%>&nbsp;</b></td>
+<td align=right><b><%$ord_oapaid->raw|string_format:"%.2f"%>&nbsp;&euro;</b></td>
+</tr>
+<%/if%>
+</table>
+<p align=center><font size="-2">&copy;&nbsp;Console S&eacute;olan - XSALTO 2003-2006</font></p>
+</body>
+</html>
+
+

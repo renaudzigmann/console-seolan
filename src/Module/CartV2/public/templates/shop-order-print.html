@@ -1,0 +1,98 @@
+<%assign var=order value=$shop_order%>
+<%assign var=customer value=$order->customer%>
+<html>
+  <body>
+    <%$shop_order_intro%>
+    <table width="100%" cellpadding="5" cellspacing="5">
+      <tr bgcolor="#e5e5e5">
+        <td width="48%" valign="top" style="border: solid 1px black;"><%$labels.corporate_address|default:"PLEASE COMPLETE $labels.corporate_address"%></td> 
+        <td width="48%" style="border: solid 1px black;">
+          <b><u><%$syslabels.Seolan_Module_Cart_Cart.billingaddress%></u></b>
+          <div class="fullname"><b><%$customer->fullname()%></b></div>
+          <div class="company"><%$customer->field('company')%></div>
+          <div class="address"><%$customer->field('address')%></div>
+          <div class="city"><span class="postalcode"><%$customer->field('postalcode')%></span> <%$customer->field('city')%></div>
+          <div class="country"><%$customer->field('country')%></div>
+          <div class="phone"><%$customer->field('phone')%></div>
+          <%if $customer->field('mobile')%><div class="mobile">Mobile: <%$customer->field('mobile')%></div><%/if%>
+          <%if $customer->field('fax')%><div class="fax">Fax: <%$customer->field('fax')%></div><%/if%>
+          <div class="email"><%$customer->field('email')%></div>
+        </td>
+      </tr>
+      <tr></tr>
+      <tr bgcolor="#f7f7f7">
+        <td width="48%" align="left" valign="top">
+          <b><%$syslabels.Seolan_Module_Cart_Cart.ref%> : </b><%$order->reference%><br/>
+          <b><%$syslabels.Seolan_Module_Cart_Cart.date%> : </b><%$order->date%><br/>
+          <b><%"Date impression"|__:'\Seolan\Module\Cart\Cart'%> :</b> <%$smarty.now|date_format:$locale.smarty_date_format%><br/>
+          <b><%$syslabels.Seolan_Module_Cart_Cart.orderstatus%> : </b><%$order->status%><br/>
+          <b><%$syslabels.Seolan_Module_Cart_Cart.paymentstatus%> : </b><%$order->payment_status%>
+        </td>
+        <td width="48%">
+          <%if $customer->is_delivery_address_filled%>
+          <b><u><%$syslabels.Seolan_Module_Cart_Cart.shippingaddress%></u></b>
+          <div class="fullname"><b><%$customer->delivery_fullname()%></b></div>
+          <div class="company"><%$customer->field('delivery_company')%></div>
+          <div class="address"><%$customer->field('delivery_address')%></div>
+          <div class="city"><span class="postalcode"><%$customer->field('delivery_postalcode')%></span> <%$customer->field('delivery_city')%></div>
+          <div class="country"><%$customer->field('delivery_country')%></div>
+          <div class="phone"><%$customer->field('delivery_phone')%></div>
+          <%if $customer->field('delivery_mobile')%><div class="mobile">Mobile: <%$customer->field('delivery_mobile')%></div><%/if%>
+          <%if $customer->field('delivery_fax')%><div class="fax">Fax: <%$customer->field('delivery_fax')%></div><%/if%>
+          <%/if%>
+        </td>
+      </tr>
+      <tr bgcolor="#f7f7f7">
+        <td colspan="2">
+          <%if $order.orem->html%>
+          <b><u><%$syslabels.Seolan_Module_Cart_Cart.remark%></u> :</b> <%$order.orem->html%>
+          <%/if%>
+          <%if $order->total.reduction.coupon%><br/>Coupon : <%$order->total.reduction.coupon%><%/if%>
+          <%if $order->has_edeliv%><%$labels.edeliv_warning|default:"Votre commande contient des produits numériques"%><%/if%>
+        </td>
+      </tr>
+    </table>
+
+    <table class="cart-items" align="center" width="100%" border="1" cellpadding="2" cellspacing="0">
+
+      <%* ENTETE DU TABLEAU *%>
+      <tr style="background-color:gray; color:white;">
+        <%foreach from=$order->print_columns key=property item=column%>
+        <th class="<%$property%>"><%$column.label%></th>
+        <%/foreach%>
+      </tr>
+
+      <%* LIGNES DE LA COMMANDE *%>
+      <%foreach from=$order->items key=key item=item%>
+      <tr class="cart-item" style="background-color:<%cycle values="silver,#f7f7f7"%>;">
+        <%foreach from=$order->print_columns key=property item=column%>
+        <td class="<%$property%> <%$column.type%>"><%$item->html($property, $column, 'print')%></th>
+        <%/foreach%>
+      </tr>
+      <%/foreach%>
+
+      <%* TOTAL DE LA COMMANDE *%>
+      <%foreach from=$order->total.labels key=property item=label%>
+      <%if $order->total.$property%>
+      <tr style="background-color:#e5e5e5;" class="<%$property%>">
+        <th colspan="4" align="right"><b><%$label%></b></th>
+        <td class="price"><%$order->total_html($property)%></td>
+      </tr>
+      <%/if%>
+      <%/foreach%>
+
+    </table>
+    <%if $order->has_edeliv%><%$labels.edeliv_warning|default:"Votre commande contient des produits numériques"%><%/if%>
+
+    <%$shop_order_outro%>
+
+    <%if !$shop_mail%>
+    <p align="center">
+      [<a href="javascript:window.print();"><%$syslabels.Seolan_Core_General.print_text%></a>]
+      [<a href="javascript:window.close();"><%$syslabels.Seolan_Core_General.close_text%></A>]
+    </p>
+    <%/if%>
+
+    <p align="center"><font size="-2">&copy; Console S&eacute;olan - XSALTO</font></p>
+  </body>
+</html>

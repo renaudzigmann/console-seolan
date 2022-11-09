@@ -1,0 +1,123 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="`$syslabels.Seolan_Module_Calendar_Calendar.planification` : `$br_link`"%>
+<script type="text/javascript">
+ v<%$uniqid%>.changeAllDay=function(){
+  form=document.editform;
+  o=form.allday;
+  if(o.checked) {
+    form.elements["begin[hour]"].value="00:00";
+    form.elements["end[hour]"].value="00:00";
+    form.elements["begin[hour]"].disabled =true;
+    form.elements["end[hour]"].disabled =true;
+  }else {
+    form.elements["begin[hour]"].disabled =false;
+    form.elements["end[hour]"].disabled =false;
+  }
+ }
+</script>
+<form action="<%$self%>" method="post" name="editform" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="function" value="procEditPlanif">
+ <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+ <input type="hidden" name="koid" value="<%$br_oid%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="cancel" value="2">
+ <input type="hidden" name="close" value="1">
+ <input type="hidden" name="_next" value="<%$back%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.event%></legend>
+  <div class="table-responsive">
+  <table class="list2" >
+   <%section name=fields loop=$br_fields_object%>
+    <%if !$br_fields_object[fields]->sys && $br_fields_object[fields]->fielddef->field!="ag"%>
+     <tr id="cont-<%$br_fields_object[fields]->field%>">
+      <th <%if $br_fields_object[fields]->fielddef->comment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>]&nbsp;<%$br_fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+      <td><%$br_fields_object[fields]->html%></td>
+     </tr>
+    <%/if%>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.planification%></legend>
+  <div class="table-responsive">
+  <table class="cv8_tablelist nohover">
+   <tr>
+    <th>&nbsp;</th>
+    <%section name=d loop=$brd_lines_oid%>
+     <th>
+      <label>
+       <%$brd_lines_obegin[d]->date->html%><br>
+       <%if $brd_lines_obegin[d]->hour->html=="00:00" && $brd_lines_oend[d]->hour->html=="00:00"%>
+	<%$syslabels.Seolan_Module_Calendar_Calendar.allday%>
+       <%else%>
+	<%$brd_lines_obegin[d]->hour->html%> - <%$brd_lines_oend[d]->hour->html%>
+       <%/if%>
+      </label>
+     </th>
+    <%/section%>
+    <th><label><%$bri_lines_oremark[0]->fielddef->label%></label></th>
+   </tr>
+   <%section name=i loop=$bri_lines_oid%>
+    <tr>
+     <td><%$bri_lines_owho[i]->html%></td>
+     <%section name=d loop=$brd_lines_oid%>
+      <td bgcolor="<%if in_array($bri_lines_oid[i],$brd_lines_oconfirm[d]->oidcollection) && $bri_lines_opart[i]->raw==1%>#93e799<%elseif $bri_lines_opart[i]->raw==1%>#ffffff<%else%>#ff8787<%/if%>">
+       <%if in_array($bri_lines_oid[i],$brd_lines_oconfirm[d]->oidcollection) && $bri_lines_opart[i]->raw==1%><%$syslabels.Seolan_Module_Calendar_Calendar.invitationaccepted%><%elseif $bri_lines_opart[i]->raw==1%>&nbsp;<%else%><%$syslabels.Seolan_Module_Calendar_Calendar.invitationrefused%><%/if%>
+      </td>
+     <%/section%>
+     <td><%$bri_lines_oremark[i]->html%></td>
+    </tr>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.decision%></legend>
+  <div class="table-responsive">
+  <table class="list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.datedec%></label></th>
+    <td>
+     <%if !empty($br_obegin->html)%>
+      <%$br_obegin->date->html%>
+      <%if $br_obegin->hour->html=="00:00" && $br_oend->hour->html=="00:00" && $br__mode=='display'%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.allday%>
+      <%else%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <%$br_obegin->hour->html|replace:"TZR.formatHour(this,2)":"TZR.format2hours(this,2,'begin[hour]','end[hour]');"%> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <%$br_oend->hour->html|replace:"TZR.formatHour(this,2)":"TZR.format2hours(this,2,'begin[hour]','end[hour]')"%>
+       <%if $br__mode!='display'%>
+	<br>
+	<input type="checkbox" value="1" name="allday" class="checkbox" id="allday" onchange="v<%$uniqid%>.changeAllDay()">
+	<label for="allday"><%$syslabels.Seolan_Module_Calendar_Calendar.allday%></label>
+       <%/if%>
+      <%/if%>
+     <%/if%>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$br_orem->fielddef->label%></label></th>
+    <td><%$br_orem->html%></td>
+   </tr>
+   <%if $br_oclose->raw==1%>
+    <tr>
+     <th><label><%$br_oclose->fielddef->label%></label></th>
+     <td><%$br_oclose->html%></td>
+    </tr>
+   <%elseif $br_ocancel->raw==1%>
+    <tr>
+     <th><label><%$br_ocancel->fielddef->label%></label></th>
+     <td><%$br_ocancel->html%></td>
+    </tr>
+   <%/if%>
+  </table>
+  </div>
+ </fieldset>
+ <div class="tzr-action">
+  <%if $br__mode!='display'%>
+   <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.cancelplanif%>" onclick="this.form.cancel.value='1';this.form.close.value='2';">
+   <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.closeplanif%>">
+  <%else%>
+   <input type="button" value="<%$syslabels.Seolan_Core_General.back_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+  <%/if%>
+ </div>
+</form>

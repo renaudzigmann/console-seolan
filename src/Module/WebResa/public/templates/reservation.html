@@ -1,0 +1,6 @@
+<%assign var=section value=$it_olines[it]%>
+<div class="cv3-txtseul">
+<%if $smarty.request.q%>
+    <iframe width="100%" height="740" frameborder="0" align="left" name="showframe" src="<%$section.onlinebookingurl%>?<%$smarty.server.QUERY_STRING%>" xmlns=""></iframe>
+<%/if%>
+</div>

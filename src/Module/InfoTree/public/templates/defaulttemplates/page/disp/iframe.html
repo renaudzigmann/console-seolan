@@ -1,0 +1,4 @@
+<%assign var=hauteur value=$it_olines[it].oheight->html%>
+<div class="cv3-siteexterne clearfix" style="width: 100%; height: 100%; overflow: auto; position: relative; -webkit-overflow-scrolling: touch;">
+ <iframe src="<%$it_olines[it].oimgurl1->url%>" name="invite"  width="100%" scrolling="auto" height="<%if $hauteur neq ""%><%$hauteur%><%else%>400<%/if%>" bgcolor="#FFFFFF"></iframe>
+</div>

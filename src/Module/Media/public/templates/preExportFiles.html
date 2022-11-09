@@ -1,0 +1,142 @@
+<html>
+ <head>
+  <%include file="Core.header/layout.html" wintitle=$syslabels.Seolan_Core_General.export_text%>
+  <script type="text/javascript">
+   var act=false;
+   function changeFmt(){
+    if(act){
+     document.getElementById('fieldset'+act).style.display="none";
+    }
+    v=document.myform.fmt.value;
+    if(document.getElementById('fieldset'+v)){
+     document.getElementById('fieldset'+v).style.display="block";
+     act=v;
+    }else{
+     act=false;
+    }
+   }
+   var ssmodfields=new Array();
+   var ssmodbfields=new Array();
+   var ssmodlf=new Array();
+   ssmodlf[<%$imod_props._moid%>]="";
+   ssmodfields[<%$imod_props._moid%>]=new Array();
+   ssmodbfields[<%$imod_props._moid%>]=new Array();
+   <%section name="f" loop=$br_header_fields%>
+    ssmodfields[<%$imod_props._moid%>]["<%$br_header_fields[f]->field%>"]="<%$br_header_fields[f]->label|escape:"javascript"%>";
+    <%if $br_header_fields[f]->browsable%>
+     ssmodbfields[<%$imod_props._moid%>]["<%$br_header_fields[f]->field%>"]=1;
+    <%/if%>
+   <%/section%>
+   <%section loop=$br___ssmod name="ssmod"%>
+    ssmodlf[<%$br___ssprops[ssmod]._moid%>]="<%$br___ssprops[ssmod].linkedfield%>";
+    ssmodfields[<%$br___ssprops[ssmod]._moid%>]=new Array();
+    ssmodbfields[<%$br___ssprops[ssmod]._moid%>]=new Array();
+    <%section name="f" loop=$br___ssmod[ssmod].header_fields%>
+     ssmodfields[<%$br___ssprops[ssmod]._moid%>]["<%$br___ssmod[ssmod].header_fields[f]->field%>"]="<%$br___ssmod[ssmod].header_fields[f]->label|escape:"javascript"%>";
+     <%if $br___ssmod[ssmod].header_fields[f]->browsable%>
+      ssmodbfields[<%$br___ssprops[ssmod]._moid%>]["<%$br___ssmod[ssmod].header_fields[f]->field%>"]=1;
+     <%/if%>
+    <%/section%>
+   <%/section%>
+   var act=false;
+   function changeFmt(){
+    if(act){
+     document.getElementById(act).style.display="none";
+    }
+    var v=document.myform.fmt.value;
+    var id='';
+    if(document.getElementById('fieldset'+v)) id='fieldset'+v;   
+    if(id!=""){
+     document.getElementById(id).style.display="block";
+     act=id;
+    }else{
+     act=false;
+    }
+   }
+   function checkParams(){
+    if(document.myform.fmt.value=="ftp"){
+     if(document.myform.ftpserver.value=="" || document.myform.ftplogin=="" || document.myform.ftppassword==""){
+      alert('<%$syslabels.Seolan_Module_Media_Media.exportftpparamerror|escape:"javascript"%>');
+      return false;
+     }
+    }else if(document.myform.fmt.value=="mail"){
+     if(document.myform.mails.value=="" || document.myform.subject.value==""){
+      alert('<%$syslabels.Seolan_Module_Media_Media.exportmailparamerror|escape:"javascript"%>');
+      return false;
+     }
+    }
+    return true;
+   }
+  </script>
+ </head>
+ <body class="tzr-raw-body" onload="try{window.focus();}catch(e){}; changeFmt();">
+  <fieldset>
+   <legend><%$syslabels.Seolan_Core_General.export_text%></legend>
+   <b><%$br_exportcount%></b> <%$syslabels.Seolan_Module_Table_Table.exportrecord%><br>
+   <%section name=i loop=$br_lines_oid max=10%>
+    - <%$br_exportref[i]%><br>
+   <%/section%>
+   <%if count($br_exportcount)>10%>...<%/if%>
+  </fieldset>
+  <form name="myform" action="<%$self%>" method="post" onsubmit="return checkParams();">
+   <input type="hidden" name="fromfunction" value="<%$smarty.request.fromfunction%>" />
+   <input type="hidden" name="function" value="exportFiles" />
+   <input type="hidden" name="tplentry" value="br"/>
+   <input type="hidden" name="moid" value="<%$_moid%>" />
+   <input type="hidden" name="template" value="Core.message-popup.html">
+   <input type="hidden" name="_selectedok" value="ok"/>
+   <%foreach from=$smarty.request._selected key=oid item=foo%>
+    <input type="hidden" name="_selected[<%$oid%>]" value="on">
+   <%/foreach%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.options_text%></legend>
+    <div class="table-responsive">
+    <table class="list2">
+     <tr>
+      <th><label>Poids total</label></th>
+      <td><%$br_size/1024/1024|string_format:"%.2f"%> Mo</td>
+     </tr>
+     <tr>
+      <th><label>Mode</label></th>
+      <td>
+       <select name="fmt" onchange="changeFmt();">
+	<option value="dl">Direct</option>
+	<option value="ftp">FTP</option>
+       </select>
+      </td>
+     </tr>
+    </table>
+    </div>
+   </fieldset>
+   <fieldset id="fieldsetftp" style="display:none;">
+    <legend><%$syslabels.Seolan_Core_General.options_text%> FTP</legend>
+    <div class="table-responsive">
+    <table class="list2">
+     <tr>
+      <th><label>Server IP</label></th>
+      <td>
+       <input type="text" name="ftpserver">
+      </td>
+     </tr>
+     <tr>
+      <th><label>Login</label></th>
+      <td>
+       <input type="text" name="ftplogin">
+      </td>
+     </tr>
+     <tr>
+      <th><label>Password</label></th>
+      <td>
+       <input type="text" name="ftppassword">
+      </td>
+     </tr>
+    </table>
+    </div>
+   </fieldset>
+   <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input name="print" type="submit" value="<%$syslabels.Seolan_Core_General.export_text%>">
+    <input name="fermer" type="button" value="<%$syslabels.Seolan_Core_General.close_text%>" onclick="window.close();">
+   </div>
+  </form>
+ </body>
+</html>

@@ -1,0 +1,39 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+<%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:20%>
+<%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+<%math equation="w-(m*2)" w=$nlwidth m=$nlmarginwidth assign="nlcontentwidth" %>
+
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-separator">
+  <tr>
+    <td align="center" style="padding: <%$nlspacingheight%>px 0px <%$nlspacingheight%>px 0px">
+    <!--[if (gte mso 9)|(IE)]>
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+    <tr>
+    <td align="center" valign="top" width="<%$nlwidth%>">
+    <![endif]-->
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+        <%if $tzr.newsletter_image_hr && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_image_hr`")%>
+          <tr>
+            <td align="center">
+              <img src="<%$website%><%$tzr.newsletter_image_hr%>" width="<%$nlcontentwidth%>">
+            </td>
+          </tr>
+        <%else%>
+          <tr>
+            <td>
+              <hr/>
+            </td>
+          </tr>
+        <%/if%>
+      </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    </td>
+  </tr>
+</table>

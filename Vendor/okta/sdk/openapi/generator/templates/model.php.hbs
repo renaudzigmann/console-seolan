@@ -1,0 +1,242 @@
+<?php
+/*******************************************************************************
+ * Copyright 2017 Okta, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
+namespace Okta\Generated\\{{namespace}};
+
+{{#each namespacedModels as |namespacedModel|}}
+use Okta\\{{namespacedModel.namespace}}\\{{namespacedModel.modelName}};
+{{/each}}
+
+class {{modelName}} extends {{getExtends modelName}}
+{
+    {{#each properties}}
+    const {{upperSnakeCase propertyName}} = '{{propertyName}}';
+    {{/each}}
+
+    {{#each properties}}
+    {{#if this.default}}
+    private ${{propertyName}} = '{{this.default}}';
+    {{/if}}
+    {{/each}}
+
+    {{#each crudOperations}}
+    {{#if (eq alias "read")}}
+        {{#if (eq this.operation.operationId "getFactor")}}
+    public function get($userId, $factorId, $query)
+    {
+        $factor = \Okta\Client::getInstance()
+                    ->getDataStore()
+                    ->getResource(
+                        $query,
+                        \\{{this.defaultReturnType}}::class,
+                        "{{getCrudOperationPath this}}"
+                    );
+        return $factor->convertFromGenericFactor();
+    }
+        {{else if (eq this.operation.operationId "getApplication")}}
+    public function get($query)
+    {
+        $application = \Okta\Client::getInstance()
+                    ->getDataStore()
+                    ->getResource(
+                        $query,
+                        \\{{this.defaultReturnType}}::class,
+                        "{{getCrudOperationPath this}}"
+                    );
+        return $application->convertFromGenericApplication();
+    }
+        {{else}}
+    public function get($query)
+    {
+        return \Okta\Client::getInstance()
+                    ->getDataStore()
+                    ->getResource(
+                        $query,
+                        \\{{this.defaultReturnType}}::class,
+                        "{{getCrudOperationPath this}}"
+                    );
+    }
+        {{/if}}
+    {{/if}}
+    {{#if (eq alias "create")}}
+    public function create($query=[])
+    {
+        return \Okta\Client::getInstance()
+                ->getDataStore()
+                ->createResource(
+                    "{{getCrudOperationPath this}}",
+                    $this,
+                    \\{{this.defaultReturnType}}::class,
+                    $query
+                );
+    }
+
+    {{/if}}
+    {{#if (eq alias "update")}}
+        {{#if (eq this.operation.operationId "updateApplicationUser")}}
+    {{> updateApplicationUser }}
+        {{else}}
+
+    public function save()
+    {
+        return \Okta\Client::getInstance()
+                ->getDataStore()
+                ->saveResource(
+                    "{{getCrudOperationPath this}}",
+                    $this,
+                    \\{{this.defaultReturnType}}::class
+                );
+    }
+
+        {{/if}}
+    {{/if}}
+    {{#if (eq alias "delete")}}
+        {{#if (eq this.operation.operationId "deleteApplicationUser")}}
+    {{> deleteApplicationUser }}
+        {{else if (eq this.operation.operationId "deleteApplicationGroupAssignment")}}
+    {{> deleteApplicationGroupAssignment }}
+        {{else}}
+    {{#unless (eq this.operation.operationId "deleteFactor")}}
+    public function delete()
+    {
+        return \Okta\Client::getInstance()
+                ->getDataStore()
+                ->deleteResource(
+                    "{{getCrudOperationPath this}}",
+                    $this
+                );
+    }
+    {{/unless}}
+        {{/if}}
+    {{/if}}
+    {{/each}}
+    {{#each properties}}
+    {{#unless this.default}}
+
+    /**
+     * Get the {{propertyName}}.
+     *
+     * @return {{getType this baseClass}}
+     */
+    {{#if isObject}}
+    public function get{{pascalCase propertyName}}(array $options = []){{getSafeType this baseClass}}
+    {
+        return $this->getResourceProperty(
+            self::{{upperSnakeCase propertyName}},
+            \Okta\\{{getFirstTagFromReference this.reference}}\\{{model}}::class,
+            $options
+        );
+    }
+
+    {{#unless readOnly}}
+
+    /**
+     * Set the {{propertyName}}.
+     *
+     * @param {{getTypeHint this}} ${{propertyName}} The {{model}} instance.
+     * @return self
+     */
+    public function set{{pascalCase propertyName}}({{getTypeHint this}} ${{propertyName}})
+    {
+        $this->setResourceProperty(
+            self::{{upperSnakeCase propertyName}},
+            ${{propertyName}}
+        );
+        
+        return $this;
+    }
+    {{/unless}}
+    {{else}}
+    public function get{{pascalCase propertyName}}(){{getSafeType this baseClass}}
+    {
+        return $this->{{getAccessMethodType this}}(self::{{upperCase (snakeCase propertyName)}});
+    }
+    {{#unless readOnly}}
+
+    /**
+    * Set the {{propertyName}}.
+    *
+    * @param mixed ${{propertyName}} The value to set.
+    * @return self
+    */
+    public function set{{pascalCase propertyName}}(${{propertyName}})
+    {
+        $this->setProperty(
+            self::{{upperSnakeCase propertyName}},
+            ${{propertyName}}
+        );
+
+        return $this;
+    }
+    {{/unless}}
+    {{/if}}
+    {{/unless}}
+    {{/each}}
+    {{#each methods}}
+
+    {{#if operation.isArray}}
+
+    /**
+    * Get the {{operation.responseModel}} object.
+    *
+    * @param array $options The options for the request.
+    * @return {{getCollectionName this}}
+    */
+    public function {{getMethodArrayName alias}}({{{getCollectionMethodParams this}}}): {{getCollectionName this}}
+    {
+
+        return $this
+                ->getDataStore()
+                ->getCollection(
+                    "{{{getMethodPath this}}}",
+                    {{getClassNameForCollection this}}::class,
+                    {{getCollectionName this}}::class,
+                    $options
+                );
+    }
+    {{else}}
+
+    /**
+    * {{this.operation.description}}
+    *
+    {{getMethodParamsComment this}}
+    * @return mixed|null
+    */
+    public function {{camelCase alias}}({{{getMethodParams this}}})
+    {
+        $uri = "{{{getMethodPath this}}}";
+        $uri = $this->getDataStore()->buildUri(
+            $this->getDataStore()->getOrganizationUrl() . $uri
+        );
+        $body = $this
+                ->getDataStore()
+                ->executeRequest({{{getMethodRequestParams this}}}{{path}});
+
+        {{#if this.operation.responseModel}}
+            {{#if (eq this.operation.responseModel "Factor")}}
+        $response =  new \Okta\\{{{pluralize this.operation.tags.[0] }}}\\{{this.operation.responseModel}}(null, $body);
+        return $response->convertFromGenericFactor();
+            {{else}}
+        return new \Okta\\{{{pluralize this.operation.tags.[0] }}}\\{{this.operation.responseModel}}(null, $body);
+            {{/if}}
+        {{else}}
+        return $body;
+        {{/if}}
+    }
+    {{/if}}
+    {{/each}}
+}

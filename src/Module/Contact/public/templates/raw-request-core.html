@@ -1,0 +1,20 @@
+  <%if $brt_odisp->filename%>
+   <!-- cas d'un masque d'édition dédié -->
+   <%assign var="filename" value=$brt_odisp->filename%>
+   <p><%include file=$filename%></p>
+  <%else%>
+   <p>Une demande a été effectuée sur votre site Internet le <%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%>.<br/>
+   <em>A request has been sent from your website on the <%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%>.</em></p>
+
+   <table align="center">
+    <%section name=fields loop=$br_fields_object %>
+     <%if !$br_fields_object[fields]->sys && $br_fields_object[fields]->field!=$imod_props.processedfield && $br_fields_object[fields]->field!=$imod_props.archivefield%>
+      <tr>
+       <th><label><%$br_fields_object[fields]->fielddef->label|wordwrap:40:"<br />\n"%></label></th>
+       <td><%$br_fields_object[fields]->html%></td>
+      </tr>
+     <%/if%>
+    <%/section%>
+   </table>
+
+  <%/if%>

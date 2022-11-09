@@ -1,0 +1,97 @@
+<%if is_array($import_lines_oid)%>
+ <%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Core_General.import_text`"%>
+ <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$title%>
+<div class="cv8-contenu-center">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.import_text%></legend>
+  <form name="myform<%$uniqid%>" action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+   <input type="hidden" name="nav" value="1">
+   <input type="hidden" name="function" value="import">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="tplentry" value="br">
+   <input type="hidden" name="template" value="Core.message.html">
+   <div class="table-responsive">
+   <table class="table list2">
+    <tr><th><label>Filename</label></th><td><input name="file" type="file"></td></tr>
+    <tr>
+     <th><label>Procedure</label></th>
+     <td>
+      <select name="spec" onchange="v<%$uniqid%>.changeSpec();">
+       <%section name=i loop=$import_lines_oid%>
+	<option value="<%$import_lines_oID[i]->raw%>"><%$import_lines_oID[i]->raw%></option>
+       <%/section%>
+       <option value="default">Default</option>
+      </select>
+     </td>
+    </tr>
+    <tbody id="spec<%$uniqid%>">
+     <tr>
+      <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.field%></label></th>
+      <td>
+       <select name="fieldsname">
+	<option value="label"><%$syslabels.Seolan_Core_DataSource_DataSource.field_label%></option>
+	<option value="sql">SQL</option>
+       </select>
+      </td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Core_Module_Module.import_linestoskip%></label></th>
+      <td><input type="text" name="linestoskip" value="1"></td>
+     </tr>
+    </tbody>
+   </table>
+   </div>
+   <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    <input type="button" onclick="TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:'<%$back%>'});" value="<%$syslabels.Seolan_Core_General.cancel_text%>">
+   </div>
+  </form>
+ </fieldset>
+<%elseif $subs_header_fields%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.subs_text%></legend>
+  <form name="myform<%$uniqid%>" action="<%$self%>" method="post" ENCTYPE="multipart/form-data">
+   <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&function=manage&template=Core/Module.manage.html">
+   <input type="hidden" name="function" value="sub">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="tplentry" value="br">
+   <input type="hidden" name="template" value="Core.message.html">
+   <div class="table-responsive">
+   <table class="table cv8_tablelist">
+    <tr>
+     <th><%$syslabels.Seolan_Core_General.user%></th>
+     <th><%$syslabels.Seolan_Core_General.date%></th>
+     <th><%$syslabels.Seolan_Core_General.actions%></th>
+    </tr>
+    <%section name=s loop=$subs_lines_oid%>
+     <tr>
+      <td><%$subs_lines_ouser[s]->html%></td>
+      <td><%$subs_lines_oUPD[s]->html%></td>
+      <td><a href="<%$self%>&moid=<%$_moid%>&function=unsub&suboid=<%$subs_lines_oid[s]%>&template=Application/MiniSite/public/templates/index.html&_next=<%$here|escape:"url"%>"><%$syslabels.Seolan_Core_General.delete%></a></td>
+     </tr>
+    <%/section%>
+   </table>
+   </div>
+   <%if $root || $modsec_mods[$_moid].admin%>
+    <select name="users[]" multiple size="10">
+     <%foreach from=$userlist_list item='name' key='koid' name='f1'%>
+      <option value="<%$koid%>"><%$name%> <%$key%></option>
+     <%/foreach%>
+    </select>
+   <%else%>
+    <input type="hidden" name="users[]" value="<%$uid%>">
+   <%/if%>
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:'<%$back%>'});">
+  </form>
+ </fieldset>
+</div>
+<%/if%>
+
+<script type="text/javascript">
+  v<%$uniqid%>.changeSpec=function(){
+   if(myform<%$uniqid%>.spec.value=="default") document.getElementById('spec<%$uniqid%>').style.display="";
+   else document.getElementById('spec<%$uniqid%>').style.display="none";
+  }
+  v<%$uniqid%>.changeSpec();
+</script>

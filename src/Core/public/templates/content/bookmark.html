@@ -1,0 +1,56 @@
+<%assign var=infotext value=$br_text%>
+<%assign var=history value=$smarty.const.HISTORY_SESSION_VAR%>
+<%section name=it loop=$br_urls%>
+ <%if !empty($br_urls[it])%>
+  <div class="cv8-module" id="cv8-module-<%$smarty.section.it.index%>"> 
+   <div class="cv8-module-bg">
+    <div class="cv8-titre">
+     <h2><%$br_titles[it]%></h2>
+     <span><%$br_comments[it]%></span>
+     <%if $br_comments[it] && empty($infotext)%><%assign var=infotext value=$br_comments[it]%><%/if%>
+    </div>
+    <div class="cv8-module-container" id="cv8-module-container-<%$smarty.section.it.index%>">
+     <%if $smarty.request.gohistory && !empty($smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index])%>
+      <script type="text/javascript">
+       if(TZR.historymode=='loadnav'){
+        TZR.jQueryLoad({url:"<%$smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index]%>&_nohistory=1",target:"#cv8-module-container-<%$smarty.section.it.index%>"});
+       }else{
+        TZR.jQueryLoad({url:"<%$smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index]%>&_bdxnewstack=1&_nohistory=1",target:"#cv8-module-container-<%$smarty.section.it.index%>"});
+       }
+      </script>
+     <%else%>
+      <%assign var="moduleid" value="cv8-module-container-`$smarty.section.it.index`"%>
+      <script type="text/javascript">
+       TZR.jQueryLoad({nocheckauth:true,url:'<%$self%>&<%$br_urls[it]%>&_bdxnewstack=1&_nohistory=1&_raw=1&_ajax=1',target:'#<%$moduleid%>',cb:function(responseText,textStatus,XMLHttpRequest){
+        if(XMLHttpRequest.status==401){
+         jQuery('#<%$moduleid%>').remove();
+        }
+       }});
+      </script>
+     <%/if%>
+    </div>
+   </div>
+  </div>
+ <%/if%>
+<%/section%>
+<script type="text/javascript">
+ // Specifie le contexte principal
+ TZR.maintitle='<%$br_title|escape:"javascript"%>';
+ TZR.mainurl='<%$smarty.server.REQUEST_URI%>';
+ // Titre de la page
+ if(TZR.historymode!='loadnav') TZR.setDocumentTitle(TZR.maintitle);
+ else TZR.setDocumentTitle("<%$smarty.session.$history[$smarty.request.gohistory].title|escape:"javascript"%>");
+ // Commentaire
+ TZR.setInfoText('<%$infotext|escape:"javascript"%>');
+ // Chemin
+ TZR.clearNav();
+ TZR.addNav(TZR.maintitle,'<%$self%>&_bdxnewstack=1&moid=<%$sysmods.xmoduser2%>&function=getBookmark&tplentry=br&template=Core.content/bookmark.html&skip=1&key=<%$br_key%>');
+ // Ajout d'un historique
+ if(TZR.historymode!='loadnav'){
+  <%if !$smarty.request._nohistory%>
+   TZR.addNavHistory(TZR.maintitle);
+  <%elseif !empty($smarty.request.gohistory)%>
+   TZR.addNavHistory("<%$smarty.session.$history[$smarty.request.gohistory].title|escape:"javascript"%>");
+  <%/if%>
+ }
+</script>

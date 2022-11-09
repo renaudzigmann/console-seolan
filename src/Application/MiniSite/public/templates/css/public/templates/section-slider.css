@@ -1,0 +1,228 @@
+/* variantes */
+.cv8d-browsediv .anythingSlider, .cv8d-browsediv .anythingSlider-default {
+	width: 100%;
+	height: 460px;
+	padding: 0 0 20px 0;
+	margin: 0 0 60px 0;
+}
+
+
+.cv8d-browsediv .anythingSlider-default .anythingWindow {
+	border-top: none;
+	border-bottom: none;
+	background-color: transparent;
+}
+
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingWindow {
+	border-top: none;
+	border-bottom: none;
+}
+
+.cv8d-browsediv .cv8d-slider-wrapper {
+	position: relative;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+	display: block;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background-color: transparent;
+}
+.cv8d-slider-details {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+.cv8d-field-caption {
+	font-size: 1em;
+	line-height: 1.3em;
+	color: #333333;
+}
+
+
+.anythingSlider-default .arrow {
+	z-index: 1;
+}
+
+.cv8d-browsediv .anythingSlider-default .arrow a {
+	width: 55px;
+	background: url(/images/slider_control_default.png) no-repeat;
+}
+
+.cv8d-browsediv .anythingSlider-default .back {
+	left: 0px;
+}
+
+.cv8d-browsediv .anythingSlider-default .forward {
+	right: 0px;
+}
+
+.cv8d-browsediv .anythingSlider-default .forward a {
+	background-position: right top;
+}
+
+
+.cv8d-slider-image {
+	display: block;
+	text-align: center;
+}
+
+.cv8d-slider-image img {
+	display: block;
+	height: auto;
+	max-width: 100%;
+}
+
+
+.cv8d-browsediv .cv8d-slider-details {
+	display: block;
+	width: 100%;
+	color: #ffffff;
+	padding: 5px 3% 10px 3%;
+	background: url(/images/slider_fond_blanc_trans.png) left top repeat;
+}
+
+.cv8d-browsediv .cv8d-slider-details span {
+	display: block;
+	margin: 1px 0 1px 0;
+	padding: 0 0 0 0;
+}
+.cv8d-browsediv .cv8d-slider-details a {
+	font-weight: bold;
+	padding: 0 0;
+	color: #ffffff;
+	text-decoration: underline;
+	background-color: transparent;
+}
+.cv8d-slider-details a:hover {
+	color: #1261c4;
+	text-decoration: none;
+	background-color: transparent;
+}
+.cv8d-browsediv span.more-link {
+	margin-top: 4px;
+}
+
+.cv8d-browsediv .cv8d-slider-details .cv8d-fieldvalue:first-child {
+	font-weight: inherit;
+}
+
+.cv8d-field-title {
+    font-weight: normal;
+    font-style: normal;
+    line-height: normal;
+    color: #d2001e;
+    margin: 4px 0 8px 0;
+    font-size: 1.9em;
+    line-height: 1em;
+}
+
+.cv8d-field-url {
+    margin-top: 4px;
+	font-size: 17px;
+}
+
+
+.cv8d-browsediv .anythingSlider-default .anythingControls ul {
+    width: 100%;
+    margin-left: 0;
+    list-style: none;
+    list-style-image: none;
+    padding: 0 3% 5px 3%;
+    background-color: #e9e6dd;
+}
+
+.cv8d-browsediv .anythingSlider-default .anythingControls ul a {
+    margin-top: 5px;
+    margin-right: 3px;
+    height: 20px;
+    text-indent: -5000px;
+    padding: 5px 10px;
+    background: url(/images/slider_puce.png) center 4px no-repeat;
+}
+
+
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a {
+    background: url(/images/slider_puce.png) center 4px no-repeat;
+}
+
+
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a:hover {
+    color: #f38f00;
+    background: url(/images/slider_puce.png) center -56px no-repeat;
+}
+
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a.cur,
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a:hover {
+    color: #f38f00;
+    background: url(/images/slider_puce.png) center -56px no-repeat;
+}
+
+.cv8d-browsediv .anythingSlider-default .anythingControls a.start-stop {
+    right: 0;
+    bottom: 0;
+    left: inherit;
+    height: 20px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background: url(/images/slider_control_default.png) 15px -460px no-repeat;
+}
+
+.cv8d-browsediv .anythingSlider-default .anythingControls a.start-stop:hover {
+    background: url(/images/slider_control_default.png) 15px -460px no-repeat;
+}
+
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a.start-stop,
+.cv8d-browsediv .anythingSlider-default.activeSlider .anythingControls a.start-stop.playing {
+	background-color: #1261c4;
+}
+
+.cv8d-browsedivslide { position: relative; overflow: auto; }
+.cv8d-browsedivslide li { list-style: none; }
+.cv8d-browsedivslide ul li { float: left; }
+.cv8d-browsedivslide ul { margin:0}
+.cv8d-browsedivslide ul .item{
+    border: none;
+    background-color: #f9f8f5;
+    padding:5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    padding-bottom:20px;
+}
+.cv8d-browsedivslide .dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+}
+.cv8d-browsedivslide .dots li {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 4px;
+    text-indent: -999em;
+    border: 2px solid #d2001e;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: .4;
+    -webkit-transition: background .5s, opacity .5s;
+    -moz-transition: background .5s, opacity .5s;
+    transition: background .5s, opacity .5s;
+}
+.cv8d-browsedivslide .dots .dot{
+    -webkit-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -moz-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -ms-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    -o-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+}
+.cv8d-browsedivslide .dots li .active {
+    background: #fff;
+    opacity:1;
+}
+

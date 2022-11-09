@@ -1,0 +1,30 @@
+
+@import url(../../../../Vendor/getbootstrap/css/normalize.css);
+@import url(../../../../Vendor/getbootstrap/css/bootstrap.min.css);
+
+
+/* pour avoir le spliter du mode traduction en attendant */
+@import url(../../../../Vendor/jquery/jquery-ui-resizable/jquery-ui.min.css);
+
+@import url(../../../../Vendor/jquery/plugins/datatable/datatables.min.css);
+
+@import url(../../../../Vendor/jquery/plugins/floatingscroll/jquery.floatingscroll.css);
+
+@import url(../../../../Vendor/getbootstrap/plugins/daterangepicker/daterangepicker.css);
+@import url(../../../../Vendor/wie/image-editor.css);
+
+@import url(../../../Module/InfoTree/public/css/xmodinfotree.css);
+@import url(../../../Module/DocumentManagement/public/css/xmoddocmgt.css);
+@import url(../../../Module/Calendar/public/css/xmodcalendar.css);
+@import url(../../../Module/Media/public/css/xmodmedia.css);
+@import url(../../../Module/Form/public/css/xmodform.css);
+@import url(./xmodstats.css);
+/*@import url(/csx/public/templates/epasslibre/epl-styles-admin.css);*/
+
+/* flatty */
+@import url(./dark-theme.css);
+
+@import url(./base.css);
+@import url(./page-content.css);
+
+

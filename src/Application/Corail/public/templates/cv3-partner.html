@@ -1,0 +1,26 @@
+<!--<%$smarty.template%>-->
+<%if $pa_lines_oid[0]%>
+<%assign var="id" value=""|uniqid%>
+<div id="cv3-partner" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-partner" href="#partner<%$id%>"><%label v="partner_title" t="Nos partenaires"%></a>
+  <h4><%label v="partner_title" t="Nos partenaires"%></h4>
+  <div id="partner<%$id%>" class="collapse">
+    <div class="middle">
+      <%section name=pa loop=$pa_lines_oid%>
+        <div class="partner">
+        <%if $pa_lines_otitle[pa]->html%><h5><%$pa_lines_otitle[pa]->html%></h5><%/if%>
+        <div class="logo">
+        <span>
+          <%if $pa_lines_ologo[pa]->html && $pa_lines_olink[pa]->url%>
+            <a href="<%$pa_lines_olink[pa]->url%>" target="<%$pa_lines_olink[pa]->target%>" title="<%$pa_lines_olink[pa]->toText()|escape:"html"%>"><img src="<%$pa_lines_ologo[pa]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$pa_lines_ologo[pa]->title|escape:"html"%>"></a>
+          <%elseif $pa_lines_ologo[pa]->html%>
+            <img src="<%$pa_lines_ologo[pa]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$pa_lines_ologo[pa]->title|escape:"html"%>">
+        <%/if%>
+        </span>
+        </div>
+        </div>
+      <%/section%>
+    </div>
+	  </div><!-- partner -->
+</div><!-- fin cv3-partner -->
+<%/if%>

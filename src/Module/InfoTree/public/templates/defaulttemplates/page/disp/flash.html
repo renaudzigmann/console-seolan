@@ -1,0 +1,21 @@
+<%strip%>
+<div class="cv3-flash clearfix">
+ <style type="text/css">
+  .cv3-flash .flex-video {
+   padding-top: 0;
+   padding-bottom: <%$it_olines[it].oflashh->html%>px;
+   margin-bottom: 0;
+  }
+ </style>
+ <%if $it_olines[it].otitsec->html%><h2><%$it_olines[it].otitsec->html%></h2><%/if%>
+ <div class="flex-video">
+  <script type="text/javascript">
+   var flashvars= {nomclip:'<%"`$it_olines[it].ofichier->url`&disp=inline"|urlencode%>'};
+   var params={wmode:'<%$it_olines[it].oflashwm->html%>',quality:'best',play:'true'};
+   var attributes={};
+   swfobject.embedSWF("<%$it_olines[it].ofichier->url%>&disp=inline","flash<%$it_olines[it].oid|replace:':':'_'%>","<%$it_olines[it].oflashw->html%>","<%$it_olines[it].oflashh->html%>","9.0.0","/js/swfobject/expressInstall.swf",flashvars,params,attributes);
+  </script>
+  <div id="flash<%$it_olines[it].oid|replace:':':'_'%>"></div>
+ </div>
+</div>
+<%/strip%>

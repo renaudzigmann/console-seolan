@@ -1,0 +1,52 @@
+<!--<%$smarty.template%>-->
+
+<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+
+<!-- Menu Déroulant -->
+<%assign var="jumpt" value="-1"%>
+<%section name=itm loop=$tm_lines_oid%><%strip%>
+  <%assign var="classLi" value=""%>
+  <%assign var="classA" value=""%>
+  <%assign var="href" value=$self|cat:$tm_lines_selfurl[itm]|cat:$tm_lines_ocurl[itm]->html%>
+  <%assign var="title" value=$tm_lines_ocusttitle[itm]->html%>
+  <%assign var="level" value=$tm_lines_level[itm]%>
+  <%assign var="levelNext" value=$tm_lines_level[$smarty.section.itm.index_next]%>
+  <%assign var="indent" value="\n"%>
+
+  <%* Si le saut est négatif c'est qu'il y a un sous menu : début d'une liste *%>
+  <%if $jumpt < 0%>
+    <ul class="<%if $smarty.section.itm.first%>nav navbar-nav<%else%>dropdown-menu<%/if%>">
+  <%/if%>
+
+  <%assign var="jumpt" value=$level-$levelNext%>
+
+  <%if $tm_lines_oid[itm]|in_array:$path_oidup%>
+    <%assign var="classLi" value="active"%>
+  <%/if%>
+  <%if $jumpt < 0 && $level==1%>
+    <%assign var="classLi" value="`$classLi` dropdown"%>
+    <%assign var="classA" value=' class="dropdown-toggle" data-toggle="dropdown"'%>
+  <%/if%>
+  <%section loop=$level name="indent"%>
+    <%assign var="indent" value="`$indent`  "%>
+  <%/section%>
+
+  <%* Ligne du menu *%>
+  <%$indent%><!-- <%$level%> / <%$levelNext%> <%$self%> / <%$tm_lines_selfurl[itm]%> / <%$tm_lines_ocurl[itm]->html%> --><li class="<%$classLi%>"><a <%$classA%> title="<%$title%>" href="<%$href%>"><%$tm_lines_otitle[itm]->html%></a>
+
+  <%* Si le niveau suivant n'est pas plus grand on ferme listItem, sinon il faut pas fermer car début d'un sous menu *%>
+  <%if !($jumpt < 0)%></li><%/if%>
+
+  <%* Pour chaque niveau de saut on referme la liste, et le listItem si ce n'est pas le tout dernier (car non ouvert au debut) *%>
+  <%if $jumpt > 0 %>
+    <%section name=foo loop=$jumpt%>
+      </ul>
+      <%if !($smarty.section.foo.last && $smarty.section.itm.last)%></li><%/if%>
+    <%/section%>
+  <%/if%>
+
+<%/strip%><%/section%>
+
+<!--/ Menu Déroulant -->
+
+</nav>

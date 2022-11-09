@@ -1,0 +1,33 @@
+<%if empty($title)%><%assign var="title" value=$syslabels.Seolan_Core_General.new_text%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.general%></legend>
+  <div class="row-striped">
+   <div class="row">
+    <div class="row-striped-content">
+     <div class="col-xs-12 col-sm-3 col-lg-2 ">
+      <label class="fieldHelp">
+       <span>Application</span>
+      </label>
+     </div>
+     <div class="col-xs-12 col-sm-9 col-lg-10">
+      <select name="app">
+       <%foreach from=$br_apps key=k item=v%>
+        <option value="<%$k%>"><%$v%></option>
+       <%/foreach%>
+      </select>
+     </div>
+    </div>
+   </div>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.next_text%>">
+ </div>
+ <input type="hidden" name="template" value="Module/Application.appWizard.html">
+ <input type="hidden" name="_function" value="newWizard">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="step" value="1">
+</form>
+

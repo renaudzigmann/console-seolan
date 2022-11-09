@@ -1,0 +1,17 @@
+<!-- <%$smarty.template%> -->
+<div class="<%$groups_class%> group-<%$group|asciify%>">
+  <%assign
+   var="fieldsTemplates"
+   value=$shop->getFieldsTemplates('frontusersCustomer')%>
+  <%if !$no_groups_title and $group%><h2><%$group%></h2><%/if%>
+  <%foreach from=$fields key=key item=xfieldval%>
+  <%assign var=field value=$xfieldval->fielddef->field%>
+  <%if isset($fieldsTemplates[$field])%>
+  <%assign var="fieldTemplate" value=$fieldsTemplates[$field]%>
+  <%include file=$fieldTemplate%>
+  <%else%>
+  <%include file="Module/FrontUsers.form-field.html"%>
+  <%/if%>
+  <%/foreach%>
+</div>
+<!-- /<%$smarty.template%> -->

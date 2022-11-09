@@ -1,0 +1,19 @@
+<%if $tzr.CorailNewsLetter%>
+<div id="cv3-newsletter">
+<div id="cv3-newsletter-top"></div>
+<div id="cv3-newsletter-middle">
+<form id="myform" name="newsletterform" class="newsletterform" action="<%$self%>" method="post" onsubmit="TZR.isFormValidWithFocus(this,true);" >
+<input type="hidden" name="moid" value="<%$tzr.CorailNewsLetter%>">
+<input type="hidden" name="_function" value="subscribe">
+<input type="hidden" name="_next" value="alias=newsletter_ok">
+<input type="hidden" name="LANGUSER" value="<%$lang_data%>">
+<input name="email" type="text" id="emailaddress" value="<%$labels.youremail%>" onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='<%$labels.youremail%>';}" /> 
+<%if $frmnewsletter_captcha%><p><%$frmnewsletter_captcha.label%></p><%$frmnewsletter_captcha.html%></p><%/if%>
+<p><span class="btnewsletter"><a href="#" onClick="document.newsletterform._function.value='subscribe';if(TZR.isFormValidWithFocus(document.newsletterform,true)){ document.newsletterform.submit();}return;"><%$labels.subscribe%></a></span> 
+<span class="btnewsletter"><a href="#" onClick="document.newsletterform._function.value='unsubscribe';if(TZR.isFormValidWithFocus(document.newsletterform,true)){ document.newsletterform.submit();}return;"><%$labels.unsubscribe%></a></span></p>
+</form>
+<%if $labels.newsletter_info%><p id="infonewsletter"><%$labels.newsletter_info%></p><%/if%>
+</div>
+<div id="cv3-newsletter-bottom"></div>
+</div><!-- fin cv3-newsletter -->
+<%/if%>

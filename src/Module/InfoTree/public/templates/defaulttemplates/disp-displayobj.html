@@ -1,0 +1,104 @@
+<%assign var=section value=$it_olines[it]%>
+<div class="cv8d-object-nav">
+<%if $admini%>
+  <%if $section._prev_oid%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._prev_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.previous%></a>
+  <%/if%>
+  <%if $section._from%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._from.oidit%>&sectionopts[<%$section._from.itoid%>][oid]=<%$section.oid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.back%></a>
+  <%/if%>
+  <%if $section._next_oid%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._next_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.next%></a>
+  <%/if%>
+<%else%><%** !admini **%>
+  <%if $section._prev_oid%>
+    <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._prev_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-chevron-left"></span><%else%><%$syslabels.Seolan_Core_General.previous%><%/if%></a>
+  <%/if%>
+  <%if $section._from%>
+    <a href="<%$self%>&alias=<%$section._from.alias%>&sectionopts[<%$section._from.itoid%>][oid]=<%$section.oid%>#cv8d-object-<%$section.oid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-align-justify"></span><%else%><%$syslabels.Seolan_Core_General.back%><%/if%></a>
+  <%/if%>
+  <%if $section._next_oid%>
+    <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._next_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-chevron-right"></span><%else%><%$syslabels.Seolan_Core_General.next%><%/if%></a>
+  <%/if%>
+<%/if%>
+</div>
+<div class="cv8-displayobj cv8-displayobj-<%$section._functionparams.moid%>">
+<%if ($section._groups && $section._functionparams.params.__usegroup==1)
+  || $section._showsubmodules %>
+  <div class="cv8d-display-group" id="tabs<%$uniqid%>">
+    <ul>
+<%if $section._groups && $section._functionparams.params.__usegroup==1 %>
+  <%** groupes de champs **%>
+  <%foreach key=group item=fields from=$section._groups%>
+      <li><a href="#tabs-<%$group|rewriteToAscii%>"><%$group%></a></li>
+  <%/foreach%>
+<%else%>
+      <li><a href="#tabs-fiche"><%$syslabels.Seolan_Core_General.general%></a></li>
+<%/if%>
+  <%** sous modules **%>
+  <%foreach key=i item=ssmod from=$section.__ssmod%>
+    <%if $ssmod.lines_oid %>
+      <li><a href="#tabs-ssmod<%$i%>"><%$section.__ssprops[$i].modulename%></a></li>
+    <%/if%>
+  <%/foreach%>
+    </ul>
+<%if $section._groups  && $section._functionparams.params.__usegroup==1 %>
+  <%foreach key=group item=fields from=$section._groups%>
+    <div id="tabs-<%$group|rewriteToAscii%>">
+    <%foreach item=field from=$fields%>
+      <%if !empty($field->html)%>
+      <div class="cv8-displayobj-field cv8-displayobj-field-<%$field->fielddef->field%>">
+        <div class="cv8-displayobj-label"><%$field->fielddef->label%></div>
+        <div class="cv8-displayobj-value"><%$field->html%></div>
+      </div>
+      <%/if%>
+    <%/foreach%>
+    </div>
+  <%/foreach%>
+<%else%>
+    <div id="tabs-fiche">
+      <%foreach item=field from=$section.fields_object%>
+      <%if !empty($field->html)%>
+      <div class="cv8-displayobj-field cv8-displayobj-field-<%$field->fielddef->field%>">
+        <div class="cv8-displayobj-label"><%$field->fielddef->label%></div>
+        <div class="cv8-displayobj-value"><%$field->html%></div>
+      </div>
+      <%/if%>
+    <%/foreach%>
+    </div>
+<%/if%>
+<%** les sous-moules **%>
+<%foreach key=i item=ssmod from=$section.__ssmod%>
+<%if $ssmod.lines_oid %>
+    <div id="tabs-ssmod<%$i%>">
+  <%foreach key=j item=lineoid from=$ssmod.lines_oid%>
+      <div class="cv8d-object">
+    <%foreach item=field from=$ssmod.header_fields%>
+        <div class="cv8d-fieldvalue cv8d-field-<%$field->field%>">
+	  <%$ssmod["lines_o<%$field->field%>"][$j]->html%>
+        </div>
+    <%/foreach%>
+      </div>
+  <%/foreach%>
+    </div>
+<%/if%>
+<%/foreach%>
+  </div>
+<script>
+  jQuery(function() {
+    jQuery( "#tabs<%$uniqid%>" ).tabs();
+  });
+</script>
+
+<%else%><%** !group && ! submodule **%>
+  <%foreach item=field from=$section.fields_object%>
+  <%if !empty($field->html)%>
+  <div class="cv8-displayobj-field cv8-displayobj-field-<%$field->fielddef->field%>">
+    <div class="cv8-displayobj-label"><%$field->fielddef->label%></div>
+    <div class="cv8-displayobj-value" data-rawvalue="<%$field->raw|escape:'html'%>"><%$field->html%></div>
+    <div class="fin_float"></div>
+  </div>
+  <%/if%>
+  <%/foreach%>
+<%/if%>
+</div>

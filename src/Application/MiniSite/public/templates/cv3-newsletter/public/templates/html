@@ -1,0 +1,25 @@
+<%if $tzr.CorailNewsLetter%>
+<div id="cv3-newsletter" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-newsletter" href="#newsletter"><%$labels.newsletter_title %></a>
+  <h4><%$labels.newsletter_title %></h4>
+  <div id="newsletter" class="collapse">
+    <div class="middle">
+      <div class="item">
+        <%if $labels.newsletter_info%><p id="infonewsletter"><%$labels.newsletter_info%></p><%/if%>
+        <form id="newsletter_subscribe_form<%$form_id_suffix%>" name="newsletterform" action="<%$self%>" method="post" onsubmit="TZR.isFormValidWithFocus(this,true);" >
+          <input type="hidden" name="moid" value="<%$tzr.CorailNewsLetter%>">
+          <input type="hidden" name="_function" value="subscribe">
+          <input type="hidden" name="_next" value="alias=newsletter_ok">
+          <input type="hidden" name="LANGUSER" value="<%$lang_data%>">
+	  <%$frmnewsletter_oemail->html%>
+          <%if $frmnewsletter_captcha%><p><%$frmnewsletter_captcha.label%></p><%$frmnewsletter_captcha.html%></p><%/if%>
+          <input class="btn" onclick="document.getElementById('newsletter_subscribe_form<%$form_id_suffix%>')._function.value='subscribe';if(TZR.isFormValidWithFocus(document.getElementById('newsletter_subscribe_form<%$form_id_suffix%>'),true)){ document.getElementById('newsletter_subscribe_form<%$form_id_suffix%>').submit();}return false;" type="submit" name="button" value="" />
+        </form>
+      </div>
+    </div>
+    <%if $charte_oRUB_NEWSLETTER->raw %>
+    <div class="link"><a href="<%$self%>alias=<%$charte_oRUB_NEWSLETTER->oalias->raw%>"><%$labels.newsletter_ttelink|default:"Toutes les newsletter"%></a></div>
+    <%/if%>
+  </div><!-- fin newsletter -->
+</div><!-- fin cv3-newsletter -->
+<%/if%>

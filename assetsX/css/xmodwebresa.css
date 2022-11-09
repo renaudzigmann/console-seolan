@@ -1,0 +1,329 @@
+.cv3-main-contenu div:after {
+    clear: inherit;
+    content: none;
+    display: inherit;
+    height: inherit;
+    visibility: inherit;
+}
+
+.fin_float {
+    clear: both;
+	float: none;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    border: 0;
+    height: 0;
+    overflow: auto;
+    visibility: hidden;
+    display: block;
+}
+
+.cv8d-field-XShortTextDef,
+.cv8d-field-XStringSetDef,
+.cv8d-field-XDateDef,
+.cv8d-field-XRealDef,
+.cv8d-field-XRichTextDef,
+.cv8d-field-XLinkDef {
+	margin: 0 0 5px 0;
+}
+
+.cv8d-field-XShortTextDef label,
+.cv8d-field-XStringSetDef label,
+.cv8d-field-XDateDef label,
+.cv8d-field-XRealDef label,
+.cv8d-field-XRichTextDef label,
+.cv8d-field-XLinkDef label{
+	font-size: 11px;
+	font-weight: bold;
+	line-height: normal;
+	color: #666666;
+}
+
+.cv8d-browsediv {
+	background-color: #f6f2e7; /* couleur fond page site */
+}
+
+.cv8d-object {
+	clear: both;
+	width: 100%;
+	color: #000000;
+	font-family: Verdana,Geneva,sans-serif;
+	font-size: 12px;
+	line-height: 16px;
+	margin-bottom: 15px;
+	padding-bottom: 10px;
+	border-bottom: 4px dotted #6f5d54;
+}
+
+.cv8d-field-media {
+	float: left;
+	width: 20%;
+	margin: 0 10px 10px 0;
+	padding-right: 9px;
+	border-right: 1px solid #5c4b43;
+}
+
+.cv8d-field-media img {
+	width: 100%;
+}
+
+.cv8d-field-media label {
+	display: none;
+}
+
+.cv8d-field-libelle {
+	float: left;
+	width: 62%;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: normal;
+	color: #c18f2a;
+	margin: 0 0 3px 0;
+}
+
+.cv8d-field-libelle label  {
+	display: none;
+}
+
+.cv8d-field-commentaire {
+	float: left;
+	width: 62%;
+	font-size: 11px;
+	line-height: 15px;
+	margin: 0 0 5px 0;
+}
+
+.cv8d-field-commentaire label {
+	display: none;
+}
+
+.cv8d-field-niveau_oid {
+	float: left;
+	width: 62%;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: normal;
+	color: #6d071a;
+	margin: 0 0 2px 0;
+}
+
+.cv8d-field-duree {
+	float: left;
+	width: 62%;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: normal;
+	color: #6d071a;
+	margin: 0 0 5px 0;
+}
+
+.cv8d-field-duree span.suffix {
+	display: none;
+	font-weight: normal;
+	margin-left: 5px;
+}
+
+.cv8d-field-prix_maximum,
+.cv8d-field-prix_minimum {
+	float: right;
+	width: 10%;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: normal;
+	color: #ffffff;
+	text-align: center;
+	vertical-align: top;
+	margin: -20px 10px 5px 0;
+	padding: 8px 10px 8px 10px;
+	background-color: #5c4b43;
+}
+
+.cv8d-field-prix_maximum label,
+.cv8d-field-prix_minimum label {
+	display: block;
+	font-size: 10px;
+	font-weight: normal;
+	color: #ffffff;
+}
+
+.cv8d-field-prix_maximum span.suffix,
+.cv8d-field-prix_minimum span.suffix {
+	margin-left: 5px;
+}
+
+.cv8-linktodetails {
+	float: left;
+	width: 62%;
+	margin: 0 0 5px 0;
+}
+
+#tzr-page-content .cv8-linktodetails a {
+	font-weight: bold;
+	font-size: 11px;
+	line-height: normal;
+	color: #475187;
+	text-decoration: underline;
+}
+
+#tzr-page-content .cv8-linktodetails a:hover {
+	color: #f28c23;
+	text-decoration: none;
+}
+
+.cv8-displayobj {
+	background-color: #f6f2e7; /* fiche couleur fond page site */
+}
+
+.cv8d-field-libelle1 {
+	font-size: 13px;
+	font-weight: bold;
+	line-height: normal;
+	color: #6d071a;
+	margin: 0 0 8px 0;
+}
+
+.cv8d-field-resume {
+	margin: 0 0 15px 0;
+}
+
+
+
+.cv8-displaywebresa .cv8d-field-libelle {
+	display: block;
+	float: none;
+	width: 100%;
+	font-size: 20px;
+	color: #c18f2a;
+	margin: 0 0 5px 0;
+}
+
+.cv8-displaywebresa .cv8d-field-libelle label,
+.cv8-displaywebresa .cv8d-field-libelle1 label {
+	display: none;
+}
+
+
+/* contionnement dans les les onglets */
+
+#tzr-page-content .ui-tabs ul {
+	list-style: none;
+	list-style-image: none;
+}
+
+#tzr-page-content .ui-tabs ul a {
+	color: #475187;
+	text-decoration: none;
+}
+
+#tzr-page-content .ui-tabs ul a:hover {
+	text-decoration: none;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover {
+	border: 1px solid #999999; background: #475187 url() 50% 50% repeat-x; font-weight: bold; color: #ffffff; outline: none;
+}
+
+#tzr-page-content .ui-tabs .ui-state-hover a {
+	color: #ffffff;
+}
+
+#tabs-ssmod5 .cv8d-field-libelle { display: none; }
+
+.ui-tabs .cv8d-object {
+	margin: 5px 10px 9px 0;
+	padding: 0 0 9px 0;
+	border-bottom: 1px solid #cccccc;
+}
+
+.ui-tabs .cv8d-object .cv8d-field-media {
+	float: left;
+	width: auto;
+	margin: 0 0 0 0;
+	padding-right: 0;
+	border: none;
+}
+
+
+.ui-tabs .cv8d-field-date_depart,
+.ui-tabs .cv8d-field-date_fin {
+	float: left;
+	width: 25%;
+	font-size: 11px;
+	color: #6d071a;
+	margin: 0 0 5px 0;
+}
+
+
+.ui-tabs .cv8d-field-XRealDef label {
+	float: left;
+	margin-right: 10px;
+}
+
+.ui-tabs .cv8d-field-XRealDef div {
+	float: left;
+	clear: right;
+}
+
+.ui-tabs .cv8d-field-prix {
+	clear: both;
+	font-size: 13px;
+	font-weight: bold;
+	color: #6d071a;
+}
+
+.ui-tabs .cv8d-field-prix span.suffix {
+	margin-left: 5px;
+}
+
+.ui-tabs .cv8d-field-etat {
+	clear: both;
+	color: #6d071a;
+}
+
+.ui-tabs .cv8d-field-etat label {
+	float: left;
+	margin-right: 10px;
+}
+
+.ui-tabs .cv8d-field-disponibilite {
+	clear: both;
+	color: #6d071a;
+}
+
+.ui-tabs .cv8d-field-disponibilite label {
+	float: left;
+	margin-right: 10px;
+}
+
+
+.ui-tabs .cv8d-field-nom_jour {
+	font-size: 15px;
+	font-weight: bold;
+	color: #c18f2a;
+	margin-bottom: 5px;
+}
+
+.ui-tabs .cv8d-field-nom_jour label {
+	display: none;
+}
+
+.ui-tabs .cv8d-field-description label {
+	display: block;
+	color: #6d071a;
+	margin-bottom: 5px;
+}
+
+.cv8-displaywebresa .ui-tabs .cv8d-field-libelle {
+	font-size: 15px;
+	clear: both;
+	float: none;
+}
+.cv8-displaywebresa .tabs-ssmod5 .cv8d-field-libelle,
+.cv8-displaywebresa .tabs-ssmod5 .cv8d-fieldvalue label,
+.cv8d-field-description label,
+.ui-tabs .cv8d-field-description label
+{
+    display:none
+}

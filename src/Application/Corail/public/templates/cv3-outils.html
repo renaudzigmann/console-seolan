@@ -1,0 +1,59 @@
+<!--<%$smarty.template%>-->
+<div id="cv3-outils" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-outils" href="#outils<%$id%>"><%label v="outils_title" t="Outils"%></a>
+  <h4><%label v="outils_title"%></h4>
+  <div id="outils<%$id%>" class="collapse">
+    <div class="middle">
+      <ul>
+
+        <%if $charte_oFR->raw==1 && $charte_oGB->raw==1%>
+          <li><a href="FR_<%$application->infotreehome%>.html">
+            <span class="icon-fr"></span><%label v="outils_fr" t="Version Française"%>
+          </a></li>
+
+          <li><a href="GB_<%$application->infotreehome%>.html">
+            <span class="icon-gb"></span><%label v="outils_gb" t="English Version"%>
+          </a></li>
+        <%/if%>
+
+        <li><a href="javascript:resizeText(1)">
+          <span class="glyphicon csico-text-plus"></span><%label v="outils_augm_txt" t="Augmenter taille du texte"%>
+        </a></li>
+
+        <li><a href="javascript:resizeText(-1)">
+          <span class="glyphicon csico-text-moins"></span><%label v="outils_dimin_txt" t="Diminuer taille du texte"%>
+        </a></li>
+
+        <li><a href="javascript:window.print()">
+          <span class="glyphicon csico-print"></span><%label v="outils_print" t="Imprimer"%>
+        </a></li>
+
+        <%if $pdf_link%>
+          <li><a href="<%$pdf_link%>">
+            <span class="glyphicon csico-pdf"></span><%label v="outils_pdf" t="Version Pdf"%>
+          </a></li>
+        <%/if%>
+
+        <li><a href="<%$fullself%>&alias=<%$it_cat_mit.oalias->raw%>" title="<%$title%>" rel="sidebar" onclick="bookmarkIE()">
+          <span class="glyphicon csico-favori"></span><%label v="outils_bookmark" t="Marque page"%>
+        </a></li>
+
+      </ul>
+    </div>
+  </div><!-- fin outils -->
+</div><!-- fin cv3-outils -->
+
+<script>
+  function resizeText(multiplier) {
+    if (document.body.style.fontSize == "") {
+      document.body.style.fontSize = "14px";
+    }
+    document.body.style.fontSize = (parseInt(document.body.style.fontSize) + multiplier) + "px";
+  }
+
+  function bookmarkIE() {
+    if(document.all && window.external) {
+      window.external.AddFavorite(window.location.href, document.title);
+    }
+  }
+</script>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="<%$locale.code%>">
+  <head>
+    <%$header%>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%capture assign="title"%><%strip%>
+      <%if $page_title %>
+        <%$page_title|escape:"html"%>,
+      <%elseif $it_cat_mit.otitle2->html%>
+        <%$it_cat_mit.otitle2->html%>,&nbsp;
+      <%elseif $it_cat_mit.otitle->html%>
+        <%$it_cat_mit.otitle->toText()%>,&nbsp;
+      <%/if%>
+      <%$application->society|default:$tzr.societe%>
+    <%/strip%><%/capture%>
+
+    <title><%$title%></title>
+  
+  <%if !empty($it_cat_mit.odescr->html)%>
+   <%assign var="description" value=$it_cat_mit.odescr->toText()%>
+  <%/if%>
+  <%if empty($description) %>
+  <%foreach from=$it_olines item=section%>
+   <%if $section.otxt1 && !$section.otxt1->isEmpty() %>
+    <%assign var="description" value=$section.otxt1->toText()%>
+    <%continue%>
+   <%elseif $section.ochapeau && !$section.ochapeau->isEmpty() %>
+    <%assign var="description" value=$section.ochapeau->toText()%>
+    <%continue%>
+   <%/if%>
+  <%/foreach%>
+  <%/if%>
+  <%if ($it_cat_mit.oalias->html != $tzr.corailv3_home) && $description%>
+   <meta name="description" content="<%$description|truncate:"300":".."|strip:" "|escape:"html"%>">
+  <%else%>
+   <meta name="description" content="<%$charte_ometa01->html|escape:"html"%>">
+  <%/if%>
+  <meta name="keywords" content="<%$charte_ometa02->html%>">
+  
+  <meta name="reply-to" content="info@xsalto.com">
+  <%if $tzr.rss%>
+   <link rel="alternate" type="application/rss+xml" title="<%$application->society|default:$tzr.societe|escape:'html'%> : <%$labels.rss_title%>" href="<%$smarty.server.REQUEST_SCHEME|cat:'://'|cat:$application->domain|cat:'/'|cat:$lang_data|cat:'_rssnews.xml'%>"/>
+  <%/if%>
+  <meta name="robots" content="index, follow">
+  <meta name="distribution" content="global">
+  <meta name="revisit-after" content="1 days">
+  <meta name="author" lang="<%$locale.code%>" content="<%$application->society|default:$tzr.societe|escape:"html"%>">
+  <meta name="copyright" content="<%$tzr.meta_copyright%>">
+  <meta name="identifier-url" content="<%$application->domain_url|default:$application->domain|default:$tzr.societe_url%>">
+  <meta name="msvalidate.01" content="<%$application->bingtag|default:$tzr.bingtag|default:"22BC5188D45EE4521CE5B6311942F9B9"%>" />
+  <meta name="expires" content="never">
+  <meta name="Date-Revision-yyyymmdd" content="<%$it_lastpageupdate->raw|date_format:"%Y%m%d"%>">
+
+  <link href="/csx/src/Application/Corail/public/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/csx/src/Application/Corail/public/js/smartmenu/jquery.smartmenus.bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/csx/src/Application/Corail/public/js/ekko-lightbox/ekko-lightbox.min.css" />
+  <%if $general_style%>
+  <!-- general style -->
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/<%$general_style%>" />
+  <%/if%>
+
+<!--htdig_noindex-->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/ie.css" />
+<![endif]-->
+
+
+<!-- favicon - icon -->
+<%if $charte_oicon->html%><link rel="shortcut icon" href="<%$charte_oicon->url%>"><%/if%>
+<%if $charte_oappletouchicon->html%><link rel="apple-touch-icon" href="<%$charte_oappletouchicon->url%>"><%/if%>
+
+<%onejs id="jquery-base" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/" minify=$minify%>
+jquery-1.11.3.js
+#jquery.mobile.custom.min.js
+jquery-migrate.min.js
+jquery-ui/jquery-ui.js
+jquery-ui/locale/<%strtolower($lang_user)%>/
+<%/onejs%>
+<%onejs id="Core" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/" minify=$minify%>
+Core/public/generic.js
+Core/public/generic8.js
+Core/public/genericX.js
+#/js/swfobject/swfobject.js
+<%/onejs%>
+<%onejs id="jquery-suite" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/Application/Corail/public/js/" minify=$minify%>
+jquery.noconflict.js
+# voir, c'est un pack
+ekko-lightbox/ekko-lightbox.js
+bootstrap.min.js
+smartmenu/jquery.smartmenus.js
+smartmenu/jquery.smartmenus.bootstrap.js
+<%/onejs%>
+
+
+
+<%$TZR.packs.header%>
+  
+<script type="text/javascript">
+jQuery(document).ready(function() {						
+    jQuery(window).scroll(function() {
+	if(jQuery(window).scrollTop() == 0){
+	    jQuery('#scrollToTop').fadeOut("fast");
+	} else {
+	    if(jQuery('#scrollToTop').length == 0){
+		jQuery('body').append('<div id="scrollToTop">'+
+        '<a href="#"></a>'+
+				 '</div>');
+	    }
+	    jQuery('#scrollToTop').fadeIn("slow");
+	}
+    });
+    jQuery(document).on('click', '#scrollToTop a' , function(event){
+	event.preventDefault();
+	jQuery('html,body').animate({scrollTop: 0}, 'slow');
+    });
+    // Effet parallaxe
+    $window = jQuery(window);
+    jQuery('section[data-type="background"]').each(function(){
+      var $scroll = jQuery(this);
+
+      jQuery(window).scroll(function() {
+        var yPos = -($window.scrollTop() / $scroll.data('speed'));
+        var coords = '50% '+ yPos + 'px';
+        $scroll.css({ backgroundPosition: coords });   
+      });
+    });
+   <%*
+    //remplace nyromodal par ekko-lightbox
+    // au cas  ou certain template instancie nyromodal
+   *%>
+    function setEkkoModalForObject(obj){
+	$this = jQuery(obj);
+	if(!$this.attr('data-gallery') && $this.attr('rel')) 
+	    $this.attr('data-gallery',$this.attr('rel'))
+	if(!$this.attr('data-title') && $this.attr('title'))
+	    $this.attr('data-title',$this.attr('title'));
+	$this.click(function(e){
+	    e.preventDefault();
+	    jQuery(this).ekkoLightbox({
+		loadingMessage: '...',
+	    });
+	});
+    }
+    if ( typeof jQuery.fn.nyroModal != "function")
+	jQuery.fn.nyroModal = function () {setEkkoModalForObject(this)};
+    jQuery('.nyroModal').each(function(i,e){
+	setEkkoModalForObject(e);
+    });
+});
+</script>
+<%if defined('CORAILV3_JS') %>
+  <script type="text/javascript" src="<%$smarty.const.CORAILV3_JS%>"></script>
+<%/if%>
+<script type="text/javascript">
+   <%if $tzr.corailv3_photovisio%>
+    function onVisioComplete(o){
+      if(o.code=="addOK"){
+        alert("<%$labels.photo_addVisioOK%>");
+      }
+    }
+    function addToVisio(oid){
+      document.fvisio.oid.value=oid;
+      document.fvisio.submit();
+    }
+   <%/if%>
+   <%if $tzr.corailv3_cart%>
+    function onAddItemComplete(o){
+      if(o.code=="addOK"){
+        document.getElementById("cv3-panier-item").innerHTML=o.q;
+        alert("<%$labels.cart_addItemOK%>");
+      }
+    }
+    function addItem(oid,q){
+      document.fcart.oid.value=oid;
+      if(q){ document.fcart.q.value=q; }
+      document.fcart.submit();
+    }
+   <%/if%>
+   <%if $tzr.corailv3_photovisio || $tzr.corailv3_cart%>
+    function callAjax(fok,fnok){
+     var expression = /PHPSESSID=([^&]+)/;
+     if(!expression.test(location.href)){
+        eval(fnok);
+      }else{
+        eval(fok);
+      }
+    }
+   <%/if%>
+  </script>
+  <%if isset($tarteaucitron_header)%>
+   <%$tarteaucitron_header%>
+  <%elseif (isset($application->analytictag) && !empty($application->analytictag)) || $tzr.analytictag%>
+   <%include file="application:googleanalytics.html"%>
+  <%/if%>
+
+<!--/htdig_noindex-->
+</head>
+<body class="<%$application->name|rewriteToAscii%>">
+<!--htdig_noindex-->
+<a id="top"></a>
+<!--/htdig_noindex--> 
+
+<div class="hidden-print surtop">
+	<div class="container">
+		<div class="row">
+			<%include file="application:cv3-outils.html"%>
+			<%include file="application:cv3-newsletter.html"%>
+			<%include file="application:cv3-recherche.html"%>
+			<%include file="application:cv3-private.html"%>
+		</div>
+	</div>
+</div>
+
+<div class="hidden-print top">
+	<div class="container">
+		<div class="row"></div>
+	</div>
+</div>
+
+<!-- B. MAIN -->
+<div class="container">
+	<div class="cv3-main">
+
+		<!-- Chemin -->
+		<div class="row">
+			<div class="col-md-12 cv3-chemin visible-md visible-lg">
+				<ol class="breadcrumb">
+					<li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$labels.accueil%>" href="<%$self%>alias=<%$tzr.corailv3_home%>"><span itemprop="title"><%$labels.accueil%></span></a></li>
+					<%section loop=$path_stack name=path%><%if !$smarty.section.path.first AND $path_stack[path].oalias->raw neq $tzr.corailv3_home  %><%if $smarty.section.path.last OR $path_stack[path].sections %><li><%$path_stack[path].otitle->toText()%><%else%><li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$path_stack[path].otitle->toText()%>" href="<%$self%>alias=<%$path_stack[path].oalias->raw%>"><span itemprop="title"><%$path_stack[path].otitle->toText()%></span></a><%/if%></li><%/if%><%/section%>
+				</ol>
+			</div>
+		</div><!-- fin chemin -->
+	
+		<div class="row">
+		  <!-- <%$general_tpl%> -->
+		  <%if (!empty($general_tpl))%><%include file=$general_tpl%><%/if%>
+		</div>
+
+	</div><!-- fin cv3-main -->
+</div>
+
+<!--htdig_noindex-->
+
+<!-- C. basdepage  -->
+	
+<footer class="hidden-print footer" role="contentinfo">
+	<div class="container">
+		<div class="cv3-basdepage">
+				<%include file="application:cv3-logo.html"%>
+				<%include file="application:cv3-navbas.html"%>
+				<%include file="application:cv3-infosite.html"%>
+				<%include file="application:cv3-linkscustom.html"%>
+				<%include file="application:cv3-newsletter.html"%>
+				<%include file="application:cv3-partner.html"%>
+		</div>
+	</div>
+</footer>
+	
+
+
+	<%if $application->infotreederoule%>
+		<header class="navbar navbar-default navbar-fixed-top" role="banner">
+			<div class="container">
+				<div class="navbar-header">
+					<%include file="application:cv3-logo.html"%>
+					<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+						<span class="sr-only">Menu</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<%include file="application:menu_deroule.html"%>
+			</div>
+		</header>
+    <%/if%>
+
+<div id="scrollToTop"><a href="#"><span class="glyphicon csico-arrow_up"></span></a></div>
+
+ <script type="text/javascript">TZR.referer('<%$it_cat_mit.oalias->html%>','<%$lang_data%>');</script>
+ <%if isset($tarteaucitron_footer)%>
+   <%$tarteaucitron_footer%>
+ <%elseif $charte_osocial_addthis->raw%>
+   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<%$charte_osocial_addthis->raw%>"></script>
+ <%/if%>
+<!--/htdig_noindex-->
+
+</body>
+</html>

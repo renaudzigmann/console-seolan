@@ -1,0 +1,211 @@
+@import url(page-content.css);
+@import url(global.css);
+@import url(nyroModal.css);
+@import url(section-slider.css);
+@import url(agenda.css);
+
+
+.container {
+    width: 100%;
+}
+
+
+
+.carousel-indicators {
+	left: 0;
+}
+
+
+.cv3-chemin {
+	display: none !important;
+}
+
+
+.cv3-titrepage {
+	background: #ffffff;
+}
+
+.cv3-txtseul {
+	color: #ffffff;
+	background: #444444;
+}
+
+.cv3-txtseul h1, .cv3-txtseul h2, .cv3-txtseul h3, .cv3-txtseul h4, .cv3-txtseul h5, .cv3-txtseul h6 {
+	color: #ffffff;
+}
+
+
+
+@media (max-width: 768px) {
+	body {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+
+
+
+@media (min-width: 768px) {
+
+	.cv3-titrepage {
+		padding: 2.5em 7em 1.75em 7em;
+	}
+
+	.cv3-txtseul {
+		padding: 4em 7em;
+	}
+
+	.cv3-2cols {
+		padding: 10em 7em;
+	}
+
+	.cv3-2cols .colg, .cv3-2cols .cold {
+		width: 46%;
+		margin-left: 8%;
+		padding: 2%;
+	}
+
+	.cv3-2cols .colg {
+		margin-left: 0;
+	}
+
+	.cv3-3cols {
+		padding: 10em 7em;
+	}
+
+	.cv3-3cols .cols1, .cv3-3cols .cols2, .cv3-3cols .cols3 {
+		width: 30%;
+		margin-left: 5%;
+	}
+
+	.cv3-3cols .cols1 {
+		margin-left: 0;
+	}
+
+}
+
+
+@media (min-width: 992px) {
+
+	.cv3-titrepage {
+		padding: 2.5em 9em 1.75em 9em;
+	}
+
+	.cv3-txtseul {
+		padding: 4em 9em;
+	}
+
+	.cv3-2cols {
+		padding: 10em 9em;
+	}
+
+	.cv3-2cols .colg, .cv3-2cols .cold {
+		width: 45%;
+		margin-left: 10%;
+		padding: 2%;
+	}
+
+	.cv3-2cols .colg {
+		margin-left: 0;
+	}
+
+	.cv3-3cols {
+		padding: 10em 9em;
+	}
+
+	.cv3-3cols .cols1, .cv3-3cols .cols2, .cv3-3cols .cols3 {
+		width: 25%;
+		margin-left: 12%;
+	}
+
+	.cv3-3cols .cols1 {
+		margin-left: 0;
+	}
+
+}
+
+
+@media (min-width: 1200px) {
+
+	.cv3-titrepage {
+		padding: 2.5em 12em 1.75em 12em;
+	}
+
+	.cv3-txtseul {
+		padding: 4em 12em;
+	}
+
+	.cv3-2cols {
+		padding: 10em 12em;
+	}
+
+	.cv3-2cols .colg, .cv3-2cols .cold {
+		width: 42%;
+		margin-left: 16%;
+		padding: 2%;
+	}
+
+	.cv3-2cols .colg {
+		margin-left: 0;
+	}
+
+	.cv3-3cols {
+		padding: 10em 12em;
+	}
+
+	.cv3-3cols .cols1, .cv3-3cols .cols2, .cv3-3cols .cols3 {
+		width: 25%;
+		margin-left: 12%;
+	}
+
+	.cv3-3cols .cols1 {
+		margin-left: 0;
+	}
+
+
+}
+
+@media (max-width: 767px) {
+
+	.container {
+		width: inherit;
+		margin-left: auto;
+		margin-right: auto;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.cv3-titrepage {
+		width: inherit;
+		padding: 0;
+	}
+
+	.cv3-txtseul {
+		width: inherit;
+		padding: 0;
+	}
+
+
+	.cv3-2cols, .cv3-3cols {
+		width: inherit;
+		padding: 0;
+		background-image: none;
+	}
+
+	.cv3-2cols .colg, .cv3-2cols .cold,
+	.cv3-3cols .cols1, .cv3-3cols .cols2, .cv3-3cols .cols3 {
+		float: none;
+		width: 100%;
+		margin-left: 0;
+		margin-bottom: 15px;
+	}
+
+	.cv3-2cols .colg img, .cv3-2cols .cold img,
+	.cv3-3cols .cols1 img, .cv3-3cols .cols2 img, .cv3-3cols .cols3 img {
+		float: none;
+		max-width: 100%;
+		margin: 0 0 20px 0;
+		padding: 0;
+	}
+}

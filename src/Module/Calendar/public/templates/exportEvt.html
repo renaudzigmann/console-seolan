@@ -1,0 +1,29 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.export_text%>
+<form name="export<%$uniqid%>" method="post" action="<%$self%>" onsubmit="return TZR.isFormValidWithFocus(this,true);">
+ <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="_function" value="saveExport">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.export_text%></legend>
+  <table>
+   <tr>
+    <th>Période</th>
+    <td>
+     <input type="radio" class="radio" name="period" value="all" checked> <%$syslabels.Seolan_Module_Calendar_Calendar.alldiary%><br>
+     <input type="radio" class="radio" name="period" value="date">
+     <%$syslabels.Seolan_Module_Calendar_Calendar.at1%> <%$br_begindate->html|replace:"TZR.formatDate(this)":"TZR.format2dates(this,'begindate','enddate')"%>
+     <%$syslabels.Seolan_Module_Calendar_Calendar.to1%> <%$br_enddate->html|replace:"TZR.formatDate(this)":"TZR.format2dates(this,'begindate','enddate')"%>
+    </td>
+   </tr>
+   <tr>
+    <th>Exporter pour Outlook (2000 ,XP, 2003)</th>
+    <td><input type="checkbox" name="charset" value="latin1"></td>
+   </tr>
+  </table>
+  <br>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.export%>">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+  </div>
+ </form>
+</fieldset>

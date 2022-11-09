@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%* adaptation libre du KML pour charger une carte definie dans la console *%>
+<tzrkml xmlns:tzr="http://www.xsalto.com/maps"><%strip%>
+<styles>
+<style id="<%$br_modmap.oid%>" name="<%$br_modmap.oname->html%>">
+      <icon size="<%$br_modmap.oricon1->getImageSize('fullwidth')%>X<%$br_modmap.oricon1->getImageSize('fullheight')%>">
+      <url><%$full_serverhome%><%$br_modmap.oricon1->url%>?foo=.png</url>
+      </icon>
+      <%if $br_modmap.orshad1->url%>
+      <shadow>
+      <url size="<%$br_modmap.orshad1->getImageSize('fullwidth')%>X<%$br_modmap.orshad1->getImageSize('fullheight')%>"><%$full_serverhome%><%$br_modmap.orshad1->url%>?foo=png</url>
+      <size><%$br_modmap.orshad1->getImageSize('fullwidth')%>X<%$br_modmap.orshad1->getImageSize('fullheight')%></size>
+      <%/if%>
+</style>
+</styles>
+<markers layerid="<%$br_modmap.oid%>" count="<%$br_places|@count%>">
+<%if $br_modmap.orkmltpl->html%>
+<%assign var="filename" value=$br_modmap.orkmltpl->filename%>
+<%/if%>
+<%section name=p loop=$br_places%>
+<%if $br_places[p].valid%>
+  <marker id="<%$br_places[p].oid%>" styleid="<%$br_modmap.oid%>">
+  <name><![CDATA[<%$br_places[p].name%>]]></name>
+  <coordinates><%$br_places[p].latlng%></coordinates>
+  <%if $filename%><options><%include file="$filename" mode='annotation'%></options><%/if%>
+  </marker>
+<%/if%>
+<%/section%>
+</markers>
+<%/strip%></tzrkml>

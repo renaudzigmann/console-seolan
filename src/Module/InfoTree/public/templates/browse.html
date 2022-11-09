@@ -1,0 +1,54 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.result_text%>
+<%include file="Module/InfoTree.search.html"%>
+<div class="table-responsive">
+ <table class="table table-border cv8-tablelist" >
+  <thead>
+   <tr>
+    <%if $TZR.lang_trad && $br_translatable%><th></th><%/if%>
+    <th></th>
+    <th align="center" colspan="1"><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+    <%section name=header loop=$br_header_fields %>
+     <th><%$br_header_fields[header]->get_label()%></th>
+    <%/section%>
+   </tr>
+   <tr>
+    <td>
+     <input type="checkbox" onchange="TZR.toggleCheckBoxes(this.form);" name="selectall">
+     <input type="hidden" name="marker" value="selectstart"/>
+    </td>
+    <%if $TZR.lang_trad && $br_translatable%><td></td><%/if%>
+    <td align="center" colspan="1"></td>
+    <%section name=header loop=$br_header_fields%><td></td><%/section%>
+   </tr>
+  </thead>
+  <tbody>
+   <%section name=lines loop=$br_lines_oid %>
+    <tr <%if $br_lines_published && ($br_lines_published[lines] neq "1")%>class="napp-dataline" <%/if%>>
+     <td>
+      <input type="hidden" name="oid[]" value="<%$br_lines_oid[lines]%>">
+      <input name="_selected[<%$br_lines_oid[lines]%>]" type="checkbox" <%if $br_lines_selected[lines]%> checked<%/if%>>
+     </td>
+     <%if $TZR.lang_trad && $br_translatable%>
+      <td><%if $br_lines_translation_ok[lines]%><%$TZR.lang_data.long%><%/if%></td>
+     <%/if%>
+     <td>
+      <table class="tzr-compact">
+       <tr>
+	<%if $TZR.lang_trad && !$br_lines_translation_ok[lines]%>
+	 <td align="center"><%if $br_actions[lines][1]%><%$br_actions[lines][1]%><%/if%></td>
+	<%else%>
+	 <%section name=a loop=$br_actions[lines]%>
+	  <td align="center"><%if $br_actions[lines][a]%><%$br_actions[lines][a]%><%/if%></td>
+	 <%/section%>
+	<%/if%>
+       </tr>
+      </table>
+     </td>
+     <%section name=header loop=$br_header_fields %>
+      <td><%$br_lines_o<%$br_header_fields[header]->field%>[lines]->html%></td>
+     <%/section%>
+    </tr>
+   <%/section%>
+  </tbody>
+ </table>
+</div>

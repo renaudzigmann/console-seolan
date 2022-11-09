@@ -1,0 +1,96 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%* media état un Module/Table *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.edit-jsscripts.html"%>
+<%include file="Module/Table.functions.html"%>
+<%capture name="action_handled" assign="action_handled" %>0<%/capture%>
+<div class="cv8-contenu-center">
+
+  <div id="tzr-tablist-<%$uniqid%>">
+
+    <ul class="nav nav-responsive nav-tabs" role="tablist">
+      <%* onglet general *%>
+      <li role="presentation" class="active"><a href="#sc1-<%$uniqid%>" data-toggle="tab" role="tab" aria-expanded="true"><%$syslabels.Seolan_Core_General.general_text%></a></li>
+      <%* onglet sécurité *%>
+      <%if $imod_props.object_sec && $br_object_sec.admin%>
+      <li role="presentation"><a href="#sc<%$smarty.section.ssmod.total+3%>-<%$uniqid%>" data-url="<%$self%>function=secEdit&template=Core/Module.edit-sec-tabs.html&moid=<%$imod_props._moid%>&tplentry=br&oid=<%$br_oid%>&_raw=2" data-overlay="none" data-toggle="tabajax" role="tab" aria-expanded="false"><%$syslabels.Seolan_Core_General.security_text%></a></li>
+      <%/if%>
+    </ul>
+    
+    <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+
+      <%* container general *%>
+      <div id="sc1-<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+	<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+
+	  <%if $brt_oedit->filename%>
+	  <%assign var="filename" value=$brt_oedit->filename%>
+	  <%include file=$filename%>
+	  <%else%>
+
+	  <%foreach key=group item=fields from=$br__groups%>
+	  <%if $group != '_systemproperties'%>
+	  <fieldset>
+	    <legend><%$group%></legend>
+	    <div class="row-striped">
+	      <%section name=f loop=$fields %>
+	      <%call fieldline field=$fields[f]%>
+	      <%/section%>
+	    </div>
+	  </fieldset>
+	  <%/if%>
+	  <%/foreach%>
+	  <%if count($br__groups['_systemproperties'])>0 || isset($br_oid)%>
+	  <fieldset>
+	    <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+	    <div class="row-striped">
+	      <%include file="Module/Table.core-sysfields.html"
+	      fields=$br__groups['_systemproperties']
+	      inline
+	      %>
+	    </div>
+	  </fieldset>
+	  <%/if%>
+	  <%/if%>
+	  <%if !$smarty.capture.action_handled%>
+	  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+	    <input type="submit" onclick="editform<%$uniqid%>._function.value='procEdit';" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+	    <%if $smarty.request.usenav && !$br__islast%>
+	    <input type="submit" onclick="editform<%$uniqid%>._next.value='<%$self%>&moid=<%$_moid%>&function=edit&template=Module/Media.edit.html&tplentry=br&oid=<%$br_oid%>&navdir=next&usenav=1';" value="<%$syslabels.Seolan_Core_General.save_and_editnext_text%>">
+	    <%/if%>
+	    <%*** procEditDup missing
+		  <input type="submit" onclick="editform<%$uniqid%>._function.value='procEditDup';" value="<%$syslabels.Seolan_Core_General.clone%>">
+		  ***%>
+	    <input type="button" onclick="TZR.Record.delete('<%$uniqid%>', '<%$_moid%>', 'del', '<%$br_oid%>', {});" value="<%$syslabels.Seolan_Core_General.delete_text%>">
+	    <%if $modsec_mods[$_moid].rwv && ($lang_data eq $lang_def) && (count($lang_code)>1)%>
+	    <input type="submit" onclick="if(confirm('<%$syslabels.Seolan_Core_General.savealllangwarning%>')) jQuery(this.form).append('<input type=\'hidden\' name=\'procEditAllLang\' value=\'1\'>'); else return false;" value="<%$syslabels.Seolan_Core_General.savealllang%>">
+	    <%/if%>
+	  </div>
+	  <%/if%>
+	  
+	  <input type="hidden" name="_function" value="procEdit">
+	  <input type="hidden" name="template" value="Core.empty.html">
+	  <input type="hidden" name="uniqid" value="<%$uniqid%>">
+	  <input type="hidden" name="tplentry" value="br">
+	  <input type="hidden" name="moid" value="<%$_moid%>">
+	  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+	  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+	  <input type="hidden" name="oid" value="<%$br_oid%>">
+	  <input type="hidden" name="skip" value="1">
+	  <%if $smarty.request.usenav && $br__islast%>
+	  <input type="hidden" name="_next" value="<%$self%>moid=<%$_moid%>&function=procQuery&template=Module/Media.browse.html&tplentry=br">
+	  <%else%>
+	  <input type="hidden" name="_next" value="<%$back%>">
+	  <%/if%>
+	</form>
+
+      </div><%* end sc1 *%>
+      
+      <%* onglet sécurité *%>
+      <%if $imod_props.object_sec && $br_object_sec.admin%>
+      <div id="sc<%$smarty.section.ssmod.total+3%>-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+      <%/if%>
+
+    </div>
+  </div>
+</div>
+

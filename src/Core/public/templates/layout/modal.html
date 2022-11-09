@@ -1,0 +1,131 @@
+<div id="cvx-confirm-delete" class="cvx-confirm-delete modal fade"  role="dialog" aria-labelledby="<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><%$syslabels.Seolan_Core_General.confirm|escape:"quotes"%></h4>
+      </div>
+      <div class="modal-body">
+        <p><%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary btn-danger btn-ok cvx-confirm"><%$syslabels.Seolan_Core_General.ok%></button>
+        <button type="button" data-dismiss="modal" class="btn btn-default cvx-cancel"><%$syslabels.Seolan_Core_General.cancel%></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-confirm-generic" class="cvx-confirm-generic modal fade"  role="dialog" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title"></h4></div>
+      <div class="modal-body"></div>
+      <div class="modal-footer"><button type="button" data-dismiss="modal" class="btn btn-primary btn-danger btn-ok cvx-confirm"><%$syslabels.Seolan_Core_General.ok%></button><button type="button" data-dismiss="modal" class="btn btn-default cvx-cancel"><%$syslabels.Seolan_Core_General.cancel%></button></div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-alert-message" class="cvx-alert-message modal fade"  role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title"></h4>	
+      </div>
+      <div class="modal-body">
+        <p></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary btn-danger btn-ok cvx-confirm"><%$syslabels.Seolan_Core_General.ok%></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-auth" class="modal fade"  role="dialog" aria-labelledby="<%$syslabels.Seolan_Core_General.permission_denied|escape:'html'%>" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%$syslabels.Seolan_Core_General.permission_denied%></h4>
+      </div>
+      <div class="modal-body">
+        <form action="<%$self%>" method="post" name="auth" onSubmit="TZR.submitLogin(this); return false;">
+          <input type="hidden" name="_function" value="ajaxProcAuth">
+          <input type="hidden" name="admin" value="true">
+          <input type="hidden" name="admini" value="true">
+          <input type="hidden" name="class" value="<%$smarty.const.TZR_SESSION_MANAGER%>">
+          <input type="hidden" name="_skip" value="1"> 
+          <div id="cvx-auth-error" data-default="<%$syslabels.Seolan_Core_General.login_not_accepted|escape:javascript%>" style="visibility:hidden" class="alert alert-danger"></div>
+          <div class="form-group">
+            <label><%$syslabels.Seolan_Module_User_User.alias%></label>
+            <input type="text" name="login" value="">
+          </div>
+          <div class="form-group">
+            <label><%$syslabels.Seolan_Module_User_User.password%></label>
+            <input type="password" name="password">
+          </div>
+          <button class="btn btn-default" type="submit">Ok</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        [ <%$tzr.console_release_name%> ] <%$tzr.societe%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-selection" class="cvx-selection selection modal fade"  role="dialog" aria-labelledby="<%$syslabels.Seolan_Core_General.selectedobjects%>"></div>
+
+<div id="cs-default-dialog" class="modal" aria-hidden="true" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-daterange-modal" class="cvx-daterange modal fade"  role="dialog" aria-labelledby="TESTS">
+  <div class="modal-dialog modal-lg automodal" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+	<div class="tzr-action"><button data-dismiss="modal" class="btn btn-default"><%$syslabels.Seolan_Core_General.close_text%></button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="cvx-applications-modal" class="cvx-applications modal fade" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <form action="<%$self%>" method="post">
+          <input type="hidden" name="class" value="\Seolan\Module\Application\Application">
+          <input type="hidden" name="function" value="setForcedApps">
+          <input type="hidden" name="template" value="Core.layout/main.html">
+          <input type="hidden" name="_next" value="<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail">
+          <div class="form-group">
+            <label><%$syslabels.Seolan_Module_Application_Application.choose_current_app%></label>
+            <select name="apps_koids">
+              <%foreach from=$allowed_apps item="label" key="oid"%>
+                <option <%if $choosed_app == $oid%>selected<%/if%> value="<%$oid%>"><%$label%></option>
+              <%/foreach%>
+            </select>
+          </div>
+          <button class="btn btn-default" type="submit">Ok</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

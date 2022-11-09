@@ -1,0 +1,6 @@
+Bonjour <%$user_fullnam%>,<br>
+<%foreach from=$conv_list item=c%>
+Vous avez <%$c["unread"]%> nouveau(x) message(s) de la part de <%$c["name"]%><br><br>
+<%/foreach%>
+Vous pouvez aller le(s) consulter sur le site <a href="<%$link_url%>"><%$link_text%></a>
+              

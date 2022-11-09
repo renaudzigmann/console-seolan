@@ -1,0 +1,29 @@
+<a 
+    data-dyncontent='{"target":"#bookmarks-links", "src":{"selector":"#cvx-bookmarks", "event":"show.bs.dropdown"}, "url":"<%$self%>&moid=<%$sysmods.xmoduser2%>&tplentry=br&function=getBookmarks&_skip=1&template=Module/User.bookmarks-links.html"}' 
+    class="dropdown-toggle" 
+    aria-expanded="false" 
+    aria-haspopup="true" 
+    role="button" 
+    data-toggle="dropdown" 
+    href="#">
+  <span class="glyphicon csico-bookmark-border" aria-hidden="true"></span>
+</a>
+<ul class="dropdown-menu" id="bookmarks-links">
+</ul>
+<script type="text/javascript">
+ jQuery(document).ready(function(){
+   jQuery("a[data-dyncontent]").each(function(i, o){
+     var params = jQuery(o).data('dyncontent');
+     jQuery(params.src.selector).on(params.src.event, function(){
+       TZR.jQueryLoad({
+	 url:params.url,
+	 target:params.target,
+	 noautocreate:true,
+	 nocheckauth:false,
+	 noautoscroll:true,
+	 dataType:'text/html'
+       });
+     });
+   });
+});
+</script>

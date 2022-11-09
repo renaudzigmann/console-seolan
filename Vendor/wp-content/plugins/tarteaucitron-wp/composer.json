@@ -1,0 +1,31 @@
+{
+  "name": "couleurcitron/tarteaucitron-wp",
+  "description": "Cookie manager WordPress plugin",
+  "license": "MIT",
+  "type": "wordpress-plugin",
+  "authors": [
+    {
+      "name": "Couleur Citron",
+      "email": "technique@couleur-citron.com",
+      "homepage": "https://www.couleur-citron.com"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "CouleurCitron\\TarteaucitronWP\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.6",
+    "ext-json": "*",
+    "composer/installers": "^1.5",
+    "tightenco/collect": "^5.4"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^3.4"
+  }
+}

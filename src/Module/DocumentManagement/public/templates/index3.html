@@ -1,0 +1,289 @@
+<%* vue arbo *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%include file="Module/DocumentManagement.bdscripts.js"%>
+<%include file="Module/DocumentManagement.top.html"%>
+
+<script language="javascript" type="text/javascript">
+ // Vue normale sur le noeud en cours
+ v<%$uniqid%>.gotonode=function(){
+   v<%$uniqid%>.jQueryLoad("<%$self%>&moid=<%$smarty.request.moid%>&_function=index&template=Module/DocumentManagement.index2.html&tplentry=br&clear=1&oid="+v<%$uniqid%>.currentOid); 
+ }
+ // Telechargement des fichiers
+ v<%$uniqid%>.downloadselected=function(){
+   var f=document.forms['browse<%$uniqid%>'];
+   var sel=TZR.checkBoxesIsChecked(f);
+   if(!sel) return;
+   f._function.value='documentsDownload';
+   f.physical.value=0;
+   f.oid.value=v<%$uniqid%>.currentOid;
+   f.submit();
+ }
+ // Suppression d'un document
+ v<%$uniqid%>.deleteselected = function() {
+   var form =document.forms['browse<%$uniqid%>'];
+   var sel=TZR.checkBoxesIsChecked(form);
+   var next = "<%$self%>&moid=<%$smarty.request.moid%>&_function=index2&template=Module/DocumentManagement.index3.html&tplentry=br&clear=1&oid=";
+   if(!sel){
+     form.oid.value=v<%$uniqid%>.currentOid;
+     next+=v<%$uniqid%>.parentOid;
+   }else{
+     form.oid.value=v<%$uniqid%>.currentOid;
+     next+=v<%$uniqid%>.currentOid;
+   }
+   return TZR.DocMngt.preDel(form,null,{next:next});
+ }
+ // Chargement du contenu d'un repertoire
+ v<%$uniqid%>.loaddir=function(params) { 
+   jQuery('#viewdirglob<%$uniqid%>').css('opacity',0.5);
+   jQuery.getJSON("<%$self%>moid=<%$smarty.request.moid%>&_function=ajaxLoadDir&skip=1&_raw=1&_silent=1",params,v<%$uniqid%>.showdir);
+ }
+ // Callback de "loaddir" : affiche le contenu
+ v<%$uniqid%>.appendRes=function(viewdirdiv, qno, buff) {
+   setTimeout(function(){var cno = null; try{cno=viewdirdiv.getAttribute('data-qno');}catch(e){}; if (cno==qno)viewdirdiv.innerHTML+=buff.join('');}, 200);
+ }
+ v<%$uniqid%>.showdir=function(res) {
+   var viewdirdiv=document.getElementById('viewdirdiv<%$uniqid%>');
+   var viewdirtitlediv=document.getElementById('viewdirtitlediv<%$uniqid%>');
+   var orderdiv=document.getElementById('orderdiv<%$uniqid%>');
+   var orderSel=document.getElementById('orderSel<%$uniqid%>');
+   var newdirsdiv=document.getElementById('newdirsdiv<%$uniqid%>');
+   var newdocsdiv=document.getElementById('newdocsdiv<%$uniqid%>');
+   var newdirs=document.getElementById('newdirsid<%$uniqid%>');
+   var newdocs=document.getElementById('newdocsid<%$uniqid%>');
+   var tzraction=document.getElementById('tzr-action<%$uniqid%>');
+   var tzrdocmgtpath=document.getElementById('tzr-docmgt-path<%$uniqid%>');
+   var qno =  res.doc.oid+res.doc._parentoid;
+   viewdirdiv.setAttribute('data-qno',qno);
+   var form = document.forms['browse<%$uniqid%>'];
+   form['elements']['oid'].value = v<%$uniqid%>.currentOid = res.doc.oid;
+   form['elements']['_parentoid'].value = v<%$uniqid%>.parentOid = res.doc.parentoid;
+   // Changement du titre et du commentaire
+   viewdirtitlediv.innerHTML='<h4>'+res.tpl.title+' : '+res.doc.title+'</h4><div class="tzr-docmgt-comment">'+res.doc.comment+'</div>';
+   // Chargement des ordres personnalisés 
+   var len=orderSel.options.length;
+   var i;
+   for(i=len-1; i>=4;i--) {
+     orderSel.options[i]=null;
+   }
+   for(i=0;i<res.doc.sorting.length;i++) {
+     orderSel.options[orderSel.options.length] = new Option(res.doc.sorting[i].name,res.doc.sorting[i].order);
+   }
+   // Affichage des documents
+   viewdirdiv.innerHTML = '';
+   var classes=['odd','even'];
+   var buff = [];
+   var buffhtml = null;
+   var toInit = [];
+   if(res.doc.documents.length>0){
+     orderdiv.style.visibility='visible';
+     for(var i=0; i<res.doc.documents.length; i++){
+       toInit.push([res.doc.documents[i].oid,res.doc.documents[i].countfiles]);
+       var html='<div class="tzr-docmgt-doc1"><input type="hidden" value="ok" name="_selectedok"/>';
+       if(res.doc.documents[i].actions.indexOf(',ro,')>=0){
+         html+='<input type="checkbox" class="checkbox" name="_selected['+res.doc.documents[i].oid+']">';
+	 html+='<a class="cv8-ajaxlink" href="'+res.doc.documents[i].urlview+'"><%$syslabels.Seolan_Core_General.view%></a>';
+       }
+       if(res.doc.documents[i].actions.indexOf(',rw,')>=0){
+         html+='<a class="cv8-ajaxlink" href="'+res.doc.documents[i].urledit+'"><%$syslabels.Seolan_Core_General.edit%></a>';
+       }
+       if(res.doc.documents[i].actions.indexOf(',lock,')>=0){
+         html+='<a class="cv8-ajaxlink" href="'+res.doc.documents[i].urledit+'&_mode=lock&_moidlock=<%$_moid%>"><%$syslabels.Seolan_Core_General.lock%></a>';
+       }
+       if(res.doc.documents[i].lock) var locktxt="<br><%$syslabels.Seolan_Core_General.locked_text%> ("+res.doc.documents[i].lock.user+")";
+       else var locktxt="";
+
+       var tooltip = res.doc.documents[i].tpltitle+'<br>'+res.doc.documents[i].upd+'<br>'+locktxt;
+       html+='<span class="tzr-hottip-c" data-toggle="tooltip" data-html="true" title="'+tooltip.replace(/"/g,'&quot;')+'">'+res.doc.documents[i].title+'</span>';
+
+       if(res.doc.documents[i].docs) html+=res.doc.documents[i].docs;
+       html+='</div>';
+       if (res.doc.documents.length>=100){
+	 buff.push(html);
+	 if (buff.length == 50){
+	   v<%$uniqid%>.appendRes(viewdirdiv, qno, buff);
+	   buff = [];
+	 }
+       } else {
+	 viewdirdiv.innerHTML+=html;
+       }
+      }
+     if (buff.length > 0){
+       v<%$uniqid%>.appendRes(viewdirdiv, qno, buff);
+       buff = [];
+     }
+   } else {
+     viewdirdiv.innerHTML='<%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.nodocument|escape:"javascript"%>';
+     orderdiv.style.visibility='hidden';
+   }
+   var async = (res.doc.documents.length>=100);
+   for(var i=0; i<toInit.length; i++){
+     TZR.DocMngt.Docs.asyncInit(toInit[i][0],
+				toInit[i][1],
+				"browse<%$uniqid%>",
+				"<%$syslabels.Seolan_Core_General.files_text%>",
+				async); 
+   }
+   jQuery('#viewdirglob<%$uniqid%>').css('opacity','');
+   // Charge les types de docs qui peuvent être créés
+   if(res.doc.actions.indexOf('rw')>=0){
+     v<%$uniqid%>.loadSelect(newdirs,res.doc.newdirs);
+     v<%$uniqid%>.loadSelect(newdocs,res.doc.newdocs);
+   }else{
+     v<%$uniqid%>.loadSelect(newdirs,new Array());
+     v<%$uniqid%>.loadSelect(newdocs,new Array());
+   }
+   if(newdirsdiv.style.visibility!='visible' && newdocsdiv.style.visibility!='visible'){
+     tzraction.style.visibility='hidden';
+   }else{
+     tzraction.style.visibility='visible';
+   }
+   // Chemins (chemin de la base doc, à voir)
+   tzrdocmgtpath.innerHTML='';
+   for(var i in res.doc.mpaths){
+     for(var j in res.doc.mpaths[i]){
+       tzrdocmgtpath.innerHTML+=' '+res.doc.mpaths[i][j];
+     }
+     tzrdocmgtpath.innerHTML+='<br>';
+   }
+
+   // chemin module
+   var paths = [];
+   for(var i =0; i<res.doc.paths.length; i++){
+     paths.push(res.doc.paths[i]);
+   }
+
+   TZR.updateModulePath('<%$uniqid%>', paths, {full:false});
+   
+ };
+ // Affiche les sous repertoires d'un repertoire
+ v<%$uniqid%>.showdirfolders=function(response){
+   var html;
+   var dir;
+   for(var i=0;i<response.directories.length;i++){
+     dir=response.directories[i];
+     html='<li id="node_'+dir.oid+'" tree-icon="'+dir.smalliconurl+'"><span><a href="#" onclick="v<%$uniqid%>.loaddir({oid:\''+dir.oid+'\'}); return false;">'+dir.title;
+     if(dir.countdocs>0){
+       html+='('+dir.countdocs+')';
+     }
+     html+='</a></span>';
+     if(dir.countdirs>0){
+       html+='<ul class="ajax"><li>{url:"<%$self%>function=ajaxLoadDirTree&moid=<%$imod_props._moid%>&oid='+dir.oid+'&_raw=1&_silent=1",dataType:"json",callback:"v<%$uniqid%>.showdirfolders"}</li></ul>';
+     }
+     html+='</li>';
+     jQuery(this).append(html);
+   }
+ }
+ // Charge un select
+ v<%$uniqid%>.loadSelect=function(sel,items){
+   jQuery(sel).empty();
+   if(items.length>0){
+     sel.options[0]=new Option('---','');
+     for(var i=0;i<items.length;i++){
+       sel.options[i+1]=new Option(items[i].title,items[i].url);
+     }
+     sel.parentNode.style.visibility='visible';
+   }else{
+     sel.parentNode.style.visibility='hidden';
+   }
+ }
+ // Change l'ordre d'affichage d'un repertoire
+ v<%$uniqid%>.changeOrder=function(order){
+   if(order!='') v<%$uniqid%>.loaddir({oid:v<%$uniqid%>.currentOid,fileorder:order});
+ }
+ // Creation d'un nouveau document
+ v<%$uniqid%>.newdoc=function(url) {
+   if(url!='') v<%$uniqid%>.jQueryLoad(url);
+ }
+
+ // Création de l'arbo
+ var simpleTreeCollection;
+ jQuery(function(){
+   simpleTreeCollection=jQuery(".simpleTree.docsTree").simpleTree({drag:false,animate:true});
+   <%if $br_oidcurrent%>
+    simpleTreeCollection[0].openNode(document.getElementById('node_<%$br_oidcurrent%>'),true)
+    v<%$uniqid%>.loaddir({oid:'<%$br_oidcurrent%>'});
+   <%/if%>
+ });
+//# sourceURL=Module/DocumentManagement/public/templates/index.html
+</script>
+<form method="post" name="browse<%$uniqid%>" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$imod_props._moid%>">
+ <input type="hidden" name="template" value="Module/DocumentManagement.viewdir.html">
+ <input type="hidden" name="message" value="">
+ <input type="hidden" name="_function" value="viewDir">
+ <input type="hidden" name="_next" value="">
+ <input type="hidden" name="oid" value="">
+ <input type="hidden" name="_parentoid" value="">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="physical" value="">
+ <input type="hidden" name="_move" value="">
+ <input type="hidden" name="_copy" value="">
+ <input type="hidden" name="targetoid" value="">
+ <input type="hidden" name="marker" value="selectstart"/>
+ <div class="row">
+ <div class="col-xs-12 col-md-5 tzr-docmgt-tree">
+
+    <ul class="simpleTree docsTree">
+     <li class="root">
+      <span><a href="#" onclick="v<%$uniqid%>.loaddir({oid:'<%$br_path[0][0]->oid%>'}); return false"><%$imod_props.modulename%> : <%$br_path[0][0]->title%></a></span>
+      <ul>
+       <%section name="i" loop=$br_ors%>
+	<li id="node_<%$br_docs[i]->oid%>" tree-icon="<%$br_docs[i]->smalliconurl%>">
+	 <span>
+	  <a href="#" onclick="v<%$uniqid%>.loaddir({oid:'<%$br_docs[i]->oid%>'}); return false"><%$br_docs[i]->title%><%if $br_docs[i]->countdocs%>&nbsp;(<%$br_docs[i]->countdocs%>)<%/if%></a>
+	 </span>
+	 <%if $br_docs[i]->countdirs>0 && $br_ors[i].level>=$br_ors[$smarty.section.i.index_next].level%>
+	  <ul class="ajax">
+	   <li>{url:"<%$self%>function=ajaxLoadDirTree&moid=<%$imod_props._moid%>&oid=<%$br_docs[i]->oid%>&_raw=1&_silent=1",dataType:"json",callback:"v<%$uniqid%>.showdirfolders"}</li>
+	  </ul>
+	 <%/if%>
+	 <%if $br_ors[i].level<$br_ors[$smarty.section.i.index_next].level%><ul><%/if%>
+	 <%if $br_ors[$smarty.section.i.index_next].level%>
+	  <%assign var="levelNext" value=$br_ors[$smarty.section.i.index_next].level%>
+	 <%else%>
+	  <%assign var="levelNext" value="1"%>
+	 <%/if%>
+	 <%math equation="x-y" x=$br_ors[i].level y=$levelNext assign="jump"%>
+	 <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+	 <%if $jump>=0%></li><%/if%>
+	 <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+	 <%if $jump>0%>
+	  <%section name=foo loop=$jump%>
+	    </ul>
+	   </li>
+	  <%/section%>
+	 <%/if%>
+       <%/section%>
+      </ul>
+     </li>
+    </ul>
+
+   </div>
+   <div class="col-xs-12 col-md-7 tzr-docmgt-treesep">
+
+    <div id="viewdirglob<%$uniqid%>">
+     <div id="viewdirtitlediv<%$uniqid%>"></div>
+     <div class="tzr-docmgt-paramblock form-inline" id="orderdiv<%$uniqid%>" style="visibility:hidden">
+     <div class="form-group">
+      <label><%$syslabels.Seolan_Core_General.order%></label>
+      <select onchange="v<%$uniqid%>.changeOrder(this.value);" name="fileorder" id="orderSel<%$uniqid%>">
+       <option value="">---</option>
+       <option value="title">Titre</option>
+       <option value="UPD"><%$syslabels.Seolan_Core_General.last_update%></option>
+       <option value="doctype">Type de document</option>
+      </select>
+      </div>
+     </div>
+     <div id="viewdirdiv<%$uniqid%>"></div>
+     <div id="tzr-action<%$uniqid%>" class="tzr-action" style="visibility:hidden">
+      <div class="form-group" id="newdocsdiv<%$uniqid%>" style="visibility:hidden;"><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.newdocument_text%></label>
+       <select id="newdocsid<%$uniqid%>" name="newdocs" onchange="v<%$uniqid%>.newdoc(this.value);"></select>
+      </div>
+      <div class="form-group" id="newdirsdiv<%$uniqid%>" style="visibility:hidden;"><label>
+       <%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.newfolder_text%></label><select id="newdirsid<%$uniqid%>" name="newdirs" onchange="v<%$uniqid%>.newdoc(this.value);"></select>
+      </div>
+     </div>
+    </div>
+</div>
+</div>
+</form>

@@ -1,0 +1,61 @@
+
+<p align="center">
+  <%if $smarty.request._archive%>
+  <h3>[ Archive <%$smarty.request._archive|date_format:"%d-%m-%Y %H:%M:%S"%> ]</h3>
+  <%/if%>
+  <table>
+    <tbody>
+      <%foreach key=group item=fields from=$br__groups %>
+      <%if $group != '_systemproperties'%>
+      <tr  class="fieldsgroups"><th colspan="2"><%$group%></th></tr>
+      <%section name=f loop=$fields %>
+      <tr>
+      <th><label><%$fields[f]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+      <td><%$fields[f]->html%></td>
+      </tr>
+      <%/section%>
+      <%/if%>
+      <%/foreach%>
+      <tr class="fieldsgroups">
+	<th colspan="2"><%$syslabels.Seolan_Core_General.properties_text%></th>
+      </tr>
+      <%$sysfields=$br__groups['_systemproperties']%>
+      <%section name=fs loop=$sysfields%>
+      <%if $sysfields[fs]->field != 'PUBLISH' || isset($modsec_mods[$_moid].rwv)%>
+      <tr>
+      <th><label><%$sysfields[fs]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+      <td><%$sysfields[fs]->html%></td>
+      </tr>
+      <%/if%>
+      <%/section%>
+    </tbody>
+  </table>
+</p>
+<%if !$br___ssmod_in_template%>
+<p style="text-align:center">
+  <%section name=ssmod loop=$br___ssmod%>
+  <%assign var=browse value=$br___ssmod[ssmod]%>
+  <h4><%$br___ssprops[ssmod].modulename%></h4>
+  <%if $browse.lines_oid%>
+  <table class="bordered">
+    <thead>
+      <tr>
+	<%section name=header loop=$browse.header_fields%>
+	<th><%$browse.header_fields[header]->label%></th>
+	<%/section%>
+      </tr>
+    </thead>
+    <tbody>
+      <%section name=b loop=$browse.lines_oid%>
+      <tr>
+	<%section name=header loop=$browse.header_fields%>
+	<td><%getvar var="br___ssmod[`$smarty.section.ssmod.index`][lines_o`$browse.header_fields[header]->field`][`$smarty.section.b.index`]->html"%></td>
+	<%/section%>
+      </tr>
+      <%/section%>
+    </tbody>
+  </table>
+  <%/if%>
+  <%/section%>
+</p>
+<%/if%>

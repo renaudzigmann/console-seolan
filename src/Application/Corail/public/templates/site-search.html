@@ -1,0 +1,18 @@
+<!--<%$smarty.template%>-->
+<%$conf=$smarty.const.cvx_site_search%>
+<div id="cv3-recherche" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-recherche" href="#recherche<%$id%>"><%label v="recherche_title" t="Recherche"%></a>
+  <h4><%label v="recherche_title" t="Recherche"%></h4>
+  <div id="recherche<%$id%>" class="collapse">
+    <div class="middle">
+      <form name="sitesearch" method="get" action="<%$self%>" role="search">
+        <input type="text" name="terms" placeholder="<%$labels.recherche%>..."/>
+        <button class="btn btn-primary" type="submit" name="button"><%$labels.recherche_go%></button>
+        <input type="hidden" name="_" value="<%time()%>">
+        <input type="hidden" name="_skip" value="1">
+        <input type="hidden" name="_next" value="">
+        <input type="hidden" name="alias" value="<%$conf.alias%>">
+    </form>
+    </div>
+  </div><!-- fin recherche -->
+</div><!-- fin cv3-recherche -->

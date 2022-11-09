@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <%include file="Core.header/layout.html"%>
+  <script type="text/javascript">
+   var menuCollection;
+   // Recharge l'arbo de l'admin
+   function home_reloadMenu(oid){
+    if(!oid) oid="";
+    else if(!/^[_a-z0-9]+:(\*|[a-z0-9_-]+)$/i.test(oid)) oid="";
+    if(document.getElementById('cv8-infotreemenu')){
+     jQuery('#cv8-infotreemenu').load('<%$self%>moid=<%$tzr.admin_xmodinfotree%>&function=home&do=add&oid='+oid+'&norubric=1&tplentry=menu&template=Module/InfoTree.tree.html&maxlevel=1&oidtop=<%$menu_self.oid%>&_raw=1&skip=1&action=home_viewpage&ajaxurl=self&action=home_viewpage');
+    }
+   }
+   // Recharge l'arbo des modules
+   function home_reloadModules(){
+    if(menuCollection[0]){
+     menuCollection[0].reloadAjaxNode(document.getElementById('cv8-navigation-allmodules'));
+    }
+   }
+   // Affiche le contenu du page du gestionnaire de rubrique
+   function home_viewpage(oid,alias,title,nbssrub,nbsec){
+    TZR.jQueryLoad({noautocreate:true,target:'#cv8-content',url:'<%$self%>&_bdxnewstack=1&moid=<%$tzr.admin_xmodinfotree%>&function=viewpage&tplentry=it&template=Core.content/infotree/main.html&skip=1&_nav=0&_path=1&oidit='+oid+'&_notrad=1&LANG_DATA=<%$lang_user%>'});
+    menuCollection[0].nodeToggle(document.getElementById('node_'+oid),true);
+   }
+   // Depile un groupe de module
+   function home_toggleModules(li){
+    menuCollection[0].nodeToggle(li,true);
+    var html='<div class="cv8_contentpadding"><h1>'+jQuery('>span>a:first',li).html()+'</h1>';
+    jQuery('>ul>li>span>a',li).each(function(){
+     var jthis=jQuery(this);
+     html+='<div class="cv8_inlineblock cv8_submenu"><div class="block"><a href="'+jthis.attr('href')+'" bt-xtitle="'+jthis.attr('bt-xtitle')+'" onclick="home_viewmodule(this);return false;"><span class="haut"><img src="/tzr/templates/ico/general/menu_default.png" width="32" height="32">'+jthis.html()+'<span class="fin_float"></span></span><span class="text">'+jthis.attr('bt-xtitle')+'</span></a></div></div>';
+    });
+    html+='</div>';
+    jQuery('#cv8-content').html(jQuery(html));
+   }
+   // Affiche le contenu d'un module
+   function home_viewmodule(a){
+    var ja=jQuery(a);  
+    var href=ja.attr('href');
+    var url=href.substr(href.indexOf('#')+1)+'&_bdxnewstack=1';
+    TZR.mainurl='';
+    TZR.maintitle=ja.find('>span:first').text();
+    TZR.setDocumentTitle(TZR.maintitle);
+    TZR.setInfoText(ja.attr('bt-xtitle'));
+    TZR.clearNav();
+    TZR.addNav(TZR.maintitle,url);
+    TZR.jQueryLoad({target:'#cv8-content',url:url});
+   }
+   // Affiche le contenu d'un signet
+   function home_viewbookmark(key){
+    TZR.jQueryLoad({noautocreate:true,target:'#cv8-content',url:'<%$self%>&_bdxnewstack=1&moid=<%$sysmods.xmoduser2%>&function=getBookmark&tplentry=br&template=Core.content/bookmark.html&skip=1&key='+key});
+   }
+   // Déplie un noeud du menu des signets
+   function home_toggleBookmarks(li,dispgrp){
+    menuCollection[0].nodeToggle(li,true);
+    if(dispgrp){
+     var html='<div class="cv8_contentpadding"><h1>'+jQuery('>span>a:first',li).html()+'</h1>';
+     jQuery('>ul>li>span>a',li).each(function(){
+      var jthis=jQuery(this);
+      html+='<div class="cv8_inlineblock cv8_submenu"><div class="block"><a href="#" onclick="home_viewbookmark(\''+jthis.attr('href').replace('#','')+'\'); return false;"><span class="haut"><img src="/tzr/templates/ico/general/menu_default.png" width="32" height="32">'+jthis.html()+'<span class="fin_float"></span></span><span class="text">'+jthis.attr('bt-xtitle')+'</span></a></div></div>';
+     });
+     html+='</div>';
+     jQuery('#cv8-content').html(jQuery(html));
+    }
+   }
+   // Prepare l'ajout d'un signet à la volée    
+   function home_addBookmark(){
+    var urls=new Array();
+    var titles=new Array();
+    var comments=new Array();
+    jQuery('#cv8-content div.cv8-module-container').each(function(){
+     var tzrobj=jQuery(this).data('tzrobj');
+     if(tzrobj.modulecontainer._method=='GET'){
+      urls.push(tzrobj.modulecontainer._uri);
+      var title=jQuery('div.cv8-titre:first>h2',tzrobj.module).html();
+      if(!title) title='';
+      titles.push(title);
+      var comm=jQuery('div.cv8-titre:first>span',tzrobj.module).html();
+      if(!comm) comm='';
+      comments.push(comm);
+     }
+    });
+    TZR.mainurl='';
+    TZR.maintitle='';
+    TZR.setInfoText('');
+    TZR.jQueryLoad({target:'#cv8-content',url:'<%$self%>&_bdxnewstack=1&moid=<%$sysmods.xmoduser2%>&function=insertBookmark&template=Module/User.bookmarks-new.html&tplentry=br',data:{urls:urls,titles:titles,comments:comments}});
+   }
+   // Lance une recherche via le moteur de recherche
+   function home_search(f){
+    TZR.mainurl='';
+    TZR.maintitle='';
+    TZR.setDocumentTitle(TZR.maintitle);
+    TZR.setInfoText('');
+    TZR.clearNav();
+    return TZR.ajaxSubmitForm(f);
+   }
+
+   // Actions effectuées après le chargement de la page
+   jQuery(window).load(function(){
+     var $ = jQuery;
+     // Ajoute un filtre aux doublebox (pour les champs des sections fonctions par exemple)
+     $(document).on('change keyup search','input.doublebox-filter',function() {
+       var $doublebox = $($(this).data("doublebox-selector"),$(this).parent());
+       var text = this.value.toLowerCase();
+       $doublebox.find("option").hide().filter(function(){
+         return $(this).val().match(new RegExp(text,'i')) || $(this).html().match(new RegExp(text,'i'));
+       }).show();
+     });
+     jQuery('#cv8-top').resizable({distance:5,minWidth:980,handles:'e',alsoResize:'#cv8-container,#cv8-content',stop:function(e,ui){
+       jQuery.get('<%$self%>&skip=1&_raw=2&moid=<%$sysmods.xmoduser2%>&function=setPref&prop=contentsize&propv='+jQuery('#cv8-content').width());
+       jQuery('#cv8-container,#cv8-content').height('');
+       window.dispatchEvent(new Event('resize'));
+     }}).find('div.ui-resizable-e').dblclick(function(){
+       var size=TZR.resizeTo('toggle');
+       jQuery.get('<%$self%>&skip=1&_raw=2&moid=<%$sysmods.xmoduser2%>&function=setPref&prop=contentsize&propv='+size);
+       window.dispatchEvent(new Event('resize'));
+     });
+     TZR.initObjCleaner();
+     TZR.lasthid='';
+     TZR.mainurl='';
+     TZR.maintitle='';
+     TZR.historymode='normal';
+     // Alternace de couleur sur les tr des tableaux
+     TZR.applyAlternate();
+     // Info bulle
+     TZR.applyHottip(jQuery('.tzr-hottip-c'));
+     // Lien avec demande de confirmation et qui ne soit pas un lien ajax
+     jQuery('a:not(.cv8-ajaxlink)').live('click',function(e){
+       if(!TZR.checkLinkConfirm(this)) return false;
+     });
+     // Modification des liens type ajax
+     jQuery('a.cv8-ajaxlink').live('click',function(e){
+       // Confirmation eventuelle
+       if(!TZR.checkLinkConfirm(this)) return false;
+       // Recupere le container
+       var cont=jQuery(this).parents('div.cv8-module-container');
+       // Detruit les eventuels tooltip bt
+       jQuery.bt.docClick(e);
+       // Supprime d'eventuels ckeditor (probleme de focus et de menu contextuel sous ie>=7)
+//       cont.find('textarea.xrichtext').ckeditor(function(){this.destroy();}).remove();
+       // Charge la nouvelle page et empeche l'execution par defaut du lien
+       var params=jQuery(this).data('linkoptions');
+       if(!params) params={};
+       if(!params.target) params.target=cont[0];
+       params.url=this.href;
+       TZR.jQueryLoad(params);
+       e.preventDefault();
+     }).live('mouseup',function(e){
+      if(e.which==2){
+       var h=this.href;
+       var t=this.target;
+       var a=this;
+       a.target="_new";
+       a.href="<%$self%>&moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&gopage="+escape(a.href+'&_bdxnewstack=1');
+       setTimeout(function(){a.href=h;a.target=t;},500);
+      }
+     });
+     // Gestion de l'historique navigateur pour ajax
+     if(top.location.hash) jQuery('#cv8-content>div').remove();
+     jQuery('#cv8-content').show();
+     jQuery(window).bind('hashchange',function(e,ui){
+       var hregex=/^history-[0-9]+$/;
+       if(ui) var hid=ui.value;
+       else var hid=top.location.hash.replace('#','');
+       if(hid!=TZR.lasthid && hid=='') location.reload();
+       if(hid==TZR.lasthid || !hregex.test(hid)) return false;
+       TZR.loadNavHistory(hid,true);
+       TZR.lasthid=hid;
+     });
+     jQuery(window).trigger('hashchange');
+     // Redimmenssionne la page
+     TZR.resizeTo(<%$upref.contentsize%>);
+     // Applique simpleTree sur le menu
+     menuCollection = jQuery("#cv8-menu").simpleTree({drag:false});
+     // Affiche la selection
+     TZR.SELECTION.update();
+     // Over/out sur les langues
+     jQuery('#cv8-langs').mouseenter(function(){jQuery('#cv8-alllangs').fadeIn(200);}).mouseleave(function(){jQuery('#cv8-alllangs').fadeOut(200);});
+     <%if $smarty.request.gopage%>
+     // Affiche la page demandée
+     if(!top.location.hash) TZR.jQueryLoad({target:'#cv8-content',url:'<%$smarty.request.gopage%>'});
+     <%/if%>
+     <%if $xuser->_cur.bohome%>
+     if(!top.location.hash) home_viewpage('<%$xuser->_cur.bohome%>');
+     <%/if%>
+   });
+   // validateurs html5
+   jQuery(document).on('click', ':submit', function(){
+
+       var firstinvalid = jQuery(this).parents('form').find(':invalid').first();
+       if (firstinvalid.length == 0)
+	 return;
+       var tabid = jQuery(firstinvalid).parents('.tzr-tabcontent').attr('id');
+       if (typeof(tabid) != "undefined" ){
+	 jQuery('li>a[href="#'+tabid+'"]').click();
+       }
+       // si invalid repercuté dans les fieldsets
+       if (firstinvalid.hasClass('fieldsetAccordionOpen')){
+	 return;
+       }
+       if (firstinvalid.hasClass('fieldsetAccordionClose')){
+	 firstinvalid.find('>legend').click();
+	 return;
+       }
+       // sinon (champ simple, et pas fait dans validfrom), container fieldset parent fermé
+       jQuery(firstinvalid).parents('fieldset.fieldsetAccordionClose').find('>legend').click();
+     });
+  </script>
+ </head>
+ <body>
+  <div id="cv8-container">
+   <!-- haut de page -->
+   <div id="cv8-top">
+    <div class="cv8-top-left">
+     <div class="cv8-perso">
+      <ul>
+       <li><%$smarty.session._TZR.FullName%></li>
+	<li><a  onclick="TZR.Dialog.openURL('<%$self%>moid=<%$sysmods.xmodadmin%>&function=showUserManual&template=Core/Module.usermanual.html&tplentry=br&_skip=1&chapter=intro&_raw=1');return false;" href="#"><%$syslabels.Seolan_Core_General.help_text%></a></li>
+       <%if empty($tzr.hiddenmyaccountlink)%>
+	<li><a href="<%$self%>moid=<%$sysmods.xmoduser2%>&function=myAccount&template=Module/User.myAccount.html&tplentry=br" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_User_User.myaccount%></a></li>
+       <%/if%>
+       <%if !$nobody%>
+	<%if empty($tzr.hiddenwebsitelink)%><li><a target="site" href="<%$tzr.societe_url%>"><%$syslabels.Seolan_Core_General.website%></a></li><%/if%>
+	<li><a href="<%$self%>class=\Seolan\Core\Session&function=close&template=Core.layout/auth.html"><%$syslabels.Seolan_Core_General.logout_text%></a></li>
+       <%/if%>
+       <%if count($langsort_code)>1%>
+       <li id="cv8-langs">
+	 <a href="#" onclick="return false;"><%$syslabels.Seolan_Core_General.languages_text%></a>
+	 <div id="cv8-alllangs">
+	   <div id="cv8-alllangsbg">
+	     <div class="cv8-langsmode"><%$syslabels.Seolan_Core_General.languages_change%></div>
+	     <a <%if $lang_data != $lang_def%>href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$lang_def%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"<%/if%>><strong><%$TZR.lang_def.text%></strong></a>
+	     <%section name=lang loop=$langsort_code%>
+	     <%if empty($TZR.lang_trad)%>
+	     <%if $langsort_code[lang] neq $lang_def 
+		  && $langsort_code[lang] neq $lang_trad
+	          && $langsort_code[lang] neq $lang_data%>
+	     <a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$langsort_text[lang]%></a>
+	     <%/if%>
+	     <%if $langsort_code[lang] eq $lang_data
+		  && $langsort_code[lang] neq $lang_def%>
+	     <a class="currentlang"><%$langsort_text[lang]%></a>
+	     <%/if%>
+	     <%elseif $langsort_code[lang]  != $lang_trad%>
+	     <a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$langsort_text[lang]%></a>
+	     <%/if%>
+	     <%/section%>
+	     <div class="fin_float"></div><br>
+	     <div class="cv8-langsmode"><%$syslabels.Seolan_Core_General.languages_translation_mode%></div>
+	     <%section name=lang loop=$langsort_code%>
+	     <%if $langsort_code[lang] neq $lang_def%>
+	     <a <%if $TZR.lang_trad && $langsort_code[lang] == $lang_data%>class="currentlang"<%else%>href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=<%$lang_def%>&_setlang=1'+location.hash; return false;"<%/if%>><%$langsort_text[lang]%></a>
+	     <%/if%>
+	     <%/section%>
+	     <div class="fin_float"></div>
+	   </div>
+	 </div>
+       </li>
+       <%/if%>
+       <li class="last" id="cv8-flags">
+	<%if $TZR.lang_trad%>
+	 <a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$TZR.lang_trad.code%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$TZR.lang_trad.long%></a> > 
+	<%/if%>
+	<%if count($langsort_code)>1%>
+	 <a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$TZR.lang_data.code%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$TZR.lang_data.long%></a>
+	<%/if%>
+	<%if $smarty.session._TZR.SUID%>
+	 <a href="<%$self%>&moid=<%$sysmods.xmoduser2%>&function=setbackuid&_next=<%$here|escape:"url"%>"><%$syslabels.Seolan_Core_General.move%></a>
+	<%/if%>
+       </li>
+      </ul>
+     </div>
+     <div class="fin_float"></div>
+     <h1 id="cv8-pagetitle"><%$syslabels.Seolan_Core_General.home%></h1>
+     <div id="cv8-path">
+      <ul>
+       <li><a href="<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail"><%$syslabels.Seolan_Core_General.home%></a></li>
+      </ul>
+     </div>
+    </div>
+    <div class="cv8-top-right">
+     <div class="cv8-logo"<%if $smarty.session._TZR.PROJECT.logo%> style="background-image:url(<%$smarty.session._TZR.PROJECT.logo%>)"<%/if%>><%if $smarty.const.TZR_CUSTOM_LOGO_OVERLAY!='TZR_CUSTOM_LOGO_OVERLAY'%><%include file="`$smarty.const.TZR_WWW_DIR``$smarty.const.TZR_CUSTOM_LOGO_OVERLAY`"%><%/if%></div>
+    </div>
+    <div class="fin_float"></div>
+    <!-- infos textuelle -->
+    <div id="cv8-infotext">
+     <div class="cv8-infotextg"><div class="cv8-txtseul">&nbsp;</div></div>
+     <div class="cv8-infotextd"><!--<img height="130" width="490" alt="photographie" src="/console/images/illustrations/infotext_photo_01.jpg">-->&nbsp;</div>
+     <div class="fin_float"></div>
+    </div>
+    <!-- infos textuelle -->
+   </div>
+   <!-- fin haut de page -->
+
+
+   <!-- centre page -->
+   <div class="cv8-center">
+    <div class="cv8-center2">
+     <!-- Colonne gauche -->
+     <div class="cv8-col-left">
+      <div class="cv8-col-left2">
+       <div class="cv8-search">
+	<%if $tzr.solr_activated%>
+	 <form action="<%$self%>" name="searchengineform" onsubmit="return home_search(this);">
+	  <input type="hidden" name="class" value="XSearch">
+	  <input type="hidden" name="_function" value="globalSearch">
+	  <input type="hidden" name="tplentry" value="br">
+	  <input type="hidden" name="template" value="Library/SolR.result.html">
+	  <input type="hidden" name="_bdxnewstack" value="1">
+	  <input name="query" type="text" class="chps" value="<%$syslabels.Seolan_Core_General.query_text%>..." onclick="if(this.value=='<%$syslabels.Seolan_Core_General.query_text%>...') this.value='';" size="22" onblur="if(this.value=='') this.value='<%$syslabels.Seolan_Core_General.query_text%>...';"><input type="image" border="0" alt="OK" src="/tzr/templates/images/pixel.gif" width="26" height="24" class="ok">
+	 </form>
+	<%/if%>
+       </div>
+       
+       <!-- Menu deroulant : menu gestionnaire de rubrique + bookmaks + tous les modules -->
+       <div id="cv8-navigation">
+        <div id="cv8-navigation-top">
+          <%if $smarty.const.SUB_SITE_ENABLED && $system_allowed_sites_apps%>
+            <%include file="xsiteapp/allowed_sites.html"%>
+          <%/if%>
+        </div>
+	<div id="cv8-navigation-middle">
+	 <ul id="cv8-menu">
+	  <span class="root">
+	   <li id="cv8-infotreemenu-home" data-oid="<%$menu_self.oid%>"><a href="<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail"><%$syslabels.Seolan_Core_General.home%></a></li>
+	   <span id="cv8-infotreemenu">
+ 	    <%include file="Module/InfoTree.tree.html" ajaxurl="`$self`moid=`$tzr.admin_xmodinfotree`&function=home&do=showtree&tplentry=menu&template=Module/InfoTree.tree.html&maxlevel=1&oidtop=`$mit_lines_oid[i]`&_raw=1&skip=1&_ajax=1&action=home_viewpage&ajaxurl=self&action=home_viewpage" action="home_viewpage" prefix="menu"%>
+	   </span>
+	   <%if $xmodinfotreeadmin_sec.admin%>
+	    <li><span><a href="#<%$self%>&moid=<%$tzr.admin_xmodinfotree%>&function=home&tplentry=mit&template=Module/InfoTree.index.html" onclick="home_viewmodule(this); return false"><%$syslabels.Seolan_Module_InfoTree_InfoTree.managemenu%></a></span></li>
+	   <%/if%>
+	   <li style="height:10px; display:block;"></li>
+	   <li id="cv8-navigation-bookmarks">
+	    <span><a href="#" onclick="home_toggleBookmarks(this.parentNode.parentNode); return false;"><%$syslabels.Seolan_Core_Module_Module.bookmarks%></a></span>
+	    <ul><%include file="Core.menu/bookmark.html" bks=$home_bookmarks%></ul>
+	   </li>
+	   <li style="height:10px; display:block;"></li>
+	   <%if $xmodadmin_sec.ro%>
+	    <li id="cv8-navigation-allmodules">
+	     <span><a href="#" onclick="menuCollection[0].nodeToggle(this.parentNode.parentNode,true); return false;"><%$syslabels.Seolan_Core_General.modulesall%></a></span>
+	     <ul class="ajax">
+	      <li>{url:"<%$self%>&class=\Seolan\Core\Module\Module&function=ajaxModmenu&template=Core.menu/module.html&tplentry=mods&skip=1&_ajax=1&_raw=2&_silent=1"}</li>
+	     </ul>
+	    </li>
+	   <%/if%>
+	  </span>
+	 </ul>
+	 <script type="text/javascript">
+	 </script>
+	</div>
+	<div id="cv8-navigation-bottom"></div>
+       </div>
+       <!-- Fin menu -->
+
+       <!-- Historique -->
+       <div id="cv8-history">
+	<div id="cv8-history-top"></div>
+	<div id="cv8-navigation-middle">
+	 <h3><%$syslabels.Seolan_Core_General.navhistory%></h3>
+	 <ul id="cv8-history-list"></ul>
+	 <script type="text/javascript">
+	  var jh=jQuery('#cv8-history-list');
+          <%assign var=history value=$smarty.const.HISTORY_SESSION_VAR%>
+	  <%foreach item=i key=k from=$smarty.session.$history%>
+	   var tmp="<%$i.title|escape:"javascript"%>";
+	   jh.prepend('<li id="_<%$k%>"><a class="tzr-hottip-c" bt-xTitle="<%$i.title|escape:"html"|escape:"javascript"%>" href="#" onclick="TZR.loadNavHistory(\'<%$k%>\');return false;">'+(tmp.length>34?tmp.substr(0,34)+'...':tmp)+'</a></li>');
+	  <%/foreach%>
+	  if(location.hash!="#") jQuery(location.hash.replace('#','#_')).addClass('active');
+	 </script>
+	</div>
+	<div id="cv8-history-bottom"></div>
+       </div>
+       <!-- Fin historique -->
+      </div>
+     </div>
+     <!-- Fin colonne gauche -->
+
+     <!-- Contenu -->
+     <div id="cv8-content" style="display:none;">
+      <%section name=it loop=$it_olines%>
+       <%assign var="filename" value=$it_tlines[it].odisp->filename%>
+       <%if file_exists($filename)%>
+	<div class="cv8-module" id="cv8-module-<%$smarty.section.it.index%>"> 
+	 <div class="cv8-module-bg">
+	  <div class="cv8-module-container" id="cv8-module-container-<%$smarty.section.it.index%>">
+	   <%include file="$filename" moduleid="cv8-module-container-`$smarty.section.it.index`"%>
+	  </div>
+	 </div>
+	</div>
+       <%/if%>
+      <%/section%>
+     </div>
+     <div class="fin_float"></div>
+     <!-- Fin contenu -->
+
+     <!-- Selection -->
+     <div id="cv8-panier"></div>
+     <div class="fin_float"></div>
+     <!-- Fin selection -->
+    </div>
+   </div>
+   <!-- Fin centre page -->
+
+   <!-- bas de page -->
+   <div id="cv8-baspage">
+    <div id="cv8-baspage-bg">
+     <%if $root%>
+     <ul class="devlinks">
+      <li><a href="/tzr/devmanual/html" target="doc">Documentation</a></li>
+      <li><a href="/tzr/devmanual/api" target="api">API</a></li>
+      <li><a href="https://git.xsalto.com/console-seolan/console-seolan" target="gitlab">GitLab</a></li>
+     </ul>
+     <%/if%>
+     <div id="cv8-copyright">
+       Console S&eacute;olan &copy; v<%$smarty.const.TZR_CONSOLE_RELEASE%>.<%$smarty.const.TZR_CONSOLE_SUB_RELEASE%> <%$smarty.const.TZR_CONSOLE_RELEASE_NICKNAME%> (<%$smarty.const.TZR_STATUS%>)&nbsp;<a href="<%if $tzr.mail_xsalto%><%$tzr.mail_xsalto%><%else%>mailto:commercial@xsalto.com<%/if%>">XSALTO</a><%if $smarty.const.TZR_DEBUG_MODE eq 1%><br><font color="red">Debug mode activated</font><%/if%>
+     </div>
+     <ul>
+      <li><a id="cv8-footer" name="cv8-footer" href="#cv8-top"><%$syslabels.Seolan_Core_General.top_text%></a></li>
+      <li><a href="<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail"><%$syslabels.Seolan_Core_General.home_text%></a></li>
+      <%section name=i loop=$menub_lines_oid%>
+       <li><a href="#" onclick="home_viewpage('<%$menub_lines_oid[i]%>','<%$menub_lines_oalias[i]->raw%>','<%$menub_lines_otitle[i]->html|escape:"quotes"%>','<%$menub_lines_ssrub[i]%>','<%$menub_lines_sections[i]%>'); return false;"><%$menub_lines_otitle[i]->html%></a></li>
+      <%/section%>
+     </ul>
+    </div>
+   </div>
+   <!-- fin bas de page -->
+  </div>
+  <div id="cv8-unauth" style="display:none;" title="<%$syslabels.Seolan_Core_General.permission_denied|escape:"html"%>">
+   <form action="<%$self%>" method="post" name="auth" onsubmit="TZR.submitLogin(this); return false;">
+    <input type="hidden" name="_function" value="ajaxProcAuth">
+    <input type="hidden" name="admin" value="true">
+    <input type="hidden" name="admini" value="true">
+    <input type="hidden" name="class" value="<%$smarty.const.TZR_SESSION_MANAGER%>">
+    <input type="hidden" name="_skip" value="1"> 
+    <div id="cv8-unauth-error"><%$syslabels.Seolan_Core_General.login_not_accepted%></div>
+    <div class="authlabels"><%$syslabels.Seolan_Module_User_User.alias%></div>
+    <div class="authlabels"><%$syslabels.Seolan_Module_User_User.password%></div>
+    <div class="fin_float"></div>
+    <input type="text" name="login" value="">
+    <input type="password" name="password">
+    <input type="image" border="0" alt="ok" src="/tzr/templates/images/pixel.gif" width="29" height="21" value="Search" name="image" class="ok">
+   </form>
+  </div>
+  <%include file="generic8-tools.html"%>
+ </body>
+</html>

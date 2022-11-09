@@ -1,0 +1,75 @@
+<%include file="Core.header/ajax.html"%>
+<br>
+<form action="<%$self%>" id="importFromArchive">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="procImportFromArchive">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="_next" value="refresh">
+  <fieldset>
+    <legend>Choisir 1 des 2 méthodes pour récupérer l'export APIDAE</legend>
+    <label>METHODE 1 : Choisir un ZIP précédemment importé (dossier var/sitra/archives/)</label>
+    <br>
+    <%html_options name="archiveFile" options=$archive_files%>
+    <br>
+    <br>
+    <label>METHODE 2 : Entrer une URL de ZIP d'export APIDAE</label>
+    <br>
+    <input type="text" name="archiveUrl" size="80" placeholder="Exemple : http://export.sitra-tourisme.com/exports/1574_20170105-1220_nA3AhJ.zip">
+    <br>
+    <br>
+  </fieldset>
+  <fieldset>
+    <legend>Réinitialisation</legend>
+    <label>Ré-initialiser la base de données APIDAE ?</label>
+    <br>
+    <select name="reinitialisation">
+      <option value="">Non</option>
+      <option value="true">Oui (= efface tout !)</option>
+    </select>
+  </fieldset>
+  <div class="tzr-action">
+    <input type="submit" value="Ré-importer cette archive">
+  </div>
+</form>
+<%* Javascript pour suivre l'avancement de l'import *%>
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($){
+
+    var timeInterval = 3000; // 3 secondes entre chaque requete AJAX de getImportStatus
+
+    var intervalWatching = null;
+
+    var stopWatching = function() {
+      if (typeof intervalWatching != 'undefined')
+        clearInterval(intervalWatching);
+    };
+
+    var startWatching = function() {
+      $('.overlay-content').css({lineHeight:'3em',marginTop:'35px'}).prepend($('<div class="importStatus"></div>').css({color:'white',fontSize:'2em'}));
+      intervalWatching = setInterval(function(){
+        $.get('/tzr/scripts-admin/admin.php?moid=<%$_moid%>&function=getImportStatus', function(data){
+          if (data && data.details && data.details.percent)
+            $('.importStatus').html('Import: '+data.details.percent+'% ('+data.details.number+'/'+data.details.total+')<br>'+data.details.current);
+          if (data.status == 'finished') {
+            stopWatching();
+            $('.importStatus').html('<b>Finished !</b>');
+          }
+          if (data.status == 'error') {
+            stopWatching();
+            $('.importStatus').html('<b>Error : '+data.details.message+'</b>');
+          }
+        });
+      }, timeInterval);
+    };
+
+    $('#importFromArchive').submit(function(e) {
+      TZR.ajaxSubmitForm(this, undefined, undefined, {
+        cb: function(){
+          stopWatching();
+        }
+      });
+      startWatching();
+      return false;
+    });
+  });
+</script>

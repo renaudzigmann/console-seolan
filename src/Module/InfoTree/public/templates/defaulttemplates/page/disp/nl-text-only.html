@@ -1,0 +1,32 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+<%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-text-only">
+  <tr>
+    <td align="center" style="padding: <%$nlspacingheight%>px 0px 0px 0px">
+    <!--[if (gte mso 9)|(IE)]>
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+    <tr>
+    <td align="center" valign="top" width="<%$nlwidth%>">
+    <![endif]-->
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+        <tr>
+          <td class="mobile-center">
+            <%if $it_olines[it].otitsec->raw %><h1><%$it_olines[it].otitsec->html%></h1><%/if%>
+            <%if $it_olines[it].osubtit->raw %><h2><%$it_olines[it].osubtit->html%></h2><%/if%>
+            <%if $it_olines[it].ochapeau->raw %><h3><%$it_olines[it].ochapeau->html%></h3><%/if%>
+            <%if $it_olines[it].otxt1->raw%><%$it_olines[it].otxt1->html%><%/if%>
+          </td>
+        </tr>
+      </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    </td>
+  </tr>
+</table>

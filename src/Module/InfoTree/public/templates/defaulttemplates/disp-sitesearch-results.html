@@ -1,0 +1,44 @@
+<%$pagescount=count($siteSearch_pages)%>
+<%function name="score"%>
+<%section name=s1 loop=$score%><span class="glyphicon" style="color:green">*</span><%/section%>
+<%section name=s2 loop=5-$score%><span class="glyphicon" style="color:transparent">*</span><%/section%>
+<%/function%>
+<%if $pagescount > 0%>
+<h2><%$siteSearch_params.resulttitle|default:$syslabels.Seolan_Module_InfoTree_InfoTree.search_result_term|sprintf:$siteSearch_terms%></h2>
+<hr>
+<%$siteSearch_params.pagescountlabel|default:$syslabels.Seolan_Module_InfoTree_InfoTree.search_result_count|sprintf:$pagescount%>
+<hr>
+<%else%>
+<%$syslabels.Seolan_Module_InfoTree_InfoTree.search_result_empty%>
+<%/if%>
+
+<div class="row">
+
+  <%foreach from=$siteSearch_pages key='range' item='page'%>
+
+  <%$hltitle=''%>
+  <%$hightlights=''%>
+  <%capture assign='hightlights'%>
+  <ul>
+  <%foreach $page.highlights as $fn=>$hl%>
+  <%if $fn != 'title'%>
+  <li><i><%$fn%><%$syslabels.Seolan_Core_General.i18ncolon%></i>"<%implode('...', $hl)%>"</li>
+  <%else%>
+  <%$hltitle=implode('', $hl)%>
+  <%/if%>
+  <%/foreach%>
+
+  </ul>
+
+  <%/capture%>
+
+  <div class="col-xs-12">
+    <p>
+      <%call name="score" score=$page.score%>
+      &nbsp;-&nbsp;<!--  <%$page.rawscore%> -->
+      <a title="<%$page.title|escape:'html'%>" href="<%$self%>alias=<%$page.alias%>">"<%$hltitle|default:$page.title%>"</a>
+      <%$hightlights%>
+    </p>
+  </div>
+  <%/foreach%>
+</div>

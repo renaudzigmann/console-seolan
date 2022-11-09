@@ -1,0 +1,65 @@
+<%* Changement de mot de passe *%>
+<!-- <%$smarty.template%> -->
+
+<%if !$xuser->authentified()%>
+  <%* Nouveau compte *%>
+  <script type="text/javascript">
+  jQuery(function($) {
+    $('#passwd,#passwd_HID').change(function(){
+      var isDiff = $('#passwd').val().length > 0 && $('#passwd_HID').val().length > 0 && $('#passwd').val() != $('#passwd_HID').val();
+      $('#alertdiffpass').toggle(isDiff);
+      $('#passwd,#passwd_HID').toggleClass('fielderror', isDiff);
+    });
+   });
+  </script>
+  <div id="alertdiffpass" class="alert alert-danger" style="display:none;"><%"Les mots de passe saisis sont différents"|__%></div>
+  <div id="passwd_container">
+  <%include file="Module/FrontUsers.form-field.html"
+    field='passwd'
+    fhtml=$form.opasswd->html|replace:$form.opasswd->varid:'passwd'
+    ftype='\Seolan\Field\Password\Password' 
+    label='Mot de passe'|__:'\Seolan\Module\FrontUsers'
+    compulsory=true
+    %>   
+  </div>
+
+<%else%>
+
+  <%* Modification de mot de passe *%>
+
+  <script type="text/javascript">
+  jQuery(function($) {
+     $('#passwd,#passwd_HID').on('change', function(){
+       var isDiff = $('#passwd').val().length > 0 && $('#passwd_HID').val().length > 0 && $('#passwd').val() != $('#passwd_HID').val();
+       $('#alertdiffpass').toggle(isDiff);
+       $('#passwd,#passwd_HID').toggleClass('fielderror', isDiff);
+     }); 
+   });
+  </script>
+
+  <div id="alertbadoldpass" class="alert alert-danger" style="display:none;"><%label t="Le mot de passe actuel saisi est incorrect"%></div>
+  <div class="field-oldpass">
+    <div class="form-group">
+      <label><%'Mot de passe actuel'|__:'\Seolan\Module\FrontUsers'%></label>
+      <div class="oldpass-edit">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="password" name="oldpass" size="30" maxlength="64" value="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="alertdiffpass" class="alert alert-danger" style="display:none;"><%label t="Les mots de passe saisis sont différents"%></div>
+  <div id="vnewpass_container">
+    
+  <%include file="Module/FrontUsers.form-field.html"
+    field='passwd'
+    fhtml=$form.opasswd->html|replace:$form.opasswd->varid:'passwd'
+    ftype='\Seolan\Field\Password\Password' 
+    label='Mot de passe'|__:'\Seolan\Module\FrontUsers'
+    compulsory=true
+    %>
+  </div>
+<%/if%>

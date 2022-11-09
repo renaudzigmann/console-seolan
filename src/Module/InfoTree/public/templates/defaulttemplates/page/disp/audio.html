@@ -1,0 +1,10 @@
+
+<!-- Section audio -->
+<div class="cv3-audio clearfix">
+  <h2><%if $it_olines[it].otitsec->html%><%$it_olines[it].otitsec->html%><%/if%></h2>
+  <%if $it_olines[it].ofichier->html%>
+    <div class="displayMedia">
+      <%$it_olines[it].ofichier->completeHtml("geometry=`$tzr.ggigeo`")%>
+    </div>
+  <%/if%>
+</div>

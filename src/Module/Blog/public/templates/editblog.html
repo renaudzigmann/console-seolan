@@ -1,0 +1,33 @@
+<%assign var="title" value="`$imod_props.modulename` : `$syslabels.Seolan_Module_Blog_Blog.editblog_text`"%>
+<%assign var="tzrhistoryurl" value="`$self`&moid=`$_moid`&function=editBlog&template=Module/Blog.editblog.html&tplentry=br&oid=`$br_oid`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.edit_text%></legend>
+ <form action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="uniqid" value="<%$uniqid%>">
+  <input type="hidden" name="_function" value="procEditBlog">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="oid" value="<%$br_oid%>">
+  <input type="hidden" name="template" value="proc.html">
+  <input type="hidden" name="_next" value="<%$back%>"/>
+  <input type="hidden" name="skip" value="1">
+  <div class="table-responsive">
+  <table class="table table-striped">
+   <tr>
+    <th><label><%$br_otitle->fielddef->label%></label></th>
+    <td><%$br_otitle->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br_oafile->fielddef->label%></label></th>
+    <td><%$br_oafile->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br_otxt->fielddef->label%></label></th>
+    <td><%$br_otxt->html%></td>
+   </tr>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+  
+ </form>
+</fieldset>

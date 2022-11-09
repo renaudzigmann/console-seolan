@@ -1,0 +1,238 @@
+<%if empty($noheader)%>
+<%** 
+   Cette premiere div doit absolument contenir au moins un lettre 
+   Elle est aussi nécessaire pour objCleaner ("container" de référence);
+**%>
+<div id="cv8-uniqdiv-<%$uniqid%>" style="display:none;">tzr</div>
+<script type="text/javascript">
+  TZR._refresh='<%$here%>&_nohistory=0';
+  TZR._back='<%$back%>&_nohistory=0';
+  TZR._self='<%$self%>';
+  TZR._bdxprefix="<%$bdxprefix%>";
+  TZR._bdx="<%$bdx%>";
+  //TZR._uri="<%$smarty.server.REQUEST_URI%>";
+  //ne veut pas dire grand chose lors d'un POST et n'est donc pas trop utilisable
+  //n'était utilisée que dans applyfunction de TZR.Table, remplacée par TZR._refresh
+  TZR._method="<%$smarty.server.REQUEST_METHOD%>";
+  TZR.dependency = {};
+  
+ // Prepare un objet unique contenant les informations de base du container et l'associe aux 2 div principale du container
+ var v<%$uniqid%>={
+   moid:"<%$_moid%>",
+   div:document.getElementById("cv8-uniqdiv-<%$uniqid%>"),
+   module:jQuery('#cv8-uniqdiv-<%$uniqid%>').parents('div.cv8-module:first')[0], // faux en X
+   modulecontainer:jQuery('#cv8-uniqdiv-<%$uniqid%>').parents('div.cv8-module-container:first')[0],
+   uniqid:'<%$uniqid%>',
+   unbinds:[],
+   jQueryLoad:function(url){
+     TZR.jQueryLoad({url:url,
+		     target:this.modulecontainer,
+		     context:'document'});
+   },
+   refresh:function(hist){
+     if(hist) this.jQueryLoad(this.modulecontainer._here+"&_nohistory=0");
+     else this.jQueryLoad(this.modulecontainer._here+"&_nohistory=1&skip=1");
+   }
+ };
+ if(v<%$uniqid%>.modulecontainer){
+  v<%$uniqid%>.modulecontainer._here="<%$here%>";
+  v<%$uniqid%>.modulecontainer._bdxprefix="<%$bdxprefix%>";
+  v<%$uniqid%>.modulecontainer._bdx="<%$bdx%>";
+  v<%$uniqid%>.modulecontainer._uri="<%$smarty.server.REQUEST_URI%>";
+  v<%$uniqid%>.modulecontainer._method="<%$smarty.server.REQUEST_METHOD%>";
+ }
+ TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>",v<%$uniqid%>);
+ jQuery("div.bt-wrapper").remove();
+ jQuery("#cv8-uniqdiv-<%$uniqid%>").data('tzrobj',v<%$uniqid%>);
+ <%if empty($nodata)%>jQuery(v<%$uniqid%>.modulecontainer).data('tzrobj',v<%$uniqid%>);<%/if%>
+ // Essaye d'executer la function definie specifiquement  
+ <%if $function and $_moid%>
+  var userfunction = '<%$function%><%$_moid%>';
+  if(eval('(typeof('+userfunction+')!="undefined" && jQuery.isFunction('+userfunction+'))')){
+    eval(userfunction+".apply(v<%$uniqid%>)");
+  }
+ <%/if%>
+ <%if $_moid%>
+  // Suppression du titre/commentaire du bloc si changement de module
+  var jmc=jQuery(v<%$uniqid%>.modulecontainer);
+  var moid=<%$_moid%>;
+  var oldmoid=jmc.data('moid');
+  if(oldmoid && moid!=oldmoid){
+   jmc.siblings('div.cv8-module-comment:first').remove();
+  }
+  jmc.data('moid',moid);
+ <%/if%>
+ <%if isset($smarty.request.filename) && isset($smarty.request.fileoriginalname) && isset($smarty.request.filemime)%>
+ /* donwload tmp file <%$smarty.request.filename%> */
+ jQuery(document).ready(function(){
+  <%if $smarty.request.fileinline%>
+   window.open('<%$smarty.const.TZR_DOWNLOADER%>?filename=<%$smarty.request.filename%>&amp;originalname=<%$smarty.request.fileoriginalname%>&amp;mime=<%$smarty.request.filemime%>&amp;tempfile=1&amp;disp=inline');
+  <%else%>
+   document.location = '<%$smarty.const.TZR_DOWNLOADER%>?filename=<%$smarty.request.filename%>&amp;originalname=<%$smarty.request.fileoriginalname%>&amp;mime=<%$smarty.request.filemime%>&amp;tempfile=1';
+  <%/if%>
+ });
+ <%/if%>
+ <%if isset($smarty.request._tabs) %>
+ /* load requerid tab, by name or range if exists */
+ jQuery(document).ready(function(){
+   TZR.Tabs.loadBy("<%$uniqid%>", "<%$smarty.request._tabs|escape:'javascript'%>", {});
+ });
+ <%/if%>
+  jQuery(document).ready(function(){
+    jQuery('.table-responsive').floatingScroll();
+  });
+</script>
+
+<%** Barre de navigation **%>
+<%if empty($smarty.request._nonav) && empty($nonav)%>
+<div class="toolbar-nav">
+  <div class="toolbar-nav-header">
+    <button type="button" class="btn btn-default navbar-toggle collapsed" data-toggle="collapse" data-target="#toolbar-collapse" aria-expanded="false"><span class="glyphicon csico-plus" aria-hidden="true"></span></button>
+  </div>
+  <div class="collapse navbar-collapse" id="toolbar-collapse">
+    <div class="btn-toolbar" role="toolbar" id="toolbar<%$uniqid%>">
+    <div class="btn-group btn-group-dropdown-menu">
+      <ul class="btn-group-ul">
+        <li>
+    	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%$syslabels.Seolan_Core_General.actions%><span class="caret"></span></button>
+  	<ul class="dropdown-menu scrollable-menu" id="csx-outils-menu-<%$uniqid%>-actions"></ul>
+        </li>
+        <li>
+	  <button title="<%$syslabels.Seolan_Core_General.help_text%>" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%$syslabels.Seolan_Core_General.help%></span></button>
+	  <ul class="dropdown-menu scrollable-menu" id="csx-outils-menu-<%$uniqid%>-helpitems"></ul>
+        </li>
+      </ul>
+    </div>
+    <div class="btn-group">
+      <%if $imod_props.testmode %>
+        <button type="button" class="btn btn-default"><%$syslabels.Seolan_Core_General.warning%></button>
+      <%/if%>
+      <%if $back%>
+        <button title="<%$syslabels.Seolan_Core_General.back_text%>" type="button" class="btn btn-default" onclick="TZR.updateModuleContainer('<%$back%>&_nohistory=0', jQuery(this).closest('.cv8-module-container'));"><%$syslabels.Seolan_Core_General.back%></button>
+      <%/if%>
+      <button title="<%$syslabels.Seolan_Core_General.refresh_text%>" type="button" class="btn btn-default" onclick="TZR.updateModuleContainer('<%$here%>&_nohistory=0', jQuery(this).closest('.cv8-module-container'));"><%$syslabels.Seolan_Core_General.refresh%></button>
+    </div>
+    <div id="csx-outils-ico-<%$uniqid%>-display" class="btn-group"></div>
+    <div id="csx-outils-ico-<%$uniqid%>-edit" class="btn-group"></div>
+    <div id="csx-outils-ico-<%$uniqid%>-admin" class="btn-group"></div>
+    <div id="csx-outils-ico-<%$uniqid%>-menu" class="btn-group"></div>
+    <div class="btn-group btn-group-dropdown-menu">
+      <ul class="btn-group-ul">
+        <li>
+	    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <%$syslabels.Seolan_Core_General.content_text%><span class="caret"></span>
+	   </button>
+	    <ul class="dropdown-menu scrollable-menu" id="csx-outils-menu-<%$uniqid%>-edit"></ul>
+        </li>
+        <li>
+	    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <%$syslabels.Seolan_Core_General.display_text%><span class="caret"></span>
+	    </button>
+	    <ul class="dropdown-menu scrollable-menu" id="csx-outils-menu-<%$uniqid%>-display"></ul>
+        </li>
+        <li>
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <%$syslabels.Seolan_Core_General.more%>
+	  </button>
+	  <ul class="dropdown-menu scrollable-menu" id="csx-outils-menu-<%$uniqid%>-more"></ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  </div><!--/toolbar-collapse-->
+</div><!--/toolbar-nav-->
+
+<div class="chemin clearfix" id="chemin<%$uniqid%>">
+  <ol class="breadcrumb">
+   <%* imod_props et mod ne sont pas toujours instanciés (wizard ajout source de donnée par exemple *%>
+   <%if count($lang_code)>1 && isset($imod_mod)%><li class="cv8-lang-info"><%$imod_mod->languagesInfosFlags()%></li><%/if%>
+   <%assign var="historytitle" value=[]%>
+   <%if empty($inav_stack[0])%>
+    <%if $nav_lastlabel%>
+      <li><a><%$imod_props.modulename%> <%$nav_lastlabel%></a></li>
+      <%append var="historytitle" value=$imod_props.modulename%>
+      <%/if%>
+   <%else%>
+    <%foreach from=$inav_stack item=action name=a%>
+     <li><a class="cv8-ajaxlink" href='<%$action->xurl%>'><%$action->name|strip_tags%></a></li>
+     <%append var="historytitle" value=$action->name%>
+    <%/foreach%>
+   <%/if%>
+   <%if !empty($title)%>
+    <%append var="historytitle" value=$title%>
+    <%/if%>
+  </ol>
+</div>
+
+
+  <script type="text/javascript">
+   <%foreach from=$imod_props.actions item=action%>
+   <%if !$action instanceof \Seolan\Core\Module\Action%><%continue%><%/if%>
+   <%if !empty($action->toolbar)%>
+   TZR.toolBarX.addToolBarItem('csx-outils-ico-<%$uniqid%>','<%$action->group%>',<%$action->order%>,'<%$action->toolbarX|escape:"javascript"%>');
+   <%elseif $action->menuable%>
+   TZR.toolBarX.addMenuItem('csx-outils-menu-<%$uniqid%>','<%$action->group%>','<%$action->name|escape:"javascript"%>','<%$action->xurl|escape:"javascript"%>','<%$action->needsconfirm|escape:"javascript"%>','<%$action->newgroup%>','<%$action->separator%>','<%$action->target%>', '<%$action->shortkey%>');
+   <%/if%>
+   <%/foreach%>
+   // Ajout du menu pour la construction rapide de l'arbo admin
+   if(TZR._infotreeadmin_sec){
+    <%if $smarty.server.REQUEST_METHOD=="GET"%>
+     var url="<%$self%>&moid=<%$_moid%>&function=adminNewSection&tplentry=it&template=Core/Module.admin-newsection.html&fct=<%$smarty.server.REQUEST_URI|escape:"url"%>";
+    <%else%>
+     var url="<%$self%>&moid=<%$_moid%>&function=adminNewSection&tplentry=it&template=Core/Module.admin-newsection.html&fct=<%$smarty.server.REQUEST_URI|escape:"url"%><%$post_param_url%>";
+    <%/if%>
+    
+    TZR.toolBarX.addMenuItem('csx-outils-menu-<%$uniqid%>','more','<%$syslabels.Seolan_Core_General.addtoadmininfotree%>','#','','admininfotree');
+    TZR.toolBarX.addMenuItem('csx-outils-menu-<%$uniqid%>','admininfotree','<%$syslabels.Seolan_Core_General.addtoadmininfotreenew%>',url+'&newrub=1');
+    TZR.toolBarX.addMenuItem('csx-outils-menu-<%$uniqid%>','admininfotree','<%$syslabels.Seolan_Core_General.addtoadmininfotreeedit%>',url);
+   }
+   TZR.toolBarX.addMenuItem('csx-outils-menu-<%$uniqid%>','more','<%$syslabels.Seolan_Core_General.getlink%>','javascript:TZR.linkAlert("<%$domainname%><%$smarty.server.REQUEST_URI%>");','');
+
+   TZR.toolBarX.initMenu("toolbar<%$uniqid%>");
+   TZR.ShortKeys.init(v<%$uniqid%>);
+
+</script>
+
+<%/if%>
+<%if !empty($_message) || !empty($smarty.request.message) || !empty($br_message) || !empty($smarty.session._TZR.message)%>
+<div class="cv8-contenu-center clearfix">
+ <div class="tzr-message">
+  <%$smarty.request.message|escape:"htmlall":"UTF-8"%>
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+ </div>
+ </div>
+<%/if%>
+
+<%if !empty($smarty.request.debug_message)%>
+ <div class="tzr-message"><%$smarty.request.debug_message%></div>
+<%/if%>
+      
+<%* Affiche les alertes créées via \Seolan\Core\Shell::alert() avec type=danger|warning|info|success (voir Bootstrap) *%>
+<%if !empty($smarty.session._TZR.alerts)%>
+<%foreach from=$smarty.session._TZR.alerts key=type item=messages%>
+<div class="alert alert-<%$type%>" role="alert">
+  <%foreach from=$messages item=message%>
+    <div class="tzr-message"><%$message%></div>
+  <%/foreach%>
+</div>
+<%/foreach%>
+<%/if%>
+
+<script type="text/javascript">
+ jQuery('#scv8-contenu-haut-<%$uniqid%>').resizable({distance:5,alsoResize:'#cv8-container,#cv8-content',minWidth:710,handles:'e',stop:function(e,ui){jQuery.get('<%$self%>&skip=1&_raw=2&moid=<%$sysmods.xmoduser2%>&function=setPref&prop=contentsize&propv='+jQuery('#cv8-content').width());jQuery('#cv8-container,#cv8-content').height('');}}).find('.ui-resizable-e').dblclick(function(){var size=TZR.resizeTo('toggle');jQuery.get('<%$self%>&skip=1&_raw=2&moid=<%$sysmods.xmoduser2%>&function=setPref&prop=contentsize&propv='+size);});
+    <%if empty($smarty.request._nohistory) && empty($nohistory) && empty($smarty.request.skip) && empty($smarty.request._skip)%>
+  <%if !empty($historytitle)%>TZR.addNavHistory("<%'>'|implode:$historytitle|escape:"javascript"%>");<%/if%>
+ <%/if%>
+
+ <%if !empty($smarty.request._reloadmods) || !empty($smarty.session._TZR._reloadmods)%>
+  // Mise à jour du menu des modules
+  home_reloadModules();
+ <%/if%>
+
+ <%if !empty($smarty.request._reloadmenu) || !empty($smarty.session._TZR._reloadmenu)%>
+  home_reloadMenu();
+ <%/if%>
+</script>
+<%/if%>

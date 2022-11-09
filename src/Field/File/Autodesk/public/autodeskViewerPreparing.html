@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
+    <link href="/csx/src/Core/public/css/generic.css" rel="stylesheet" type="text/css">
+    <style>
+      .center {
+      text-align:center;
+      margin: auto;
+      margin-top:50px;
+      width: 50%;
+      border: 1pt dotted #dadada;
+      }
+    </style>
+  </head>
+
+
+  <body onunload="try{window.opener.TZR.AutodeskViewer.stopPrepare();}catch(e){};">
+    <div class="center">
+      <br>
+      <h2>Chargement du document</h2>
+      <br><br>
+      <div style="font-size:100px" class="glyphicon csico-loader csico-spin"></div>
+      <br><br>
+      <button type="button" onclick="try{window.opener.TZR.AutodeskViewer.stopPrepare();window.close();}catch(e){};" class="btn btn-primary">Fermer</button>
+      <br><br>
+      <small>
+	La préparation du document peut-prendre un certain temps. Vous pouvez fermer cette fenêtre et revenir dans quelques instants sans que le processus ne soit pour autant interrompu.
+      </small>
+      <br>
+    </div>
+
+    <script>
+
+    </script>
+
+  </body>
+  
+</html>
+
+

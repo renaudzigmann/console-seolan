@@ -1,0 +1,70 @@
+<select name="<%$fname%>_op">
+  <option value=""><%$syslabels.Seolan_Core_Field_Field.query_containing%></option>
+  <option value="!~" <%if $op == '!~'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_notcontaining%></option>
+  <option value="$" <%if $op == '$'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_ending_with%></option>
+  <option value="^" <%if $op == '^'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_beginning_with%></option>
+  <option value=">=" <%if $op == '>='%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.upper_than%></option>
+  <option value="<=" <%if $op == '<='%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.lower_than%></option>
+  <option value="!=" <%if $op == '!='%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_different%></option>
+  <option value="regex" <%if $op == 'regex'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_regex%></option>
+  <option value="noregex" <%if $op == 'noregex'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.query_noregex%></option>
+  <%if $genempty !== "false"%>
+    <option value="is empty" <%if $op == 'is empty'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.is_empty%></option>
+    <option value="is not empty" <%if $op == 'is not empty'%> selected<%/if%>><%$syslabels.Seolan_Core_Field_Field.is_not_empty%></option>
+  <%/if%>
+</select>
+
+<label id="<%$fname%>_regex_help" style="display:none;" class="fieldHelp" tabindex="0" role="button" data-html="true" data-toggle="popover" data-trigger="" data-content="<p><%$syslabels.Seolan_Core_Field_Field.query_regex_help%></p>">
+  <span class="glyphicon csico-infos" aria-hidden="true"></span>
+</label>
+
+<script>
+  function testValidRegex(id) {
+    var o = document.getElementById(id);
+    var isValid = true;
+    try {
+      new RegExp(o.value);
+    }
+    catch(e) {
+      isValid = false;
+    }
+    if(isValid) {
+      TZR.setCustomValidityMess(id, "");
+      TZR.setElementErrorState(o, true, "<%$tzr.error_color%>");
+    }
+    else {
+      TZR.setCustomValidityMess(id, "<%$syslabels.Seolan_Core_Field_Field.query_regex_error|escape:"javascript"%>");
+      TZR.setElementErrorState(o, false, "<%$tzr.error_color%>");
+    }
+  }
+  jQuery(function() {
+    var id = "<%$fname%>";
+    var o = document.getElementById(id);
+    var op = jQuery("select[name='<%$fname%>_op']");
+    var hlp = jQuery("#<%$fname%>_regex_help");
+    var finput = jQuery("#<%$fname%>");
+    op.change(function(){
+      if(op.val() === "regex" || op.val() === "noregex") {
+        hlp.css({
+          top: finput.position().top + 8,
+          left: finput.position().left + finput.width(),
+          position:'absolute'
+        });
+        hlp.show().popover("show");
+        finput.one("focus", function() { hlp.popover("hide"); });
+        testValidRegex(id);
+      }
+      else {
+        hlp.hide().popover("hide");
+        TZR.setCustomValidityMess(id, "");
+        TZR.setElementErrorState(o, true, "<%$tzr.error_color%>");
+      }
+    });
+    finput.on("blur", function(){
+      if(op.val() === "regex" || op.val() === "noregex") {
+        testValidRegex(id);
+      }
+    });
+  });
+</script>
+

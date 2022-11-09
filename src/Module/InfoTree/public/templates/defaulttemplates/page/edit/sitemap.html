@@ -1,0 +1,6 @@
+<%if $admini%>
+ <b>Plan du site. Non visualisable dans le backoffice.</b>
+<%else%>
+ <%fetch file="`$fullself`&alias=sitemap&class=Corailv3&function=menu&aliastop=`$tzr.corailv3_top`&template=Application/MiniSite/public/templates/plan.html"%>
+ <%fetch file="`$fullself`&alias=sitemap&class=Corailv3&function=menu&aliastop=`$tzr.corailv3_bottom`&template=Application/MiniSite/public/templates/plan.html"%>
+<%/if%>

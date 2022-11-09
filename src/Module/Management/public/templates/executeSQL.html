@@ -1,0 +1,43 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.executesql%>
+<div class="cv8-contenu-center clearfix">
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="executeSQL">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="template" value="Module/Management.executeSQL.html">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Management_Management.executesql%></legend>
+  <textarea name="sql" cols="100" rows="6"><%$br_sql%></textarea>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>">
+  </div>
+ </fieldset>
+ <%if $br_sql%>
+  <fieldset>
+   <legend><%$syslabels.Seolan_Core_General.result%><%if $br_mode=="select"%> (<%$br_nb%>)<%/if%></legend>
+   <%if $br_mode=="update"%>
+    <%$br_nb%> <%$syslabels.Seolan_Module_Management_Management.sqlaffected%>
+   <%else%>
+    <%if count($br_lines)>0%>
+     <table class="cv8_tablelist">
+      <tr>
+       <%foreach from=$br_lines[0] key=f item=v%>
+	<th><%$f%></th>
+       <%/foreach%>
+      </tr>
+      <%section name=i loop=$br_lines%>
+       <tr>
+	<%foreach from=$br_lines[i] key=f item=v%>
+	 <td><%$v%></td>
+	<%/foreach%>
+       </tr>
+      <%/section%>
+     </table>
+    <%else%>
+     <%$syslabels.Seolan_Core_General.nodata%>
+    <%/if%>
+   <%/if%>
+  </fieldset>
+ <%/if%>
+</form>
+</div>

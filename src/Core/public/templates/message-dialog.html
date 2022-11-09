@@ -1,0 +1,15 @@
+<%*
+   afficher un texte + bouton fermer dans une dialog (en remplacement de message-popup.html)
+*%>
+<%if $_message  || $br_message || $smarty.session._TZR.message%>
+<div class="cv8-contenu-center clearfix">
+ <div class="tzr-message">
+  <%$smarty.session._TZR.message%>
+  <%$_message%>
+  <%$br_message%>
+ </div>
+ </div>
+<%/if%>
+<div class="tzr-action">
+  <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+</div>

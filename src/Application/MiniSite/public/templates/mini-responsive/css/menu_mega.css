@@ -1,0 +1,150 @@
+/* Reprise + Adaptation du style du fichier global-diocese.css */
+.yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+    position: static;
+}
+.yamm .container {
+    position: relative;
+}
+.yamm .dropdown-menu {
+    left: auto;
+    right: 0;
+    padding: 0 0;
+    border: none;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.yamm .yamm-content {
+    margin: 0 -375px;
+    padding: 30px 375px 20px 375px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    background: #e7e7e7;
+}
+.yamm .dropdown.yamm-fw .dropdown-menu {
+    left: 0;
+    right: 0;
+    width:100% !important;
+    min-width:100% !important;
+}
+/* Lors du click sur l'item du menu, conserver l'apparence du :hover lorsque le dropdown-menu est ouvert */
+.yamm .dropdown.yamm-fw.open a.dropdown-toggle {
+  color: #555;
+  background-color: #e7e7e7;
+}
+.yamm-content .row {
+    padding: 0 15px;
+}
+.menu-vertical {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* Titre du menu en cours */
+.yamm .yamm-content .titreNav {
+    color: #555;
+    font-size: 2em;
+    margin: 0 60% 8px 23px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+/* menu 2ème niveau */
+.mv-item, .mv-item a {
+    display: block;
+}
+.mv-item a {
+    margin: 1px 0;
+    padding: 8px 0px 10px 25px;
+    font-size: 1.2em;
+    line-height: 1.2em;
+}
+  .mv-item a.active {
+    color:#bc0707;
+  }
+  .mv-item a.active:hover {
+    color:#bc0707;
+    text-decoration:underline;
+  }
+/* menu 3ème niveau */
+.mt-item, .mt-item a {
+    display: block;
+    margin-left:10px;
+}
+.mt-item a {
+    margin: 1px 0;
+    padding: 4px 0px 4px 40px;
+    font-size: 1.1em;
+    line-height: 1.2em;
+    font-weight: 400;
+}
+  .mt-item a.active {
+    color:#bc0707;
+  }
+  .mt-item a.active:hover {
+    color:#bc0707;
+    text-decoration:underline;
+  }
+/* menu 4ème niveau */
+.mst-item, .mst-item a {
+    display: block;
+    margin-left:20px;
+}
+.mst-item a {
+    margin: 1px 0;
+    padding: 4px 0px 4px 40px;
+    font-size: 1.1em;
+    line-height: 1.1em;
+    font-weight: normal;
+}
+  .mst-item a.active {
+    color:#bc0707;
+  }
+  .mst-item a.active:hover {
+    color:#bc0707;
+    text-decoration:underline;
+  }
+
+.yamm .yamm-content .titreNav {
+    margin: -5px auto 0px auto;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+/* Reprise + Adaptation du style du fichier minisite.css */
+@media (min-width: 768px) {
+  .container > .navbar-collapse {
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 991px) {
+  .container > .navbar-collapse {
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container > .navbar-collapse {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .titreNav {
+    display:none;
+  }
+  .yamm .yamm-content {
+    padding-top: 0;
+  }
+  .yamm .container {
+    padding-top:0;
+  }
+  /* 1er DIV qui reprend le titre du menu */
+  .yamm .container div.col-sm-12:first-child {
+    display:none;
+  }
+  /* Les sous-menus */
+  .yamm .container div.col-xs-12 {
+    padding: 0;
+  }
+  .mv-item a {
+    padding-left:0;
+  }
+}

@@ -1,0 +1,87 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_Module_Module.bookmark_add%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_Module_Module.bookmark_text%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="_function" value="procInsertBookmark">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&function=getBookmarks&tplentry=br&template=Module/User.bookmarks.html">
+  <div class="table-responsive">
+  <table class="table">
+   <tr>
+    <th><%$syslabels.Seolan_Core_General.title_text%></th>
+    <td>
+     <input type="text" name="title" value="<%$br_title%>" id="title<%$uniqid%>" size="50">
+     <script type="text/javascript">
+      TZR.addValidator(["title<%$uniqid%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+     </script>
+    </td>
+   </tr>
+   <tr>
+    <th><%$syslabels.Seolan_Core_General.group_text%></th>
+    <td>
+     <input type="text" name="group" value="<%$br_group%>" id="group<%$uniqid%>" size="50">
+     <script type="text/javascript">
+      TZR.addValidator(["group<%$uniqid%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+     </script>
+    </td>
+   </tr>
+   <tr>
+    <th><%$syslabels.Seolan_Module_User_User.viewhome%></th>
+    <td><input type="checkbox" class="checkbox" name="viewhome"></td>
+   </tr>
+   <tr>
+    <th><%$syslabels.Seolan_Module_User_User.autostart%></th>
+    <td><input type="checkbox" class="checkbox" name="autostart"></td>
+   </tr>
+   <tr>
+    <th><%$syslabels.Seolan_Core_General.comment_text%></th>
+    <td>
+     <textarea id="text<%$uniqid%>" name="text" cols="60" rows="3"></textarea>
+     <script type="text/javascript">
+      TZR.addValidator(["text<%$uniqid%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+     </script>
+    </td>
+   </tr>
+   <tr>
+    <th><%$syslabels.Seolan_Core_Module_Module.bookmark_text%></th>
+    <td>
+     <table class="table list2">
+      <%section name=i loop=$br_urls%>
+       <tr>
+	<th><%$syslabels.Seolan_Core_General.title_text%></th>
+	<td>
+	 <input id="title<%$uniqid%>-<%$smarty.section.i.index%>" type="text" name="titles[]" value="<%$br_titles[i]|escape:"html"%>">
+	 <script type="text/javascript">
+	  TZR.addValidator(["title<%$uniqid%>-<%$smarty.section.i.index%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+	 </script>
+	</td>
+       </tr>
+       <tr>
+	<th><%$syslabels.Seolan_Core_General.comment_text%></th>
+	<td>
+	 <textarea id="comment<%$uniqid%>-<%$smarty.section.i.index%>" cols="60" name="comments[]"><%$br_comments[i]%></textarea>
+	 <script type="text/javascript">
+	  TZR.addValidator(["comment<%$uniqid%>-<%$smarty.section.i.index%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+	 </script>
+	</td>
+       </tr>
+       <tr>
+	<th>Url</th>
+	<td>
+	 <input id="url<%$uniqid%>-<%$smarty.section.i.index%>" type="text" size="60" name="urls[]" value="<%$br_urls[i]|escape:"html"%>">
+	 <script type="text/javascript">
+	  TZR.addValidator(["url<%$uniqid%>-<%$smarty.section.i.index%>",/(.+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+	 </script>
+	</td>
+       </tr>
+       <tr><td colspan="2">&nbsp;</td></tr>
+      <%/section%>
+     </table>
+    </td>
+   </tr>
+  </table>
+  </div>
+  
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+ </form>
+</fieldset>

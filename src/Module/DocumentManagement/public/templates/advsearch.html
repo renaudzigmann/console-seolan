@@ -1,0 +1,88 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.search_text%>
+<%include file="Module/DocumentManagement.top.html"%>
+
+<fieldset class="tzr-docmgt-fd">
+ <legend><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchquery%></legend>
+ <form action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="_function" value="advsearch">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="template" value="Module/DocumentManagement.advsearch.html">
+  <input type="hidden" name="dosearch" value="1">
+  <input type="hidden" name="structsearch" value="<%$smarty.request.structsearch%>">
+  <div class="table-responsive">
+  <table class="table list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.doctype%></label></th>
+    <td>
+     <select name="type" onchange="this.form.dosearch.value='0'; this.form.onsubmit();">
+      <option value="">---</option>
+      <%section name=i loop=$doctypes_lines_oid%>
+       <option value="<%$doctypes_lines_oid[i]%>" <%if $smarty.request.type eq $doctypes_lines_oid[i]%>selected<%/if%>><%$doctypes_lines_otitle[i]->html%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+   <%if $smarty.request.type%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchtype%></label></th>
+     <td>
+      <select name="structsearch" onchange="this.form.dosearch.value='0';this.form.onsubmit();">
+       <option value="0"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchtypenostruct%></option>
+       <option value="1"<%if $smarty.request.structsearch%> selected<%/if%>><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchtypestruct%></option>
+      </select>
+     </td>
+    </tr>
+    <%if $smarty.request.structsearch%>
+     <%* formulaire avancé *%>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchcond%></label></th>
+      <td>
+       <input type="radio" class="radio" name="operator" value="AND" <%if $br_operator eq "AND"%>"checked"<%/if%>> <%$syslabels.Seolan_Core_General.and%>
+       <input type="radio" class="radio" name="operator" value="OR" <%if $br_operator eq "OR"%>"checked"<%/if%>> <%$syslabels.Seolan_Core_General.or%>
+      </td>
+     </tr>
+     <%section name=fields loop=$br_fields_object %>
+      <tr>
+       <th><label><%$br_fields_object[fields]->fielddef->label%></label></th>
+       <td><%$br_fields_object[fields]->html%></td>
+      </tr>
+     <%/section%>
+    <%else%>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.searchtext%></th>
+      <td><input type="text" name="query"></td>
+     </tr>
+    <%/if%>
+   <%/if%>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>">
+  </div>
+ </form>
+</fieldset>
+
+<%if !empty($br_docs) %>
+ <%* tableau des resultats *%>
+ <fieldset class="tzr-docmgt-fd">
+  <legend><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.results_text%></legend>
+  <%assign var="Directory" value=""%>
+  <%foreach from=$br_docs item=it key=i%>
+   <%if $Directory neq $it->parentsoid[0]%>
+    <%assign var="Directory" value=$it->parentsoid[0]%>
+    <%assign var="parent" value=$it->parents[0]%>
+    <div class="tzr-docmgt-blockfullwidth">
+     <a class="tzr-hottip-c cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&oid=<%$parent->oid%>&tplentry=br" bt-xTitle="Type: <%$parent->tpl.otitle->html|escape:'html'%><br><%$parent->fields.oUPD->html%><br><%$parent->fields.oOWN->text|escape:'html'%>"><%$parent->icon->html%></a>
+     <a href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&oid=<%$parent->oid%>&tplentry=br" class="cv8-ajaxlink tzr-docmgt-block-title"><%$parent->parents[0]->title%> > <%$parent->title%><%if $parent->countdocs%>#<%$parent->countdocs%><%/if%></a>
+    </div>
+   <%/if%>
+   <div class="tzr-docmgt-doc1">
+    <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=goto1&oid=<%$it->oid%>&tplentry=br"><%$it->smallicon%></a>
+    <span  class="tzr-hottip-c" bt-xTitle="Type: <%$it->tpl.otitle->html|escape:'html'%><br><%$it->fields.oUPD->html%><br><%$it->fields.oOWN->text|escape:'html'%>"><%$it->short%></span><%$it->docs%>
+   </div>
+  <%/foreach%>
+ </fieldset>
+<%else%>
+<%if $smarty.request.dosearch==1%><div class="info information"><%$syslabels.Seolan_Core_Field_Field.no_result%></div><%/if%>
+<%/if%>

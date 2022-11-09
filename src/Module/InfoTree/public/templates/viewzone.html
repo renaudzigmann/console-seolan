@@ -1,0 +1,182 @@
+<script type="text/javascript" language="javascript">
+<%if !empty($it__langrepli.langdata_updatedbyother)%>
+ jQuery(document).ready(function(){
+  var jtoolbars = jQuery(".cv8-infotree-sectiontoolbar");
+  jQuery("a", jtoolbars).removeAttr('onclick').removeAttr('href').css('opacity', 0.5);
+  jQuery("input", jtoolbars).attr('disabled', true).css('opacity', 0.5);
+  jQuery("#tzr-action<%$uniqid%>").remove();
+  });
+<%/if%>
+</script>
+<script src="<%$smarty.const.TZR_WWW_CSX%>src/Core/public/deepl.js"></script>
+<fieldset class="fieldset-content" data-zone="<%$zn%>">
+  <legend><%$syslabels.Seolan_Core_General.content%></legend>
+  <!-- parcours des sections -->
+  <%section name=it loop=$_zone.olines%>
+    <%assign var="oo" value=$_zone.olines[it]%>
+    <%assign var="filename" value=$_zone.tlines[it].odisp->filename%>
+    <%if !file_exists($filename) %>
+      <%assign var="filename" value="`$smarty.const.TEMPLATES_DIR`Module/InfoTree.section-display.html"%>
+    <%/if%>
+    
+    <%** Préparation de la toolbar de la section **%>
+    <%capture name="toolbar"%>
+      <%if !$TZR.lang_trad || $oo._lang_data neq $lang_data || $_zone.olines[it]._type!='section'%>
+        <div class='cv8-infotree-sectiontoolbar <%if $_zone.olines[it]._infos.oPUBLISH && $_zone.olines[it]._infos.oPUBLISH->raw!=1%>napp-dataline<%/if%>'>
+        <ul>
+          <%if $imod_sec.$it__editLevel && $_zone.catoid[it]==$_zone.oidit%>
+
+	  <li><input type="checkbox" name="_itoidselected[<%$_zone.itoid[it]%>]" onchange="v<%$uniqid%>.updateSelection(this);" onclick="v<%$uniqid%>.updateSelection(this);"></li>
+	  <li class="dragzone"><span class="glyphicon csico-move" aria-hidden="true"></span></li>
+	  <li><a href="#" onclick="v<%$uniqid%>.edit<%$_zone.olines[it]._type%>('<%$_zone.itoid[it]%>', '<%$zn%>'); return false;" title="<%$syslabels.Seolan_Core_General.edit_text%>"><%$syslabels.Seolan_Core_General.edit%></a></li>
+	  <li><a href="#" onclick="if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text%> ?')) v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','delSection','Module/InfoTree.viewpage.html','&skip=1'); return false;" title="<%$syslabels.Seolan_Core_General.delete_text%>"><%$syslabels.Seolan_Core_General.delete%></a></li>
+	  
+           <%if $lang_def == $lang_data%>
+          <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','moveSection','Module/InfoTree.viewpage.html','&dir=down'); return false;" title="<%$syslabels.Seolan_Module_InfoTree_InfoTree.move_down%>"><%$syslabels.Seolan_Core_General.down%></a></li>
+          <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','moveSection','Module/InfoTree.viewpage.html','&dir=up'); return false;" title="<%$syslabels.Seolan_Module_InfoTree_InfoTree.move_up%>"><%$syslabels.Seolan_Core_General.up%></a></li>
+          <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','moveSection','Module/InfoTree.viewpage.html','&dir=bottom'); return false;" title="<%$syslabels.Seolan_Module_InfoTree_InfoTree.move_to_bottom%>"><%$syslabels.Seolan_Core_General.bottom%></a></li>
+          <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','moveSection','Module/InfoTree.viewpage.html','&dir=top'); return false;" title="<%$syslabels.Seolan_Module_InfoTree_InfoTree.move_to_top%>"><%$syslabels.Seolan_Core_General.top%></a></li>
+          <%/if%>
+
+            <%if $_zone.olines[it]._infos.oPUBLISH && $imod_sec.$it__publishLevel%>
+              <%if $_zone.olines[it]._infos.oPUBLISH->raw!=1%>
+                <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','publish','Module/InfoTree.viewpage.html','&_pub=1'); return false;" title="<%$syslabels.Seolan_Core_General.approve%>"><%$syslabels.Seolan_Core_General.not_approved%></a></li>
+              <%else%>
+                <li><a href="#" onclick="v<%$uniqid%>.applytosection('<%$_zone.itoid[it]%>','publish','Module/InfoTree.viewpage.html','&_pub=0'); return false;"title="<%$syslabels.Seolan_Core_General.unapprove%>"><%$syslabels.Seolan_Core_General.approved%></a></li>
+              <%/if%>
+            <%/if%>
+	<%else%>
+          <li><input type="checkbox" name="_itoidselected[<%$_zone.itoid[it]%>]" disabled></li>
+	  <li class="dragzone"><span class="glyphicon csico-move" aria-hidden="true"></span></li>
+          <%/if%>
+          <%if $imod_mod->section_sec%>
+          <li><a href="#" onclick="TZR.editSec('<%$self%>','<%$_moid%>','<%$_zone.itoid[it]%>', undefined, 'secEditSection'); return false;"><%$syslabels.Seolan_Core_General.security%></a></li>
+          <%/if%>
+	  <%if $TZR.lang_trad%>
+	  <li><%$_zone.langstatus[it/2].$lang_data.html%></li>
+	  <%/if%>
+          <li>
+            <%assign var=type value=$_zone.olines[it]._type%>
+	    |
+            <%$_zone.fieldobject->display($_zone.tlines[it].oid)->text%>
+            <%if isset($oo._functionparams)%>
+              | <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$oo._functionparams.moid%>&function=gotoMainAction&skip=1"><%$syslabels.Seolan_Module_InfoTree_InfoTree.$type%> : <%$oo._functionparams.modulename%></a>
+            <%else%>
+              | <%$syslabels.Seolan_Module_InfoTree_InfoTree.$type%>
+            <%/if%>
+            <%if $_zone.catoid[it]!=$_zone.oidit%>| <%$syslabels.Seolan_Module_InfoTree_InfoTree.section_from_model%><%/if%>
+            | <%$_zone.olines[it]._infos.lst_upd.dateupd%><%if $_zone.olines[it]._infos.lst_upd.usernam%> | <%$_zone.olines[it].infos.lst_upd.usernam%><%/if%>
+          </li>
+
+</ul>
+
+        </div>
+      <%/if%>
+      <%if $_zone.tlines[it].ozones->rawcollection && !in_array($zn, $_zone.tlines[it].ozones->rawcollection)%>
+        <div class="tzr-message error"><%$syslabels.Seolan_Module_InfoTree_InfoTree.forbidden_zone_for_template%> <%$_zone.tlines[it].ozones->html%></div>
+      <%/if%>
+    <%/capture%>
+    <%if file_exists($filename)%>
+      <%if $_zone.olines[it]._type=='function'%>
+        <!-- CAS D'UNE SECTION FONCTION -->
+        <div class="cv8-infotree-section<%if $_zone.catoid[it]==$_zone.oidit%> selectable<%/if%>" data-oidit="<%$_zone.itoid[it]%>">
+          <a name="<%$_zone.itoid[it]%>"></a>
+          <%$smarty.capture.toolbar%>
+          <div>
+            <%if $_zone.olines[it].message%><%$_zone.olines[it].message%><%/if%>
+            <%include file="$filename" it_olines=$_zone.olines assign=template_content%>
+            <%$template_content|remove_script_tags%>
+          </div>
+        </div>
+      <%elseif $_zone.olines[it]._type=='query'%>
+        <%if $oo._q eq "0"%>
+          <!-- CAS D'UNE REQUÊTE -->
+          <div class="cv8-infotree-section<%if $_zone.catoid[it]==$_zone.oidit%> selectable<%/if%>" data-oidit="<%$_zone.itoid[it]%>">
+            <%$smarty.capture.toolbar%>
+            <%assign var="v1" value=$_zone.olines[it]._dynquery%>
+            <%if $v1.fields_object[0]%>
+              <div class="table-responsive">
+                <table class="table list2">
+                  <%section name=f loop=$v1.fields_object%>
+                    <tr><th><%$v1.fields_object[f]->fielddef->label%></th><td><%$v1.fields_object[f]->html%></td></tr>
+                  <%/section%>
+                  <tr>
+                    <td colspan="2">
+                      <input type="submit" name="submit1" value="<%$syslabels.Seolan_Core_General.query_text%>" onclick="this.form._function.value='viewpage';this.form._next.value='';">
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            <%/if%>
+          <%/if%>
+          
+          <%if !$oo._empty %>
+            <%assign var=$_zone.olines[it] value=$tr%>
+            <a name="<%$_zone.itoid[it]%>"></a>
+            <div>
+              <%include file="$filename" it_olines=$_zone.olines assign=template_content%>
+              <%$template_content|remove_script_tags%>
+            </div>
+          <%else%>
+            <div><%$syslabels.Seolan_Module_InfoTree_InfoTree.query_is_empty%></div>
+          <%/if%>
+          <%if $oo._eoq || $oo._empty%>
+          </div>
+        <%/if%>
+      <%else%>
+        <%if is_array($oo)%>
+          <!-- CAS D'UNE SECTION CLASSIQUE -->
+          <div class="cv8-infotree-section<%if $_zone.catoid[it]==$_zone.oidit%> selectable<%/if%>" data-oidit="<%$_zone.itoid[it]%>">
+            <a name="<%$_zone.itoid[it]%>"></a>
+            <%$smarty.capture.toolbar%>
+            <%if $TZR.lang_trad.long%>
+              <div>
+                <%if $oo._lang_data eq $lang_data%><%$TZR.lang_data.long%><%/if%>
+                <%if $oo._lang_data neq $lang_data%><%$TZR.lang_trad.long%><%/if%>
+              <%/if%>
+              <div class="cv8-infotree-sectioncontent" ondblclick="v<%$uniqid%>.editsection('<%$_zone.itoid[it]%>');">
+		<%include file="$filename" it_olines=$_zone.olines assign=template_content%>
+                <%$template_content|remove_script_tags%>
+              </div>
+              <%if $TZR.lang_trad.long%>
+              </div>
+            <%/if%>
+          </div>
+        <%/if%>
+      <%/if%>
+    <%/if%>
+  <%sectionelse%>
+    <%$syslabels.Seolan_Module_InfoTree_InfoTree.nocontent%>
+  <%/section%>
+</fieldset>
+
+<%if $_zone.config && !$_zone.model_config.o_not_editable->valid%>
+  <fieldset>
+    <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.zone_config%></legend>
+    <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="function" value="procEditZoneConfig">
+      <input type="hidden" name="oid" value="<%$_zone.config.oid%>">
+      <input type="hidden" name="cat" value="<%$_zone.oidit%>">
+      <input type="hidden" name="zone" value="<%$_zone.name%>">
+      <input type="hidden" name="skip" value="1">
+      <input type="hidden" name="_next" value="<%$here%>">
+      <div class="table-responsive">
+        <table class="table list2">
+          <%assign var="zef" value=$_zone.config.fields_object%>
+          <%section name=fields loop=$zef%>
+            <%if !$zef[fields]->sys && !in_array($zef[fields]->field,array('cat','zone')) && ($it_cat_mit._model && strpos($zef[fields]->field,'_')===0 || !$it_cat_mit._model && strpos($zef[fields]->field,'_')!==0)%>
+              <tr id="cont-<%$zef[fields]->field%>">
+                <th <%if $zef[fields]->fielddef->acomment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$zef[fields]->fielddef->acomment|escape:'html'%>"<%/if%>><label><%$zef[fields]->fielddef->label|wordwrap:"50"%></label></th>
+                <td><%$zef[fields]->html%></td>
+              </tr>
+            <%/if%>
+          <%/section%>
+        </table>
+      </div>
+      <div class="tzr-action">
+        <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+      </div>
+    </form>
+  </fieldset>
+<%/if%>

@@ -1,0 +1,9 @@
+<%if !$fieldobject->isEmpty()%>
+<div class="cv8d-fieldlabel cv8d-fieldlabel-<%$field->field%>">
+  <%$field->label%>
+</div>
+
+<div class="cv8d-fieldvalue cv8d-field-<%$field->field%>" data-rawvalue="<%$field->raw|escape:html%>">
+  <%$fieldobject->html%>
+</div>
+<%/if%>

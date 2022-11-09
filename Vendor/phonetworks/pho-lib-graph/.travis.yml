@@ -1,0 +1,27 @@
+sudo: false
+language: php
+
+cache:
+  directories:
+  - $HOME/.composer/cache
+  - vendor
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.1
+    - php: 7.2
+
+before_install:
+- PHP=$TRAVIS_PHP_VERSION
+- composer self-update
+
+install:
+- travis_retry composer install --no-interaction
+- composer info -i
+
+script:
+- ./vendor/bin/phpunit 
+
+notifications:
+  email: false

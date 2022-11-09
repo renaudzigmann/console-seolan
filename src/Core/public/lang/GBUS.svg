@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1235 650" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <path id="b" transform="scale(.0616)" d="m-.16246,0 .16246.5 .16246-.5h-.32492z"/>
+  <g id="a">
+   <use transform="matrix(-.30902,-.95106,.95106,-.30902,0,0)" width="1235" height="650" xlink:href="#b"/>
+   <use transform="matrix(.80902,-.58779,.58779,.80902,0,0)" width="1235" height="650" xlink:href="#b"/>
+   <use transform="rotate(36)" width="1235" height="650" xlink:href="#b"/>
+   <use transform="matrix(-.30902,.95106,-.95106,-.30902,0,0)" width="1235" height="650" xlink:href="#b"/>
+   <use transform="scale(-1)" width="1235" height="650" xlink:href="#b"/>
+  </g>
+  <g id="d">
+   <use x="-.252" width="1235" height="650" xlink:href="#a"/>
+   <use x="-.126" width="1235" height="650" xlink:href="#a"/>
+   <use width="1235" height="650" xlink:href="#a"/>
+   <use x=".126" width="1235" height="650" xlink:href="#a"/>
+   <use x=".252" width="1235" height="650" xlink:href="#a"/>
+  </g>
+  <g id="c">
+   <use x="-.063" width="1235" height="650" xlink:href="#d"/>
+   <use x=".315" width="1235" height="650" xlink:href="#a"/>
+  </g>
+  <g id="e">
+   <use width="1235" height="650" xlink:href="#c"/>
+   <use y=".054" width="1235" height="650" xlink:href="#d"/>
+   <use y=".108" width="1235" height="650" xlink:href="#c"/>
+   <use y=".162" width="1235" height="650" xlink:href="#d"/>
+  </g>
+  <clipPath id="f">
+   <path d="m-15-7.5h30v15h-30z"/>
+  </clipPath>
+ </defs>
+ <g transform="matrix(41.167 0 0 43.333 617.5 325)" clip-path="url(#f)">
+  <path d="m20 0a20 20 0 1 0 -40 0 20 20 0 1 0 40 0" fill="#00247d"/>
+  <path d="m-20-10 40 20m-40 0 40-20" stroke="#fff" stroke-width="3"/>
+  <path d="m-20-10 40 20m-40 0 40-20" stroke="#cf142b" stroke-width="2"/>
+  <path d="m0 0 20 10h-3l-20-10m3 0 20-10h3l-20 10m-3 0-20 10h-3l20-10m3 0-20-10h3l20 10" fill="#fff"/>
+  <path d="m-20 0h40m-20-10v20" stroke="#fff" stroke-width="5"/>
+  <path d="m-20 0h40m-20-10v20" stroke="#cf142b" stroke-width="3"/>
+ </g>
+ <path d="m0 0v650l1235-650h-1235z" fill="#fff"/>
+ <path d="m0 0v50h1140l95-50h-1235z" fill="#bf0a30"/>
+ <path d="m0 100v50h950l95-50h-1045z" fill="#bf0a30"/>
+ <path d="m0 200v50h760l95-50h-855z" fill="#bf0a30"/>
+ <path d="m0 300v50h570l95-50h-665z" fill="#bf0a30"/>
+ <path d="m0 400v50h380l95-50h-475z" fill="#bf0a30"/>
+ <path d="m0 500v50h190l95-50h-285z" fill="#bf0a30"/>
+ <path d="m0 600v50l95-50h-95z" fill="#bf0a30"/>
+ <path d="m0 0h494v350h-494z" fill="#002868"/>
+ <g transform="matrix(650,0,0,650,247,175)" fill="#fff">
+  <use y="-.216" width="1" height="1" xlink:href="#e"/>
+  <use width="1" height="1" xlink:href="#e"/>
+  <use y=".216" width="1" height="1" xlink:href="#c"/>
+ </g>
+</svg>

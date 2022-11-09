@@ -1,0 +1,53 @@
+<%block name="configuration"%>
+<%$templatedetail='Module/Table.view.html'%>
+<%$functiondetail='display'%>
+<%$viewarch=$imod_props.archive%>
+<%/block%>
+<%if !empty($br_lines_oid)%>
+<div class="table-responsive">
+ <table class="table table-striped cv8_tablelist">
+<thead>
+  <tr>
+   <%if $viewarch%><th>&nbsp;</th><%/if%>
+   <th><%$br_lines_odateupd[0]->fielddef->label%></th>
+   <th><%$br_lines_ouser[0]->fielddef->label%></th>
+   <th><%$br_lines_oetype[0]->fielddef->label%></th>
+   <%if $br_lines__lang%><th><%$syslabels.Seolan_Core_General.language%></th><%/if%>   
+   <th><%$br_lines_ocomment[0]->fielddef->label%></th>
+  </tr>
+</thead>
+<tbody>
+  <%section name=r loop=$br_lines_oid%>
+  <tr>
+    <%if $viewarch%>
+     <td>
+       
+       <table class="tzr-compact">
+	 <tr>
+	   <td>
+	     <%if $smarty.section.r.first %>
+	     <a class="cv8-ajaxlink"
+		href="<%$self%>&moid=<%$_moid%>&function=<%$functiondetail%>&oid=<%$br_lines_oobject[r]->raw%>&template=<%$templatedetail%>&tplentry=br"><%$syslabels.Seolan_Core_General.view%></a>
+	     <%else%>
+	     <a class="cv8-ajaxlink"
+		href="<%$self%>&moid=<%$_moid%>&function=<%$functiondetail%>&oid=<%$br_lines_oobject[r]->raw%>&template=<%$templatedetail%>&tplentry=br&_archive=<%$br_lines_odateupd[$smarty.section.r.index_prev]->raw|escape:'url'%>"><%$syslabels.Seolan_Core_General.view%></a>
+	     <%/if%>
+	   </td>
+	 </tr>
+       </table>
+       
+     </td>
+    <%/if%>
+    <td><%$br_lines_odateupd[r]->html%></td>
+    <td><%$br_lines_ousernam[r]->html%></td>
+    <td><%$br_lines_elabel[r]%></td>
+    <%if $br_lines__lang%><td><%$br_lines__lang[r]%></td><%/if%>   
+    <td><%section name=p loop=$logs_array.lines_journal[r]%><%$logs_array.lines_journal[r][p]%><br/><%/section%><%$br_lines_ocomment[r]->html%></td>
+   </tr>
+  <%/section%>
+</tbody>
+ </table>
+</div>
+<%else%>
+ <%$syslabels.Seolan_Core_General.noarchive%>
+<%/if%>

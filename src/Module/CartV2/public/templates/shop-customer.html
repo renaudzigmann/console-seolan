@@ -1,0 +1,20 @@
+<div class="shop-customer">
+  <div class="row">
+    <div class="col-md-6 address">
+      <h3>Facturation<%if !$customer->is_delivery_address_filled%> &#x26; Livraison<%/if%></h3>
+      <%foreach from=$customer->address_selectedfields item=field%>
+      <%assign var=ofield value="o`$field`"%>
+      <div class="field field-<%$field|asciify%>"><%$customer.$ofield->text%></div>
+      <%/foreach%>
+    </div>
+    <%if $customer->is_delivery_address_filled%>
+    <div class="col-md-6 delivery">
+      <h3>Livraison</h3>
+      <%foreach from=$customer->delivery_selectedfields item=field%>
+      <%assign var=ofield value="o`$field`"%>
+      <div class="field field-<%$field|asciify%>"><%$customer.$ofield->text%></div>
+      <%/foreach%>
+    </div>
+    <%/if%>
+  </div>
+</div>

@@ -1,0 +1,229 @@
+<%* vue plate *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%include file="Module/DocumentManagement.bdscripts.js"%>
+<%include file="Module/DocumentManagement.top.html" templateType="index2"%>
+
+<script language="javascript" type="text/javascript">
+  
+  TZR.DocMngt.browse['<%$uniqid%>'] = {
+    moid:"<%$_moid%>",
+    fromfunction:'<%$function%>',
+    modulecontainer:v<%$uniqid%>.modulecontainer
+  };
+
+  // surcharge pour effacer aussi TZR.Table.browse['<%$uniqid%>]
+  TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>", v<%$uniqid%>, function() {
+    TZR.cleanObj(v<%$uniqid%>);
+    if (!delete TZR.Table.browse['<%$uniqid%>']) {
+      TZR.Table.browse['<%$uniqid%>'] = null;
+    }
+  });
+</script>
+
+<script type="text/javascript">
+ v<%$uniqid%>.navto=function(url) {
+  this.jQueryLoad(url);
+ }
+ v<%$uniqid%>.deleteselected=function(onlyselected) {
+   var form=document.forms['browse<%$uniqid%>'];
+   if(onlyselected && !TZR.checkBoxesIsChecked(form)) return;
+   return TZR.DocMngt.preDel(form, {});
+ }
+ v<%$uniqid%>.downloadselected=function() {
+  var f=document.forms['browse<%$uniqid%>'];
+  if(!TZR.checkBoxesIsChecked(f)) return;
+  f._function.value='documentsDownload';
+  f.physical.value=0;
+  f.submit();
+ }
+ v<%$uniqid%>.moveselected=function(oid, onlysel) {
+     v<%$uniqid%>.linkselected(oid,1,0,onlysel);
+ }
+ v<%$uniqid%>.copyselected=function(oid, onlysel) {
+     v<%$uniqid%>.linkselected(oid,0,1,onlysel);
+ }
+ v<%$uniqid%>.linkselected=function(oid,move,copy,onlysel) {
+     var f=document.forms['browse<%$uniqid%>'];
+     if (onlysel && !TZR.checkBoxesIsChecked(f)){
+	 TZR.alert('<%$syslabels.Seolan_Core_General.error_select_object%>', '');
+	 return;
+     };
+  var move,copy;
+  var sel=TZR.checkBoxesIsChecked(f);
+  if(sel) sel="1";
+  else sel="0";
+  if(copy) copy="1";
+  else copy="0";
+  if(move) move="1";
+  else move="0";
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move='+move+'&_copy='+copy+'&oid='+escape(oid)+'&_selected='+sel+'&formname=browse<%$uniqid%>');
+ }
+
+ <%if $br_here->newdocs && in_array('rw',$br_here->actions)%>
+   // Drag & drop de fichier pour inserer de nouvelles fiches
+   TZR.addProperDragEventsTo(jQuery(v<%$uniqid%>.modulecontainer).find('>fieldset.tzr-docmgt-fd'),'<%$syslabels.Seolan_Core_General.drophere|escape:javascript%>').on('drop',function(e){
+     if(!TZR.dragEventContainsFiles(e)) return;
+     var $select=jQuery(document.newform<%$uniqid%>.newdoc).clone();
+     $select.find('option:first').remove();
+     jQuery('<div align="left"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.newdocument_text%> : </div>').append($select).dialog({
+       title:"",
+       modal:true,
+       resizable:false,
+       close:function(e,ui){jQuery(this).dialog('destroy').remove();},
+       buttons:{
+         "OK":function(){
+           jQuery(this).dialog("close");
+           v<%$uniqid%>.modulecontainer.droppedinfos={
+             from:"<%$uniqid%>",
+             files:e.dataTransfer.files,
+             type:jQuery(this).find('select').val(),
+             bdx:"<%$bdxprefix%>_<%$bdx-1%>"
+           };
+           TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:'<%$self%>&moid=<%$_moid%>&_function=input&template=Module/DocumentManagement.input.html&doid='+v<%$uniqid%>.modulecontainer.droppedinfos.type+'&tplentry=br&_parentoid=<%$smarty.request.oid%>&oid=<%$doc->oid%>&droppedfile=0&droppedfrom=<%$uniqid%>'});
+         },
+         "<%$syslabels.Seolan_Core_General.cancel_text%>":function(){
+           jQuery(this).dialog("close");
+         }
+       }
+     });
+   });
+ <%/if%>
+</script>
+
+<div class="cv8-contenu-center clearfix">
+<fieldset class="tzr-docmgt-fd">
+ <legend><%if $br_here->tpl.title%><%$br_here->tpl.title%> : <%/if%><%if $br_here->title%><%$br_here->title%><%else%>Dossiers<%/if%></legend>
+ <%if $br_here->comment%><div class="tzr-docmgt-comment"><%$br_here->comment%></div><%/if%>
+ <!-- Affichage des dossiers -->
+ <%if $br_here->countdirs>0%>
+  <div class="tzr-docmgt-docs clearfix">
+    <%foreach item=doc from=$br_here->directories%>
+     <div class="tzr-docmgt-block<%$br_here->getOption('layout')%>">
+      <a href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&_parentoid=<%$smarty.request.oid%>&oid=<%$doc->oid%>&tplentry=br" class="cv8-ajaxlink tzr-docmgt-block-folder" data-toggle="tooltip" data-html="true" title="<%$doc->tpl.otitle->html|escape:'html'%><br><%$doc->fields.oUPD->html%><%if $doc->fields.oOWN%><br><%$doc->fields.oOWN->toText()|escape:'html'%><%/if%>"><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.defaultsdir%></a>
+      <a href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&_parentoid=<%$smarty.request.oid%>&oid=<%$doc->oid%>&tplentry=br" class="cv8-ajaxlink tzr-docmgt-block-title"><%$doc->title%><%if $doc->countdocs%> (<%$doc->countdocs%>)<%/if%></a>
+      <div class="tzr-docmgt-subblock">
+       <%if $doc->comment%><p><%$doc->comment%></p><%/if%>
+       <ul class="tzr-docmgt-ul<%$doc->options.layout%>">
+	<%foreach name=subdoc item=subdoc from=$doc->directories%>
+	 <li><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=index&template=Module/DocumentManagement.index2.html&_parentoid=<%$doc->oid%>&oid=<%$subdoc->oid%>&tplentry=br"><%$subdoc->title%><%if $subdoc->countdocs%>&nbsp;(<%$subdoc->countdocs%>)<%/if%></a></li>
+	 <%if $doc->options.layout!='fullwidth' && !$smarty.foreach.subdoc.last%><%/if%>
+	<%/foreach%>
+       </ul>
+      </div>
+     </div>
+    <%/foreach%>
+  </div>
+ <%/if%>
+ <!-- Fin affichage des dossiers -->
+ <!-- Affichage des fichiers -->
+ <%if $br_here->countdocs>0%>
+  <div class="tzr-docmgt-docs clearfix">
+   <form method="post" name="browse<%$uniqid%>" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+    <input type="hidden" name="template" value="Module/DocumentManagement.index2.html">
+    <input type="hidden" name="targetoid" value="">
+    <input type="hidden" name="message" value="">
+    <input type="hidden" name="_function" value="index">
+    <input type="hidden" name="fromfunction" value="">
+    <input type="hidden" name="_next" value="">
+    <input type="hidden" name="physical" value="">
+    <input type="hidden" name="_move" value="">
+    <input type="hidden" name="_copy" value="">
+    <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+    <input type="hidden" name="_parentoid" value="<%$smarty.request._parentoid%>">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="_selectedok" value="ok"/>
+    <input type="hidden" name="marker" value="selectstart"/>
+    
+    <%foreach from=$br_here->documents item=it key=doc%>
+
+     <div class="tzr-docmgt-doc1 clearfix">
+      <%assign var="any" value=1%>
+      <input name="_selected[<%$it->oid%>]" type="checkbox" class="checkbox">
+      <a class="cv8-ajaxlink" data-toggle="tooltip" data-html="false" title="<%$syslabels.Seolan_Core_General.view_text%>" href="<%$self%>&moid=<%$smarty.request.moid%>&function=display&template=Module/DocumentManagement.display.html&_parentoid=<%$smarty.request.oid%>&oid=<%$doc%>&tplentry=br"><%$it->smallicon%></a>
+      <%if in_array('rw',$it->actions)%><a class="cv8-ajaxlink" data-toggle="tooltip" data-html="true" title="<%$syslabels.Seolan_Core_General.edit_text%>" href="<%$self%>&moid=<%$smarty.request.moid%>&function=edit&template=Module/DocumentManagement.edit.html&_parentoid=<%$smarty.request.oid%>&oid=<%$doc%>&tplentry=br"><%$syslabels.Seolan_Core_General.edit%></a><%/if%>
+      <%if in_array('lock',$it->actions)%><a class="cv8-ajaxlink" data-toggle="tooltip" data-html="true" title="<%$syslabels.Seolan_Core_General.lock_text%>" href="<%$self%>&moid=<%$smarty.request.moid%>&function=edit&template=Module/DocumentManagement.edit.html&_parentoid=<%$smarty.request.oid%>&oid=<%$doc%>&tplentry=br&_mode=lock&_moidlock=<%$_moid%>"><%$syslabels.Seolan_Core_General.lock%></a><%/if%>
+      <%if $it->fields._lock%>
+       <%assign var="lock" value="<br>`$syslabels.Seolan_Core_General.locked_text` (`$it->fields._lock_user.user`)"%>
+      <%else%>
+       <%assign var="lock" value=""%>
+      <%/if%>
+      <span data-toggle="tooltip" data-html="true" title="<%$it->tpl.otitle->html|escape:'html'%><br><%$it->fields.oUPD->html%><%if !empty($it->fields.oOWN)%><br><%$it->fields.oOWN->toText()|escape:'html'%><%/if%><%$lock%>"><%$it->short%></span><%$it->docs%>
+      <script>
+       TZR.DocMngt.Docs.init("browse<%$uniqid%>", "<%$it->oid%>", <%$it->countfiles|default:0%>, "<%$syslabels.Seolan_Core_General.files_text%>");
+      </script>
+     </div>
+    <%/foreach%>
+
+   </form>
+  </div>
+ <%else%>
+  <div style="display:hidden;">
+   <form method="post" action="<%$self%>" name="browse<%$uniqid%>"  onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+    <input type="hidden" name="template" value="Module/DocumentManagement.index2.html">
+    <input type="hidden" name="targetoid" value="">
+    <input type="hidden" name="_function" value="index">
+    <input type="hidden" name="_next" value="">
+    <input type="hidden" name="physical" value="">
+    <input type="hidden" name="_move" value="">
+    <input type="hidden" name="_copy" value="">
+    <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+    <input type="hidden" name="_parentoid" value="<%$smarty.request._parentoid%>">
+    <input type="hidden" name="tplentry" value="br">
+   </form>
+  </div>
+ <%/if%>
+ <%if ($br_here->countdocs<=0) && ($br_here->countdirs<=0)%><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.folderisempty_text%><%/if%>
+</fieldset>
+
+<%if $br_here->countdocs>0 || ($br_here->newdocs && in_array('rw',$br_here->actions)) || ($br_here->newdirs && in_array('rw',$br_here->actions))%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-docmgt-actions tzr-action ">
+   <form name="newform<%$uniqid%>" class="form-inline">
+    <%if $br_here->countdocs>0%>
+     <div class="form-group"><input type="button" onclick="v<%$uniqid%>.downloadselected();" value="<%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.downloadselected_text%>"></div>
+    <%/if%>
+    <!-- Nouveau document -->
+    <%if $br_here->newdocs && in_array('rw',$br_here->actions)%>
+     <%if count($br_here->newdocs)>1%>
+     <div class="form-group">
+       <label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.newdocument_text%></label>
+      <select name="newdoc" onchange="v<%$uniqid%>.navto(this.value);">
+       <option value="">--</option>
+       <%foreach from=$br_here->newdocs key=k item=it%>
+	<option value="<%$self%>&moid=<%$smarty.request.moid%>&function=input&template=Module/DocumentManagement.input.html&doid=<%$it.oid%>&tplentry=br&_parentoid=<%$smarty.request.oid%>&oid=<%$smarty.request.oid%>"><%$it.otitle->html%></option>
+       <%/foreach%>
+      </select>
+     </div>
+     <%else%>
+     <div class="form-group">
+      <%foreach from=$br_here->newdocs key=k item=it%>
+       <input type="button" onclick="v<%$uniqid%>.navto('<%$self%>&moid=<%$smarty.request.moid%>&function=input&template=Module/DocumentManagement.input.html&doid=<%$it.oid%>&tplentry=br&_parentoid=<%$smarty.request.oid%>&oid=<%$smarty.request.oid%>');" value="<%$syslabels.Seolan_Core_General.new_text%> <%$it.otitle->raw|escape:'html'|lcfirst%>">
+      <%/foreach%>
+      </div>
+     <%/if%>
+    <%/if%>
+    <!-- Nouveau dossier -->
+    <%if $br_here->newdirs && in_array('rw',$br_here->actions)%>
+     <%if count($br_here->newdirs)>1%>
+     <div class="form-group">
+       <label><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.newfolder_text%></label>
+      <select name="newdir" onchange="v<%$uniqid%>.navto(this.value);">
+       <option value="">--</option>
+       <%foreach from=$br_here->newdirs key=k item=it%>
+	<option value="<%$self%>&moid=<%$smarty.request.moid%>&function=input&template=Module/DocumentManagement.input.html&doid=<%$it.oid%>&tplentry=br&_parentoid=<%$smarty.request.oid%>&oid=<%$smarty.request.oid%>"><%$it.otitle->text%></option>
+       <%/foreach%>
+      </select>
+     </div>
+     <%else%>
+     <div class="form-group">
+      <%foreach from=$br_here->newdirs key=k item=it%>
+       <input type="button" onclick="v<%$uniqid%>.navto('<%$self%>&moid=<%$smarty.request.moid%>&function=input&template=Module/DocumentManagement.input.html&doid=<%$it.oid%>&tplentry=br&_parentoid=<%$smarty.request.oid%>&oid=<%$smarty.request.oid%>');" value="<%$syslabels.Seolan_Core_General.new_text%> <%$it.otitle->raw|lcfirst%>">
+      <%/foreach%>
+     </div>
+     <%/if%>
+    <%/if%>
+   </form>
+ </div>
+<%/if%>
+</div>

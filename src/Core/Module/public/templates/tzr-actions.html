@@ -1,0 +1,23 @@
+<%* 
+constitution de la barre tzr-action d'un formulaire à partir des actions
+(Core\Module\Action) de la fonction en cours du module
+*%>
+<%foreach from=$imod_props.actions item=action%>
+<%if ! ($action instanceof \Seolan\Core\Module\Action)%><%continue%><%/if%>
+<%if $action->actionable%>
+<%if substr($action->xurl,0,11) == 'javascript:'%>
+<%if $action->needsconfirm%>
+<%assign var='confStart' value='if (TZR.confirm(\'<%$action->needsconfirm\')){'%>
+<%assign var='confEnd' value='}'%>
+<%else%>
+<%assign var='confStart' value=''%>
+<%assign var='confEnd' value=''%>
+<%/if%>
+
+<a class="btn btn-<%$action->type|default:'default'%>" href="#" onclick="<%$confStart|escape:'javascript'%><%$action->xurl|replace:'javascript:':''|escape:'html'%>;<%$confEnd%>;return false;"><%$action->name%></a>
+
+<%else%>
+<a class="cv8-ajaxlink btn btn-<%$action->type|default:'default'%>" href="<%$action->xurl%>" <%if $action->needsconfirm%>x-confirm="var ret=confirm('<%$action->needsconfirm%>');"<%/if%>><%$action->name%></a>
+<%/if%>
+<%/if%>
+<%/foreach%>

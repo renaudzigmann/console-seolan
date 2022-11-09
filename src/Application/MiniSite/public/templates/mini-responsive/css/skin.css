@@ -1,0 +1,308 @@
+<%if $charte_oBODY_fontFamily->link.ofichier->raw %>
+@import url(<%$charte_oBODY_fontFamily->link.ofichier->raw%>);
+<%/if%>
+<%if $charte_oHEADINGS_fontFamily->link.ofichier->raw %>
+@import url(<%$charte_oHEADINGS_fontFamily->link.ofichier->raw%>);
+<%/if%>
+.navbar-fixed-top {
+    background-image: url('<%$charte_oSITE_HEADER_IMG->url%>&disp=inline');
+	margin:0;
+  padding:0;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover; /* version standardisée */
+}
+@media (min-width: 768px) {
+    .navbar-fixed-top {
+	background-image: url('<%$charte_oSITE_HEADER_IMG->url%>&disp=inline');
+			margin:0;
+  padding:0;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover; /* version standardisée */
+    }
+}
+@media (min-width: 992px) {
+    .navbar-fixed-top {
+	background-image: url('<%$charte_oSITE_HEADER_IMG->url%>&disp=inline');
+			margin:0;
+  padding:0;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover; /* version standardisée */
+    }
+}
+@media (min-width: 1200px) {
+    .navbar-fixed-top {
+	background-image: url('<%$charte_oSITE_HEADER_IMG->url%>&disp=inline');
+	margin:0;
+  padding:0;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover; /* version standardisée */
+    }
+}
+body{
+    <%if $charte_oBODY_fontFamily->raw %>font-family:<%$charte_oBODY_fontFamily->link.odeclaration->raw%>;<%/if%>
+    <%if $charte_oBODY_color->raw%>color:<%$charte_oBODY_color->raw%>;<%/if%>
+    <%if $charte_oBODY_fontSize->raw%>font-size:<%$charte_oBODY_fontSize->raw%>px;<%/if%>
+    <%if $charte_oBODY_backgroundColor->raw%>background-color:<%$charte_oBODY_backgroundColor->raw%>;<%/if%>
+}
+.legende,.legende a{
+    <%if $charte_oBODY_color->raw%>color:<%$charte_oBODY_color->raw%>;<%/if%>
+}
+
+a,.cv3-download a{
+    <%if $charte_oa_color->raw%>color:<%$charte_oa_color->raw%>;<%/if%>
+    <%if $charte_oa_textDecoration->raw%>text-decoration:<%$charte_oa_textDecoration->raw%>;<%/if%>
+}
+a:hover ,.cv3-download a:hover
+{
+    <%if $charte_oa_hover_color->raw%>color:<%$charte_oa_hover_color->raw%>;<%/if%>
+    <%if $charte_oa_hover_textDecoration->raw%>text-decoration:<%$charte_oa_hover_textDecoration->raw%>;<%/if%>
+}
+<%if $charte_oBODY_separateur_color->raw%>
+hr {border-color:<%$charte_oBODY_separateur_color->raw%>}
+<%/if%>
+.cv8d-action [type="submit"],
+.navbar-toggle,
+.cv8d-browseform input[type="submit"] {
+    <%if $charte_oa_color->raw%>background-color:<%$charte_oa_color->raw%>;border-color:<%$charte_oa_color->raw%>;<%/if%>
+
+}
+.cv8d-action [type="submit"]:hover,
+.cv8d-browseform input[type="submit"]:hover,
+.navbar-toggle:hover,.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    <%if $charte_oa_hover_color->raw%>background-color:<%$charte_oa_hover_color->raw%>;border-color:<%$charte_oa_hover_color->raw%>;<%/if%>
+
+}
+<%if $charte_oHEADINGS_fontFamily->raw %>
+.cv3-envaleur .titrage_envaleur,
+h1,h2,h3,h4,h5,h6,
+.cv8d-browsediv-4 .cv8d-field-F0001,
+.cv3-3cols .titre
+{
+	font-family: <%$charte_oHEADINGS_fontFamily->link.odeclaration->raw%>;
+}
+<%/if%>
+h1{
+    <%if $charte_oH1_color->raw%>color:<%$charte_oH1_color->raw%>;<%/if%>
+    <%if $charte_oH1_fontWeight->raw%>font-weight:<%$charte_oH1_fontWeight->raw%>;<%/if%>
+}
+h2,
+.cv8d-browsediv-4 .cv8d-field-F0001 ,
+.cv8d-browsediv-4 .cv8d-field-F0004
+{
+    <%if $charte_oH2_color->raw%>color:<%$charte_oH2_color->raw%>;<%/if%>
+    <%if $charte_oH2_fontWeight->raw%>font-weight:<%$charte_oH2_fontWeight->raw%>;<%/if%>
+}
+h3{
+    <%if $charte_oH3_color->raw%>color:<%$charte_oH3_color->raw%>;<%/if%>
+    <%if $charte_oH3_fontWeight->raw%>font-weight:<%$charte_oH3_fontWeight->raw%>;<%/if%>
+}
+h4{
+    <%if $charte_oH4_color->raw%>color:<%$charte_oH4_color->raw%>;<%/if%>
+    <%if $charte_oH4_fontWeight->raw%>font-weight:<%$charte_oH4_fontWeight->raw%>;<%/if%>
+}
+h5{
+    <%if $charte_oH5_color->raw%>color:<%$charte_oH5_color->raw%>;<%/if%>
+    <%if $charte_oH5_fontWeight->raw%>font-weight:<%$charte_oH5_fontWeight->raw%>;<%/if%>
+}
+h6{
+    <%if $charte_oH6_color->raw%>color:<%$charte_oH6_color->raw%>;<%/if%>
+    <%if $charte_oH6_fontWeight->raw%>font-weight:<%$charte_oH6_fontWeight->raw%>;<%/if%>
+}
+<%if $charte_ohtdig_bg_color_search->raw%>
+#collapseSearch {background-color:<%$charte_ohtdig_bg_color_search->raw%>;}
+<%/if%>
+.footer,
+.cv3-envaleur,
+.cv3-3cols .txt p,.cv3-3cols .titre,
+.footer ul li a
+{
+    <%if $charte_ofooter_backgroundColor->raw%>background-color:<%$charte_ofooter_backgroundColor->raw%>;<%/if%>
+    <%if $charte_ofooter_fontColor->raw%>color:<%$charte_ofooter_fontColor->raw%>;<%/if%>
+}
+.footer a,
+.cv3-envaleur a,
+.cv3-3cols a
+{
+    <%if $charte_ofooter_a_color->raw%>color:<%$charte_ofooter_a_color->raw%>;<%/if%>
+    <%if $charte_ofooter_a_textDecoration->raw%>text-decoration:<%$charte_ofooter_a_textDecoration->raw%>;<%/if%>
+
+}
+.footer a:hover, .footer ul li a:hover,
+.cv3-envaleur a:hover,
+.cv3-3cols a:hover
+{
+    <%if $charte_ofooter_a_hover_color->raw%>color:<%$charte_ofooter_a_hover_color->raw%>;<%/if%>
+    <%if $charte_ofooter_a_hover_textDecoration->raw%>text-decoration:<%$charte_ofooter_a_hover_textDecoration->raw%>;<%/if%>
+}
+.cv3-block input[type="submit"]{
+  <%if $charte_ofooter_a_color->raw%>color:<%$charte_ofooter_a_color->raw%>;<%/if%>
+}
+.cv3-block input[type="submit"]:hover{
+  <%if $charte_ofooter_a_hover_color->raw%>color:<%$charte_ofooter_a_hover_color->raw%>;<%/if%>
+}
+#cv3-social ul li a {
+    <%if $charte_ofooter_a_color->raw%>color:<%$charte_ofooter_a_color->raw%>;<%/if%>
+}
+#cv3-social ul li a:hover {
+    <%if $charte_ofooter_a_hover_color->raw%>color:<%$charte_ofooter_a_hover_color->raw%>;<%/if%>
+}
+
+
+.footer h1, .footer h2,.footer h3,.footer h4, .footer h5,.footer h6,
+.footer .cv3-block h1, .footer .cv3-block h2,.footer .cv3-block h3,.footer .cv3-block h4, .footer .cv3-block h5,.footer .cv3-block h6,
+.cv3-envaleur h1, .cv3-envaleur h2,.cv3-envaleur h3,.cv3-envaleur h4,.cv3-envaleur h5,.cv3-envaleur h6,
+.cv3-3cols h1,.cv3-3cols h2,.cv3-3cols h3,.cv3-3cols h4,.cv3-3cols h5, .cv3-3cols h6
+{
+    <%if $charte_ofooter_H2_color->raw%>color:<%$charte_ofooter_H2_color->raw%>;<%/if%>
+    <%if $charte_ofooter_H2_fontWeight->raw%>font-weight:<%$charte_ofooter_H2_fontWeight->raw%>;<%/if%>
+}
+
+#cv3-news {
+    <%if $charte_oactus_backgroundColor->raw%>background-color:<%$charte_oactus_backgroundColor->raw%>;<%/if%>
+}
+#cv3-news h4 {
+    <%if $charte_oactus_H4_color->raw%>color:<%$charte_oactus_H4_color->raw%>;<%/if%>
+    <%if $charte_oactus_H4_fontWeight->raw%>font-weight:<%$charte_oactus_H4_fontWeight->raw%>;<%/if%>
+}
+#cv3-news h5 {
+    <%if $charte_oactus_H5_color->raw%>color:<%$charte_oactus_H5_color->raw%>;<%/if%>
+    <%if $charte_oactus_H5_fontWeight->raw%>font-weight:<%$charte_oactus_H5_fontWeight->raw%>;<%/if%>
+}
+#cv3-news a,
+#scrollToTop a{
+    <%if $charte_oactus_a_color->raw%>color:<%$charte_oactus_a_color->raw%>;<%/if%>
+    <%if $charte_oactus_a_textDecoration->raw%>text-decoration:<%$charte_oactus_a_textDecoration->raw%>;<%/if%>
+}
+#scrollToTop a{
+    <%if $charte_oactus_a_color->raw%>background-color:<%$charte_oactus_a_color->raw%>;<%/if%>
+    text-decoration:none;
+}
+#cv3-news a:hover,
+#scrollToTop a:hover{
+    <%if $charte_oactus_a_hover_color->raw%>color:<%$charte_oactus_a_hover_color->raw%>;<%/if%>
+    <%if $charte_oactus_a_hover_textDecoration->raw%>text-decoration:<%$charte_oactus_a_hover_textDecoration->raw%>;<%/if%>
+}
+#scrollToTop a:hover{
+    <%if $charte_oactus_a_hover_color->raw%>background-color:<%$charte_oactus_a_hover_color->raw%>;<%/if%>
+    text-decoration:none;
+}
+
+.navbar-default .navbar-nav > li > a {
+    <%if $charte_omenunv1_a_color->raw%>color:<%$charte_omenunv1_a_color->raw%>;<%/if%>
+    <%if $charte_omenunv1_a_backgroundColor->raw%>background-color:<%$charte_omenunv1_a_backgroundColor->raw%>;<%/if%>
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > .open > a:hover, .yamm .dropdown.yamm-fw.open a.dropdown-toggle {
+    <%if $charte_omenunv1_a_hover_color->raw%>color:<%$charte_omenunv1_a_hover_color->raw%>;<%/if%>
+    <%if $charte_omenunv1_a_hover_backgroundColor->raw%>background-color:<%$charte_omenunv1_a_hover_backgroundColor->raw%>;<%/if%>
+
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    <%if $charte_omenunv1_a_active_color->raw%>color:<%$charte_omenunv1_a_active_color->raw%>;<%/if%>
+    <%if $charte_omenunv1_a_active_backgroundColor->raw%>background-color:<%$charte_omenunv1_a_active_backgroundColor->raw%>;<%/if%>
+}
+
+.navbar-nav .dropdown-menu > li > a {
+    <%if $charte_omenunv2_a_color->raw%>color:<%$charte_omenunv2_a_color->raw%>;<%/if%>
+    <%if $charte_omenunv2_a_backgroundColor->raw%>background-color:<%$charte_omenunv2_a_backgroundColor->raw%>;<%/if%>
+}
+.navbar-nav .dropdown-menu > li > a:hover {
+    <%if $charte_omenunv2_a_hover_color->raw%>color:<%$charte_omenunv2_a_hover_color->raw%>;<%/if%>
+    <%if $charte_omenunv2_a_hover_backgroundColor->raw%>background-color:<%$charte_omenunv2_a_hover_backgroundColor->raw%>;<%/if%>
+}
+.navbar-nav .dropdown-menu > li.active > a,
+.navbar-nav .dropdown-menu > li.active > a:focus,
+.navbar-nav .dropdown-menu > li.active > a:hover
+{
+    <%if $charte_omenunv2_a_active_color->raw%>color:<%$charte_omenunv2_a_active_color->raw%>;<%/if%>
+    <%if $charte_omenunv2_a_active_backgroundColor->raw%>background-color:<%$charte_omenunv2_a_active_backgroundColor->raw%>;<%/if%>
+}
+<%if $charte_omenu_menuXLbgColor->raw%>
+.yamm .yamm-content {
+  background-color:<%$charte_omenu_menuXLbgColor->raw%>;
+}
+<%/if%>
+#cv3-links-reseaux-sociaux ul li a {
+    <%if $charte_oSHARE_color->raw%>color:<%$charte_oSHARE_color->raw%>;<%/if%>
+}
+/* MODULE AGENDA */
+/*#agendaHome, #agendaCol,  #agendaBottom, .agendaModal-title, .newsMiniSite {*/
+#agendaCol,  #agendaBottom, .newsMiniSite {
+  <%if $charte_oAGENDA_backgroundColor->raw%>background-color: <%$charte_oAGENDA_backgroundColor->raw%>;<%/if%>
+}
+  .modal-header, .modalAgenda {
+    <%if $charte_oAGENDA_backgroundColor_page->raw%>background-color: <%$charte_oAGENDA_backgroundColor_page->raw%>;<%/if%>
+  }
+
+#agenda .titre, #agenda .itemAgendaHome, #agenda .date1, #agenda .date2, #agenda .duree, #agenda .itemAgenda,
+#agenda .titreItem,
+#agenda .descItem, #agenda #agenda-link-toggle,
+#agenda .newsMiniSite .descItem,
+#agendaHome .newsMiniSite .titre, #agendaHome .newsMiniSite .date1, #agendaHome .newsMiniSite .descItem,
+#agenda .newsMiniSite .titreItem, #agenda .newsMiniSite .date1 {
+    <%if $charte_oAGENDA_color->raw%>color: <%$charte_oAGENDA_color->raw%>;<%/if%>
+}
+
+
+#agenda .itemAgendaHome {
+  <%if $charte_oAGENDA_color->raw%>border-top-color: <%$charte_oAGENDA_color->raw%>;<%/if%>
+}
+#agenda .color, #agendaHome .color {
+    <%if $charte_oAGENDA_color_date->raw%>color: <%$charte_oAGENDA_color_date->raw%>;<%/if%>
+}
+
+#agenda .theme, #agendaHome .theme {
+    <%if $charte_oAGENDA_color_theme->raw%>color: <%$charte_oAGENDA_color_theme->raw%>;<%/if%>
+}
+#agenda .type, #agendaHome .type {
+    <%if $charte_oAGENDA_color_type->raw%>color: <%$charte_oAGENDA_color_type->raw%>;<%/if%>
+}
+#agenda .organisateur, #agenda .modalOrganisateur,
+#agendaHome .organisateur, #agendaHome .modalOrganisateur {
+  <%if $charte_oAGENDA_color_organisateur->raw%>color: <%$charte_oAGENDA_color_organisateur->raw%>;<%/if%>
+}
+#agenda .lieu, #agenda .modalLieu,
+#agendaHome .lieu, #agendaHome .modalLieu {
+  <%if $charte_oAGENDA_color_lieu->raw%>color: <%$charte_oAGENDA_color_lieu->raw%>;<%/if%>
+}
+
+
+#agenda .btAgenda, #agenda .btAgendatte,
+#agendaHome .newsMiniSite .btAgenda, #agendaHome .newsMiniSite .btAgendatte,
+#agenda .btn-downloadprog, .footer #cv3-newsletter a.btn-recevoirNewsletter {
+  <%if $charte_oAGENDA_backgroundColor_btn->raw%>background-color: <%$charte_oAGENDA_backgroundColor_btn->raw%>;<%/if%>
+  <%if $charte_oAGENDA_color_btn->raw%>color: <%$charte_oAGENDA_color_btn->raw%>;<%/if%>
+  <%if $charte_oAGENDA_color_btn_border->raw%>border-color: <%$charte_oAGENDA_color_btn_border->raw%>;<%/if%>
+}
+#agenda .btAgenda:hover, #agenda .btAgendatte:hover,
+#agendaHome .newsMiniSite .btAgenda:hover, #agendaHome .newsMiniSite .btAgendatte:hover,
+#agenda .btn-downloadprog:hover, .footer #cv3-newsletter a.btn-recevoirNewsletter:hover {
+    <%if $charte_oAGENDA_backgroundColor_btn_hover->raw%>background-color: <%$charte_oAGENDA_backgroundColor_btn_hover->raw%>;<%/if%>
+    <%if $charte_oAGENDA_color_btn_hover->raw%>color: <%$charte_oAGENDA_color_btn_hover->raw%>;<%/if%>
+    <%if $charte_oAGENDA_color_btn_border_hover->raw%>border-color: <%$charte_oAGENDA_color_btn_border_hover->raw%>;<%/if%>
+}
+
+/* Bouton "Recevoir la newsletter ?" situé dans le footer */
+.footer #cv3-newsletter a.btn-recevoirNewsletter {
+  <%if $charte_ofooter_nl_backgroundColor_btn->raw%>background-color: <%$charte_ofooter_nl_backgroundColor_btn->raw%>;<%/if%>
+  <%if $charte_ofooter_nl_color_btn->raw%>color: <%$charte_ofooter_nl_color_btn->raw%>;<%/if%>
+}
+.footer #cv3-newsletter a.btn-recevoirNewsletter:hover {
+  <%if $charte_ofooter_nl_backgroundColor_btn_hover->raw%>background-color: <%$charte_ofooter_nl_backgroundColor_btn_hover->raw%>;<%/if%>
+  <%if $charte_ofooter_nl_color_btn_hover->raw%>color: <%$charte_ofooter_nl_color_btn_hover->raw%>;<%/if%>
+}
+
+.newsMiniSite {
+    <%if $charte_oAGENDA_div_borderColor->raw%>border-color: <%$charte_oAGENDA_div_borderColor->raw%>;<%/if%>
+    <%if $charte_oAGENDA_div_backgroundColor->raw%>background-color: <%$charte_oAGENDA_div_backgroundColor->raw%>;<%/if%>
+}
+#agenda .newsMiniSite .titreItem, #agendaHome .newsMiniSite .titreItem,
+#agenda .newsMiniSite .date1, #agendaHome .newsMiniSite .date1,
+#agenda .newsMiniSite .descItem, #agendaHome .newsMiniSite .descItem {
+  <%if $charte_oAGENDA_div_color->raw%>color:<%$charte_oAGENDA_div_color->raw%>;<%/if%>
+}
+
+#agenda .newsMiniSite .btAgenda, #agenda .newsMiniSite .btAgendatte,
+#agendaHome .newsMiniSite .btAgenda, #agendaHome .newsMiniSite .btAgendatte {
+  <%if $charte_oAGENDA_div_color->raw%>color:<%$charte_oAGENDA_div_color->raw%>;<%/if%>
+  <%if $charte_oAGENDA_div_color->raw%>border-color:<%$charte_oAGENDA_div_color->raw%>;<%/if%>
+}

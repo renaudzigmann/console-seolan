@@ -1,0 +1,28 @@
+<!--<%$smarty.template%>-->
+<%if $tzr.private_space%>
+<%assign var="id" value=""|uniqid%>
+<div id="cv3-private" class="cv3-block">
+   <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-private" href="#private<%$id%>"><%label v="private_title" t="Accès pro"%></a>
+   <h4><%label v="private_title" t="Accès pro"%></h4>
+   <div id="private<%$id%>" class="collapse">
+		<div class="middle">
+			<%if $uid=="USERS:0"%>
+			<form name="privateform" method="post" action="<%$self%>" class="privateform">
+				<input type="hidden" name="_next" value="alias=<%$tzr.private_alias%>">
+				<input type="hidden" name="_function" value="procAuth">
+				<input type="hidden" name="_class" value="XSession">
+				<input type="hidden" name="onerror" value="<%$self%>&alias=loginfailed">
+            <input type="text" name="login" class="zoneLogin" placeholder="<%label v='login' t='Nom d\'utilisateur'%>" />
+            <input type="password" name="password" class="zoneLogin" placeholder="<%label v='password' t='Mot de passe'%>" />
+            <input type="submit" name="button" class="btn" value="<%$labels.connecter%>"/>
+			</form>
+			<%else%>
+			<ul>
+            <li><a href="<%$self%>alias=home&function=close&class=XSession"><%$labels.deconnecter%></a></li>
+				</ul>
+			<%/if%>
+		</div>
+		
+	</div><!-- fin private -->
+</div><!-- fin cv3-private -->
+<%/if%>

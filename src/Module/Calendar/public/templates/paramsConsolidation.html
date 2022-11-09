@@ -1,0 +1,63 @@
+<div id="colorchooser">
+ <form name="consolidateform" method="post" action="<%$self%>" onsubmit="TZR.hideFullScreenContent('#colorchooser');return TZR.ajaxSubmitForm(this,v<%$uniqid%>.modulecontainer);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+  <input type="hidden" name="_function" value="addConsolidation">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="target" value="">
+  <input type="hidden" name="color" value="">
+  <input type="hidden" name="_next" value="<%$smarty.request.ajaxnext%>">
+  <div class="table-responsive">
+  <table class="list2">
+   <%if $br_texte && $br_date%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.consolidationsave%></label></th>
+     <td><input type="checkbox" value="1" name="save"></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.title%></label></th>
+     <td><select name="text"><%html_options options=$br_stexte%></select></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.begin%></label></th>
+     <td><select name="begin"><%html_options options=$br_date%></select></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.end%></label></th>
+     <td><select name="end"><%html_options options=$br_date%></select></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.description%></label></th>
+     <td><select name="descr"><option value="">---</option><%html_options options=$br_texte%></select></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.place%></label></th>
+     <td><select name="place"><option value="">---</option><%html_options options=$br_stexte%></select></td>
+    </tr>
+   <%/if%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.color%></label></th>
+    <td>
+     <div id="cols"></div>
+    </td>
+   </tr>
+  </table>
+  </div>
+  <br>
+  <script type="text/javascript">
+   pal="<%$imod_props.tcolors%>";
+   pal=pal.split(',');
+   var cols=document.getElementById("cols");
+   for(i=0;i<pal.length;i++){
+    cols.innerHTML+='<a href="#" onclick="v<%$uniqid%>.changeColor(\''+pal[i]+'\',this);return false;" style="background-color:'+pal[i]+';"></a>';
+    if((i+1)%7==0){
+     cols.innerHTML+='<div style="clear:both;"></div>';
+    }
+   }
+  </script>
+  <div class="tzr-action">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="TZR.hideFullScreenContent('#colorchooser');">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.approve_text%>" id="colssubmit" style="display:none;">
+  </div>
+ </form>
+</div>

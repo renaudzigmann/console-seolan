@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%include file="Core.header/layout.html"%>
+  </head>
+  <body>
+    
+    <header>
+      <nav class='navbar navbar-default'>
+	<div class="navbar-brand" role="banner">
+	  <%if $tzr.hiddenwebsitelink%>
+          <a href="<%$self%>moid=17&template=Core.layout/main.html&function=portail">
+	    <%else%>
+            <a href="<%$fullself%>">
+	      <%/if%>
+	      <%if $smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>
+	      <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="" src="<%$smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>"></span>
+	      <%if $smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>
+	      <span class="slogan"><%$labels[<%$smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>]%></span>
+	      <%/if%>
+	      <%else%>
+	      <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="Console Séolan X" src="<%$smarty.const.TZR_WWW_CSX%>src/Core/public/images/logo.svg"></span>
+	      <span class="slogan">Console Séolan X</span>
+	      <%/if%>
+	    </a>
+	</div>
+      </nav>
+    </header>
+    <%* 	  <h1 id="cv8-pagetitle"></h1> *%>    
+
+    <section id='content' style="margin-left:10px">
+      <div class='container'>
+	<div class='row' id='content-wrapper'>
+          <div class='col-xs-12'>
+	    
+            <div class="cv8-titre-page"><h1 id="cs-maintitle" ><%<%$imod_props.modulename%>%></h1></div>
+	    
+            <div id="cv8-content">
+	      <%include file=$smarty.request.insidefile%>
+	    </div>
+
+	  </div>
+	</div>
+      </div>
+
+
+      <footer class="footer" role="contentinfo"><!-- bas de page -->
+	<div class="row">
+	  <div class="col-xs-12 col-sm-6 basnav"></div>
+	  <div class="col-xs-12 col-sm-6 cv8-copyright">
+	    Console S&eacute;olan &copy;v <%$smarty.const.TZR_CONSOLE_RELEASE%>.<%$smarty.const.TZR_CONSOLE_SUB_RELEASE%> <%$smarty.const.TZR_CONSOLE_RELEASE_NICKNAME%> (<%$smarty.const.TZR_STATUS%>)&nbsp;<a href="<%if $tzr.mail_xsalto%><%$tzr.mail_xsalto%><%else%>mailto:commercial@xsalto.com<%/if%>">XSALTO</a>
+	  </div>
+	</div>
+      </footer>
+
+    </section>
+
+ </body>
+</html>

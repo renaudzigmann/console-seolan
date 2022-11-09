@@ -1,0 +1,120 @@
+<!-- cv3-agenda-fiche.html -->
+<%assign var=section value=$it_olines[it]%>
+<div id="agendaFiche">
+  <!-- Agenda : Pagination -->
+  <div class="cv8d-object-nav">
+    <%if $admini %>
+      <%if $section._prev_oid%>
+        <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._prev_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.previous%></a>
+      <%/if%>
+      <%if $section._from%>
+        <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._from.oidit%>&sectionopts[<%$section._from.itoid%>][oid]=<%$section.oid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.back%></a>
+      <%/if%>
+      <%if $section._next_oid%>
+        <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._next_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.next%></a>
+      <%/if%>
+    <%else%><%** !admini **%>
+      <%assign var="from_alias" value=$section._from.alias|default:$smarty.get.from.alias%>
+      <%assign var="from_itoid" value=$section._from.itoid|default:$smarty.get.from.itoid%>
+      <%if $section._prev_oid%>
+        <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._prev_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-chevron-left"></span><%else%><%$syslabels.Seolan_Core_General.previous%><%/if%></a>
+      <%/if%>
+      <%if $from_alias && $from_itoid %>
+        <a href="<%$self%>&alias=<%$from_alias%>&sectionopts[<%$from_itoid%>][oid]=<%$section.oid%>#cv8d-object-<%$section.oid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-align-justify"></span><%else%><%$syslabels.Seolan_Core_General.back%><%/if%></a>
+      <%/if%>
+      <%if $section._next_oid%>
+        <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._next_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%if $tzr.bootstrap%><span class="glyphicon glyphicon-chevron-right"></span><%else%><%$syslabels.Seolan_Core_General.next%><%/if%></a>
+      <%/if%>
+    <%/if%>
+  </div>
+  <!-- Agenda : détail de l'évenement -->
+  <div class="agendaContainer">
+  <div id="agenda" class="agendaModal-title">
+    <div class="modal-header">
+      <h4 class="modal-title"><%$section.otitle->raw%></h4>
+    </div>
+    <div class="modalAgenda clearfix">
+      <div class="agendaModal-body">
+        <%if $section.oimage->resizer%>
+        <div class="row">
+          <%if $section.oimage->decoded_raw->h > $section.oimage->decoded_raw->w %>
+          <div class="col-md-6">
+            <div class="affichePortrait" itemprop="image"><%html_picture resizer=$section.oimage->resizer alt=$section.oimage->title title=$section.oimage->title srcsetId="img_tiers" %></div>
+          </div>
+          <%else%>
+          <div class="col-md-12">
+            <div class="affichePaysage" itemprop="image"><%html_picture resizer=$section.oimage->resizer alt=$section.oimage->title title=$section.oimage->title srcsetId="img_demi" %></div>
+          </div>
+          <%/if%>
+        </div>
+        <%/if%>
+
+        <div class="row">
+          <div class="col-md-6">
+            <%assign var=date1time value=$section.ostart->raw|strtotime%>
+            <%assign var=date2time value=$section.oend->raw|strtotime%>
+            <%assign var=day1 value="d"|date:$date1time%>
+            <%assign var=month1 value="m"|date:$date1time%>
+            <%assign var=day2 value="d"|date:$date2time%>
+            <%assign var=month2 value="m"|date:$date2time%>
+
+            <%if $day1 neq $day2 and $month1 neq $month2 %>
+              <div class="modalDate"><span class="color"><%$day1%> </span><%$month1|@getFrenchMonth|substr:0:4%><%if $section.oend->raw%> au <span class="color"><%$day2%> </span><%$month2|@getFrenchMonth|substr:0:4%><%/if%></div>
+            <%else%>
+              <div class="modalDate">Le <span class="color"><%$day1%> </span><%$month1|@getFrenchMonth%><%if $agline.oend->raw%><%/if%></div>
+            <%/if%>
+            <%if $section.ohor->raw%><div class="modalDuree">à <%$section.ohor->html%></div><%/if%>
+            <%if $section.olieu->raw%><div class="modalLieu"><%$section.olieu->fielddef->label%> : <%$section.olieu->html%></div><%/if%>
+          </div>
+          <div class="col-md-6">
+            <%if $section.otheme->raw%><div class="theme">Thème : <%$section.otheme->html%></div><%/if%>
+            <%if $section.otype->raw%><div class="type">Type : <%$section.otype->html%></div><%/if%>
+          </div>
+        </div>
+
+        <%if $section.oresume->html%>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="txt">
+              <%$section.oresume->html%>
+            </div>
+          </div>
+        </div>
+        <%/if%>
+
+        <%assign var="player" value=$section.ovideoext->raw|@player_from_video_url%>
+        <%if $player%>
+        <div class="agendaMedia agendaMediaIframe">
+          <%$section.ovideoext->raw|@html_from_video_url%>
+        </div>
+        <%/if%>
+
+        <%if $section.ovideofile->raw && $section.ovideofile->isVideo%>
+        <div class="agendaMedia agendaMediaIVideo">
+            <%$section.ovideofile->completeHtml()%>
+        </div>
+        <%/if%>
+
+        <%if $section.oaudiofile->raw && $section.oaudiofile->isAudio%>
+        <div class="agendaMedia agendaMediaAudio">
+          <%$section.oaudiofile->completeHtml()%>
+        </div>
+        <%/if%>
+
+        <%if $section.ofile->raw %>
+        <div class="agendaMedia agendaMediaDocument">
+          <a class="btn btn-primary btn-downloadprog" href="<%$section.ofile->url%>">Télécharger le programme</a>
+        </div>
+        <%/if%>
+
+      </div><!-- / .agendaModal-body -->
+    </div> <!-- / .modalAgenda -->
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12">
+        <a href="/index.php?nocache=1&amp;alias=agenda" class="btn btn-default btAgendatte pull-left"><%$labels.agenda_toutes_les_dates|default:"Toutes les dates"%></a>
+      </div>
+    </div>
+  </div><!-- / .agendaModal-title -->
+  </div>
+</div>
+<!-- /cv3-agenda-fiche.html -->

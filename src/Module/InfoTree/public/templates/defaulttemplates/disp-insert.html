@@ -1,0 +1,81 @@
+<!-- formulaire insertion standard -->
+<div class="cv8d-insert cv8d-insert-<%$it_olines[it]._functionparams.moid%>">
+ <form id="insertform<%$uniqid%>" name="insertform<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.isFormValidWithFocus(this,true);" enctype="multipart/form-data" >
+  <%if $it_olines[it].oid%>
+   <input type="hidden" name="oid" value="<%$it_olines[it].oid%>">
+   <input type="hidden" name="_function" value="procEdit">
+  <%else%>
+   <input type="hidden" name="_function" value="procInsert">
+  <%/if%>
+
+  <input type="hidden" name="itoid" value="<%$it_itoid[it]%>">
+
+  <input type="hidden" name="moid" value="<%$it_olines[it]._functionparams.moid%>">
+  <input type="hidden" name="_next" value="<%$self%>alias=<%$it_olines[it]._functionparams.params.nextalias%>">
+  <%assign var="tmpgroup" value=""%>
+  <%assign var="RGPD_block" value=""%>
+  <%section name=i loop=$it_olines[it].fields_object%>
+     <%assign var=field value=$it_olines[it].fields_object[i]%>
+     <%if $it_olines[it]._functionparams.params.dispfgroup==1 && $field->fielddef->fgroup && $field->fielddef->fgroup!=$tmpgroup%>
+      <%assign var="tmpgroup" value=$field->fielddef->fgroup%>
+      <div class="cv8d-group">
+       <h2><%$tmpgroup%></h2>
+     <%/if%>
+
+     <%if $it_olines[it]._functionparams.module->consent_field && $field->fielddef->field == $it_olines[it]._functionparams.module->consent_field%>
+       <%* Il s'agit du champ RGPD défini dans les options du module *%>
+       <%capture assign=RGPD_block%>
+       <div class="cv8d-field cv8d-field-<%$field->fielddef->field%>" id="cv8d-displayobj-field-<%$field->fielddef->field%>">
+         <%* 1. Phrase pour le RGPD *%>
+         <%assign var="RGPD_sentence" value=$labels.form_sentence_RGPD|default:"En soumettant ce formulaire, j'accepte que les informations saisies soient utilisées pour me recontacter."%>
+         <%* 2. Suppression du label pour tout mettre sur la même ligne car la phrase explicative est trop grande *%>
+         <%assign var="field_html" value=$field->html|replace:"<label>":""|replace:"</label>":""%>
+         <%* 3. Insertion de la phrase juste après le input[type=checkbox]*%>
+         <%* 3. Insertion de la phrase juste après le input[type=checkbox]*%>
+         <%$field_html|replace:"<input":"<input required"|replace:"</div>":"`$RGPD_sentence`</div>"%>
+       </div>
+       <script>
+       TZR.addValidator(["<%$field->varid%>",/(.+)/,"Acceptation","#FF0000","\Seolan\Field\Boolean\Boolean"]);
+       jQuery("input#<%$field->varid%>").change(function(e) {
+         TZR.isIdValid('<%$field->varid%>');
+       });
+       </script>
+       <%/capture%>
+     <%else%>
+       <div class="cv8d-field cv8d-field-<%$field->fielddef->field%>" id="cv8d-displayobj-field-<%$field->fielddef->field%>">
+          <%$field->fielddef->get_htmllabel()%>
+          <%if $field->comment%><div class="cv8d-comment"><%$field->comment%></div><%/if%>
+          <div class="cv8d-answer"><%$field->html%></div>
+       </div>
+     <%/if%>
+
+     <%if $it_olines[it]._functionparams.params.dispfgroup==1 && ($smarty.section.i.last && $tmpgroup || $tmpgroup!=$it_olines[it].fields_object[$smarty.section.i.index_next]->fielddef->fgroup)%>
+      </div>
+     <%/if%>
+  <%/section%>
+  <%if $it_olines[it].captcha%>
+  <!-- Captcha -->
+   <div class="cv8d-field cv8d-field-captcha">
+    <label><%$it_olines[it].captcha.label%></label>
+    <div class="cv8d-answer">
+      <%if $admini%>
+        <%$it_olines[it].captcha.html%>
+      <%else%>
+        <%$it_olines[it].captcha.html|replace:'csico-refresh':'glyphicon-refresh'%>
+      <%/if%>
+    </div>
+   </div>
+   <!-- / Captcha -->
+  <%/if%>
+
+  <%$RGPD_block%>
+
+  <div class="cv8d-action">
+   <input type="submit" id="inputSubmit<%$uniqid%>" value="<%$it_olines[it]._functionparams.params.labelvalidate|default:$labels['Seolan_Core_General.approve']|default:$syslabels.Seolan_Core_General.approve%>">
+  </div>
+
+ </form>
+</div>
+<script type="text/javascript">
+ if(TZR != undefined) TZR.activeDependency(document.insertform<%$uniqid%>);
+</script>

@@ -1,0 +1,17 @@
+<%include file="Module/Table.functions.html"%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.title%></legend>
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].otitsec %>
+    <%call fieldline field=$it_olines[it].osubtit %>
+    <%call fieldline field=$it_olines[it].osubtit2 %>
+    <%call fieldline field=$it_olines[it].ochapeau %>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.content%></legend>
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].otxt1 %>
+  </div>
+</fieldset>

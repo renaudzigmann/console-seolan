@@ -1,0 +1,32 @@
+<%if $moduleid%>
+<script type="text/javascript">
+ jQuery(function(){
+   TZR.jQueryLoad({nocheckauth:true,url:'<%if strpos($it_olines[it].ofct->raw,'/')!==0%><%$self%><%/if%><%$it_olines[it].ofct->raw%>&_bdxnewstack=1&_nohistory=1&_raw=1&_ajax=1',target:'#<%$moduleid%>',cb:function(responseText,textStatus,XMLHttpRequest){
+    if(XMLHttpRequest.status==401){
+     jQuery('#<%$moduleid%>').parents('div.cv8-module').remove();
+    }
+   }});
+ });
+</script>
+<%else%>
+<div class="table-responsive">
+<table class="table list2">
+ <tr>
+  <th><%$it_olines[it].otitle->fielddef->label%></th>
+  <td><%$it_olines[it].otitle->html%></td>
+ </tr>
+ <tr>
+  <th><%$it_olines[it].ocomment->fielddef->label%></th>
+  <td><%$it_olines[it].ocomment->html%></td>
+ </tr>
+ <tr>
+  <th><%$it_olines[it].omodid->fielddef->label%></th>
+  <td><%$it_olines[it].omodid->html%></td>
+ </tr>
+ <tr>
+  <th><%$it_olines[it].ofct->fielddef->label%></th>
+  <td><%$it_olines[it].ofct->raw%></td>
+ </tr>
+</table>
+</div>
+<%/if%>

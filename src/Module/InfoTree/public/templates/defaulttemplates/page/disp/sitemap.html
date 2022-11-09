@@ -1,0 +1,12 @@
+<%if $admini%>
+<strong>Plan du site. Non visualisable dans l'administration.</strong>
+<%else%>
+<%if $tzr.templates_plan%><%assign var="ptemplate" value=$tzr.templates_plan%><%else%><%assign var="ptemplate" value="application:plan.html"%><%/if%>
+<div class="cv3-plansite clearfix">
+        <!-- <%$fullself|cat:"&alias=sitemap&function=menu&aliastop="|cat:$tzr.corailv3_top|cat:"&template="|cat:$ptemplate%> -->
+  <%fetch file=$fullself|cat:"&alias=sitemap&function=menu&aliastop="|cat:$tzr.corailv3_top|cat:"&template="|cat:$ptemplate%>
+        <!-- <%$fullself|cat:"&alias=sitemap&function=menu&aliastop="|cat:$tzr.corailv3_bottom|cat:"&template="|cat:$ptemplate%> -->
+  <%fetch file=$fullself|cat:"&alias=sitemap&function=menu&aliastop="|cat:$tzr.corailv3_bottom|cat:"&template="|cat:$ptemplate%>
+
+</div>
+<%/if%>

@@ -1,0 +1,158 @@
+<%*
+   gabarit de connexion / gestion des mots de passe / fermeture de compte
+*%>
+<%assign var="section" value=$it_olines[it]%>
+<%assign var="containerid" value="cv8d-manageLogin"|cat:$section._functionparams.moid|cat:$uniqid%>
+<%assign var="formid" value="requestAnAccountForm"|cat:$uniqid%>
+
+<script type="text/javascript">
+ function newPasswordRequest(form){
+   var elements = form.elements;
+   var loginel = elements['login'];
+   if (!loginel || loginel.value == ""){
+     jQuery(loginel).fadeOut(250).fadeIn(250).focus();
+     return;
+   }
+   elements["function"].value = "newPasswordRequest2";
+   if (elements["moid"].value == "")
+     elements["moid"].value = elements["sfmoid"].value;
+   try{
+     if (elements["class"].value != "")
+       elements["class"].value = "";
+   } catch(e){}
+   elements["_next"].value = elements["loginalias"].value;
+   form.submit();
+ }
+ function setErrorLogin(form, login){
+   var v = form.elements['onerror'].value;
+   if (v.indexOf('login=') != -1){
+     v = v.replace(/&(amp;)?login=([^&].)+(|&)/,"login="+escape(login));
+   } else {
+     v = v+"&login="+escape(login);
+   }
+   form.elements['onerror'].value = v;
+ }
+</script>
+
+<%if $section.mode == 'logged' && $section.ok%>
+<div id="<%$containerid%>" class="cv8d-login cv8d-login-<%$section._functionparams.moid%>">
+  <ul class="list-group list-group-flush">
+  <%foreach from=$section._functionparams.params.loggedfields item="fn"%>
+    <%$ofn="o$fn"%>
+    <%if !empty(<%$section.du.$ofn->html%>)%>
+    <li class="list-group-item"><label><%$section.du.$ofn->fielddef->label%></label><%$syslabels.Seolan_Core_General.i18ncolon%><%$section.du.$ofn->html%></li>
+    <%/if%>
+  <%/foreach%>
+  </ul>
+  <div class="tzr-action">
+    <%$disconnectedAlias=$section._functionparams.params.disconnectnextalias|default:$it_cat_mit.oalias->raw%>
+    <%$logoutnext=$self|cat:http_build_query(['alias'=>$disconnectedAlias,'_'=>date('ymids')])%>
+    <button type="button" onclick="document.location='<%$self%>class=<%$smarty.const.TZR_SESSION_MANAGER|escape:'javascript'%>&function=close&template=Core.empty.html&_next=<%$logoutnext|urlencode%>';" class="btn btn-primary"><%fieldlabelvalue id=$section._functionparams.params.logoutlabel%></button>
+  </div>
+</div>
+<%else%>
+<div id="<%$containerid%>" class="cv8d-login cv8d-login-<%$section._functionparams.moid%>">
+  <form id="<%$formid%>" 
+name="<%$formid%>" 
+action="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&_<%$uniqid%>" 
+method="post" 
+enctype="multipart/form-data" 
+    <%if $section.mode=="token"%>
+    onsubmit="return TZR.isFormValidWithFocus(this, true);">
+    <%else%>
+    onsubmit="setErrorLogin(this, this.elements['login'].value); return TZR.isFormValidWithFocus(this, true);">
+    <%/if%>
+    <%assign var="mess" value=''%>
+    <%if !empty($smarty.request.message)%><%assign var="mess" value=$smarty.request.message|escape:'html'%>
+    <%elseif !empty($smarty.request._message)%><%assign var="mess" value=$smarty.request._message|escape:'html'%>
+    <%elseif !empty($section.message)%><%capture assign="mess"%><%fieldlabelvalue id=$section.message%> <%/capture%>
+    <%if empty(trim($mess))%><%assign var="mess" value=$section.message%><%/if%>
+    <%/if%>
+    <%if !empty(trim($mess))%>
+    <div class="alert alert-info"><%$mess|trim%></div>
+    <%/if%>
+    <div class="error_message"></div>
+    <input type="hidden" name="loginalias" value="<%$it_cat_mit.oalias->raw%>">
+    <%if $section.mode == 'token' && $section.ok%>
+    <input type="hidden" name="_section" value="<%$it_moid%>,<%$it_itoid[it]%>">
+    <input type="hidden" name="_next" value="<%$self%>alias=<%$it_cat_mit.oalias->raw%>">
+    <input type="hidden" name="moid" value="<%$section._functionparams.moid%>">
+    <input type="hidden" name="id" value="<%$section.token.id%>">
+    <input type="hidden" name="function" value="procNewPasswordRequest2">
+    <input type="hidden" 
+	   name="onerror" 
+	   value="<%$self|cat:http_build_query(['alias'=>$it_cat_mit.oalias->raw,'id'=>$smarty.request.id,'_'=>date('ymdhis')])%>">
+    <%else%>
+    <%* pour demande/perte mdp *%>
+    <input type="hidden" name="_section" value="<%$it_moid%>,<%$it_itoid[it]%>">
+    <input type="hidden" name="moid" value="">
+    <input type="hidden" name="sfmoid" value="<%$section._functionparams.moid%>">
+    <%* /pour demande/perte mdp *%>
+    <input type="hidden" name="function" value="procAuth">
+    <input type="hidden" name="class" value="<%$smarty.const.TZR_SESSION_MANAGER%>">
+    <input type="hidden" name="_next" value="<%$self%>alias=<%$section._functionparams.params.nextalias%>">
+    <input type="hidden" 
+	   name="onerror" 
+	   value="<%$self|cat:http_build_query(['alias'=>$it_cat_mit.oalias->raw,'_'=>date('ymdhis')])%>">
+    <%/if%>
+
+    <%* /////////////////////////////// saisie mot de passe ///////////////////////// *%>
+    <%if $section.mode == 'token'%>
+      <%if $section.ok%>
+        <div class="form-group ident">
+          <label id="labellogin"><%$syslabels.Seolan_Core_Session.login%></label>
+          <p><%$section.token.alias%></p><input type="hidden" id="login<%$uniqid%>" value="<%$section.token.alias%>">
+          <input type="hidden" name="login" value="<%$section.token.alias%>">
+        </div>	 
+  
+        <label id="labelpassword"><%$syslabels.Seolan_Core_Session.password%></label>
+        <%$section.field_passwd->html%>
+  
+        <%if !empty($section._functionparams.params.passwordstrengthhelp)%>
+          <div class="input-group passwordhelp"><%fieldlabelvalue id=$section._functionparams.params.passwordstrengthhelp%></div>
+          <br>
+        <%/if%>
+        <div class="tzr-action">
+          <button type="submit" class="btn btn-primary"><%fieldlabelvalue id=$section._functionparams.params.labelbtnpassword|default:$syslabels.Seolan_Core_General.ok%></button>
+        </div>
+      <%/if%>
+    <%else%>
+    <%* ////////////////////////////// LOGIN ////////////////////////////////////// *%>
+    <div class="form-group ident">
+      <label id="labellogin"><%$syslabels.Seolan_Core_Session.login%></label>
+      <input name="login" required type="text" class="form-control" value="<%if $smarty.request.login%><%$smarty.request.login%><%/if%>" size="64" placeholder="<%$syslabels.Seolan_Core_Session.login|escape:'html'%>">
+    </div>
+    <div class="form-group passw">
+      <label id="labelpassword"><%$syslabels.Seolan_Core_Session.password%></label>
+      <input name="password" required type="password" class="form-control" size="22" placeholder="<%$syslabels.Seolan_Core_Session.password|escape:'html'%>">
+    </div>
+    <div class="tzr-action">
+    <button type="submit" class="btn btn-primary"><%fieldlabelvalue id=$section._functionparams.params.labelbtnlogin|default:$syslabels.Seolan_Core_General.ok%></button>
+    </div>
+    <%/if%>
+    <%* /////////////////////////////////// LIENS /////////////////////////////////// *%>
+    <div class="account-actions">
+      <ul>
+	<%if $section._functionparams.params.stayconnected%>
+	<li>
+	  <div class="checkbox">
+	    <label id="labelpassword">
+	      <input name="stayconnected" onclick="" type="checkbox">Rester connecté  [todo later]
+	    </label>
+	  </div>
+	</li>
+	<%/if%>
+	<%if $section._functionparams.params.lostpasswordlabel%>
+	<li><a href="#" onclick="newPasswordRequest(document.forms['<%$formid%>']);return false;"><%fieldlabelvalue id=$section._functionparams.params.lostpasswordlabel%></a></li>
+	<%/if%>
+	<%if $section._functionparams.params.closeaccountalias%>
+	<li><a href="<%$self%>alias=<%$section._functionparams.params.closeaccountalias%>" ><%fieldlabelvalue id=$section._functionparams.params.closeaccountlabel|default:$section._functionparams.params.closeaccountalias%></a></li>
+	<%/if%>
+	<%if $section._functionparams.params.requestanaccountalias%>
+	<li><a href="<%$self%>alias=<%$section._functionparams.params.requestanaccountalias%>"><%fieldlabelvalue id=$section._functionparams.params.requestanaccountlabel|default:$section._functionparams.params.requestanaccountalias%></a></li>
+	<%/if%>
+	</ul>
+    </div>
+  </form>
+</div>
+<%/if%>

@@ -1,0 +1,167 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if empty($myfunction)%><%assign var="myfunction" value="ProcEditField"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.onchange_validate=function(o) {
+  var f=document.forms['adminfields<%$uniqid%>'];
+  var ftype=jQuery("#ftype<%$uniqid%>")[0];
+  var mytype=ftype.options[ftype.selectedIndex].value;
+  if(mytype=="\Seolan\Field\Link\Link" || mytype=="\Seolan\Field\StringSet\StringSet" || mytype=="\Seolan\Field\Boolean\Boolean") {
+   if(o.name=="ftype"){
+    f.published.checked=true;
+   }
+   <%if $_btranslatable%>f.translatable.checked=true;<%/if%>
+   f.fcount.value='';
+  }else if(mytype=="\Seolan\Field\Text\Text" || mytype=="\Seolan\Field\RichText\RichText"){
+   if(f.fcount.value=='') f.fcount.value=70;
+  }else{
+   if(mytype=="" && o.name=="ftype"){
+     jQuery(ftype).after('<input type="text" name="ftype" id="textftype<%$uniqid%>">');
+   }
+   if(f.fcount.value=='') f.fcount.value=20;
+  }
+  if(mytype!="" && o.name=="ftype"){
+   jQuery("#textftype<%$uniqid%>").remove();
+  }
+ }
+</script>
+<div class="cv8-contenu-center clearfix">
+<form action="<%$self%>" method="post" ENCTYPE="multipart/form-data" name="adminfields<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="_function" value="<%$fprefix%><%$myfunction%>">
+ <input type="hidden" name="boid" value="<%$_boid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="field" value="<%$_field%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$back%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.edit_text%></legend>
+  <div class="table-re2sponsive">
+  <table class="table table-striped list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.label_text%></label></th>
+    <td>
+     <table class="table">
+      <%section name=langs loop=$lang_code%>
+       <tr>
+	<td><%$lang_long[langs]%></td>
+	<td><input name="label[<%$lang_code[langs]%>]" value="<%$_fnames[langs]|escape:'html'%>" type="text" size="50" maxlength="250"></td>
+       </tr>
+      <%/section%>
+     </table>
+    </td>
+   </tr>
+   <tr><th><label><%$syslabels.Seolan_Core_DataSource_DataSource.field%></label></th><td><%$_fnumber%></td></tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.order%></label></th>
+    <td><input name="forder" value="<%$_forder%>" type="text" size="4" maxlength="4"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.type_text%></label></th>
+    <td>
+     <select name="ftype" onchange="v<%$uniqid%>.onchange_validate(this)" id="ftype<%$uniqid%>">
+      <option value="">---</option>
+      <%section name=types loop=$_type_labels%>
+       <option value="<%$_type[types]%>" <%$_type_selectionFlag[types]%>><%$_type_labels[types]%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.size%></label></th>
+    <td><input name="fcount" value=<%$_fcount%> type="text" size="4" maxlength="4"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.compulsory%></label></th>
+    <td>
+     <input name="compulsory_HID" type="hidden" value="2">
+     <input name="compulsory" class="checkbox" type="checkbox" <%if $_compulsory==1%>checked="1"<%/if%>>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.queryable%></label></th>
+    <td>
+     <input name="queryable_HID" type="hidden" value="2">
+     <input name="queryable" type="checkbox" class="checkbox" <%if $_queryable == 1%>checked="1"<%/if%>>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.browsable%></label></th>
+    <td>
+     <input name="browsable_HID" type="hidden" value="2">
+     <input name="browsable" type="checkbox" class="checkbox" <%if $_browsable == 1%>checked="1"<%/if%>>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.translate_text%></label></th>
+    <td>
+     <%if $_btranslatable%>
+      <input name="translatable_HID" type="hidden" value="2">
+      <input name="translatable" class="checkbox" type="checkbox" <%if $_translatable == 1%>checked="1"<%/if%>>
+     <%else%>
+      <input name="translatable" type="hidden" value="">N/A
+     <%/if%>
+    </td>
+   </tr>
+   <%if $_multivaluable == true%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.multivalued%></label></th>
+    <td>
+     <input name="multivalued_HID" type="hidden" value="2">
+     <input name="multivalued" type="checkbox" class="checkbox" <%if $_multivalued == 1%>checked="1"<%/if%>> 
+    </td>
+   </tr>
+   <%/if%> 
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.published%></label></th>
+    <td>
+     <input name="published_HID" type="hidden" value="2">
+     <input name="published" type="checkbox" class="checkbox" <%if $_published == 1%>checked="1"<%/if%>>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.target%></label></th>
+    <td>
+     <select name="target" onchange="v<%$uniqid%>.onchange_validate(this)">
+      <%section name=targets loop=$_target_key%>
+       <option value="<%$_target_key[targets]%>" <%$_target_selectionFlag[targets]%>><%$_target_val[targets]%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+
+ <input type="hidden" name="dparam[Foo]" value="Foo">
+ <%section name=p loop=$_options%>
+  <%if $_options[p].group neq $_options[$smarty.section.p.index_prev].group%>
+   <fieldset>
+    <legend><%$_options[p].group%></legend>
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <%if $_options[p].group eq "General"%>
+      <tr><th><label>Id</label></th><td><%$smarty.request.moid%></td></tr>
+     <%/if%>
+  <%/if%>
+  <tr><th><label <%if $_options[p].comment%> 
+    data-html="true" 
+    data-container="body" 
+    data-toggle="tooltip" 
+    data-original-title="[<%$syslabels.Seolan_Core_General.help_text%>]<br><%$_options[p].comment|escape:'html'%>"<%/if%>><%$_options[p].label%></label></th>
+    <td><%$_options[p].edit%></td>
+  </tr>
+  <%if $_options[p].group neq $_options[$smarty.section.p.index_next].group%>
+    </table>
+    </div>
+   </fieldset>
+  <%/if%>
+ <%/section%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  <input type="button" value="<%$syslabels.Seolan_Core_General.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+ </div>
+</form>
+</div>

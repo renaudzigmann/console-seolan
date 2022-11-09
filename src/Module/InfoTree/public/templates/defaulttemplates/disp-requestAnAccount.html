@@ -1,0 +1,87 @@
+<!-- à partir du formulaire insertion standard -->
+
+<%assign var="containerid" value="cv8d-insert"|cat:$it_olines[it]._functionparams.moid|cat:$uniqid%>
+<%assign var="formid" value="requestAnAccountForm"|cat:$uniqid%>
+<div id="<%$containerid%>" class="cv8d-insert cv8d-insert-<%$it_olines[it]._functionparams.moid%>">
+  <form id="<%$formid%>" name="<%$formid%>" action="<%$self%>" method="post" onsubmit="return TZR.isFormValidWithFocus(this,true);" enctype="multipart/form-data" >
+    <%if $smarty.request._message%><div class="error alert alert-secondary"><div class="error_message"><%$smarty.request._message%></div></div><%/if%>
+    <input type="hidden" name="_function" value="procRequestAnAccount2">
+    <input type="hidden" name="_section" value="<%$it_moid%>,<%$it_itoid[it]%>">
+    <input type="hidden" name="moid" value="<%$it_olines[it]._functionparams.moid%>">
+    <input type="hidden" name="_onerror" value="<%$self%>alias=<%$it_cat_mit.oalias->raw%>">
+    <input type="hidden" name="_next" value="<%$self%>alias=<%$it_olines[it]._functionparams.params.nextalias%>">
+    <%assign var="tmpgroup" value=""%>
+    <%section name=i loop=$it_olines[it].fields_object%>
+    <%assign var=field value=$it_olines[it].fields_object[i]%>
+    <%if $it_olines[it]._functionparams.params.dispfgroup==1 && $field->fielddef->fgroup && $field->fielddef->fgroup!=$tmpgroup%>
+    <%assign var="tmpgroup" value=$field->fielddef->fgroup%>
+    <div class="cv8d-group"><h2><%$tmpgroup%></h2>
+    <%/if%>
+    <%capture assign="fieldLabel"%>
+    <div class="cv8d-header"><label><%$field->fielddef->label%><%if $field->fielddef->compulsory%>*<%/if%></label></div>
+    <%/capture%>
+    <%if $it_olines[it]._functionparams.module->consent_field && $field->fielddef->field == $it_olines[it]._functionparams.module->consent_field%>
+    <div class="cv8d-field cv8d-field-<%$field->fielddef->field%> consent-field checkbox-align" id="cv8d-displayobj-field-<%$field->fielddef->field%>">
+      <%$fieldLabel%>
+      <%if $field->fielddef->comment%>
+      <%if $it_olines[it]._functionparams.params.rgpdcheckboxlabel%>
+      <div class="cv8d-answer">
+	<%$field->fielddef->comment%>
+	<label><%fieldlabelvalue id=$it_olines[it]._functionparams.params.rgpdcheckboxlabel%><%$field->html%></label>
+      </div>
+      <%else%>
+      <div class="cv8d-answer"><%$field->html%> <%$field->fielddef->comment%></div>
+      <%/if%>
+      <%else%>
+      <div class="cv8d-answer"><%$field->html%></div>
+      <%/if%>
+    </div>
+    <%else%>
+    <div class="cv8d-field cv8d-field-<%$field->fielddef->field%>" id="cv8d-displayobj-field-<%$field->fielddef->field%>">
+      <div class="cv8d-header"><label><%$field->fielddef->label%><%if $field->fielddef->compulsory%>*<%/if%></label></div>
+      <div class="cv8d-comment"><%$field->fielddef->comment%></div>
+      <div class="cv8d-answer"><%$field->html%></div>
+    </div>
+    <%/if%>
+    <%if $it_olines[it]._functionparams.params.dispfgroup==1 && ($smarty.section.i.last && $tmpgroup || $tmpgroup!=$it_olines[it].fields_object[$smarty.section.i.index_next]->fielddef->fgroup)%>
+    </div>
+    <%/if%>
+    <%/section%>
+    <%*
+    <%if $consent%>
+    <script type="text/javascript">
+      if (typeof(TZR)!="undefined"){
+      TZR.addValidator(["<%$consent->varid%>",null,"<%$consent->fielddef->label|escape:'javascript'%>","color","Consent"]);
+      jQuery("input#<%$consent->varid%>").on('change', function(e) {
+      TZR.isIdValid('<%$consent->varid%>');
+      });
+      }
+    </script>
+    <%/if%>
+    *%>
+
+<%if $it_olines[it].captcha%>
+<div class="cv8d-field cv8d-field-captcha">
+  <label><%$it_olines[it].captcha.label%></label>
+  <div class="cv8d-answer">
+    <%if $admini%>
+    <%$it_olines[it].captcha.html%>
+    <%else%>
+    <%$it_olines[it].captcha.html|replace:'csico-refresh':'glyphicon-refresh'%>
+    <%/if%>
+  </div>
+</div>
+<%/if%>
+
+<div class="cv8d-action">
+  <input type="submit" value="<%$it_olines[it]._functionparams.params.labelvalidate|default:$syslabels.Seolan_Core_General.approve%>">
+</div>
+
+  </form>
+</div>
+<script type="text/javascript">
+ if (typeof(TZR)!="undefined"){
+   TZR.activeDependency(document.forms['<%$formid%>']);
+   TZR.addValidator([document.forms['<%$formid%>'],'ajaxProcRequestAnAccount2Ctrl','<%$containerid%>','<%$tzr.error_color%>','Form']);
+ }
+</script>

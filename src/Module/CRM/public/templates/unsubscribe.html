@@ -1,0 +1,61 @@
+<div class="cv3-txtseul clearfix">
+  <%if $it_olines[it].otitsec->html%><h2><%$it_olines[it].otitsec->html%></h2><%/if%>
+  <%if $it_olines[it].osubtit->html%><h3><%$it_olines[it].osubtit->html%></h3><%/if%>
+  <%if $it_olines[it].ochapeau->html%><h4><%$it_olines[it].ochapeau->html%></h4><%/if%>
+  <%$it_olines[it].otxt1->html%>
+</div>
+<div class="cv8d-insert crm-unsubscribe">
+  <form name="unsubscribe<%$uniqid%>" id="crm-form<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return crmunsubscribe(this);">
+    <input type="hidden" name="toid" value="<%$smarty.const.XMODCRM2_TOID%>">
+    <input type="hidden" name="function" value="unsubscribe">
+    <input type="hidden" name="_next" value="<%$smarty.server.REQUEST_URI%>">
+    <div class="cv8d-field cv8d-field-Email">
+      <label>Email</label>
+      <div class="cv8d-answer"><input type="text" name="email" value="<%$smarty.request.email|escape:html%>" required></div>
+    </div>
+    <div class="cv8d-field cv8d-field-marketing">
+      <label>
+        <input type="checkbox" name="marketing">
+        <%$labels.crm_marketing_unsubscribe%>
+      </label>
+    </div>
+    <div class="cv8d-field cv8d-field-commercial">
+      <label>
+        <input type="checkbox" name="commercial">
+        <%$labels.crm_commercial_unsubscribe%>
+      </label>
+    </div>
+    <div id="crm-unknowcontact<%$uniqid%>" class="alert alert-danger" <%if !$smarty.request.crm_unknowcontact%>style="display:none;"<%/if%>>
+      <%$it_olines[it].otxt3->html%>
+    </div>
+    <div class="cv8d-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.approve%>">
+    </div>
+  </form>
+</div>
+
+<div id="crm-prefsaved<%$uniqid%>" class="alert alert-success" <%if !$smarty.request.crm_prefsaved%>style="display:none;"<%/if%>>
+  <%$it_olines[it].otxt2->html%>
+</div>
+
+
+<script>
+  function crmunsubscribe(form) {
+    jQuery('#crm-unknowcontact<%$uniqid%>, #crm-prefsaved<%$uniqid%>').hide();
+    if (!TZR.isFormValidWithFocus(form, true)) {
+      return false;
+    }
+    jQuery.getJSON('<%$self%>', jQuery(form).serialize() + '&json=1',
+        function (data) {
+          if (data.unknowcontact) {
+            jQuery('#crm-unknowcontact<%$uniqid%>').show();
+          }
+          if (data.prefsaved) {
+            jQuery('#crm-prefsaved<%$uniqid%>').show();
+            jQuery('#crm-form<%$uniqid%>').hide();
+          }
+        }
+    );
+    return false;
+  }
+</script>

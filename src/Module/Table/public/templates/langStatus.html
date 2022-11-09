@@ -1,0 +1,19 @@
+<%* status des langues d'une fiche *%>
+<table class="table table-striped cv8_tablelist">
+<thead>
+<tr>
+<th><%$syslabels.Seolan_Core_General.language%></th>
+<th><%$syslabels.Seolan_Module_Table_Table.translation_status%></th>
+</tr>
+</thead>
+<tbody>
+<%foreach from=$br_langStatus item=status%>
+<tr>
+<td><%$status._lang.long%> <%$status._lang.text%></td>
+<td>
+<%$status.html%> <%$status.message%>
+</td>
+</tr>
+<%/foreach%>
+</tbody>
+</table>

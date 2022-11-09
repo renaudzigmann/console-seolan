@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+    <style>
+     body {
+       margin: 0;
+     }
+     #AutodeskViewer {
+       width: 100%;
+       height: 90%;
+       margin: 0;
+       background-color: #efefef;
+     }
+    </style>
+    
+  </head>
+
+  <body onunload="try{window.opener.TZR.AutodeskViewer.viewerWin=null;}catch(e){};">
+    <h1 id="title"></h1>
+    <div id="AutodeskViewer"></div>
+    <div id="log" style="height:1em;width:90%;background-color:#dadada;overflow:auto"></div>
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+    <script>
+     var data = window.opener.TZR.AutodeskViewer.getViewerParameters();
+     document.title = data.title;
+     var viewer;
+     
+     var options = {
+       env: 'AutodeskProduction',
+       api: 'derivativeV2',  // for models uploaded to EMEA set this option to 'derivativeV2_EU' elsewhere 'derivativeV2'
+       getAccessToken: function(onTokenReady) {
+         var token = data.vtoken;
+         var timeInSeconds = 3600; // Use value provided by Forge Authentication (OAuth) API
+         onTokenReady(token, timeInSeconds);
+       }
+     };
+     
+     Autodesk.Viewing.Initializer(options, function() {
+       
+       var htmlDiv = document.getElementById('AutodeskViewer');
+       viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv);
+       var startedCode = viewer.start();
+       if (startedCode > 0) {
+         logError('Failed to create a Viewer: WebGL not supported.');
+         return;
+       }
+       
+       log('Initialization complete, loading a model next...');
+       
+       Autodesk.Viewing.Document.load("urn:"+data.urn, onDocumentLoadSuccess, onDocumentLoadFailure);
+       
+     });
+     
+     /**
+      * Autodesk.Viewing.Document.load() success callback.
+      * Proceeds with model initialization.
+      */
+     function onDocumentLoadSuccess(doc) {
+       // A document contains references to 3D and 2D viewables.
+       var viewables = doc.getRoot().search({'type':'geometry'});
+       if (viewables.length === 0) {
+	 logError('Document contains no viewables.');
+	 return;
+       }
+       viewer.loadDocumentNode(doc, viewables[0]);
+
+     }
+     
+     /**
+      * Autodesk.Viewing.Document.load() faillire callback.
+      */
+     function onDocumentLoadFailure(viewerErrorCode) {
+       logError('onDocumentLoadFailure() - errorCode:' + getErrorInfo(viewerErrorCode));
+     }
+     /**
+      * viewer.loadModel() success callback.
+      * Invoked after the model's SVF has been initially loaded.
+      * It may trigger before any geometry has been downloaded and displayed on-screen.
+      */
+     function onLoadModelSuccess(model) {
+       log('onLoadModelSuccess()!');
+       log('Validate model loaded: ' + (viewer.model === model));
+       log(model);
+     }
+     
+     /**
+      * viewer.loadModel() failure callback.
+      * Invoked when there's an error fetching the SVF file.
+      */
+     function onLoadModelError(viewerErrorCode) {
+       logError('onLoadModelError() - errorCode:' + getErrorInfo(viewerErrorCode));
+     }
+     function log(message){
+       var el = document.getElementById("log");
+       el.innerText += message+"<br>";
+       console.log(message);
+     }
+     function logError(message){
+       var el = document.getElementById("log");
+       el.innerText += message+"<br>";
+       console.error(message);
+     }
+     function getErrorInfo(code){
+       for(var o in av.ErrorCodes){
+	 if (av.ErrorCodes[o] == code)
+	   return o;
+       }
+       return "unknown code "+code;
+     }
+     var av = {
+       ErrorCodes:{
+	 /** An unknown failure has occurred. */
+	 UNKNOWN_FAILURE: 1,
+	 /** Bad data (corrupted or malformed) was encountered. */
+	 BAD_DATA: 2,
+	 /** A network failure was encountered. */
+	 NETWORK_FAILURE: 3,
+	 /** Access was denied to a network resource (HTTP 403) */
+	 NETWORK_ACCESS_DENIED: 4,
+	 /** A network resource could not be found (HTTP 404) */
+	 NETWORK_FILE_NOT_FOUND: 5,
+	 /** A server error was returned when accessing a network resource (HTTP 5xx) */
+	 NETWORK_SERVER_ERROR: 6,
+	 /** An unhandled response code was returned when accessing a network resource (HTTP 'everything else') */
+	 NETWORK_UNHANDLED_RESPONSE_CODE: 7,
+	 /** Browser error: webGL is not supported by the current browser */
+	 BROWSER_WEBGL_NOT_SUPPORTED: 8,
+	 /** There is nothing viewable in the fetched document */
+	 BAD_DATA_NO_VIEWABLE_CONTENT: 9,
+	 /** Browser error: webGL is supported, but not enabled */
+	 BROWSER_WEBGL_DISABLED: 10,
+	 /** There is no geomtry in loaded model */
+	 BAD_DATA_MODEL_IS_EMPTY: 11,
+	 /** Collaboration server error */
+	 RTC_ERROR: 12
+       }
+     };
+    </script>
+  </body>
+</html>
+
+

@@ -1,0 +1,16 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.import_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.import_text%></legend>
+ <form method="post" enctype="multipart/form-data" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="_function" value="importEvt">
+  <input type="hidden" name="_next" value="<%$self%>oid=<%$br_diary.KOID%>&_function=<%$smarty.request.display%>&moid=<%$_moid%>&tplentry=br&template=Module/Calendar.<%$smarty.request.display%>.html&day=<%$br_day%>&month=<%$br_month%>&year=<%$br_year%>">
+  <%$syslabels.Seolan_Module_Calendar_Calendar.importfile%> : <input type="file" name="filetoimp"><br>
+  <%if $br_error%><%$syslabels.Seolan_Module_Calendar_Calendar.importerror%><br><%/if%>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.import%>">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+  </div>
+ </form>
+</fieldset>

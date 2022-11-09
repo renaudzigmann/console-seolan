@@ -1,0 +1,48 @@
+<!-- <%$smarty.template%> -->	
+<%assign var=section value=$section|default:$it_olines[it]%>
+<%assign var=fparams value=$section._functionparams%>
+
+<%assign var=onerror value=$onerror|default:$smarty.request.onerror|default:$self_with_alias%>
+<%assign var=next value=$next|default:$smarty.request.next|default:$self_with_alias%>
+<%assign var=mod_users value=$mod_users|default:$fparams.module%>
+<%assign var=form value=$form|default:$section.form%>
+<%assign var=fields value=$fields|default:$mod_users->inscription_form_fields%>
+<%assign var=moid value=$moid|default:$mod_users->_moid%>
+<%assign var=wrapper_class value=$wrapper_class|default:"inscription-fields-wrapper" %>
+<%assign var=groups_class value=$groups_class|default:"group" %>
+<form action="<%$self_with_alias%>"
+      method="post"
+      onsubmit="return TZR.isFormValidWithFocus(this,true);"
+      name="userform<%$uniqid%>"
+      class="form-inscription">
+  <input type="hidden" name="moid" value="<%$moid%>" />
+  <input type="hidden" name="onerror" value="<%$onerror%>" />
+  <input type="hidden" name="_next" value="<%$next%>" />
+  <%if !$xuser->authentified()%>
+  <input type="hidden" name="function" value="procCreateMyAccount" />
+  <%else%>
+  <input type="hidden" name="function" value="procEditMyAccount" />
+  <%/if%>
+  <div class="<%$wrapper_class%>">
+    <%foreach from=$form._groups key=group item=fields%>
+      <%if $fields|@count%>
+        <%include file="Module/FrontUsers.form-fields.html"%>
+      <%/if%>
+    <%foreachelse%>
+      <%if $form.fields_object|@count%>
+        <%include file="Module/FrontUsers.form-fields.html" group=$form.fields_object.0->fielddef->fgroup fields=$form.fields_object%>
+      <%/if%>
+    <%/foreach%>
+  </div>
+  <div class="row actions">
+    <div class="col-xs-12">
+      <%if !$xuser->authentified()%>
+      <input type="submit" value="<%if $submit_btn_label%><%$submit_btn_label%><%else%><%"Créer le compte"|__:'\Seolan\Module\FrontUsers'%><%/if%>">
+      <%else%>
+      <a href="<%$next%>" class="btn btn-default cancel"><%"Annuler"|__:'\Seolan\Module\FrontUsers'%></a>
+      <input type="submit" value="<%if $submit_btn_label%><%$submit_btn_label%><%else%><%"Enregistrer"|__:'\Seolan\Module\FrontUsers'%><%/if%>">
+      <%/if%>
+    </div>
+  </div>
+
+</form><!-- /<%$smarty.template%> -->	

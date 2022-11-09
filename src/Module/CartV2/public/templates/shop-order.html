@@ -1,0 +1,62 @@
+<%if $display eq 'table'%>
+<div class="shop-items table-responsive">
+  <table class="table-bordered">
+    <thead><tr>
+        <%foreach from=$order->columns key=property item=column%>
+        <th class="<%$property%>"><%$column.label%></th>
+        <%/foreach%>
+    </tr></thead>
+    <tbody>
+      <%foreach from=$order->items key=key item=item%>
+      <tr class="shop-item">
+        <%foreach from=$order->columns key=property item=column%>
+        <%* Appel la méthode XShopItem->html() *%>
+        <td class="<%$property%> <%$column.type%>"><%$item->html($property, $column)%></th>
+        <%/foreach%>
+      </tr>
+      <%/foreach%>
+    </tbody>
+  </table>
+</div>
+<%else%>
+<div class="shop-items">
+  <div class="shop-items-head hidden-sm hidden-xs">
+    <div class="row">
+      <div class="shop-head">
+        <%foreach from=$order->columns key=property item=column%>
+        <div class="<%$property%> <%$column.css%>"><label><%$column.label%></label></div>
+        <%/foreach%>
+      </div>
+    </div>
+  </div>
+  <div class="shop-items-body">
+    <%foreach from=$order->items key=key item=item%>
+    <div class="row">
+      <div class="shop-item">
+        <%foreach from=$order->columns key=property item=column%>
+        <div class="<%$property%> <%$column.type%> <%$column.css%>">
+          <label class="hidden-lg hidden-md"><%$column.label%></label>
+          <%* Appel la méthode XShopItem->html() *%>
+          <%$item->html($property, $column)%>
+        </div>
+        <%/foreach%>
+      </div>
+    </div>
+    <%/foreach%>
+  </div>
+</div>
+<%/if%>
+
+<%* TOTAL DE LA COMMANDE *%>
+<div class="shop-total clearfix">
+  <div class="shop-total-content">
+    <%foreach from=$order->total.labels key=property item=label%>
+    <%if $order->total.$property and $order->total_html($property)%>
+    <div class="<%$property%>">
+      <label><%$label%></label>
+      <span class="price"><%$order->total_html($property)%></span>
+    </div>
+    <%/if%>
+    <%/foreach%>
+  </div>
+</div>

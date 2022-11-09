@@ -1,0 +1,35 @@
+<%if $form%>
+  <%assign var=ofieldname value="o"|cat:$field%>
+  <%assign var=fhtml value=$fhtml|default:$form.$ofieldname->html%>
+  <%assign var=label value=$label|default:$form.$ofieldname->fielddef->label%>
+  <%assign var=ftype value=$ftype|default:$form.$ofieldname->fielddef->ftype%>
+  <%assign var=comment value=$comment|default:$form.$ofieldname->fielddef->comment%>
+  <%assign var=compulsory value=$compulsory|default:$form.$ofieldname->fielddef->compulsory%>
+<%/if%>
+
+<%if $field and $fhtml%>
+<div class="field-<%$field%> ftype-<%$ftype|lower%>">
+  <div class="form-group">
+    <%if $compulsory%>
+    <label class="compulsory"><%$label%>&nbsp;<span class="compulsory-mark">*</span></label>
+    <%else%>
+    <label><%$label%></label>
+    <%/if%>
+    <%$fhtml%>
+    <%if $comment%>
+    <span class="help-block"><%$comment%></span>
+    <%/if%>
+    <%if $edit_format%>
+    <script>
+      TZR.addValidator([
+        '<%$field%>',
+        /<%$edit_format%>/,
+        '<%$label|escape:"javascript"%>',
+        '<%$tzr.error_color%>',
+        '<%$ftype%>'
+      ]);
+    </script>
+    <%/if%>
+  </div>
+</div>
+<%/if%>

@@ -1,0 +1,59 @@
+<%include file="Module/CartV2.shop-steps.html"%>
+
+<%if !$customer->authentified%>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h2><%"Vous avez déjà un compte"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+      <%include file="Module/FrontUsers.form-login.html"
+        loginLabel="Votre email"
+        passwordLabel="Votre mot de passe"
+        onerror=$shop->getStepUrl('address')
+        next=$shop->getStepUrl('address')
+      %>
+      <ul class="account-actions">
+        <li><a href="<%$shop->customers->getPanelUrl('passwordForgotten')%>"><%"J'ai oublié mon mot de passe"|__:'\Seolan\Module\FrontUsers'%></a></li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h2><%"Vous n'avez pas encore de compte"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+      <%if !$shop->customers->inscription_require_password%>
+      <h3><%"Continuer sans créer de compte"|__:'\Seolan\Module\Cart\CartV2'%></h3>
+      <%include file="Module/FrontUsers.form-inscription.html"
+        form=$customer->insert_form_without_passwd
+        onerror=$shop->getStepUrl('address')
+        next=$shop->getStepUrl('address')
+        no_groups_title=true
+        submit_btn_label="Continuer sans créer de compte"|__:'\Seolan\Module\Cart\CartV2'
+      %>
+      <h3><%"Créer un compte"|__:'\Seolan\Module\Cart\CartV2'%></h3>
+      <div class="alert alert-info"><%"La création de compte permet de mémoriser son adresse et de regrouper ses différentes commandes dans un seul espace client."|__:'\Seolan\Module\Cart\CartV2'%></div>
+      <%/if%>
+      <%include file="Module/FrontUsers.form-inscription.html"
+        form=$customer->form
+        onerror=$shop->getStepUrl('address')
+        next=$shop->getStepUrl('address')
+        no_groups_title=true
+        submit_btn_label="Créer un compte"|__:'\Seolan\Module\Cart\CartV2'
+      %>
+    </div>
+  </div>
+
+<%else%>
+
+  <h2><%"Vos coordonnées de livraison"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+  <%include file="Module/CartV2.shop-customer.html"%>
+  <div class="shop-actions">
+    <a href="<%$shop->customers->getPanelUrl('editaddress')%>&amp;next=<%$shop->getStepUrl('address')|urlencode%>" class="btn btn-default">
+      <%"Modifier vos coordonnées"|__:'\Seolan\Module\Cart\CartV2'%>
+    </a>
+  </div>
+
+<%/if%>
+
+<div class="shop-actions">
+  <a href="<%$shop->getStepUrl('cart')%>" class="btn btn-default">&laquo; <%$shop->getStepLabel('cart')%></a>
+  <%if $customer->authentified%>
+  <a href="<%$shop->getStepUrl('validate')%>" class="btn btn-warning"><%$shop->getStepLabel('validate')%> &raquo;</a>
+  <%/if%>
+</div>

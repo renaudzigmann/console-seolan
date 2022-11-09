@@ -1,0 +1,29 @@
+<!-- texte double colonnage -->
+<%assign var=cont value=$it_olines[it]%>
+<%assign var=srcsetId value='img_demi'%>
+<div class="cv3-2cols clearfix">
+  <div class="colg">
+    <%assign var=img value="oimg1"%>
+    <%assign var=lnk value="oimglnk1"%>
+    <%assign var=url value="oimgurl1"%>
+    <%assign var=leg value="oimgleg1"%>
+    <%if !$cont.oimgleg1->isEmpty() %><h2><%$cont.oimgleg1->html%></h2><%/if%>
+    <%$cont.otxt1->html%>
+    <%if $it_olines[it].$img->resizer%>
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].$img url=$it_olines[it].$url lnk=$it_olines[it].$lnk leg=$it_olines[it].$leg titsec=$it_olines[it].otitsec srcsetId='img_demi'%>
+    <%/if%>
+
+  </div>
+  <div class="cold">
+    <%assign var=img value="oimg2"%>
+    <%assign var=lnk value="oimglnk2"%>
+    <%assign var=url value="oimgurl2"%>
+    <%assign var=leg value="oimgleg2"%>
+
+    <%if !$cont.oimgleg2->isEmpty() %><h2><%$cont.oimgleg2->html%></h2><%/if%>
+    <%$cont.otxt2->html%>
+    <%if $it_olines[it].$img->resizer%>
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].$img url=$it_olines[it].$url lnk=$it_olines[it].$lnk leg=$it_olines[it].$leg titsec=$it_olines[it].otitsec srcsetId='img_demi'%>
+    <%/if%>
+  </div>
+</div>

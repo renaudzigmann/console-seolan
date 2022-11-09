@@ -1,0 +1,95 @@
+<%* Affichage de la section slider *%>
+
+<%assign var=section value=$it_olines[it]%>
+<%assign var=params value=$section._functionparams.params%>
+<%assign var=tploptions value=$section._tploptions%>
+<div class="cv8d-browsediv cv8d-browsediv-<%$params.moid%>" id="cv8d-browsediv<%$it_itoid[it]%>">
+
+<%*** Slider ***%>
+<div class="cv8d-slider" id="cv8d-slider<%$it_itoid[it]%>">
+<%foreach key=i item=oid from=$section.lines_oid %>
+<%if !$admini || !$i%>
+
+  <%capture assign="moreLink"%>
+    <%if $tploptions.detailAlias%>
+      <span class="more-link">
+      <%if $admini%>
+        <a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&amp;function=editpage&amp;template=Module/InfoTree.viewpage.html&amp;tplentry=it&amp;oidit=<%$it_oidit%>&amp;oid=<%$oid%>&amp;from[oidit]=<%$it_cat_mit.oid%>&amp;from[itoid]=<%$it_itoid[it]%>"><%$tploptions.detailButtonLabel|default:'[+]'%></a>
+      <%else%>
+        <a href="<%$self%>alias=<%$tploptions.detailAlias%>&amp;oid=<%$oid%>&amp;from%5Balias%5D=<%$it_cat_mit.oalias->raw%>&amp;from%5Bitoid%5D=<%$it_itoid[it]%>&amp;keywords=<%$section.lines_tlink[$i]|asciify%>" class="cv8-ajaxlink cv8d-object-link"><%$tploptions.detailButtonLabel|default:'[+]'%></a>
+      <%/if%>
+      </span>
+    <%/if%>
+  <%/capture%>
+
+  <div class="cv8d-slider-panel cv8d-slider-panel<%$i%>">
+    <div class="cv8d-slider-wrapper">
+    <%* Affichage des autres champs en second *%>
+    <%foreach name=f item=field from=$section.header_fields%>
+      <%assign var=lines_field value="lines_o`$field->field`"%>
+      <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Image\Image' or $section.$lines_field.$i->isImage%>
+        <%if !$smarty.foreach.f.first%>
+          <%$moreLink%>
+          </div>
+        <%/if%>
+        <div class="cv8d-slider-image">
+          <%if $section.$lines_field.$i->resizer%>
+          <a href="<%$section.$lines_field.$i->resizer%>&amp;geometry=<%$tzr.ggigeo%>&amp;_=jpg" class="nyroModal">
+            <img src="<%$section.$lines_field.$i->resizer%>&amp;geometry=<%$tploptions.imageGeometry%>" alt="<%$section.$lines_field.$i->title|escape%>" />
+          </a>
+          <%/if%>
+        </div>
+        <%if !$smarty.foreach.f.last%>
+          <div class="cv8d-slider-details"> 
+        <%/if%>
+      <%else%>
+        <%if $smarty.foreach.f.first%>
+          <div class="cv8d-slider-details">
+        <%/if%>
+        <div class="cv8d-fieldvalue cv8d-field-<%$field->field%>">
+          <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Date\Date' or $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\DateTime\DateTime' or $section.$lines_field.$i->fielddef->ftype eq XTimestampDef%>
+            <%$section.$lines_field.$i->raw|date_format:$tploptions.dateFormat%>
+          <%else%>
+            <%$section.$lines_field.$i->html%>
+          <%/if%>
+        </div>
+        <%if $smarty.foreach.f.last%>
+          <%$moreLink%>
+          </div>
+        <%/if%>
+      <%/if%>
+    <%/foreach%>
+    </div>
+  </div>
+
+<%/if%>
+<%/foreach%>
+</div>
+
+<%if !$admini%>
+<script type="text/javascript">
+jQuery(function($){
+  if (typeof $.anythingSlider == 'function') {
+    $('#cv8d-slider<%$it_itoid[it]%>').anythingSlider({
+      mode            : <%$tploptions.mode|json_encode%>,
+      delay           : <%$tploptions.delay|json_encode%>,
+      animationTime   : <%$tploptions.animationTime|json_encode%>,
+      autoPlay        : <%$tploptions.autoPlay|json_encode%>,
+      buildStartStop  : <%$tploptions.buildStartStop|json_encode%>,
+      buildArrows     : <%$tploptions.buildArrows|json_encode%>,
+      buildNavigation : <%$tploptions.buildNavigation|json_encode%>,
+      <%* Force la taille des panels de contenu à la taille du slider (true pour un slider de taille fixe) *%>
+      resizeContents  : <%$tploptions.resizeContents|json_encode%>,
+      <%* Adapte la taille du slider à l'élément parent (utile pour le responsive-design) *%>
+      expand          : <%$tploptions.expand|json_encode%>,
+      startText       : "",
+      stopText        : "",
+      hashTags        : false,
+      easing          : 'easeInOutExpo'
+    });
+  }
+});
+</script>
+<%/if%>
+
+</div>

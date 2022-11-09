@@ -1,0 +1,18 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<h3>Formulaire appel paiement pour vérif en BO</h3>
+La transaction générée a des moid et oid (order et customer) bidons.<br>
+Template : (<%$tpc_template%>)<br>
+<br>
+<%if $tpc_template%>
+<%include file=$tpc_template%>
+<%else%>
+Pas de template
+<%/if%>
+
+<hr>
+<br>Transaction :<br>
+<%$tpc_transoid%>
+<br>Données :<br>
+<pre>
+<%$tpc_data|@var_dump%>
+</pre>

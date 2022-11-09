@@ -1,0 +1,122 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.info%>
+<iframe id="tosubmit" name="tosubmit" style="display:none;"></iframe>
+<form action="<%$self%>"
+      method="post"
+      target="tosubmit"
+      enctype="multipart/form-data" 
+      name="editform"
+      onsubmit="document.getElementById('tosubmit').onload=formSubmitted; return TZR.isFormValidWithFocus(this,true);">
+  <input type="hidden" name="linkup" value="">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="adminProcNewSection">
+  <input type="hidden" name="template" value="Core.empty.html">
+  <%if $itrub_otitle%>
+  <input type="hidden" name="createrub" value="1">
+  <fieldset>
+    <legend>Rubrique</legend>
+    <div class="table-responsive">
+      <table class="table list2">
+	<tr>
+	  <th><%$itrub_otitle->fielddef->label%></th>
+	  <td><%$itrub_otitle->html%></td>
+	</tr>
+	<tr>
+	  <th><%$itrub_odescr->fielddef->label%></th>
+	  <td><%$itrub_odescr->html%></td>
+	</tr>
+	<tr>
+	  <th><%$itrub_opicto->fielddef->label%></th>
+	  <td><%$itrub_opicto->html%></td>
+	</tr>
+	<tr>
+	  <th><%$itrub_oicon->fielddef->label%></th>
+	  <td><%$itrub_oicon->html%></td>
+	</tr>
+	<tr>
+	  <th><%$itrub_ocorder->fielddef->label%></th>
+	  <td><%$itrub_ocorder->html%></td>
+	</tr>
+	<tr>
+	  <th><%$syslabels.Seolan_Module_InfoTree_InfoTree.linkup%></th>
+	  <td>
+	    <ul id="parent-tree-selector" class="simpleTree topicsTree">
+	      <li class="root">
+		<div><%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%></div>
+		<ul>
+		  <%include file="Module/InfoTree.tree.html" ajaxurl="`$self`&function=home&moid=`$sysmods.xmodbackofficeinfotree`&template=Module/InfoTree.tree.html&tplentry=ittree&prefix=ittree&_raw=1&skip=1&ajaxurl=self&action=go_action" action="go_action" prefix="ittree"%>
+		</ul>
+	      </li>
+	    </ul>
+	  </td>
+	</tr>
+      </table>
+    </div>
+  </fieldset>
+  <%/if%>
+  <fieldset>
+    <legend>Section</legend>
+    <div class="table-responsive">
+      <table class="table list2">
+	<tr>
+	  <th><%$itsec_otitle->fielddef->label%></th> 
+	  <td><%$itsec_otitle->html|replace:"title":"sec[title]"%></td>
+	</tr>
+	<tr>
+	  <th><%$itsec_ocomment->fielddef->label%></th>
+	  <td><%$itsec_ocomment->html|replace:"comment":"sec[comment]"%></td>
+	</tr>
+	<tr>
+	  <th><%$itsec_ofct->fielddef->label%></th>
+	  <td><%$it_fct%><input type="hidden" name="sec[fct]" value="<%$it_fct%>"></td>
+	</tr>
+	<%if $it_persistent%>
+	<tr>
+	  <th><%$syslabels.Seolan_Module_Table_Table.ispersistent%></th>
+	  <td><input type="checkbox" value="1" name="sec[persistent]" checked></td>
+	</tr>
+	<%/if%>
+	<%if !$itrub_otitle%>
+	<tr>
+	  <th><%$syslabels.Seolan_Module_InfoTree_InfoTree.linkup%></th>
+	  <td>
+	    <ul id="parent-tree-selector" class="simpleTree topicsTree">
+	      <li class="root">
+		<span><%$syslabels.Seolan_Module_InfoTree_InfoTree.topics%></span>
+		<ul>
+		  <%include file="Module/InfoTree.tree.html" ajaxurl="`$self`&function=home&moid=`$sysmods.xmodbackofficeinfotree`&template=Module/InfoTree.tree.html&tplentry=ittree&prefix=ittree&_raw=1&skip=1&ajaxurl=self&action=go_action" action="go_action" prefix="ittree"%>
+		</ul>
+	      </li>
+	    </ul>
+	  </td>
+	</tr>
+	<%/if%>
+      </table>
+    </div>
+  </fieldset>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    <input type="button" value="<%$syslabels.Seolan_Core_General.cancel_text%>" onclick="TZR.updateModuleContainer('<%$back%>&_nohistory=0');">
+  </div>
+</form>
+
+<script type="text/javascript">
+ <%if !$itrub_otitle%>
+ var newrub = true;
+ <%else%>
+ var newrub = false;
+ <%/if%>
+ function go_action(oid){
+     document.editform.linkup.value=oid;
+ }
+ function formSubmitted(){
+   home_reloadMenu.apply(document,null);
+   // retour au module de départ
+   TZR.jQueryLoad({target:'#cv8-content',url:"<%$it__next%>"});
+ }
+ 
+ jQuery(document).ready(function(){
+   var simpleTreeCollection;
+   simpleTreeCollection=jQuery("#parent-tree-selector").simpleTree({drag:false});
+ });
+</script>
+

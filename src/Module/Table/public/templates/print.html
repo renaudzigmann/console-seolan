@@ -1,0 +1,38 @@
+<html>
+ <head>
+   <%$header%>
+   <style type="text/css">
+     <%include file=$smarty.const.TZR_WWW_DIR|cat:$smarty.const.TZR_DEFAULT_CSS_PATH|cat:'print.css'%>
+   </style>
+ </head>
+ <body onLoad="window.print();">
+  <table class="table table-bordered table-striped">
+   <tr>
+    <td colspan="20">
+     <label><%$param_title%></label>
+     <%if !empty($param_queryfields)%>
+      <br><label><%$syslabels.Seolan_Core_General.filter%></label> : <br>
+      <%foreach name=i from=$param_queryfields item=field%>
+       - <%$field->fielddef->label%> : <%$field->getQueryText()%><br>
+      <%/foreach%>
+     <%/if%>
+    </td>
+   </tr>
+   <tr>
+    <%section name=header loop=$br_header_fields%>
+     <td><label><%$br_header_fields[header]->label%></label></td>
+    <%/section%>
+   </tr>
+   <%section name=lines loop=$br_lines_oid %>
+    <tr>
+     <%section name=header loop=$br_header_fields %>
+      <td>
+       <%$tmp=$br_lines_o<%$br_header_fields[header]->field%>[lines]->html%>
+       <%if $tmp%><%$tmp%><%else%>&nbsp;<%/if%>
+      </td>
+     <%/section%>
+    </tr>
+   <%/section%>
+  </table>
+ </body>
+</html>

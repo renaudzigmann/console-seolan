@@ -1,0 +1,156 @@
+*{ padding:0; margin:0; }
+body { font-size: 70%; font-family: Helvetica, Arial, Geneva, sans-serif; background-color:#fff; width: 100%; margin: 0; padding: 0 0 0; text-align:center;} 
+/* div principale */
+#cv3-page-contenu { font-size: 1em; text-align:left;width:980px; clear: both; margin:0px auto 10px auto; padding: 0px; }
+
+/********************/
+/* A. partie haute  */
+/********************/
+.top { text-align: left; width:980px; margin: 0; padding: 0; }
+
+/* A.1 */
+.cv3-sur-top { background-color: #fff; background-repeat: repeat; background-attachment: scroll; background-position: 0 0; width:980px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; margin: 0; padding: 0 0 0 0; height:20px;}
+
+/* A.1.1 NAVIGATION DRAPEAUX*/
+.cv3-nav0 { z-index:1; margin-top: 20px; margin-right: 0; margin-bottom: 0; display:inline}
+.cv3-nav0 ul {float:right; padding:5px 5px 0 0; font-weight:normal;}
+.cv3-nav0 li {display:inline; list-style:none;}
+.cv3-nav0 li a {display:block; float:left; padding:0 3px 5px; color:#7d7d7d; text-decoration:none; font-size:110%;}
+.cv3-nav0 a:hover {text-decoration:none; color:rgb(50,50,50);}
+
+/* A.1.2 NAVIGATION TOP reprise du menu bas */
+.nav1 { z-index:2; margin-top: 20px; margin-right: 0; margin-bottom: 0; display:inline}
+.nav1 ul {float:right; padding:5px 10px 0 0; font-weight:normal;}
+.nav1 li {display:inline; list-style:none;}
+.nav1 li a {display:block; float:left; padding:0 3px 5px; color:#7d7d7d; text-decoration:none; font-size:110%;}
+.nav1 a:hover {text-decoration:none; color:rgb(50,50,50);}
+
+/* A.2 bandeau */
+.top-image {width:980px; height:141px; background-color:#e7e7e7;background-repeat:no-repeat; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+
+/* A.3 sous bandeau */
+.top-bottom { background-repeat: repeat-y; background-attachment: scroll; background-position: 0 0; width:980px; height:18px; text-align: center; float: left; padding-top: 3px; padding-bottom: 3px; }
+
+/* A.3.1 nav horizontal */
+.cv3-hnav{
+}
+.cv3-hnav { font-size: 12px; font-family: Helvetica, Arial, Geneva, SunSans-Regular, sans-serif; text-align: center; }
+.cv3-hnav, .cv3-hnav ul li a{padding-top: 3px; padding-bottom: 4px;}
+.cv3-hnav ul, .cv3-hnav ul li{display: inline;list-style-type: none;margin: 0;padding: 0;}
+.cv3-hnav ul li a{  margin: 0 -1px 0 0; padding-left: 10px; padding-right: 10px;	/* l'attribut de remplissage de sténographie recouvrirait la remplissage
+de top/bottom réglée dans une règle précédente */border-left: 1px solid #000; border-right: 1px solid #585858; white-space: nowrap; }
+.cv3-hnav ul li a:link,.cv3-hnav ul li a:visited, .cv3-hnav ul li a:active, .cv3-hnav ul li a:hover { text-decoration: none; }
+/*modification des couleurs (txt + Fond)*/
+.cv3-hnav, .cv3-hnav ul li a{color: #28284b;}
+.cv3-hnav ul li a:hover{background-color: #314c53;color: #fff;}
+.cv3-hnav ul li span.divBlanc{display: none;}
+
+/* A.4 chemin et recherche */
+.cv3-chemin { background-repeat: repeat-y; background-attachment: scroll; background-position: left top; text-align: left; width:980px; height: 30px; clear: both; padding:8px 0 5px; }
+
+/* A.4.1 chemin */
+.cv3-chemin ul { float:left; width:560px; list-style:none; padding:0 0 0 18px; font-family:verdana, arial, sans-serif; }
+.cv3-chemin ul li { display:inline; padding:0 0 0 10px; background-repeat:no-repeat; background-position:0 50%; font-weight:bold; color:rgb(125,125,125); font-size:100%; margin-left: 5px; }
+.cv3-chemin ul a {color:#334c53; text-decoration:none;}
+.cv3-chemin ul a:hover {color:#a80019; text-decoration:underline;}
+/* A.4.2 Recherche */
+.rechercheform {float:right; width:280px; padding:0 17px 0 0 !important /*Non-IE6*/; padding:0 12px 0px 0px /*IE6*/;}
+.rechercheform form fieldset {float:right; border:none;}
+.rechercheform input.zone { width:130px; padding:3px 0 0; border:solid 1px #c6c4c4; font-family:verdana, arial, sans-serif; font-size:90%; height: 20px; margin: 0 0 5px 2px; }
+.rechercheform input.button { width:35px;margin: 2px 0 5px; padding:2px 1px 1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:#e3e2e2; border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana, arial, sans-serif; color:#8a8a8a; font-size:90%; font-weight: bold; height: 20px; }
+.rechercheform input.button:hover { cursor:pointer; border:solid 1px rgb(80,80,80); background:#b22121; color:#eaeaea; font-weight: bold; }
+
+/*********************/
+/* B. partie central */
+/*********************/
+.cv3-main2{
+}
+.cv3-main { background-repeat:repeat-y; background-position:left top; text-align: left; width:980px; clear: both; padding-bottom: 20px; }
+
+/* B.1 col gauche */
+.cv3-main-gauche {display:inline; float:left; width:195px; margin:0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+
+.cv3-col-gauche{
+}
+.cv3-col-gauche spacerh1{ }
+.cv3-col-gauche h1{ }
+
+/* B.1.1 NAVIGATION*/
+#cv3-navigation * { margin:0; padding:0; }
+#cv3-navigation  { display: inline; margin:0; padding:0; width: 167px; float: left; border-right:1px solid #fff; border-left:1px solid #fff;}
+#cv3-navigation ul { font-size: 115%; font-family: Arial, Helvetica, sans-serif; font-weight: bold; list-style-type: none; margin:0; padding: 0 ;}
+#cv3-navigation li { display:inline; }
+
+/* menu gauche nvx 1 */
+#cv3-navigation ul li a { color: #000000; background-color:#dad6d1; background-repeat:no-repeat; background-position:2px 50%; text-decoration: none; display: block; padding:3px 2px 3px 18px; border-bottom:2px solid #fff; }
+#cv3-navigation ul li a:hover,#cv3-navigation ul li a.active { color: #ffffff; }
+
+/* menu gauche nvx 2 */
+#cv3-navigation ul ul li { font-size: 90%; margin: 0; }
+#cv3-navigation ul ul li a{ display: block; padding: 1px 1px 1px 20px; color: #000000; background-color:#819ca3; background-repeat:no-repeat; background-position:12px 50%; text-decoration: none; }
+#cv3-navigation ul ul li a:hover,#cv3-navigation ul ul li a.active{ color: #ffffff; }
+
+/* menu gauche nvx 3 */
+#cv3-navigation ul ul ul li { font-size: 90%; margin: 0; }
+#cv3-navigation ul ul ul li a{ display: block; padding: 1px 1px 1px 28px; color: #000000; background-color:#819ca3; background-repeat:no-repeat; background-position:22px 50%; text-decoration: none; }
+#cv3-navigation ul ul ul li a:hover,#cv3-navigation ul ul ul li a.active{ color: #ffffff; }
+
+/* B.1.2 NEWS */
+#cv3-news {  display:block; background-repeat:no-repeat;  width:177px; padding-top: 40px;}
+#cv3-news-top { }
+#cv3-news-middle { }
+#cv3-news-middle .cv3-news-item{ }
+#cv3-news-middle .cv3-news-item p.cv3-news-title { }
+#cv3-news-middle .cv3-news-item img.vignette-info { }
+#cv3-news-middle .cv3-news-separator { }
+#cv3-news-bottom { }
+
+/* B.1.3 FORM NEWSLETTER  */
+#cv3-newsletter { display:block; background-repeat:no-repeat;  width:177px; padding-top: 30px;}
+#cv3-newsletter-top{ }
+#cv3-newsletter-middle{ }
+.newsletterform p{ font-size: 100%; width: 167px; clear: left; margin: 0; padding: 10px 0 8px; height: 1%; }
+.newsletterform label{ float: left; width: 130px; }
+.newsletterform input[type="text"]{ /*width of text boxes. IE6 does not understand this attribute*/
+font-size: 100%; width: 130px; margin-left: 2px; padding-left: 2px; border: solid 1px #a80019; }
+.newsletterform .btnewsletter a  { color: #ccc; font-size: 105%; text-decoration: none; background-color: #898176; text-align: center; margin-top: 3px; padding: 3px 6px 2px 2px; border: solid 1px #000; }
+.newsletterform .btnewsletter a:hover { color: #fff; background-color: #941414;}
+.btnewsletter a, .btnewsletter a:link, .btnewsletter a:visited, .btnewsletter a:active  { color: #ccc; font-size: 105%; text-decoration: none; background-color: #898176; text-align: center; margin-top: 3px; padding: 3px 6px 2px; border: solid 1px #000; }
+.btnewsletter a:hover { color: #fff; background-color: #941414;}
+
+#cv3-newsletter-bottom { }
+
+/* B.2 contenu */
+.cv3-main-contenu {display:inline; /*Fix IE marge flottante bug*/; float:left; width:560px; margin:0; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+
+/* B.3 col droite (3 col) */
+.cv3-main-droite { background-repeat: no-repeat; background-position: left top; display:inline; float:right; width:225px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; }
+
+
+/*********************/
+/* 3. partie basse   */
+/*********************/
+.cv3-basdepage{
+}
+.cv3-mentions{
+}
+.cv3-basdepagesup { background-position: right bottom; clear:both; width:980px; height: 50px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; padding: 9px 0 5px; }
+.cv3-basdepage { font-size: 100%; background-repeat: repeat-y; background-attachment: scroll; background-position: left bottom; padding: 9px 0 5px; width: 980px; clear: both; overflow: visible !important; }
+
+
+
+
+/******************/
+/*CONTENU*/
+/*********************/
+.cv3-col-gauche { padding: 5px 10px 2px 18px; }
+.cv3-col-contenu { padding: 5px 10px 2px 25px; }
+.cv3-col-droite { padding: 5px 18px 2px 15px; }
+
+
+/*********************/
+/*  Efface les FLOATS  */
+/*********************/
+.cv3-page-contenu:after, .top:after, .cv3-main:after, .cv3-main-navigation:after, .cv3-main-contenu:after, .cv3-main-contenu div:after, .cv3-main-gauche:after {content:"."; display:block; height:0; clear:both; visibility:hidden;}
+.cv3-basdepage:after, p:after {content:"."; display:block; height:0; clear:both; visibility:hidden;}
+

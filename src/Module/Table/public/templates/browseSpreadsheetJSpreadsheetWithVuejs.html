@@ -1,0 +1,353 @@
+<!-- <%$smarty.template%> -->
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script language="javascript" type="text/javascript">
+    var initBrowse = function(){
+      TZR.Table.browse['<%$uniqid%>'] = {
+         moid:"<%$_moid%>",
+         g_pagesize:<%$br_pagesize|default:0%>,
+         order:'<%$br_order|escape:'javascript'%>',
+         first:'<%$br_first%>',
+         last:'<%$br_last%>',
+         firstlastpage:'<%$br_firstlastpage%>',
+         firstprev:'<%$br_firstprev%>',
+         firstnext:'<%$br_firstnext%>',
+         f:'<%$br_function%>',
+         template:'<%$template%>',
+         url:"<%$self%>moid=<%$_moid%>&tplentry=br",
+         fromfunction:'<%$function%>',
+         browseurl:'<%$imod_props.actions.browse->xurl%>',
+         // surcharge des actions en mode traduction on doit afficher 2 messages <>
+         <%if $br_translation_mode%>
+           confirmDeleteMessage:'<%$syslabels.Seolan_Core_General.confirm_delete_object_alllang|escape:"quotes"%>',
+           actionData:{"LANG_TRAD":"", "LANG_DATA":"<%$lang_def%>"}, // a finir, doit passer à la fonction !
+           translation_mode:true,
+         <%else%>
+           actionData:null,
+           confirmDeleteMessage:'<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>',
+           translation_mode:false,
+         <%/if%>
+         confirmFullDeleteTitle:"<%$syslabels.Seolan_Module_Table_Table.full_delete|escape:"quotes"%>",
+         confirmFullDeleteMessage:"<%$syslabels.Seolan_Module_Table_Table.full_delete_explain|escape:"quotes"%>",
+         modulecontainer:v<%$uniqid%>.modulecontainer
+     };
+     // surcharge pour effacer aussi TZR.Table.browse['<%$uniqid%>']
+     TZR.addToObjCleaner("cv8-uniqdiv-<%$uniqid%>", v<%$uniqid%>, function(){
+       TZR.cleanObj(v<%$uniqid%>);
+       if (!delete TZR.Table.browse['<%$uniqid%>']){
+         TZR.Table.browse['<%$uniqid%>'] = null;
+       }
+     });
+   };
+
+   var initPage = function(){
+     let uniqid = "<%$uniqid%>";
+    <%$mapper=\Seolan\Library\JSpreadsheet::getInstance()%>
+     var preparedMeta = {}; // voir comment faire en une boucle sans appel array.push ?
+     var preparedData = [];
+     var preparedROLines = [];
+     var getValueAndSetMeta = (value, meta, x, y)=>{
+       var cellname = jexcel.getColumnNameFromId([x,y]);
+       preparedMeta[cellname]=meta;
+       return value;
+     };
+     TZR.JSpreadsheet.oidColIndex = 1;
+     
+     var lactions = null;
+    <%section name=l loop=$br_lines_oid%>
+    lactions = [];
+
+    <%foreach from=$br_actions[l] item="laction"%>
+     lactions.push("<%$laction|escape:'javascript'%>");
+     <%if count($br_actions[l]) <= 1%> <%* display seul en pcpe *%>
+     preparedROLines.push("<%$br_lines_oid[l]%>");
+     <%/if%>
+    <%/foreach%>
+
+    preparedData[preparedData.length] =
+      [TZR.JSpreadsheet.prepareLineActions.call(TZR.JSpreadsheet,
+						uniqid,
+ 						"<%$br_lines_oid[l]%>", lactions),
+       "<%$br_lines_oid[l]%>",
+       <%strip%>
+	<%section name=h loop=$br_header_fields%>
+        <%$fieldvalue=$br_lines_o<%$br_header_fields[h]->field%>[l]%>
+        <%$valAndMeta = $mapper->preEdit($fieldvalue)%>
+        <%* à voir le replace ... *%>
+        getValueAndSetMeta(<%$valAndMeta.value|replace:"\n":""|default:"''"%>,
+			   <%$valAndMeta.meta%>,
+			   3+<%$smarty.section.h.index%>,
+			   <%$smarty.section.l.index%>)<%if !$smarty.section.h.last%>,<%/if%>
+	<%/section%>
+      ];
+    <%/strip%>
+    <%/section%>
+    var preparedUrl = null;
+    <%$defaultColWidth='100'%>
+    var defaultColWidth=<%$defaultColWidth%>;
+
+    var preparedColumns = [
+      <%section name=h loop=$br_header_fields%>
+      {
+        <%$mapper->getColumnDesc($br_header_fields[h], ['width'=>"$defaultColWidth"])%>
+      }
+      <%if !$smarty.section.h.last%>,<%/if%>
+      <%/section%>
+    ];
+
+    preparedColumns.unshift(
+      {type:"hidden",
+       name:"oid"
+      }
+    );
+
+    preparedColumns.unshift(
+      {type:"html",
+       title:"...",
+       name:"_actions",
+       readOnly:true,
+       classes:"line-actions",
+       width:"<%$defaultColWidth%>px"}
+    );
+
+    var preparedDimensions = null;
+
+    <%$groups = $mapper->getGroups($br_header_fields)%>
+    var preparedNestedHeaders = null;
+    <%if count($groups)>1%>
+
+    var preparedNestedHeaders = [
+
+      {title:' ',colspan:1},
+
+      <%foreach item="group" from=$groups%>
+      {title:"<%$group.title|escape:javascript%>",
+       // on peut aussi forcer align (default : center)
+       colspan:<%$group.colspan%>}<%if !$smarty.section.g.last%>,<%/if%>
+      <%/foreach%>
+    ];
+
+    <%/if%>
+    var preparedContextMenu = function(obj, x, y, e) {
+
+      var items = [];
+      // à voir, colonne RO + action dédiées à la cellule
+      switch(true){
+        case (x == 0 && y != null):
+ 	        rowContextMenu(items, obj, y, e);
+ 	        break;
+        case (y == null && x>0):
+ 	        columnContextMenu(items, obj, x, e);
+ 	        break;
+        case (x>0 && y != null): // cellule 'active'
+         	 rowContextMenu(items, obj, y, e);
+         	 columnContextMenu(items, obj, x, e);
+         	 cellContextMenu(items, obj, x, y, e);
+      }
+      return items;
+    }
+    var cellContextMenu = function(items, obj, x, y, e){
+      //items.push({title:`sample cell ${x}/${y} menu`});
+    }
+    var columnContextMenu = function(items, obj, x, e){
+
+      items.push({
+        title:obj.options.text._hideColumn,
+        onclick:function() {
+ 	        obj.hideColumn(x);
+       	 if (obj.options.nestedHeaders.length<=1)
+       	   return;
+       	 // faudra sur le show faire le contraire etc et blinder ?
+       	 for(let el of obj.options.nestedHeaders.element.children){
+       	   if (el.dataset.column){
+       	     let cols = el.dataset.column.split(',');
+       	     if (cols.indexOf(x) !== -1){
+       	       //el.dataset = ...
+       	       let colspan = parseInt(el.getAttribute('colspan'));
+       	       if (colspan == 1)
+       		 el.style.display='none';
+       	       else
+       		 el.setAttribute('colspan', colspan-1);
+       	     }
+       	   }
+ 	       };
+        }
+      });
+    };
+
+    var rowContextMenu = function(items, obj, y, e){
+      //items.push({title:`sample row ${y} menu`});
+    };
+
+    var options = {
+      url:preparedUrl,
+      freezeColumns:1, // marche mal en fait, à voir selon config
+      tableHeight:"70vh",
+      tableWidth:"100%",
+      tableOverflow:true,
+      lazyLoading:<%if $smarty.request._nolazyloading%>false<%else%>true<%/if%>,
+      loadingSpin:true, // pas vu pour le moment
+      minDimension:[<%count($br_header_fields)%>,<%min(500, count($br_lines_oid))%>],
+      defaultColWidth:defaultColWidth,
+      editable:true,
+      // manips autorisable pour un browse : delete
+      allowInsertRow:true,
+      allowManualInsertRow:true,
+      allowInsertColumn:false,
+      allowManualInsertColumn:false,
+      allowDeleteRow:true,
+      allowDeleteColumn:false,
+      allowRenameColumn:false,
+
+      data:preparedData,
+      columns:preparedColumns,
+      meta:preparedMeta,
+      nestedHeaders:preparedNestedHeaders, // au scroll, la première ligne disparait
+      contextMenu:preparedContextMenu,
+      text:{
+        _hideColumn:"Masquer la colonne",
+      },
+      /**
+       * existent
+       * updateTable: function (instance, cell, col, row, val, id)
+       * onbeforechange => ? pour faire des contrôles ?
+       * onafterchanges => pas appelée sur undo
+       */
+      updateTable:function(jexcelcontainer, cell, col, row, val, label, id){
+	// if lineRo ... => positionner ro sur toutes les cellules de la ligne
+	// si pas d'actions en rw
+	let oid = jexcelcontainer.jspreadsheet.getValue(
+          jexcel.getColumnNameFromId([TZR.JSpreadsheet.oidColIndex,row])
+        );
+	if (col >= 2 && preparedROLines.indexOf(oid) != -1){
+	  jQuery(cell).addClass('readonly');
+	}
+      },
+      onafterchanges:function(jexcelcontainer, changes){},
+      onbeforechange:function(){},
+      onchange:function(jexcelcontainer, cell, x, y, newvalue, oldvalue){
+        // pour l'état modifié, voir aussi undo redo
+
+        var cellname = jexcel.getColumnNameFromId([x,y]);
+
+        try{
+            var meta = jexcelcontainer.jspreadsheet.getMeta(cellname);
+        }catch(e){
+            var meta = null;
+        }
+        if (meta && typeof(meta.edit_format) != "undefined"){
+        }
+        // ! historyIndex pas à jour
+        let oid = jexcelcontainer.jspreadsheet.getValue(
+            jexcel.getColumnNameFromId([TZR.JSpreadsheet.oidColIndex,y])
+        );
+        if (oid != "") // cas lignes en création
+            jexcelcontainer.jspreadsheet._updatedOids.push(oid);
+
+        let vueManager = TZR.JSpreadsheet.vueManager(uniqid);
+        TZR.JSpreadsheet.setState.call(TZR.JSpreadsheet, vueManager, jexcelcontainer.jspreadsheet, true);
+        vueManager.setStyle(cellname, 'font-weight', 'bolder');
+        vueManager.setStyle(cellname, 'background-color', 'ivory');
+
+      },
+      onundo:function(jexcelcontainer, params){
+        let vueManager = TZR.JSpreadsheet.vueManager(uniqid);
+        TZR.JSpreadsheet.setState.call(TZR.JSpreadsheet, vueManager, jexcelcontainer.jspreadsheet);
+      },
+      /*
+        séléction de lignes complètes par click sur le numéro de ligne
+        x1=x2=0, y1=première ligne, y2=dernières ligne
+      */
+      onselection:function(jexcelcontainer, x1, y1, x2, y2, origin){
+
+        let selectedRows = jexcelcontainer.jspreadsheet.getSelectedRows(true);
+        let nbcols = preparedColumns.length - 1; // la colonne actions
+        if (x1 != 0 || x2 != nbcols ){
+          TZR.JSpreadsheet.resetLineSelection.call(TZR.JSpreadsheet, uniqid);
+        } else {
+          TZR.JSpreadsheet.updateLineSelection.call(TZR.JSpreadsheet, uniqid, selectedRows);
+        }
+      }
+    };
+
+    let vueManager = TZR.JSpreadsheet.vueManager(uniqid, options);
+
+    // beforeunload
+    TZR.unloadMgt.registerContainer(uniqid, function(uniqid){
+      return vueManager._updated;
+    });
+
+    // on boucle car à un moment, on avait des boutons en haut et en bas
+    // à voir let b = document.querySelector à la place
+    for(let b of document.querySelectorAll("button.save-spreadsheet")){
+      b.setAttribute("disabled", true);
+      b.addEventListener("click", function(){
+        TZR.JSpreadsheet.save.call(TZR.JSpreadsheet, vueManager);
+      });
+    }
+    for(let b of document.querySelectorAll("button.new-spreadsheet-line")){
+      b.addEventListener("click", function(){
+        TZR.JSpreadsheet.newLine.call(TZR.JSpreadsheet, vueManager);
+      });
+    }
+
+    };
+
+
+  jQuery(document).ready(function(){
+    // on charge : vue.2.6.10.min.js, jsuites.v4.js, jexcel.v4.js
+    if (typeof(TZR.JSpreadsheet) == "undefined"){
+      jQuery.getScript('/csx/src/Module/Table/public/tableedit.js').done(
+      ()=>{
+      TZR.JSpreadsheet.initialize().then(
+        ()=>{
+         initBrowse()
+         initPage();
+        },
+        (message)=>{
+         console.log("error initialize jspreadsheet components "+message);
+        }
+      );
+      }).fail(()=>{
+        console.log("error initialize jspreadsheet");
+      });
+
+    } else {
+      initBrowse();
+      initPage();
+  }
+
+  });
+
+</script>
+<style>
+ td.customjspreadsheetcell-dates,
+ td.customjspreadsheetcell-segmentation {
+   background-color:#d7aa43b8;!important
+ }
+</style>
+<%* ? *%>
+<jsuites-modal title="" closed="true" width="600" height="480"></jsuites-modal>
+
+<div class="cv8-contenu-center clearfix browse-module-<%$_moid%>">
+
+
+  <div id="spreadsheet-browse-<%$uniqid%>"></div>
+  <form name="browse<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);"><%* formulaire façon "browse" pour les actions sur les lignes *%>
+
+  <div class="tzr-actions">
+    <button class="btn btn-primary save-spreadsheet" type="button"><%$syslabels.Seolan_Core_General.save_text%></button>
+    <%if $modsec_mods[$_moid].rw%>
+    <button class="btn btn-primary new-spreadsheet-line" type="button"><%$syslabels.Seolan_Core_General.new_text%></button>
+    <%/if%>
+  </div>
+  <div id="selecteddiv<%$uniqid%>"></div>
+
+    <input type="hidden" name="_function" value="">
+    <input type="hidden" name="fromfunction" value="">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="template" value="">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="_selectedok" value="ok">
+
+  </form>
+</div>

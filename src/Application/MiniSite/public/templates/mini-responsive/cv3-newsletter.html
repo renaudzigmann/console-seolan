@@ -1,0 +1,13 @@
+<%if $tzr.CorailNewsLetter%>
+<!-- Début cv3-newsletter -->
+<div id="cv3-newsletter" class="cv3-navbas">
+  <h4><%$labels.newsletter_title %></h4>
+  <ul>
+    <li><a href="/index.php?nocache=1&alias=inscription-newsletter" class="btn btn-primary btn-recevoirNewsletter"><%$labels.newsletter_recevoir|default:"Recevoir la newsletter"%></a></li>
+    <%if $charte_oRUB_NEWSLETTER->raw %>
+    <li><a href="<%$self%>alias=<%$charte_oRUB_NEWSLETTER->oalias->raw%>"><%$labels.newsletter_ttelink|default:"Toutes les newsletter"%></a></li>
+    <%/if%>
+  </ul>
+</div>
+<!-- fin cv3-newsletter -->
+<%/if%>

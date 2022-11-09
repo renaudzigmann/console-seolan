@@ -1,0 +1,106 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<%* lite des tables BASEBASE et status de replication *%>
+<%assign var='yes' value=$syslabels.Seolan_Core_General.yes_text%>
+<%assign var='no'  value=$syslabels.Seolan_Core_General.no_text%>
+<script type="text/javascript" language="javascript">
+function subForceStatus(btab, newstatus){
+  var f = document.forms['<%$uniqid%>forceStatus'];
+  f.elements['btab'].value = btab;
+  f.elements['newstatus'].value = newstatus;
+  TZR.ajaxSubmitForm(f);
+  return false;
+}
+function subGenInitSet(btab){
+  if (!confirm('<%$syslabels.Seolan_Module_Replication_Replication.confirmresynch_text|addslashes%>')){
+    return;
+  }
+  var f = document.forms['<%$uniqid%>genInitSet'];
+  f.elements['table'].value = btab;
+  TZR.ajaxSubmitForm(f);
+  return false;
+}
+</script>
+<table class="cv8_tablelist">
+<tr>
+<th rowspan="2"><%$syslabels.Seolan_Module_Replication_Replication.resynch%></th>
+<th colspan="3"><%$syslabels.Seolan_Module_Replication_Replication.tabletitle%></th>
+<th rowspan="1" colspan="2"><%$syslabels.Seolan_Module_Replication_Replication.replication%></th>
+<th rowspan="2"><%$syslabels.Seolan_Module_Replication_Replication.modulenames%></th>
+</tr>
+<tr>
+<th><a href="<%$fullself%>moid=<%$_moid%>&function=tablesStatus&tplentry=br&template=Module/Replication.tablesstatus.html&order=bname" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_Replication_Replication.tablename%> ...</a></th>
+<th><a href="<%$fullself%>moid=<%$_moid%>&function=tablesStatus&tplentry=br&template=Module/Replication.tablesstatus.html&order=bcount" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_Replication_Replication.tablecount%> ...</a></th>
+<th><a href="<%$fullself%>moid=<%$_moid%>&function=tablesStatus&tplentry=br&template=Module/Replication.tablesstatus.html&order=blabel" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_Replication_Replication.tablelabel%> ...</a></th>
+<th><%$syslabels.Seolan_Module_Replication_Replication.computedstatus%></th>
+<th><a href="<%$fullself%>moid=<%$_moid%>&function=tablesStatus&tplentry=br&template=Module/Replication.tablesstatus.html&order=brepli" class="cv8-ajaxlink"><%$syslabels.Seolan_Module_Replication_Replication.actualstatus%> ...</a></th>
+</tr>
+<%foreach from =$br_linesyes key=tname item=tdesc%>
+<tr class="<%cycle name=c1 values='even-dataline, odd-dataline'%>">
+<td align="center">
+<%if $tdesc.replicate && $tdesc.bbrepli%>
+<input class="radio" type="checkbox" onclick="subGenInitSet('<%$tname%>'); return false;"/>
+<%/if%>
+</td>
+<td><%$tname%></td>
+<td align="right"><%$tdesc.count%></td>
+<td><%$tdesc.table.tlabel%></td>
+<td><%if $tdesc.replicate%><%$yes%><%else%><%$no%><%/if%></td><td><%if $tdesc.bbrepli%><%$yes%><%else%><%$no%><%/if%>
+<%if $tdesc.replicate != $tdesc.bbrepli%>
+&nbsp;<a href="#" onclick="subForceStatus('<%$tname%>', '<%if $tdesc.replicate%>0<%else%>1<%/if%>'); return false;"><%$syslabels.Seolan_Module_Replication_Replication.modify_text%></a>
+<%/if%>
+</td>
+<td>
+<%assign var=sep value=''%>
+<%foreach name=f1 from=$tdesc.modules key=moid item=mod%>
+<%$sep%><a  class="cv8-ajaxlink" href="<%$fullself%>&moid=<%$moid%>&function=editProperties&template=Core/Module.admin/editprop.html&tplentry=props"><%$mod.name%> (<%$moid%>) - <%if $mod.replicate%><%$yes%><%else%><%$no%><%/if%></a>
+<%if $smarty.foreach.f1.first%><%assign var=sep value='&nbsp;|&nbsp;'%><%/if%>
+<%/foreach%>
+</td>
+</tr>
+<%/foreach%>
+<tr>
+<th rowspan="2"><%$syslabels.Seolan_Module_Replication_Replication.resynch%></th>
+<th colspan="3"><%$syslabels.Seolan_Module_Replication_Replication.tabletitle%></th>
+<th rowspan="1" colspan="2"><%$syslabels.Seolan_Module_Replication_Replication.replication%></th>
+<th rowspan="2"><%$syslabels.Seolan_Module_Replication_Replication.modulenames%></th>
+</tr>
+<tr>
+<th><%$syslabels.Seolan_Module_Replication_Replication.tablename%></th>
+<th><%$syslabels.Seolan_Module_Replication_Replication.tablecount%></th>
+<th><%$syslabels.Seolan_Module_Replication_Replication.tablelabel%></th>
+<th><%$syslabels.Seolan_Module_Replication_Replication.computedstatus%></th>
+<th><%$syslabels.Seolan_Module_Replication_Replication.actualstatus%></th>
+</tr>
+<%foreach from =$br_linesno key=tname item=tdesc%>
+<tr class="<%cycle name=c1 values='even-dataline, odd-dataline'%>">
+<td></td>
+<td><%$tname%></td><td align="right"><%$tdesc.count%></td><td><%$tdesc.table.tlabel%></td><td><%if $tdesc.replicate%><%$yes%><%else%><%$no%><%/if%></td><td><%if $tdesc.bbrepli%><%$yes%><%else%><%$no%><%/if%>
+<%if $tdesc.replicate != $tdesc.bbrepli%>
+&nbsp;<a href="#" onclick="subForceStatus('<%$tname%>', '<%if $tdesc.replicate%>0<%else%>1<%/if%>'); return false;"><%$syslabels.Seolan_Module_Replication_Replication.modify%></a>
+<%/if%>
+</td>
+<td>
+<%assign var=sep value=''%>
+<%foreach name=f2 from=$tdesc.modules key=moid item=mod%>
+<%$sep%><a class="cv8-ajaxlink" href="<%$fullself%>&moid=<%$moid%>&function=editProperties&template=Core/Module.admin/editprop.html&tplentry=props"><%$mod.name%> (<%$moid%>) - <%if $mod.replicate%><%$yes%><%else%><%$no%><%/if%></a>
+<%if $smarty.foreach.f2.first%><%assign var=sep value='&nbsp;|&nbsp;'%><%/if%>
+<%/foreach%>
+</td>
+</tr>
+<%/foreach%>
+</table>
+<form name="<%$uniqid%>forceStatus" action="<%$fullself%>" method="POST"%>
+<input type="hidden" name="btab" value="">
+<input type="hidden" name="_skip" value="1">
+<input type="hidden" name="newstatus" value="">
+<input type="hidden" name="function" value="procEditTableStatus">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="_next" value="<%$fullself%>&moid=<%$_moid%>&function=tablesStatus&template=Module/Replication.tablesstatus.html&tplentry=br">
+</form>
+<form name="<%$uniqid%>genInitSet" action="<%$fullself%>" method="POST"%>
+<input type="hidden" name="table" value="">
+<input type="hidden" name="_skip" value="1">
+<input type="hidden" name="function" value="genInitSet">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="_next" value="<%$fullself%>&moid=<%$_moid%>&function=tablesStatus&template=Module/Replication.tablesstatus.html&tplentry=br">
+</form>

@@ -1,0 +1,35 @@
+<%strip%>
+<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+<!-- Start -->
+<%assign var="jumpt" value="-1"%>
+<%section name=itm loop=$tm_lines_oid%>
+<%* Si le saut est negatif :  debut d une liste *%>
+<%if ($jumpt<0)%>
+<ul <%if $smarty.section.itm.first%>class="nav navbar-nav"<%else%>class="dropdown-menu"<%/if%>><%/if%>
+<%* debuto element de la liste *%><!-- <%$tm_lines_level[itm]%> -->
+<%*calcule du saut: difference avec le niveau suivant *%>
+<%if $tm_lines_level[itm.index_next]%>
+<%assign var="levelNext" value="`$tm_lines_level[itm.index_next]`"%>
+<%else%>
+<%assign var="levelNext" value="0" %>
+<%/if%>
+<%math equation="x-y" x="`$tm_lines_level[itm]`" y="`$levelNext`" assign="jumpt"%>
+<li class="<%if $tm_lines_oid[itm]|in_array:$path_oidup %>active <%/if%><%if ($jumpt<0)&&$tm_lines_level[itm]==1%>dropdown<%/if%>" >
+<%if ($jumpt<0) %>
+<a <%if ($jumpt<0)&&$tm_lines_level[itm]==1%>class="dropdown-toggle" data-toggle="dropdown"<%/if%> href="<%$self%><%$tm_lines_selfurl[itm]%><%$tm_lines_ocurl[itm]->html%>" <%if $tm_lines_ocusttitle[itm]->html%> title="<%$tm_lines_ocusttitle[itm]->html%>"<%/if%>><%$tm_lines_otitle[itm]->html%></a>
+<%else%>
+<a href="<%$self%><%$tm_lines_selfurl[itm]%><%$tm_lines_ocurl[itm]->html%>" <%if $tm_lines_ocusttitle[itm]->html%> title="<%$tm_lines_ocusttitle[itm]->html%>"<%/if%>><%$tm_lines_otitle[itm]->html%></a>
+<%/if%>
+
+<%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+<%if !($jumpt<0) %></li><%/if%>
+<%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+<%if $jumpt > 0 %>
+<%section name=foo loop=$jumpt%>
+</ul>
+<%if !$smarty.section.foo.last and !$smart.section.itm.last%></li><%/if%>
+<%/section%>
+<%/if%>
+<%/section%>
+</nav>
+<%/strip%>

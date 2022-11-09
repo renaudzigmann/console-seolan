@@ -1,0 +1,59 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.config%>
+<div class="cv8-contenu-center clearfix">
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="iniProcEdit">
+  <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&function=iniEdit&template=Module/Management.iniEdit.html">
+  
+   <%foreach key=key item=item from=$ini_content%>
+    <fieldset class="fieldsetAccordion">
+      <legend><%$key%></legend>
+        <div class="table-responsive">
+          <table class="table table-striped cv8_tablelist">
+            <%foreach key=variable item=valeur from=$item%>
+            <%if $valeur.ro eq "0" %>
+              <tr>
+              <td width="10" nowrap>
+              <a href="#" class="cv8-delaction" data-target="#cvx-confirm-delete" data-toggle="modal" title="<%$syslabels.Seolan_Core_General.delete_text%>" data-args="<%$_moid%>,<%$self%>&moid=<%$_moid%>&function=iniDel&section=<%$key%>&variable=<%$variable%>&template=Module/Management.iniEdit.html&skip=1" data-action="TZR.Table.deleteItem"><%$syslabels.Seolan_Core_General.delete%></a> 
+              <label for="ini[<%$key%>][<%$variable%>]"><%$variable%></label></td>
+              <td><input type="text" name="ini[<%$key%>][<%$variable%>]" id="ini[<%$key%>][<%$variable%>]" value="<%$valeur.val%>"></td>
+              </tr>
+            <%else%>
+              <tr>
+              <td width="10" nowrap><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$_moid%>&function=iniAdd&section=<%$key%>&variable=<%$variable%>&template=Module/Management.iniEdit.html&value=<%$valeur.val|escape:"url"%>"><%$syslabels.Seolan_Core_General.edit%></a> <label><%$variable%></label></td>
+              <td><%$valeur.val%>&nbsp</td>
+              </tr>
+            <%/if%>
+            <%/foreach%>
+        </table>
+      </div>
+    </fieldset>
+   <%/foreach%>
+  
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+ </form>
+</fieldset>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.new_text%></legend>
+ <form action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="iniAdd">
+  <input type="hidden" name="template" value="Module/Management.iniEdit.html">
+  <div class="table-responsive">
+   <table class="table table-striped cv8_tablelist">
+   <tr>
+    <td width="10">Section</td>
+    <td><select name="section"><%foreach key=key item=item from=$ini_content%><option><%$key%></option><%/foreach%></select></td>
+   </tr>
+   <tr><td width="10"><%$syslabels.Seolan_Core_General.name%></td><td><input name="variable"></td></tr>
+   <tr><td width="10"><%$syslabels.Seolan_Core_General.value%></td><td><textarea name="value" cols="60" rows="3"></textarea></td></tr>
+  </table>
+  </div>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+ </form>
+</div>
+<script>TZR.fieldsetAccordion(jQuery(v<%$uniqid%>.modulecontainer));</script>

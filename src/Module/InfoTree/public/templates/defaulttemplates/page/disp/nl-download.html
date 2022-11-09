@@ -1,0 +1,59 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+<%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:20%>
+<%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+
+<%if $it_olines[it].ofichier->filename%>
+
+<%assign var="image_mimes" value="@"|explode:"image/jpeg@image/png@image/gif@image/bmp@image/webp"%>
+<%assign var="excel_mimes" value="@"|explode:"application/vnd.oasis.opendocument.spreadsheet@application/vnd.ms-excel@application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"%>
+<%assign var="pdf_mimes" value="@"|explode:"application/pdf"%>
+<%assign var="doc_mimes" value="@"|explode:"application/msword@application/vnd.oasis.opendocument.text" %>
+
+<%if $it_olines[it].ofichier->mime|in_array:$image_mimes %>
+<%assign var="icone" value='<img src="/csx/src/Application/Corail/public/images/newsletter/image.png" align="absmiddle" title="Fichier image" alt="Fichier image"/>' %>
+<%assign var="type" value='Image' %>
+<%elseif $it_olines[it].ofichier->mime|in_array:$excel_mimes %>
+<%assign var="icone" value='<img src="/csx/src/Application/Corail/public/images/newsletter/excel.png" align="absmiddle" title="Fichier excel" alt="Fichier excel"/>' %>
+<%assign var="type" value='Excel' %>
+<%elseif $it_olines[it].ofichier->mime|in_array:$pdf_mimes %>
+<%assign var="icone" value='<img src="/csx/src/Application/Corail/public/images/newsletter/pdf.png" align="absmiddle" title="Fichier pdf" alt="Fichier pdf"/>' %>
+<%assign var="type" value='Pdf' %>
+<%elseif $it_olines[it].ofichier->mime|in_array:$doc_mimes %>
+<%assign var="icone" value='<img src="/csx/src/Application/Corail/public/images/newsletter/doc.png" align="absmiddle" title="Fichier document" alt="Fichier document"/>' %>
+<%assign var="type" value="Doc" %>
+<%else %>
+<%assign var="icone" value='<img src="/csx/src/Application/Corail/public/images/newsletter/autre.png" align="absmiddle" title="Fichier" alt="Fichier"/>' %>
+<%assign var="type" value="Fichier" %>
+<%/if %>
+
+
+<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-download">
+  <tr>
+    <td align="center" style="padding: <%$nlspacingheight%>px 0px <%$nlspacingheight%>px 0px">
+    <!--[if (gte mso 9)|(IE)]>
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+    <tr>
+    <td align="center" valign="top" width="<%$nlwidth%>">
+    <![endif]-->
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+        <tr>
+          <td style="padding: <%$nlspacingheight%>px 0px <%$nlspacingheight%>px 0px" class="content mobile-center">
+            <%if $it_olines[it].otitsec->raw %><h1><%$it_olines[it].otitsec->html%></h1><%/if%>
+            <%if $it_olines[it].otxt1->raw%><%$it_olines[it].otxt1->html%><%/if%>
+            <div><%$icone%>&nbsp;&nbsp;<%$it_olines[it].ofichier->html%></div>
+          </td>
+        </tr>
+      </table>
+
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    </td>
+  </tr>
+</table>
+
+
+<%/if%>

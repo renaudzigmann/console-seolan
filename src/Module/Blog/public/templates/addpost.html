@@ -1,0 +1,46 @@
+<%assign var="title" value=$syslabels.Seolan_Module_Blog_Blog.addpost_text%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.new_text%></legend>
+ <form action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="uniqid" value="<%$uniqid%>">
+  <input type="hidden" name="_function" value="procAddPost">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+  <input type="hidden" name="template" value="proc.html">
+  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+  <input type="hidden" name="_next" value="<%$back%>"/>
+  <input type="hidden" name="skip" value="1">
+  <div class="table-responsive">
+  <table class="table table-striped">
+   <tr>
+    <th><label><%$br_ocateg->fielddef->label%></label></th>
+    <td><%$br_ocateg->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br_otitle->fielddef->label%></label></th>
+    <td><%$br_otitle->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br_otxt->fielddef->label%></label></th>
+    <td><%$br_otxt->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br_oafile->fielddef->label%></label></th>
+    <td><%$br_oafile->html%></td>
+   </tr>
+   <tr>
+    <th><label>Nom</label></th>
+    <td><input type="text" name="who[label]" size="30" value="<%user fullname=1%>" readonly></td>
+   </tr>
+   <tr>
+    <th><label>Email</label></th>
+    <td><input type="text" name="who[url]" size="30" value="<%user email=1%>" readonly></td>
+   </tr>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+  
+ </form>
+</fieldset>

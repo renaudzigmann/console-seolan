@@ -1,0 +1,9 @@
+<div class="xmodmonetique xmodmonetique-paypal-form">
+  <%if $labels.mntq_bq%><p><%$labels.mntq_appelbq%></p><%/if%>
+  <div class="xmodmonetique-paypal-logos"></div>
+  <form method="<%$paypalForm_method%>" action="<%$paypalForm_url%>">
+    <%$paypalForm_fields%>
+    <input alt="Effectuez vos paiements via PayPal : une solution rapide, gratuite et sécurisée" name="submit" value="setExpressCheckout" src="https://www.paypal.com/fr_FR/FR/i/btn/btn_buynow_LG.gif" type="image" />
+   <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="" width="1" height="1" />
+  </form>
+</div>

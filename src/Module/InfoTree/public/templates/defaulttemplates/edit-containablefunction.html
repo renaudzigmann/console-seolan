@@ -1,0 +1,33 @@
+<%include file="Module/Table.functions.html"%>
+<div class="table-responsive">
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].otitle %>
+    <%call fieldline field=$it_olines[it].ocomment %>
+    <%call fieldline field=$it_olines[it].omodid %>
+    <%capture name="fct"%>
+    <select name="sfct" style="float:left;"></select>
+    <img src="/tzr/templates/ico/general/indicator.gif" style="display:none;">
+    <textarea name="fct" cols="80" rows="5"><%$it_olines[it].ofct->raw%></textarea>
+    <%/capture%>
+    <%call simplefieldline field=$it_olines[it].omodid->field label=$it_olines[it].otitle->fielddef->label fieldhtml=$smarty.capture.fct %>
+  </div>
+</div>
+<script type="text/javascript">
+jQuery(document.editform<%$uniqid%>.modid).change(function(){
+ jfct=jQuery(document.editform<%$uniqid%>.sfct);
+ jfct.attr('disable',1);
+ jfct.html('');
+ jfct.parent().find('img').show();
+ jfct.append('<option value="">----</option>');
+ jQuery.getJSON('<%$self%>&moid='+this.value+'&function=ajaxGetContainableActionList&_silent=1&_raw=1',function(rep){
+  for(id in rep){
+   jfct.append('<option value="'+rep[id].xurl.replace(/_bdx=[^&]+&/,'')+'">'+rep[id].name+'</option>');
+  }
+  jfct.attr('disable',0);
+  jfct.parent().find('img').hide();
+ });
+}).change();
+jQuery(document.editform<%$uniqid%>.sfct).change(function(){
+ if(this.value!="") document.editform<%$uniqid%>.fct.value=this.value;
+});
+</script>

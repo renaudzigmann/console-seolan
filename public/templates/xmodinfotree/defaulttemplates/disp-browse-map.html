@@ -1,0 +1,104 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+
+<%assign var=sectiondivid value="`$it_itoid[it]`"%>
+
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript">function browsedivinitpage(sectiondivid){}</script>
+<%assign var=section value=$it_olines[it]%>
+
+<%if !isset($smarty.request.contentonly)%>
+  <div class="cv8d-browse-map cv8d-browsediv cv8d-browsediv-<%$section._functionparams.moid%>" id="<%$sectiondivid%>">
+  <%assign var=end value="</div>"%>
+<%else%>
+  <%assign var=end value=""%>
+<%/if%>
+
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html" browsetype="div" sectiondivid="`$sectiondivid`"%>
+
+<%* On recherche le champ contenant les coordonnées de la fiche *%>
+<%foreach item=field from=$section.header_fields%>
+  <%if $field->ftype eq "XGeodesicCoordinatesDef"%>
+    <%assign var=geofield value="lines_o`$field->field`"%>
+  <%/if%>
+<%/foreach%>
+
+<%if !$geofield%>
+<div class="tzr-message error">ERROR: No Geodesic Coordinates field found in this list. Please include a Geodesic Coordinates field in your section parameters.</div>
+<%/if%>
+
+<div class="seolanMap">
+  <div class="seolanMap-map"></div>
+  <div class="seolanMap-items">
+<%foreach key=i item=oid from=$section.lines_oid %>
+    <div class="cv8d-object seolanMap-item" data-lat="<%$section.$geofield.$i->lat%>" data-lng="<%$section.$geofield.$i->lng%>" data-icon="<%$smarty.const.TZR_SHARE_URL%>xmodmap/marker-default.png">
+      <div class="text">
+   <%foreach item=field from=$section.header_fields%>
+    <div class="cv8d-fieldvalue cv8d-field-<%$field->field%>">
+     <%getvar var=section[lines_o`$field->field`][$i]->html%>
+    </div>
+   <%/foreach%>
+<%if $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit%>
+    <div>
+<%if $admini%>
+     <a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&amp;function=editpage&amp;template=Module/InfoTree.viewpage.html&amp;tplentry=it&amp;oidit=<%$section._functionparams.params.__linktodetail_oidit%>&amp;oid=<%$oid%>&from[oidit]=<%$it_cat_mit.oid%>&amp;from[itoid]=<%$it_itoid[it]%>"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+<%else%>
+     <a href="<%$self%>alias=<%$section._functionparams.params.__linktodetail%>&amp;oid=<%$oid%>&amp;from[alias]=<%$it_cat_mit.oalias->raw%>&amp;from[itoid]=<%$it_itoid[it]%>&amp;keywords=<%$section.lines_tlink[$i]%>" class="cv8-ajaxlink cv8d-object-link"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+<%/if%>
+    </div>
+<%/if%>
+      </div>
+    </div>
+<%/foreach%>
+  </div>
+</div>
+
+
+<%if !$admini and $geofield%>
+<script type="text/javascript">
+//<![CDATA[
+  
+  //jQuery('#<%$sectiondivid%> .seolanMap').seolanMap
+  jqSeolanMapGmapInit({
+    // Largeur de la carte
+    width: '100%',
+    // Hauteur de la carte
+    height: '350px',
+    // Type d'affichage de la carte : ROADMAP|SATELLITE|HYBRID|TERRAIN
+    mapTypeId: 'ROADMAP',
+    // Options des regroupement de markers
+    markerClustererOptions: {
+      gridSize: 25,
+      maxZoom: 15,
+      zoomOnClick: false,
+      styles: [{
+        url: '<%$smarty.const.TZR_SHARE_URL%>xmodmap/marker-clusterer-default.png',
+        height: 34,
+        width: 43,
+        textColor: '#FFFFFF',
+        textSize: 11
+      }]
+    },
+    // Nombre maximum de markers à afficher dans une liste regroupée par un cluster
+    maxMarkersInACluster: 6,
+    // Largeur maximale des info-bulles s'affichant au click sur un marker
+    infoWindowMaxWidth: 300,
+    // Selecteur jQuery pour le DIV contenant la carte
+    mapSelector: '.seolanMap-map',
+    // Selecteur jQuery pour un item à placer sur la carte
+    itemSelector: '.seolanMap-item',
+    // Selecteur jQuery pour le titre des items à placer sur la carte
+    itemTitleSelector: '.text > div:first',
+    // Selecteur jQuery pour la description des items à placer sur la carte
+    itemDescriptionSelector: '.text',
+    //div id
+    divId: '#<%$sectiondivid%> .seolanMap'
+    //GMAP API key if defined
+  <%if !empty($tzr.gmap_api_key)%>
+    ,gmapApiKey: "<%$tzr.gmap_api_key%>"
+  <%/if%>
+  });
+
+//]]>
+</script>
+<%/if%>

@@ -1,0 +1,127 @@
+<%$header%>
+<script type="text/javascript">
+<%**attention self, back et refresh sont réinitialisés plus loin car faux ici****%>
+    TZR={_self:'<%$self%>',_refresh:'<%$here%>&_nohistory=0',_back:'<%$back%>&_nohistory=0',_lang_user:'<%$lang_user%>', _sysmods_xmodadmin:'<%$sysmods.xmodadmin%>',_sysmods_xmodbackofficeinfotree:'<%$sysmods.xmodbackofficeinfotree%>', _sysmods_xmoduser2:'<%$sysmods.xmoduser2%>',_sessid:'<%$session_id%>',historysize:<%$smarty.const.TZR_BACK_STACK_SIZE%>,confirmDelete:function(){return confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>');},_infotreeadmin_sec:<%if $infotreeadmin_sec.admin%>true<%else%>false<%/if%>,_confirm_delete_mess:"<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>",_noobjectselected:"<%$syslabels.Seolan_Core_General.error_select_object|escape:"quotes"%>",_sharescripts:"<%$smarty.const.TZR_SHARE_SCRIPTS%>",_sharetemplates:"<%$smarty.const.TZR_SHARE_URL%>",cleanInterval:<%if $smarty.const.TZR_JS_CLEAN_INTERVAL%><%$smarty.const.TZR_JS_CLEAN_INTERVAL%><%else%>30000<%/if%>, _request:{gopage:<%if $smarty.request.gopage%>'<%$smarty.request.gopage|escape:'javascript'%>'<%else%>null<%/if%>},_authMngt:null};
+<%assign var='authOptions' value=getSessionVar('authOptions')%>
+<%if $authOptions%>TZR._authMngt = '<%$authOptions->mngt%>';
+TZR._authMngtOptions = JSON.parse('<%$authOptions->options|escape:'quotes'%>');
+<%/if%>
+</script>
+<%assign var=minify value=1%>
+<%onejs id="jquery-base" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/" minify=$minify%>
+jquery-1.11.3.js
+jquery.mobile.custom.min.js
+jquery-migrate.min.js
+jquery-ui/jquery-ui.js
+jquery-ui/locale/<%strtolower($lang_user)%>/
+jquery.tablesorter.js
+jquery-ajax-native.js
+<%/onejs%>
+
+<%*boostrap et theme et flatty *%>
+<%onejs id="jquery-suite" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/" minify=$minify%>
+getbootstrap/bootstrap.js
+getbootstrap/plugins/daterangepicker/moment.js
+getbootstrap/plugins/daterangepicker/daterangepicker.js
+flatty/theme.js
+chartjs/chart.min.js
+chartjs/chartjs-adapter-moment.min.js
+<%/onejs%>
+
+<%* doivent être traités valides ? *%>
+<%onejs id="jquery-suite" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/" minify=$minify%>
+jquery.bgiframe.min.js
+jquery.simple.tree.js
+jquery.history.js
+jquery.bt.js
+<%/onejs%>
+
+<%onejs id="jquery-plugins" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/plugins/" minify=$minify%>
+datatable/DataTables-1.10.10/js/jquery.dataTables.min.js
+jquery_ui_touch_punch/jquery.ui.touch-punch.min.js
+modernizr/modernizr.min.js
+retina/retina.js
+flot/excanvas.js
+flot/flot.min.js
+flot/flot.resize.js
+floatingscroll/jquery.floatingscroll.min.js
+<%/onejs%>
+
+<%* doivent être traités - validéss *%>
+<%onejs type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/" minify=$minify%>
+jquery.caret.min.js
+jquery.insertatcaret.min.js
+<%/onejs%>
+
+<%**** generic8 passe pas au minify (2016/07) ***%>
+<%onejs id="Core" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/" minify=0%>
+Core/public/generic.js
+Core/public/generic8.js
+Core/public/genericX.js
+Core/public/main.js
+Core/public/tag.js
+Module/Table/public/table.js
+Module/InfoTree/public/infotree.js
+Module/Media/public/media.js
+Module/Form/public/form.js
+Module/Application/public/siteapp.js
+Module/DataSource/public/adminTable.js
+Core/public/daterangepicker-<%strtolower($lang_user)%>.js
+Field/File/Autodesk/public/autodeskViewer.js
+Field/File/Viewer/public/viewer.js
+<%/onejs%>
+
+<script>
+  var CKEDITOR_BASEPATH = '<%$smarty.const.TZR_WWW_CSX%>Vendor/ckeditor/';
+</script>
+
+<%onejs id="others1" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/"  minify=0%>ckeditor/ckeditor.js<%/onejs%>
+<%onejs id="others" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/"  minify=0%>wie/image-editor.js<%/onejs%>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery(window).scroll(function() {
+	if(jQuery(window).scrollTop() == 0){
+	    jQuery('#scrollToTop').fadeOut("fast");
+	} else {
+	    if(jQuery('#scrollToTop').length == 0){
+		jQuery('body').append('<div id="scrollToTop">'+
+        '<a href="#"></a>'+
+				 '</div>');
+	    }
+	    jQuery('#scrollToTop').fadeIn("slow");
+	}
+    });
+    jQuery(document).on('click', '#scrollToTop a',function(event){
+	event.preventDefault();
+	jQuery('html,body').animate({scrollTop: 0}, 'slow');
+    });
+});
+</script>
+
+<!-- headers -->
+
+<%$TZR.packs.header%>
+
+<%if defined('TZR_USER_JS')%>
+ <script type="text/javascript">
+  <%include file="`$smarty.const.TZR_WWW_DIR``$smarty.const.TZR_USER_JS`"%>
+ </script>
+<%/if%>
+<!-- tzr js -->
+<%section name="js" loop=$tzr_js%>
+ <script type="text/javascript" src="<%$tzr_js[js]%>"></script>
+<%/section%>
+
+<link href="<%$smarty.const.TZR_DEFAULT_CSS%>" rel="stylesheet" type="text/css">
+
+<%section name="css" loop=$tzr_css%>
+ <link href="<%$tzr_css[css]%>" rel="stylesheet" type="text/css">
+<%/section%>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+<title><%if !empty($wintitle)%><%$wintitle%><%else%>[ <%$tzr.console_release_name%> ] <%$tzr.societe%><%/if%></title>
+
+<%include file="Core.header/favicons.html"%>

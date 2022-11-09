@@ -1,0 +1,5 @@
+<div class="cv8d-fieldvalue cv8d-field-<%$field->fielddef->ftype%> cv8d-field-<%$field->fielddef->field%>">
+ <label><%assign var="lblkey" value="wrfieldlabel.`$field->fielddef->field`"%><%$labels[$lblkey]|default:$syslabels.Seolan_Module_WebResa_WebResa[$lblkey]|default:$field->fielddef->label%></label>
+ <%if $truncate == 1%><%$field->html|truncate:200%><%else%><%$field->html%><%/if%><span class="suffix"><%assign var="lblkey" value="wrfieldcomplement.`$field->fielddef->field`"%><%$labels[$lblkey]|default:$syslabels.Seolan_Module_WebResa_WebResa[$lblkey]%></span>
+</div>
+    

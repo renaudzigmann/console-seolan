@@ -1,0 +1,102 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<%assign var='translatable_field_icon' value='<span class="glyphicon csico-translatable-field" aria-hidden="true"></span>'%>
+<%include file="Module/Table.functions.html"%>
+<script>
+  <%if !empty($editcat_authorized_languages)%>
+    jQuery(document).ready(function(){
+      v<%$uniqid%>.allLangsConfirmMess = '<%$syslabels.Seolan_Core_General.saveselectedlangswarning|escape:"quote"%>';
+      TZR.Table.saveSomeLangsInitialize(jQuery("#modal-langs-list-<%$uniqid%>"), v<%$uniqid%>);
+    });
+  <%/if%>
+</script>
+<div class="cv8-contenu-center">
+  <div id="tzr-tablist-<%$uniqid%>">
+    
+    <%if $imod_props.object_sec && $editcat_object_sec.admin%>
+    <ul class="nav nav-responsive nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#sc1-<%$uniqid%>" data-toggle="tab" role="tab" aria-expanded="true"><%$syslabels.Seolan_Module_InfoTree_InfoTree.topic_text%></a></li>
+      <%if $imod_props.object_sec && $editcat_object_sec.admin%>
+      <li role="presentation"><a href="#sc3-<%$uniqid%>" data-url="<%$self%>function=secEdit&template=Core/Module.edit-sec-tabs.html&moid=<%$imod_props._moid%>&tplentry=br&oid=<%$editcat_oid%>&_raw=2&skip=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><span><%$syslabels.Seolan_Core_General.security_text%></span></a></li>
+      <%/if%>
+    </ul>
+    <%/if%>
+    
+    <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+      
+      <div id="sc1-<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+	<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this<%if $sysmods.xmodbackofficeinfotree==$_moid%>,undefined,undefined,{cb:home_reloadMenu}<%/if%>);">
+	  <input type="hidden" name="_function" value="procEdit">
+	  <input type="hidden" name="template" value="Module/InfoTree.viewpage.html">
+	  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+	  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+	  <input type="hidden" name="oid" value="<%$editcat_oid%>">
+	  <input type="hidden" name="skip" value="1">
+	  <input type="hidden" name="tplentry" value="it">
+	  <input type="hidden" name="moid" value="<%$_moid%>">
+	  <input type="hidden" name="_next" value="<%$self%>function=editpage&moid=<%$_moid%>&oidit=<%$editcat_oid%>&template=Module/InfoTree.viewpage.html&tplentry=it">
+	  
+	  <%if $cat_mitt_oedit->filename%>
+	  <!-- mise en page specifique en edition -->
+	  <%assign var="filename" value=$cat_mitt_oedit->filename%>
+	  <%include file=$filename%>
+	  <%else%>
+	  <!-- mise en page standard -->
+	  <%foreach key=group item=fields from=$editcat__groups%>
+	  <%if $group != '_systemproperties'%>
+          <fieldset>
+            <legend><%$group%></legend>
+	    <div class="row-striped">
+	      <%section name=f loop=$fields %>
+	      <%$ofn="o"|cat:$fields[f]->fielddef->field%>
+	      <%if empty($smarty.request._linkedfields) || !in_array($fields[f]->field, $smarty.request._linkedfields)%>
+	      <%if $fields[f]->edit && $editcat_d.$ofn->html%>
+	      <%call fieldlineTranslationMode
+	      field=$fields[f]
+	      tradField=$editcat_d[$ofn]
+	      %>
+	      <%else%>
+	      <%call fieldline field=$fields[f]%>
+              <%/if%>
+	      <%/if%>
+	      <%/section%>
+	      </div>
+          </fieldset>
+	  <%/if%>
+	  <%/foreach%>
+	  <%/if%>
+	  <%if count($editcat__groups['_systemproperties'])>0 || !empty($editcat_oid)%>
+	  <fieldset>
+	    <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+	    <div class="row-striped">
+	      <%include file="Module/Table.core-sysfields.html"
+	      fields=$editcat__groups['_systemproperties']
+	      oid=$editcat_oid
+	      inline
+	      %>
+	    </div>
+	  </fieldset>
+	  <%/if%>
+	  
+	  <div class="tzr-action">
+	    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+	    <%if $editcat_translatable && $imod_sec.rwv && $lang_data==$lang_def%>
+	      <input class="btn btn-primary select-langs" type="button" value="<%$syslabels.Seolan_Core_General.saveselectedlang%>" data-toggle="modal" data-target="#modal-langs-list-<%$uniqid%>">
+	      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.modalSaveLangsCat.html" inline%>
+	    <%/if%>
+	  </div>
+	  
+	</form>
+      </div>
+      
+      <div id="sc3-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+      
+    </div><%**** end tzr-tabcontentcontainer ***%>
+    
+  </div>
+  
+</div>
+
+<script type="text/javascript" language="javascript">
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"));
+ TZR.activeDependency(document.editform<%$uniqid%>);
+</script>

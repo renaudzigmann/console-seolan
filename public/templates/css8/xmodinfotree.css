@@ -1,0 +1,85 @@
+.cv8-infotree-section{
+    margin-bottom:20px;
+}
+.cv8-infotree-sectiontoolbar {
+    border-bottom:1px dotted #33A5CA;
+    border-top:1px dotted #33A5CA;
+    padding:3px;
+    clear: both;
+    margin: 0 0 7px 0px;
+    height:18px;
+}
+.cv8-infotree-sectiontoolbar .dragzone{
+    width:7px;
+    background-image:url("/tzr/templates/images8/commun/bg-dotted-FFFFFF-D0CFCF.png");
+    background-repeat:repeat;
+    height:18px;
+    margin-right:5px;
+    vertical-align: middle;
+    cursor:move;
+}
+.cv8-infotree-sectiontoolbar .checkbox {
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+.cv8-infotree-sectiontoolbar .tzr-picto {
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+}
+.cv8-infotree-ctree,.cv8-infotree-ctree ul{
+    list-style-type: none;
+}
+.cv8-infotree-ctree .cv8_tablelist{
+    margin:0px;
+    padding:0px;
+}
+.cv8-infotree-ctree .cv8_tablelist td{
+    vertical-align:middle;
+}
+.cv8-infotree-ctree .cv8_tablelist .cbcol{
+    width:20px;
+    vertical-align:middle;
+}
+.cv8-infotree-ctree .cv8_tablelist .dragcol{
+    padding:0px;
+    width:7px;
+}
+.cv8-infotree-ctree .cv8_tablelist .dragcol div{
+    width:7px;
+    height:19px;
+    background-image:url("/tzr/templates/images8/commun/bg-dotted-FFFFFF-D0CFCF.png");
+    background-repeat:repeat;
+    margin:5px 0;
+}
+.cv8-infotree-ctree .cv8_tablelist .pictocol{
+    text-align:center;
+    width:18px;
+}
+.cv8-infotree-ctree .cv8_tablelist .aliascol{
+    width:180px;
+}
+#tzr-page-content .ui-sortable-helper{
+    background-color:#dddddd;
+}
+.cv8-infotree-ctree .ui-sortable-placeholder,.cv8-infotree-ctree .ui-sortable-helper,#tzr-page-content .ui-sortable-placeholder,#tzr-page-content .ui-sortable-helper{
+    background-color:#dddddd;
+    margin-bottom:20px;
+}
+.cv8-infotree-ctree .sortablehandler{
+    cursor:move;
+}
+.cv8-infotree-ctree .cv8_tablelist .pictocol .tzr-picto{
+    margin:0px;
+}
+.cv8-infotree-ctree .ui-droppable-active{
+    background-color:#33A5CA;
+}
+.cv8-infotree-ctree .ui-droppable-hover{
+    background-color:#FF6600;
+}
+.topicsTree .napp-dataline a.inactive:link,
+.topicsTree .napp-dataline a.inactive:active,
+.topicsTree .napp-dataline a.inactive:hover{
+    color: #5d5d5d;
+    cursor:none;
+}

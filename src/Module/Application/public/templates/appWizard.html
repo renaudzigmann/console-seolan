@@ -1,0 +1,56 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" nohistory=true%>
+<%include file="Module/Table.functions.html"%>
+
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+
+ <%if $wd_message%><div class="alert alert-info"><%$wd_message%></div><%/if%>
+
+ <%if $br__groups%>
+  <%include file="Module/Table.edit-core.html" showsystprop=false%>
+ <%elseif $wd_fields._groups%>
+  <%include file="Module/Table.edit-core.html" br__groups=$wd_fields._groups showsystprop=false%>
+ <%else%>
+  <fieldset>
+   <div class="row-striped">
+    <%section name=f loop=$wd_fields %>
+     <%call fieldline field=$wd_fields[f]%>
+     <%assign var="field" value=$wd_fields[f]->field%>
+     <%if $wd_mode == 'new' && ($field == 'modules' || $field == 'groups')%>
+      <div id="cont-domain_is_regex" class="row">
+       <div class="row-striped-content">
+        <div class="col-xs-12 col-sm-3 col-lg-2 ">
+         <label class="fieldHelp">
+          <span><%$syslabels.Seolan_Module_Application_Application.$field%></span>
+         </label>
+        </div>
+        <div class="col-xs-12 col-sm-9 col-lg-10">
+         <div class="checkbox">
+          <label>
+           <input type="checkbox" name="<%$field%>_dup">
+          </label>
+         </div>
+        </div>
+       </div>
+      </div>
+     <%/if%>
+    <%/section%>
+   </div>
+  </fieldset>
+ <%/if%>
+
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" name="submit" value="<%$syslabels.Seolan_Core_General.next_text|escape:"quotes"%>"></div>
+ <%if $wd_isend%>
+  <input type="hidden" name="moid" value="<%$_moid|default:$smarty.request.moid%>">
+  <input type="hidden" name="function" value="browse">
+  <input type="hidden" name="template" value="Module/Table.browse.html">
+  <input type="hidden" name="tplentry" value="br">
+ <%else%>
+  <input type="hidden" name="moid" value="<%$_moid|default:$smarty.request.moid%>">
+  <input type="hidden" name="function" value="<%$wd_mode%>Wizard">
+  <input type="hidden" name="template" value="Module/Application.appWizard.html">
+  <input type="hidden" name="app" value="<%$wd_app%>">
+  <input type="hidden" name="oid" value="<%$wd_oid%>">
+  <input type="hidden" name="step" value="<%$wd_step%>">
+ <%/if%>
+
+</form>

@@ -1,0 +1,34 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Workflow_Rule_Rule.addrule%>
+
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="modid" value="<%$br_amoid%>">
+ <input type="hidden" name="function" value="procInsertRule">
+ <%if $back%>
+  <input type="hidden" name="_next" value="<%$back%>">
+ <%else%>
+  <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&function=browse&template=Module/Table.browse.html&tplentry=br">
+ <%/if%>
+ <input type="hidden" name="skip" value="1">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Workflow_Rule_Rule.rule%></legend>
+  <table class="list2">
+   <tr>
+    <th><label><%$br__rule.oname->fielddef->label%></label></th>
+    <td><%$br__rule.oname->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br__rule.oq->fielddef->label%></label></th>
+    <td><%$br__rule.oq->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$br__rule.oPUBLISH->fielddef->label%></label></th>
+    <td><%$br__rule.oPUBLISH->html%></td>
+   </tr>
+  </table>
+ </fieldset>
+ <%include file="`$smarty.const.TZR_SHARE_DIR``$br_atemplate`" noheader=1 fieldsonly=1%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+ </div>
+</form>

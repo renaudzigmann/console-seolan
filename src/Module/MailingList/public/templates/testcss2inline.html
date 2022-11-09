@@ -1,0 +1,25 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="Test template newsletter avec inclusion des styles"%>
+<form action="<%$self%>" target="_blank" method="get" name="sendform<%$uniqid%>" enctype="multipart/form-data" >
+ <input type="hidden" name="function" value="procCss2inline">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="template" value="Core.message.html">
+ <fieldset>
+  <legend>Test d'un template newsletter avec transformation des styles en ligne</legend>
+  <div class="table-responsive">
+  <table class="table table-condensed">
+   <tr>
+    <th><label>Url du fichier HTML</label></th>
+    <td><input type="text" size="100" name="urlhtml" value=""></td>
+   </tr>
+   <tr>
+    <th><label>Url du fichier CSS séparé</label></th>
+    <td>
+      <input type="text" size="100" name="urlcss" value="">
+      <small>(optionnel si les styles sont inclus dans une balise style)</small>
+    </td>
+   </tr>
+  </table>
+</table>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.send_text%>"></div>
+</form>

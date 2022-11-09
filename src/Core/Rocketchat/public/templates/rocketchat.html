@@ -1,0 +1,18 @@
+<link rel="stylesheet" type="text/css" href="/csx/src/Core/Rocketchat/public/css/rocketchat.css">
+<script src="/csx/src/Core/Rocketchat/public/js/rocketchatapi.js"></script>
+<script>
+jQuery("#chat-top-bar").css("cursor","wait");
+autologout();
+getIframeEvent();
+RClogin();  
+</script>
+<div id="chat_box">
+  <div id="chat_display">
+  </div>
+  <div id="chat_bar">
+    <div id="chat_bar_tools">
+      <a class="chat_bar_tool btn btn-primary" onclick="close_bar()"><span class="glyphicon csico-close"></span></a>
+    </div>
+    <iframe id="chat_iframe" style="border:0;"></iframe>
+  </div>
+</div>

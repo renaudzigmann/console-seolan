@@ -1,0 +1,52 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+  <legend>Article</legend>
+  <h3><%if $brpost_ocateg->html%><%$brpost_ocateg->html%> : <%/if%><%$brpost_otitle->html%></h3>
+  
+  <ul class="ul-list-inline list-li-border-left background-01 ul-list-tools">
+      <%if $modsec_mods[$_moid].rw%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.edit_text%>" href="<%$self%>&function=editPost&template=Module/Blog.editpost.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$smarty.request.post%>"><%$syslabels.Seolan_Core_General.edit%></a></lI>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.delete_text%>" x-confirm="var ret=TZR.confirmDelete();" href="<%$self%>&function=delPost&moid=<%$_moid%>&oid=<%$smarty.request.oid%>&post=<%$smarty.request.post%>&skip=1&_next=<%"`$self`&moid=`$_moid`&function=browseBlog&template=Module/Blog.browseblog.html&tplentry=br&oid=`$brblog_oid`"|escape:url%>"><%$syslabels.Seolan_Core_General.delete%></a></lI>
+    <%if $brpost_oPUBLISH->raw==1%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.unapprove_text%>" href="<%$self%>&function=validatePost&template=Module/Blog.displaypost.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$smarty.request.post%>&value=0&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.approved%></a></lI>
+    <%else%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.approve_text%>" href="<%$self%>&function=validatePost&template=Module/Blog.displaypost.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$smarty.request.post%>&value=1&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.not_approved%></a></lI>
+    <%/if%>
+    <%/if%>
+    <li><%$brpost_odatep->html%></li>
+    <li><%$brpost_owho->html%></li>
+  </ul>
+  
+  <p><%$brpost_otxt->html%></p>
+  <p><%$brpost_oafile->html%></p>
+</fieldset>
+
+
+<%if $brcomment_lines_oid%>
+<a name="comments"></a>
+<fieldset>
+  <legend><%$syslabels.Seolan_Module_Blog_Blog.comments_text%></legend>
+  <h4><%$brcomment_lines_otitle[i]->html%></h4>
+  
+  <%section name=i loop=$brcomment_lines_oid%>
+  <ul class="ul-list-inline list-li-border-left background-01 ul-list-tools">
+    <%if $modsec_mods[$_moid].rw || ($uid eq $brcomment_lines_owhoa[i]->raw)%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.edit_text%>" href="<%$self%>&function=editComment&template=Module/Blog.editcomment.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brcomment_lines_oid[i]%>"><%$syslabels.Seolan_Core_General.edit%></a></lI>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.delete_text%>" x-confirm="var ret=TZR.confirmDelete();" href="<%$self%>&function=delPost&moid=<%$_moid%>&oid=<%$smarty.request.oid%>&post=<%$brcomment_lines_oid[i]%>&_next=<%$here|escape:"url"%>"><%$syslabels.Seolan_Core_General.delete%></a></lI>
+    <%/if%>
+    <%if $modsec_mods[$_moid].rw || ($imod_props.object_sec && $brpost_object_sec.rwv)%>
+    <%if $brcomment_lines_oPUBLISH[i]->raw==1%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.unapprove_text%>" href="<%$self%>&function=validatePost&template=Module/Blog.displaypost.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brcomment_lines_oid[i]%>&value=0&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.approved%></a></lI>
+    <%else%>
+    <lI><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.approve_text%>" href="<%$self%>&function=validatePost&template=Module/Blog.displaypost.html&moid=<%$_moid%>&tplentry=br&oid=<%$smarty.request.oid%>&post=<%$brcomment_lines_oid[i]%>&value=1&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.not_approved%></a></lI>
+    <%/if%>
+    <%/if%>
+    <li><%$brcomment_lines_odatep[i]->html%></li>
+    <li><%$brcomment_lines_owho[i]->html%></li>
+  </ul>
+  
+  <div class="margin-bottom"><%$brcomment_lines_otxt[i]->html%></div>
+  <%/section%>
+  
+</fieldset>
+<%/if%>

@@ -1,0 +1,11 @@
+08.02.06.01;Aéroport/Aérodrome;|AERO|
+08.02.06.02;Autoroute;|AUTO|
+08.02.06.03;Gare Ferroviaire;
+08.02.06.04;Gare SNCF;|GFER|
+08.02.06.05;Gare Maritime;|GMAR|
+08.02.06.06;Gare Routière;|GROU|
+08.02.06.07;Héliport;|HELI|
+08.02.06.08;Route;
+08.02.06.09;Route (Nationale/Départementale) (Route (nationale/départ.));|ROUT|
+08.02.06.10;Transport en commun;|TRAN|
+08.02.06.11;Général;

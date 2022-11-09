@@ -1,0 +1,406 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Calendar_Calendar.addevt_text%>
+<%if $ev_secure%>
+ <script type="text/javascript">
+  v<%$uniqid%>.checkForm=function(){
+    var frm=document.add<%$uniqid%>;
+    var ret=TZR.isFormValidWithFocus(frm,true);
+    if(ret==false) return ret;
+    if(frm.repetition.value!="NO") {
+      for(i=frm.elements['except[]'].options.length-1;i>=0;i--) {
+	frm.elements['except[]'].options[i].selected=true;
+      }
+    }
+    return TZR.ajaxSubmitForm(frm);
+  }
+  v<%$uniqid%>.addExcept=function() {
+    var frm=document.add<%$uniqid%>;
+    
+    if(frm.excepttmp.value!='') {
+      var dateVal=new Date(frm.excepttmp.value);
+      let day = ("0" + dateVal.getDate()).slice(-2);
+      let month = ("0" + (dateVal.getMonth() + 1)).slice(-2);
+      let year = dateVal.getFullYear();
+
+      var date = day + "/" + month + "/" + year;
+      frm.elements['except[]'].options[frm.elements['except[]'].options.length]=new Option(date, frm.excepttmp.value);
+    }
+    date=frm.excepttmp.value='';
+  }
+  v<%$uniqid%>.remExcept=function() {
+    var frm=document.add<%$uniqid%>;
+    for(i=frm.elements['except[]'].options.length-1;i>=0;i--) {
+      if (frm.elements['except[]'].options[i].selected) { 
+	frm.elements['except[]'].options[i]=null;
+      }
+    }
+  }
+  v<%$uniqid%>.changeAllDay=function(){
+    var frm=document.add<%$uniqid%>;
+    o=frm.elements['allday_HID[val]'];
+    if(o.checked) {
+      frm.elements['begin[hour]'].value="00:00";
+      frm.elements['begin[hour]'].type="hidden";
+      if (typeof frm.elements['begin[hour]'].onblur == "function")
+	frm.elements['begin[hour]'].onblur();
+      frm.elements['end[hour]'].value="23:59";
+      frm.elements['end[hour]'].type="hidden";
+      if (typeof frm.elements['end[hour]'].onblur == "function")
+	frm.elements['end[hour]'].onblur();
+      frm.elements['begin[hour]'].disabled=true;
+      frm.elements['end[hour]'].disabled=true;
+      jQuery( "#hours-id" ).css( "display", "none" );
+    }else {
+      frm.elements['begin[hour]'].disabled=false;
+      frm.elements['end[hour]'].disabled=false;
+      frm.elements['begin[hour]'].type="time";
+      frm.elements['end[hour]'].type="time";
+      jQuery( "#hours-id" ).css( "display", "block" );
+    }
+  }
+  v<%$uniqid%>.changeRepetition=function() {
+    var frm=document.add<%$uniqid%>;
+    if(frm.repetition.value=="NO") {
+      TZR.changeValidatorsState('<%$ev_oend_rep->varid%>',false);
+      frm.end_rep.value="";
+      if (typeof frm.elements['end_rep'].onblur == "function")
+      frm.end_rep.onblur();
+      frm.end_rep.disabled=true;
+      frm.elements['except[]'].disabled =true;
+      frm.excepttmp.disabled=true;
+      frm.addexcept.disabled=true;
+      frm.remexcept.disabled=true;
+      jQuery( "#repeat-1" ).css( "display", "none" );
+    }else {
+      TZR.changeValidatorsState('<%$ev_oend_rep->varid%>',true);
+      jQuery( "#repeat-1" ).css( "display", "block" );
+      frm.end_rep.disabled=false;
+      frm.elements['except[]'].disabled =false;
+      frm.excepttmp.disabled =false;
+      frm.addexcept.disabled =false;
+      frm.remexcept.disabled =false;
+    }
+  }
+  //# sourceURL=src/Module/Calendar/public/templates/addEvt.js 
+ </script>
+ <%/if%>
+<fieldset>
+ <%if $ev_secure%>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.addevt_text%></legend>
+ <%else%>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.viewevt_text%></legend>
+ <%/if%>
+ <form name="add<%$uniqid%>" method="post" enctype="multipart/form-data" action="<%$self%>" onsubmit="return v<%$uniqid%>.checkForm()">
+  <input type="hidden" name="oid" value="<%$br_diary.KOID%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="_function" value="saveEvt">
+  <input type="hidden" name="koid" value="<%$ev_oid%>">
+  <input type="hidden" name="_next" value="<%$self%>&_function=<%$smarty.request.display%>&moid=<%$_moid%>&tplentry=br&template=Module/Calendar.<%$smarty.request.display%>.html&oid=<%$br_diary.KOID%>&adddate">
+  <%if $ev_secure && !empty($ev_orrule->raw)%>
+   <div class="tzr-message"><%$syslabels.Seolan_Module_Calendar_Calendar.advancerrule%></div>
+  <%/if%>
+  <div class="table-responsive">
+  <table class="table table-striped list2 cal-add">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.text%></label></th>
+    <td><%$ev_otext->html%></td>
+   </tr>
+   <%if !$ev_ocat->sys%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.category%></label></th>
+     <td><%$ev_ocat->html%></td>
+    </tr>
+   <%/if%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.date%></label></th>
+    <td>
+     <%if !$ev_secure%><%* on a fait un display dans ce cas *%>
+      <%if $ev_oallday->raw==1%>
+      <div class="form-group">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at1|capitalize%><%$syslabels.Seolan_Core_General.i18ncolon%><%$ev_obegin->date->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.to1%><%$syslabels.Seolan_Core_General.i18ncolon%><%$ev_oend->date->html%> (<%$syslabels.Seolan_Module_Calendar_Calendar.allday%>)
+      </div>
+      <%else%>
+      <div class="form-group">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at1|capitalize%> <%$ev_obegin->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.to1%> <%$ev_oend->html%>
+      </div>
+      <%/if%>
+      <%else%>
+      
+      <%if $ev_obegin->fielddef->html5tag%><%* ajout de la synchro des dates et heures, pas de bidouilles sur les fonction de format, elles n'y sont pas *%>
+      <div class="form-group">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at1|capitalize%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_obegin->date->html%>
+	<%$syslabels.Seolan_Module_Calendar_Calendar.to1%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_oend->date->html%>
+      </div>
+      <div class="form-group" id="hours-id">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at2|capitalize%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_obegin->hour->html%>
+	<%$syslabels.Seolan_Module_Calendar_Calendar.to2%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_oend->hour->html%>
+      </div>
+      <script type="text/javascript">
+       {
+	 var bdate = document.getElementById("<%$ev_obegin->date->varid%>");
+	 var edate = document.getElementById("<%$ev_oend->date->varid%>");
+	 var bhour = document.getElementById("<%$ev_obegin->hour->varid%>");
+	 var ehour = document.getElementById("<%$ev_oend->hour->varid%>");
+	 <%* ! change est envoyé à chaque modif jour, mois, heure donc ça le fait pas *%>
+	 jQuery(bdate).on('blur', function(){
+	   if(this.value>edate.value)
+	   edate.value=this.value;
+	 });
+	 jQuery(edate).on('blur', function(){
+	   if(bdate.value>this.value)
+	     bdate.value=this.value;
+	 });
+	 jQuery(bhour).on('blur', function(){
+	   	 console.log(ehour.value, bhour.value);
+	   if (bdate.value == edate.value && this.value>ehour.value)
+	     ehour.value=this.value;
+	 });
+	 jQuery(ehour).on('blur', function(){
+	   if (bdate.value == edate.value && bhour.value>this.value)
+	     bhour.value=this.value;
+	 });
+       };
+      </script>
+      <%else%>
+      <div class="form-group">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at1|capitalize%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_obegin->date->html|replace:"TZR.formatDate(this)":"TZR.format2dates(this,'begin[date]','end[date]')"%>
+	<%$syslabels.Seolan_Module_Calendar_Calendar.to1%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_oend->date->html|replace:"TZR.formatDate(this)":"TZR.format2dates(this,'begin[date]','end[date]')"%>
+      </div>
+      <div class="form-group" id="hours-id">
+	<%$syslabels.Seolan_Module_Calendar_Calendar.at2|capitalize%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_obegin->hour->html|replace:"TZR.formatHour(this,2)":"TZR.format2hours(this,2,'begin[hour]','end[hour]','begin[date]','end[date]')"%>
+	<%$syslabels.Seolan_Module_Calendar_Calendar.to2%><%$syslabels.Seolan_Core_General.i18ncolon%>
+	<%$ev_oend->hour->html|replace:"TZR.formatHour(this,2)":"TZR.format2hours(this,2,'begin[hour]','end[hour]','begin[date]','end[date]')"%>
+      </div>
+      <%/if%>
+      <%/if%>
+    </td>
+   </tr>
+   <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.allday%></label>
+     <td>
+	  <%if $smarty.request.allday%>
+	  <%$ev_oallday->html|replace:"type=\"checkbox\"":"type=\"checkbox\" onchange=\"v`$uniqid`.changeAllDay()\" checked id=\"allday\""%>
+	  <%else%>
+	  <%$ev_oallday->html|replace:"type=\"checkbox\"":"type=\"checkbox\" onchange=\"v`$uniqid`.changeAllDay()\" id=\"allday\""%>
+	  <%/if%>
+     </td>
+   </tr>
+   <%if !$ev_oplace->sys%>
+   <tr>
+     <th><label><%$ev_oplace->fielddef->label%></label></th>
+     <td><%$ev_oplace->html%></td>
+   </tr>
+   <%/if%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.description%></label></th>
+    <td>
+    
+     <%if !$ev_odescr->sys%><div class="form-group"><%$ev_odescr->html%></div><%/if%>
+     
+     <%if !$ev_ovisib->sys%>
+     <div class="form-group">
+      <%if $ev_secure%>
+       <%if $br_diary.OWN==$uid%>
+        <input type="radio" name="visib" id="PR" value="PR" <%if $ev_ovisib->raw=="PR" || (empty($ev_ovisib->raw) && $br_diary.defvisi=="PR")%>checked<%/if%>><label class="tzr-st-label2" for="PR"><%$syslabels.Seolan_Module_Calendar_Calendar.private%></label>
+        <input type="radio" name="visib" id="OC" value="OC" <%if $ev_ovisib->raw=="OC" || (empty($ev_ovisib->raw) && $br_diary.defvisi=="OC")%>checked<%/if%>><label class="tzr-st-label2" for="OC"><%$syslabels.Seolan_Module_Calendar_Calendar.occupy%></label>
+        <input type="radio" name="visib" id="PU" value="PU" <%if $ev_ovisib->raw=="PU" || (empty($ev_ovisib->raw)  && $br_diary.defvisi=="PU")%>checked<%/if%>><label class="tzr-st-label2" for="PU"><%$syslabels.Seolan_Module_Calendar_Calendar.public%></label>
+       <%/if%>
+      <%else%>
+       <%if $ev_ovisib->raw=="PR"%>
+        <%$syslabels.Seolan_Module_Calendar_Calendar.private%>
+       <%elseif $ev_ovisib->raw=="OC"%>
+        <%$syslabels.Seolan_Module_Calendar_Calendar.occupy%>
+       <%else%>
+        <%$syslabels.Seolan_Module_Calendar_Calendar.public%>
+       <%/if%>
+      <%/if%>
+      </div>
+     <%/if%>
+    </td>
+   </tr>
+   <%if !$ev_orepet->sys %>
+   <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.repetition%></label></th>
+     <td>
+       <%if ($ev_secure || $ev_orepet->raw!="NO") && !empty($ev_orepet) && !empty($ev_orepet->html)%>
+       <div class="form-group">
+	 <%if $ev_secure%>
+	 <select name="repetition" onchange="v<%$uniqid%>.changeRepetition()">
+           <%html_options options=$br_repetition selected=$ev_orepet->raw%>
+         </select>
+         <%else%>
+         <%$syslabels.Seolan_Module_Calendar_Calendar.repetition%><%$syslabels.Seolan_Core_General.i18ncolon%><%$br_repetition[$ev_repet]%>
+  	 <%/if%>
+       </div>
+       <div id="repeat-1">
+	 <%if $ev_secure%>
+	 <div class="form-group">
+	   <%$syslabels.Seolan_Module_Calendar_Calendar.until%><%$syslabels.Seolan_Core_General.i18ncolon%><%$ev_oend_rep->html%>
+	 </div>
+	 <div class="form-group">
+	   <span><%$syslabels.Seolan_Module_Calendar_Calendar.except%><%$syslabels.Seolan_Core_General.i18ncolon%></span>
+	   <%$ev_oexcepttmp->html%>
+           <input class="cal-add_except_button" type="button" name="addexcept" value="+" onclick="v<%$uniqid%>.addExcept()">
+	 </div>
+	 <div class="form-group">
+	   <span><%$syslabels.Seolan_Module_Calendar_Calendar.except%><%$syslabels.Seolan_Core_General.i18ncolon%></span>
+           <select name="except[]" size="6" style="width: 150px" multiple>
+             <%html_options output=$br_except values=$br_except%>  
+           </select>
+	   <input class="cal-add_except_button" type="button" name="remexcept" value="-" onclick="v<%$uniqid%>.remExcept()">
+	 </div>
+	 <%else%>
+	 <%$syslabels.Seolan_Module_Calendar_Calendar.until%><%$syslabels.Seolan_Core_General.i18ncolon%><%$ev_oend_rep->html%>
+         <%foreach from=$br_except item=ex%><%$ex%><br><%/foreach%>
+	 <%/if%>
+       </div>
+     </div>
+     <%else%><%* pas de repetition et affichage en lecture*%>
+     <div class="form-group">
+       <%$syslabels.Seolan_Core_General.no%>
+     </div>
+     <%/if%>
+   </td></tr>
+   <%/if%>
+   <%if !$ev_orecall->sys%>
+   <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.recall%></label></th>
+   <td>
+     <%if $ev_secure%>
+     <input id="recall_time<%$uniqid%>" type="text" name="recalltime" size="3" value="0" maxlength="2" onblur="TZR.isIdValid('cal-add_recall_time');">
+     <script type="text/javascript">
+       TZR.addValidator(['recall_time<%$uniqid%>',/^((0)|([1-9][0-9]?))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+     </script>
+     <select name="recalltype">
+       <option value="1"><%$syslabels.Seolan_Module_Calendar_Calendar.minutes%></option>
+       <option value="60"><%$syslabels.Seolan_Module_Calendar_Calendar.hours%></option>
+       <option value="1440"><%$syslabels.Seolan_Module_Calendar_Calendar.days%></option>
+     </select>
+     <%else%>
+     <%if $ev_orecall->raw==0%>
+     -
+     <%elseif floor($ev_orecall->raw/1400)==$ev_orecall->raw/1400%>
+     <%$ev_orecall->raw/1400%> <%$syslabels.Seolan_Module_Calendar_Calendar.days%>
+     <%elseif floor($ev_orecall->raw/60)==$ev_orecall->raw/60%>
+     <%$ev_orecall->raw/60%> <%$syslabels.Seolan_Module_Calendar_Calendar.hours%>
+     <%else%>
+     <%$ev_orecall->raw%> <%$syslabels.Seolan_Module_Calendar_Calendar.minutes%>
+     <%/if%>
+     <%/if%>
+   </td>
+   </tr>
+   <%/if%>
+   <%if !$ev_oattendees->sys && (!empty($ev_oattendees->html) || $ev_secure && empty($ev_oattendees->html))%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.internattendees%></label></th>
+     <td>
+      <%if isset($ev_oattendees->html)%>
+       <%$ev_oattendees->html|replace:"agcons":"selected"%>
+      <%elseif $ev_secure%>
+      <div class="table-responsive">
+       <table class="table" id="cal-attendees_int">
+        <tr>
+         <td>
+          <select name="unselected" size="6" multiple>
+           <%html_options options=$br_users_unselected%>
+          </select>
+         </td>
+         <td>
+          <input type="button" value=">>" onclick="TZR.doubleAdd(document.add<%$uniqid%>.unselected,document.add<%$uniqid%>.elements['selected[]'])">
+          <br>
+          <input type="button" value="<<" onclick="TZR.doubleAdd(document.add<%$uniqid%>.elements['selected[]'],document.add<%$uniqid%>.unselected)">
+         </td>
+         <td id="z">
+          <select name="selected[]" size="6" id="attendees<%$uniqid%>" multiple>
+           <%html_options options=$br_attendees%>
+          </select>
+         </td>
+        </tr>
+       </table>
+       </div>
+       <script type="text/javascript">
+	TZR.addValidator(["attendees<%$uniqid%>","","<%$syslabels.Seolan_Module_Calendar_Calendar.internattendees%>","","\Seolan\Field\Link\Link"]);
+       </script>
+      <%else%>
+       <%foreach from=$br_attendees item=att%><%$att%></br><%/foreach%>
+      <%/if%>
+     </td>
+    </tr>
+   <%/if%>
+   <%if !empty($ev_oattext) && !$ev_oattext->sys%>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Calendar_Calendar.externattendees%></label></th>
+     <td>
+      <%if $ev_secure%>
+      <div class="form-group">
+       <select onchange="jQuery.getJSON('<%$self%>',{moid:'<%$smarty.request.moid%>',_function:'getEmails',template:'Core.message.html',doid:this.value}, function(data) {var i;for(i=0;i<data.length;i++) document.add<%$uniqid%>.attext.value+=data[i]+' ; ';});">
+        <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+         <%section name=u loop=$grps_lines_oid%>
+          <option value="<%$grps_lines_oid[u]%>"><%$grps_lines_oGRP[u]->html%>
+ 	 <%/section%>
+        </optgroup>
+        <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+         <%section name=u loop=$users_lines_oid%>
+ 	  <option value="<%$users_lines_oid[u]%>"><%$users_lines_ofullnam[u]->html%> (<%$users_lines_oalias[u]->html%>)
+ 	 <%/section%>
+        </optgroup>
+       </select><br/>
+      <%/if%>
+      </div>
+      <div class="form-group">
+      <%$ev_oattext->html%>
+      </div>
+     </td>
+    </tr>
+   <%/if%>
+   <%section name=fields loop=$ev_fields_object%>
+    <%if !$ev_fields_object[fields]->sys && !in_array($ev_fields_object[fields]->field, $br__fieldlist)%>
+     <tr>
+      <th><label><%$ev_fields_object[fields]->fielddef->label|wordwrap:50:"<br>"%></label><%$f%></th>
+      <td><%$ev_fields_object[fields]->html%></td>
+     </tr>
+    <%/if%>
+   <%/section%>
+  </table>
+  </div>
+  <br>
+  <%if $ev_secure%>
+   <div id="tzr-action<%$uniqid%>" class="tzr-action">
+     <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.save%>" onclick="this.form.koid.value='<%$ev_oid%>';">
+     <%if $ev_oid%>
+     <input type="submit" value="<%$syslabels.Seolan_Module_Calendar_Calendar.duplicate%>" onclick="this.form.koid.value='';">
+     <%/if%>
+    <input type="button" value="<%$syslabels.Seolan_Module_Calendar_Calendar.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+   </div>
+  <%/if%>
+ </form>
+</fieldset>
+
+<%if $ev_secure%>
+<script type="text/javascript">
+ <%if $ev_oid%>
+    var frm=document.add<%$uniqid%>; 
+    var time=<%$ev_orecall->raw%>;
+    if(time==0){
+      frm.recalltime.value=0;
+      frm.recalltype.value=1;
+    }else if(Math.floor(time/1440)==time/1440){
+      frm.recalltime.value=time/1440;
+      frm.recalltype.value=1440;
+    }else if(Math.floor(time/60)==time/60){
+      frm.recalltime.value=time/60;
+      frm.recalltype.value=60;
+    }else{
+      frm.recalltime.value=time;
+      frm.recalltype.value=1;
+    }
+  <%/if%>
+  v<%$uniqid%>.changeRepetition();
+  v<%$uniqid%>.changeAllDay();
+</script>
+<%/if%>

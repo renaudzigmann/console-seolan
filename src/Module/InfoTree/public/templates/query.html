@@ -1,0 +1,31 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.query_text%>
+<form action="<%$self%>" method="post" name="search<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="procQuery">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="clearrequest" value="1">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="template" value="Module/InfoTree.browse.html">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.query_text%></legend>
+  <div class="table-responsive">
+    <table class="table list2">
+    <tr>
+      <th><label><%$syslabels.Seolan_Core_General.query_text%></label></th>
+      <td>
+      <div class="radio"><label><input type="radio" class="radio" name="operator" value="AND" <%if $br_operator eq "AND"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.and%></label></div>
+      <div class="radio"><label><input type="radio" class="radio" name="operator" value="OR" <%if $br_operator eq "OR"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.or%></label></div>
+      </td>
+    </tr>
+    <%section name=fields loop=$br_fields_object %>
+      <tr>
+      <th><label><%$br_fields_object[fields]->fielddef->label%></label></th>
+      <td><%$br_fields_object[fields]->html%></td>
+      </tr>
+    <%/section%>
+    </table>
+  </div>
+ </fieldset>
+<div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>"></div>
+</form>

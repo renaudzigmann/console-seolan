@@ -1,0 +1,34 @@
+<%include file="Module/Calendar.quickinput.html"%>
+<div class="cv8-aghead" id="aghead<%$uniqid%>">
+  <div class="cv8-aghourhead"></div>
+  <div class="cv8-agdayshead" id="agdayshead<%$uniqid%>"></div>
+</div>
+<div class="cv8-agallday" id="agallday<%$uniqid%>">
+  <div class="cv8-aghourallday" id="aghourallday<%$uniqid%>">Journée</div>
+  <div class="cv8-agdaysallday" id="agdaysallday<%$uniqid%>"></div>
+</div>
+<div class="cv8-agglobal" id="agglobal<%$uniqid%>">
+  <div class="cv8-aghour" id="aghour<%$uniqid%>"></div>
+  <div class="cv8-agdays" id="agdays<%$uniqid%>"></div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+ var ag<%$uniqid%>={moid:"<%$_moid%>",oid:"<%$br_diary.KOID%>",rw:"<%$br_diariesprop[$br_diary.KOID].rwsecure%>",notes:[],evs:[],max:{},newStart:0,newEnd:0,
+		    newDate:"",lineHeight:15,noteHeight:20,actEvent:"",actTarget:"",agStart:<%$br_daybegin%>,agEnd:<%$br_dayend%>,
+		    color:"<%$br_diariesprop[$br_diary.KOID].color%>",dates:[],vuniqid:v<%$uniqid%>,display:"<%$function%>",name:"<%$br_diary.name%>"};
+ <%section name=i loop=$br_dates%>
+ ag<%$uniqid%>.dates.push("<%$br_dates[i]%>");
+ <%/section%>
+    <%foreach from=$br_notes item=n%>
+    ag<%$uniqid%>.notes[ag<%$uniqid%>.notes.length]={_isod:"<%$n.begin|substr:0:10%>",_bd:"<%$n._begindate%>",_bh:"00:00:00",_ed:"<%$n._enddate%>",_eh:"23:59:00",_obd:"<%$n._cbegindate%>",_obh:"00:00:00",_oed:"<%$n._cenddate%>",_oeh:"23:59:00",oid:"<%$n.oid%>",<%if in_array($n.DKOID,$br_privatediaries) || $n.visib=="PU"%>text:"<%$n.otext->html|escape:"javascript"%>",descr:"<%$n.odescr->html|escape:"javascript"%>",place:"<%$n.oplace->raw|escape:"javascript"%>",placehtml:"<%$n.oplace->html|escape:"javascript"%>"<%else%>text:"<%$syslabels.Seolan_Module_Calendar_Calendar.occupy%>",place:"",placehtml:"",descr:""<%/if%>,id:"no-"+ag<%$uniqid%>.notes.length+"-<%$n.begin|substr:0:10%>",allday:1,color:"<%$br_diariesprop[$n.DKOID].color%>",rw:"<%$br_diariesprop[$n.DKOID].rwsecure%>",cat:"<%$br_categories[$n.cat].color%>",url:"<%$n._url%>",dname:"<%$n.DNAME%>"};
+ <%/foreach%>
+    <%foreach from=$br_events item=e%>
+    ag<%$uniqid%>.evs[ag<%$uniqid%>.evs.length]={_isod:"<%$e.begin|substr:0:10%>",_bd:"<%$e._begindate%>",_bh:"<%$e._beginhour%>",_ed:"<%$e._enddate%>",_eh:"<%$e._endhour%>",_obd:"<%$e._cbegindate%>",_obh:"<%$e._cbeginhour%>",_oed:"<%$e._cenddate%>",_oeh:"<%$e._cendhour%>",oid:"<%$e.oid%>",<%if in_array($e.DKOID,$br_privatediaries) || $e.visib=="PU"%>text:"<%$e.otext->html|escape:"javascript"%>",descr:"<%$e.odescr->html|escape:"javascript"%>",place:"<%$e.oplace->raw|escape:"javascript"%>",placehtml:"<%$e.oplace->html|escape:"javascript"%>"<%else%>text:"<%$syslabels.Seolan_Module_Calendar_Calendar.occupy%>",place:"",placehtml:"",descr:""<%/if%>,id:"ev-"+ag<%$uniqid%>.evs.length+"-<%$e.begin|substr:0:10%>",allday:0,color:"<%$br_diariesprop[$e.DKOID].color%>",rw:"<%($e.KOIDD == $br_diary.KOID) && $br_diariesprop[$e.DKOID].rwsecure%>",cat:"<%$br_categories[$e.cat].color%>",url:"<%$e._url%>",dname:"<%$e.DNAME%>"};
+ <%/foreach%>
+ TZR.Calendar.makeGrid("<%$uniqid%>",ag<%$uniqid%>);
+ TZR.Calendar.calculatePosition("<%$uniqid%>",ag<%$uniqid%>);
+ TZR.Calendar.drawAgenda("<%$uniqid%>",ag<%$uniqid%>);
+</script>
+

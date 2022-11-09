@@ -1,0 +1,64 @@
+<%*
+Récupération des gabarits par défault
+*%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.info%>
+<div>
+Afin d'harmoniser les contenus entre les sites, de pouvoir avoir des gabarits de base génériques (et donc corrigeables et optimisables de façon globale), ces derniers ont été intégrés au code de la console.<br>Il est conseillé de les utiliser à la place des gabarits pouvant exister sur le site.<br><br>
+Si vous voulez les utiliser, veuiller sélectionner la table des données des sections statiques.<br>
+Puis faire la correspondance entre les templates par défaut et ceux déjà présent en base ou demandez la création d'un nouveau gabarit.<br>
+Si vous avez des doutes alors que vous choississez de remplacer certain gabarits, pensez à <u>faire une sauvegarde de la table des gabartis et des données (data/TEMPLATES).</u>
+</div>
+<form method="POST" action="<%$fullself%>" onsubmit="return TZR.ajaxSubmitForm(this);"><br><br>
+  <input type="hidden" name="function" value="mergeDefaultTemplates">
+  <input type="hidden" name="step" value="2">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="_next" value="<%$fullself%>&function=mergeDefaultTemplates&step=1&template=Module/InfoTree.mergedefaulttemplates.html&tplentry=br&moid=<%$_moid%>">
+  Table des données : <%$br_tabledonnees->html%><br><strong>&Delta; table des données de tous les gabarits qui vont être traités, que ce soit en création ou <u>remplacement</u>.</strong><br>Les tables actuellements utilisées dans les gabarits sont marquées de '*'.
+  <br><br><br>
+<script type="text/javascript">
+var datatables = "<%","|implode:$br_tablesdonnees%>";
+jQuery("select[name='tab'] option").each(function(i, o){
+  if (this.value != ""){
+    jQuery(this).html(jQuery(this).html()+" ("+this.value+")");
+    if (datatables.indexOf(this.value) != -1){
+      jQuery(this).html("*** "+jQuery(this).html()+" ***");
+      jQuery(this).css('color','red');
+    }
+  }
+});
+</script>
+  <label>Liste des templates par défaut :</label><br/>
+  <table>
+    <thead>
+      <tr><td></td><td colspan="2" style="text-align:right"><div class="checkbox"><label><input type="checkbox" value="1" id="preselect">Pré-sélection</label></div></td></tr>
+      <tr><td></td><td colspan="2" style="text-align:right"><div class="checkbox"><label><input type="checkbox" value="1" id="allnew">Créer tous les gabarits</label></div></td></tr>
+      <tr><td></td><td colspan="2" style="text-align:right"><div class="checkbox"><label><input type="checkbox" value="1" name="setmodid">Associer le module (gabarits en création)</label></div></td></tr>
+    </thead>
+    <%foreach from=$br_defaulttemplates key=type item=tpls%>
+    <%foreach from=$tpls key=file item=tpl%>
+    <tr><td><%$tpl.name%>(<%$file%>)</td><td> => </td><td><%$tpl.select%></td></tr>
+    <%/foreach%>
+    <%/foreach%>
+  </table>
+  <br>
+  <div class="tzr-action"><input type="hidden" name="step" value="2"><br/><input type="submit" value="Valider"></div>
+</form>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+	jQuery("#preselect").on('click', function(evt){
+	    if (this.checked){
+		jQuery("select.tplselection option[data-preselect='1']").attr('selected', true);
+	    } else {
+		jQuery("select.tplselection option:selected").attr('selected', false);
+	    }
+	});
+	jQuery("#allnew").on('click', function(evt){
+	    if (this.checked){
+		jQuery("select.tplselection option[value='new']").attr('selected', true);
+	    } else {
+		jQuery("select.tplselection option:selected").attr('selected', false);
+	    }
+	});
+    });
+</script>

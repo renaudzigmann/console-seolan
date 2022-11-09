@@ -1,0 +1,9 @@
+<%strip%>
+<nav class="cv3-navbas" role="navigation">
+  <ul>
+    <%section name=bm loop=$bm_lines_oid%>
+    <li><a href="<%$self%><%$bm_lines_selfurl[bm]%><%$bm_lines_ocurl[bm]->html%>"><%$bm_lines_otitle[bm]->html%></a></li>
+    <%/section%>
+  </ul>
+</nav>
+<%/strip%>

@@ -1,0 +1,107 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Management_Management.tzrinfo%>
+<%if $function=='tzrInfo'%>
+<div class="cv8-contenu-center clearfix">
+ <fieldset class="fieldsetAccordion">
+  <legend>Direct variables</legend>
+  
+  <b>Available with < % $ variable % ></b>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+   <tr><td>back</td><td><%$back%></td></tr>
+   <tr><td>full_home</td><td><%$full_home%></td></tr>
+   <tr><td>fullself</td><td><%$fullself%></td></tr>
+   <tr><td>self</td><td><%$self%></td></tr>
+   <tr><td>here</td><td><%$here%></td></tr>
+   <tr><td>home</td><td><%$home%></td></tr>
+   <tr><td>lang_data</td><td><%$lang_data%></td></tr>
+   <tr><td>lang_def</td><td><%$lang_def%></td></tr>
+   <tr><td>lang_user</td><td><%$lang_user%></td></tr>
+   <tr><td>lang_trad <i>(BO only)</i></td><td><%$lang_trad%></td></tr>
+   <tr><td>marker</td><td><%$marker%></td></tr>
+   <tr><td>server_name</td><td><%$server_name%></td></tr>
+   <tr><td>template</td><td><%$template%></td></tr>
+   <tr><td>userhome</td><td><%$userhome%></td></tr>
+   <tr><td>website</td><td><%$website%></td></tr>
+   <tr><td>full_serverhome</td><td><%$full_serverhome%></td></tr>
+   <tr><td>currency</td><td><%$currency%></td></tr>
+  </table>
+  </div>
+  </fieldset>
+  <fieldset class="fieldsetAccordion">
+  <legend>Context variables</legend>
+  <b>Available with < % $ TZR.variable % ></b>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+   <%foreach from=$TZR item=it1 key=ke1%>
+    <tr>
+      <td><%$ke1%></td>
+      <td>
+	<%if $it1|is_array%><%foreach from=$it1 item=v key=k%><%$k%> : <%$v|escape:'html'%><br><%/foreach%>
+	<%else%><%$it1|escape:'html'%><%/if%>
+    </td></tr>
+   <%/foreach%>
+  </table>
+  </div>
+  </fieldset>
+  <fieldset class="fieldsetAccordion">
+  <legend>Ini variables</legend>
+  <b>Available with < % $ tzr.variable % ></b>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+   <%foreach from=$tzr item=it1 key=ke1%>
+    <tr><td><%$ke1%></td><td><%$it1%></td></tr>
+   <%/foreach%>
+  </table>
+  </div>
+  </fieldset>
+  <fieldset class="fieldsetAccordion">
+  <legend>Constants</legend>
+  <b>Available with < % $ smarty.const.variable % ></b>
+
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+   <tr><td>TZR_WWW_DIR</td><td><%$smarty.const.TZR_WWW_DIR%></td></tr>
+   <tr><td>TZR_VAR_DIR</td><td><%$smarty.const.TZR_VAR_DIR%></td></tr>
+   <tr><td>TZR_TMP_DIR</td><td><%$smarty.const.TZR_TMP_DIR%></td></tr>
+   <tr><td>TZR_SHARE_URL</td><td><%$smarty.const.TZR_SHARE_URL%></td></tr>
+   <tr><td>TZR_SHARE_DIR</td><td><%$smarty.const.TZR_SHARE_DIR%></td></tr>
+   <tr><td>TZR_SHARE_SCRIPTS</td><td><%$smarty.const.TZR_SHARE_SCRIPTS%></td></tr>
+   <tr><td>TZR_SHARE_ADMIN_PHP</td><td><%$smarty.const.TZR_SHARE_ADMIN_PHP%></td></tr>
+   <tr><td>TZR_SHARE_MARKER_PHP</td><td><%$smarty.const.TZR_SHARE_MARKER_PHP%></td></tr>
+   <tr><td>TZR_DEFAULT_CSS</td><td><%$smarty.const.TZR_DEFAULT_CSS%></td></tr>
+   <tr><td>TZR_USER_CSS</td><td><%$smarty.const.TZR_USER_CSS%></td></tr>
+   <tr><td>TZR_DEFAULT_TEMPLATE</td><td><%$smarty.const.TZR_DEFAULT_TEMPLATE%></td></tr>
+   <tr><td>TZR_SERVER_NAME</td><td><%$smarty.const.TZR_SERVER_NAME%></td></tr>
+   <tr><td>TZR_LOG_FILE</td><td><%$smarty.const.TZR_LOG_FILE%></td></tr>
+   <tr><td>TZR_ACCESS_LOG_FILE</td><td><%$smarty.const.TZR_ACCESS_LOG_FILE%></td></tr>
+   <tr><td>CACHE_DIR</td><td><%$smarty.const.CACHE_DIR%></td></tr>
+   <tr><td>TZR_LOG_LEVEL</td><td><%$smarty.const.TZR_LOG_LEVEL%></td></tr>
+   <tr><td>TZR_DOWNLOADER</td><td><%$smarty.const.TZR_DOWNLOADER%></td></tr>
+   <tr><td>TZR_RESIZER</td><td><%$smarty.const.TZR_RESIZER%></td></tr>
+   <tr><td>TZR_MOGRIFY_RESIZER</td><td><%$smarty.const.TZR_MOGRIFY_RESIZER%></td></tr>
+   <tr><td>TZR_SUPPORT_ADDRESS</td><td><%$smarty.const.TZR_SUPPORT_ADDRESS%></td></tr>
+   <tr><td>TZR_ARCHIVE_ADDRESS</td><td><%$smarty.const.TZR_ARCHIVE_ADDRESS%></td></tr>
+   <tr><td>TZR_FAX_SENDER</td><td><%$smarty.const.TZR_FAX_SENDER%></td></tr>
+   <tr><td>TZR_SMS_SENDER</td><td><%$smarty.const.TZR_SMS_SENDER%></td></tr>
+   <tr><td>TZR_SMS_RECIPIENT</td><td><%$smarty.const.TZR_SMS_RECIPIENT%></td></tr>
+   <tr><td>TZR_SMS_MAXLENGTH</td><td><%$smarty.const.TZR_SMS_MAXLENGTH%></td></tr>
+   <tr><td>TZR_NOREPLY_ADDRESS</td><td><%$smarty.const.TZR_NOREPLY_ADDRESS%></td></tr>
+   <tr><td>TZR_DEBUG_ADDRESS</td><td><%$smarty.const.TZR_DEBUG_ADDRESS%></td></tr>
+   <tr><td>TZR_MAX_LOAD</td><td><%$smarty.const.TZR_MAX_LOAD%></td></tr>
+   <tr><td>TZR_PAGE_EXPIRES</td><td><%$smarty.const.TZR_PAGE_EXPIRES%></td></tr>
+  </table>
+  </div>
+  </fieldset>
+  <fieldset class="fieldsetAccordion">
+  <legend>Release Constants</legend>
+  <b>Available with < % $ smarty.const.variable % ></b>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+   <tr><td>TZR_CONSOLE_RELEASE</td><td><%$smarty.const.TZR_CONSOLE_RELEASE%></td></tr>
+   <tr><td>TZR_CONSOLE_RELEASE_NICKNAME</td><td><%$smarty.const.TZR_CONSOLE_RELEASE_NICKNAME%></td></tr>
+   <tr><td>TZR_STATUS</td><td><%$smarty.const.TZR_STATUS%></td></tr>
+  </table>
+  </div>
+  </fieldset>
+  <script>TZR.fieldsetAccordion(jQuery(v<%$uniqid%>.modulecontainer));</script>
+<%/if%>

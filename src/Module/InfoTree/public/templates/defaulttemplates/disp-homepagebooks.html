@@ -1,0 +1,29 @@
+<!-- <%$smarty.template%> -->
+<%if !isset($home_bookmarks)%>
+Affichage des signets en page d'accueil
+<%else%>
+ <%assign var="disp" value=0%>
+ <ul class="menu-list clearfix">
+  <%section name=i loop=$home_bookmarks%>
+   <%if $home_bookmarks[i].viewhome%>
+    <%assign var="disp" value=1%>
+    <li>
+      <a href="#<%$home_bookmarks[i].key%>" onclick="home_viewbookmark('<%$home_bookmarks[i].key%>'); return false;">
+        <span class="icon"><span class="glyphicon csico-module-list"></span></span>
+        <span class="title"><%$home_bookmarks[i].title%></span>
+        <span class="text"><%$home_bookmarks[i].text%></span>
+      </a>
+    </li>
+   <%/if%>
+  <%/section%>
+ </ul>
+ <%if $disp%>
+  <script type="text/javascript">
+   jQuery('#cv8-module-<%$smarty.section.it.index%>').removeClass('cv8-module').addClass('cv8-module-withoutbg');
+  </script>
+ <%else%>
+  <script type="text/javascript">
+   jQuery('#cv8-module-<%$smarty.section.it.index%>').hide();
+  </script>
+ <%/if%>
+<%/if%>

@@ -1,0 +1,14 @@
+<%include file="Module/Table.functions.html"%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.title%></legend>
+  <div class="row-striped">
+    <%call fieldline field=$it_olines[it].otitsec %>
+  </div>
+</fieldset>
+ 
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.content%></legend>
+  <div class="row-striped">
+    <%call fieldline label="Fichier vidéo" field=$it_olines[it].ofichier %>
+  </div>
+</fieldset>

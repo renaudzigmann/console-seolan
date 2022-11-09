@@ -1,0 +1,66 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "2b220e3897e52db372e1755c366784e8",
+    "packages": [
+        {
+            "name": "crazy-max/cws-dump",
+            "version": "1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crazy-max/CwsDump.git",
+                "reference": "41e34c6aeafc9430cf3d3e40f014124b9c764a91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crazy-max/CwsDump/zipball/41e34c6aeafc9430cf3d3e40f014124b9c764a91",
+                "reference": "41e34c6aeafc9430cf3d3e40f014124b9c764a91",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cws": "lib/"
+                },
+                "files": [
+                    "lib/Cws/CwsDumpHelper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CrazyMax",
+                    "homepage": "https://github.com/crazy-max"
+                }
+            ],
+            "description": "PHP class to replace var_dump(), print_r() based on the Xdebug style.",
+            "homepage": "https://github.com/crazy-max/CwsDump",
+            "keywords": [
+                "Xdebug",
+                "dump",
+                "print_r",
+                "var_dump"
+            ],
+            "time": "2018-01-04T14:42:56+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3.0"
+    },
+    "platform-dev": []
+}

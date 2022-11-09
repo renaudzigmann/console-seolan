@@ -1,0 +1,86 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<div class="cv8-contenu-center">
+  <form name="<%$uniqid%>unbounce" action="<%$fullself%>" method="POST" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <%if $ml_step == '1'%>
+    <input type="hidden" name="function" value="unBounce">
+    <input type="hidden" name="step" value="">
+    <input type="hidden" name="skip" value="1">
+    <input type="hidden" name="uniqid" value="<%$uniqid%>">
+    <%else%>
+    <input type="hidden" name="function" value="prepareUnBounce">
+    <input type="hidden" name="step" value="1">
+    <%/if%>
+    <input type="hidden" name="template" value="Module/MailLogs.unbounce.html">
+    <input type="hidden" name="tplentry" value="ml">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <%if $ml_step == '0'%><%* saisie email *%>
+    <div class="form-group">
+      <span><%$syslabels.Seolan_Module_MailLogs_MailLogs.email%>(s)<%$syslabels.Seolan_Core_General.i18ncolon%></span>
+      <textarea name="mails" class="form-control" rows="6" cols="50" wrap="virtual"></textarea>
+      <div class="tzr-action">
+	<button class="btn btn-primary" type="submit"><%$syslabels.Seolan_Core_General.ok_text%></button>
+      </div>
+    </div>
+    <%else%><%* confirmation et coche des modules *%>
+    <%assign var="confirm" value=0%>
+    <div class="table-responsive">
+      <table class="table table-condensed table-stripped cv8_tablelist">
+	<thead>
+	  <tr>
+	    <th colspan="2"><%$syslabels.Seolan_Module_MailLogs_MailLogs.email%></th>
+	    <th><%$syslabels.Seolan_Module_MailLogs_MailLogs.status%></th>
+	    <th>Modules</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <%section name="m" loop=$ml_mails%>
+	  <%assign var="invalid" value=0%>
+	  <%assign var="bs" value="bouncestatus_"|cat:$ml_mails[m].status%>
+	  <%if in_array($ml_mails[m].status, ['uncertain', 'invalid'])%>
+	  <%assign var="confirm" value=1%>
+	  <%assign var="invalid" value=1%>
+	  <%/if%>
+	  <tr class="<%if $invalid%>napp<%/if%>">
+	    <td>
+	      <%if $invalid%>
+	      <input type="checkbox" checked value="<%$ml_mails[m].email|escape:'html'%>" name="emails[]">
+	      <%/if%>
+	    </td>
+	    <td><%$ml_mails[m].email%></td>
+	    <td>
+              <%if $ml_mails[m].status == 'uncertain'%>
+              <%$ml_mails[m].nbdetect%>
+              <%/if%>
+              <%$syslabels.Seolan_Module_MailLogs_MailLogs.$bs%>
+            </td>
+	    <%capture assign=mods%><%section name=nl loop=$ml_mails[m].modstatus%><%if $ml_mails[m].modstatus[nl] != 'unknown'%><%$ml_modlist[$smarty.section.nl.index]->getLabel()%>, <%/if%><%/section%><%/capture%>
+	    <td><%$mods|substr:0:-2%></td>
+	  </tr>
+	  <%/section%>
+	</tbody>
+      </table>
+      <%if $confirm%>
+      <%assign var="modules_text" value=""%>
+      <%assign var="modules_list" value=""%>
+      <%capture name="modlist" assign="modules_list"%>
+      <%section name="l" loop=$ml_modlist%>
+      <%if $ml_modlist_hasemail[l]%>
+      <%assign var="modules_text" value=" - et les dans les modules selectionnés"%>
+      <li class="form-group"><label><input type="checkbox" name="modules[]" class="form_group" value='<%$ml_modlist[l]->_moid%>' checked> <%$ml_modlist[l]->getLabel()%><label></li>
+      <%/if%>
+      <%/section%>
+      <%/capture%>
+      <label>Re-valider les email(s) cochés ci-dessus<%$modules_text%></label><%$syslabels.Seolan_Core_General.i18ncolon%>
+      <ul>
+        <%$modules_list%>
+      </ul>
+      <%/if%>
+      <div class="tzr-action">
+	<%if $confirm%>
+	<button class="btn btn-primary" type='submit'><%$syslabels.Seolan_Core_General.ok_text%></button>
+	<%/if%>
+	<button class='btn btn-default' onclick="var els = document.forms['<%$uniqid%>unbounce']['elements']; els['function'].value='prepareUnBounce';els['step'].value='0'; return TZR.ajaxSubmitForm(document.forms['<%$uniqid%>unbounce']);" type="submit"><%$syslabels.Seolan_Core_General.back_text%></button>
+      </div>
+      <%/if%>
+  </form>  
+</div>

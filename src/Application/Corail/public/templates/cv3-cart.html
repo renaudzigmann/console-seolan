@@ -1,0 +1,14 @@
+<!--<%$smarty.template%>-->
+<%if $tzr.corailv3_cart AND $cart_total_articles AND $it_cat_mit.oalias->html neq $tzr.corailv3_cartalias%>
+<div id="cv3-panier">
+ <div id="cv3-panier-top"><%$labels.cart_panier%></div>
+ <div id="cv3-panier-middle">
+  <p><%"<span id=\"cv3-panier-item\">`$cart_total_articles`</span>"|string_format:$labels.cart_nbprod%></p>
+  <p class="cv3-panier-voir">
+   <a href="<%$self%>function=view&insidefile=myCart.html&tplentry=cart&alias=<%$tzr.corailv3_cartalias%>"><%$labels.votrecommande|default:"Voir votre commande"%></a>
+  </p>
+ </div>
+ <div id="cv3-panier-bottom"></div>
+</div>
+<!-- FIN Panier -->
+<%/if%>

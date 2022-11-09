@@ -1,0 +1,90 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+<%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:20%>
+<%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+<%math equation="w/3" w=$nlwidth assign="nlcontentwidth" %>
+<%math equation="w-(2*m)" w=$nlcontentwidth m=$nlmarginwidth assign="imgResize" %>
+
+<%assign var=jump value=3%>
+
+
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-3-columns">
+  <tr>
+    <td align="center" style="padding: <%$nlspacingheight%>px 0px 0px 0px" height="100%" valign="top" width="100%">
+      <!--[if (gte mso 9)|(IE)]>
+      <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+      <tr>
+      <td align="center" valign="top" width="<%$nlwidth%>">
+      <![endif]-->
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+        <tr>
+          <td align="center" valign="top" class="font-0">
+          <!--[if (gte mso 9)|(IE)]>
+          <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+          <tr>
+          <![endif]-->
+
+
+          <%section name=foo loop=$jump%>
+            <%assign var=img value="oimg`$smarty.section.foo.iteration`"%>
+            <%assign var=url value="oimgurl`$smarty.section.foo.iteration`"%>
+            <%assign var=leg value="oimgleg`$smarty.section.foo.iteration`"%>
+            <%assign var=txt value="otxt`$smarty.section.foo.iteration`"%>
+
+            <!--[if (gte mso 9)|(IE)]>
+            <td align="center" valign="top" width="<%$nlcontentwidth%>">
+            <![endif]-->
+
+            <div style="display:inline-block; max-width:33.3333%; min-width:170px; vertical-align:top; width:100%;">
+            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlcontentwidth%>px;">
+              <tr>
+                <td align="center" valign="top">
+
+                <p class="nl-3-columns-img">
+                <%if $it_olines[it].$url->url%>
+                  <a href="<%$it_olines[it].$url->url%>" title="<%$it_olines[it].$img->title%>">
+                <%/if%>
+                <%html_image file="`$website``$it_olines[it].$img->resizer`&geometry=`$imgResize|floor`" title="`$it_olines[it].$img->title`" %>
+                <%if $it_olines[it].$url->url%>
+                  </a>
+                <%/if%>
+                </p>
+
+                <div class="nl-3-columns-text">
+                  <%if $it_olines[it].$leg->raw%>
+                    <h2><%$it_olines[it].$leg->html%></h2>
+                  <%/if%>
+
+                  <%if $it_olines[it].$txt->raw%>
+                    <%$it_olines[it].$txt->html%>
+                  <%/if%>
+                </div>
+                </td>
+              </tr>
+            </table>
+            </div>
+
+            <!--[if (gte mso 9)|(IE)]>
+            </td>
+            <![endif]-->
+
+          <%/section%>
+
+
+          <!--[if (gte mso 9)|(IE)]>
+          </tr>
+          </table>
+          <![endif]-->
+          </td>
+        </tr>
+      </table>
+
+      <!--[if (gte mso 9)|(IE)]>
+      </td>
+      </tr>
+      </table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>

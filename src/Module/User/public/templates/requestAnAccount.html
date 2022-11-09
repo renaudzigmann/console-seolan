@@ -1,0 +1,26 @@
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.isFormValidWithFocus(this,true);">
+  <h2><%$syslabels.Seolan_Module_User_User.account_request%></h2>
+  <div class="table-responsive">
+    <table class="table table-condensed" >
+      <%section name=fields loop=$br_fields_object%>
+      <%if !$br_fields_object[fields]->sys && !in_array($br_fields_object[fields]->field, $smarty.request._linkedfields)%>
+      <tr id="cont-<%$br_fields_object[fields]->field%>">
+	<th <%if $br_fields_object[fields]->fielddef->acomment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$br_fields_object[fields]->fielddef->acomment|escape:'html'%>"<%/if%>><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+	<td><%$br_fields_object[fields]->html%></td>
+      </tr>
+      <%/if%>
+      <%/section%>
+      <tr>
+	<th>Captcha</th>
+	<td><%$br_captcha.html%></td>
+      </tr>
+    </table>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    </div>
+    <input type="hidden" name="_function" value="procRequestAnAccount">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="onerror" value="<%$here%>">
+    <input type="hidden" name="_next" value="<%$self%>template=Core.layout/raw.html&insidefile=Core.message.html&message=<%$syslabels.Seolan_Module_User_User.account_request_confirm%>&_nonav=1&_nohistory=1">
+  </div>
+</form>

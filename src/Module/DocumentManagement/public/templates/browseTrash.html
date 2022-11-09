@@ -1,0 +1,65 @@
+<%include file="Core.header/ajax.html"%>
+<%if !isset($trash_repos) || $trash_nbtot==0%>
+<div class="info info-message"><%$syslabels.Seolan_Core_Module_Module.trashempty%></div>
+<%else%>
+<%include file="Core/Module.browseTrash.js"%>
+<script type="text/javascript">
+ TZR.Archives.labels.restore="<%$syslabels.Seolan_Core_General.restore_from_trash_text%>"
+ TZR.Archives.labels.trash="<%$syslabels.Seolan_Core_General.trash_text%>";
+ TZR.Archives.labels.delfromtrash="<%$syslabels.Seolan_Core_General.deletefromtrashconfirm|escape:'javascript'%>";
+ TZR.Archives.labels.delAll="<%$syslabels.Seolan_Core_Module_Module.emptytrash|escape:'javascript'%>?";
+ TZR.Archives.restoreArchiveTarget = function(url){
+   var dialogurl = "<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.modaltree.html&_raw=1&moid="+moid+"&tplentry=br&title="+escape(TZR.Archives.labels.restore);
+   TZR.Dialog.openURL(dialogurl, 
+		      null, 
+		      {sizeClass:'modal-md',
+		       initCallback:{_function:"TZR.DocumentManagement.ModalTree.init",
+				     _param:{
+				       selectedcb:function(folderoid, title){
+					 TZR.Archives.restoreArchive.call(TZR.Archives, 
+									  folderoid,
+									  title, 
+									  url);
+				       }
+				     }
+		      }});
+ };
+ TZR.Archives.restoreArchive = function(folderoid, title, url){
+
+   TZR.Dialog.closeDialog();
+   
+   
+   TZR.jQueryPost({target:null, // target par default
+		   url:url+"&_parentoid="+escape(folderoid),
+		   cb:TZR.updateModuleContainer,
+		   cb_args:[TZR._refresh,null]
+   });
+
+ };
+</script>
+<%if $trash_actions.delAll && $trash_nbtot>0%>
+<ul class="nav nav-pills module-tool" role="tablist">
+  <li>
+    <button onclick="console.log('ici');TZR.Archives.delAllConfirm('<%$trash_actions.delAll|escape:'javascript'%>');" class="btn btn-primary"><%$syslabels.Seolan_Core_Module_Module.emptytrash%></button>
+  </li>
+</ul>
+<%/if%>
+<div class="cv8-contenu-center">
+  <div class="panel-group">
+    <%foreach name="repo" from=$trash_repos item="repo" key="typeoid"%>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="panel-title">
+	  <a href="#<%$uniqid%><%$typeoid|replace:':':''%>" data-toggle="collapse"><%$repo.type.otitle->html%> (<%$repo.browse.last%>)</a>
+	  </div>
+      </div>
+      <div id="<%$uniqid%><%$typeoid|replace:':':''%>" class="panel-collapse collapse">
+	<div class="panel-body">
+	  <%include file="Module/DocumentManagement.browseTrash-core.html" browse=$repo.browse%>
+	</div>
+      </div>
+    </div>
+    <%/foreach%>
+  </div>
+</div>
+<%/if%>

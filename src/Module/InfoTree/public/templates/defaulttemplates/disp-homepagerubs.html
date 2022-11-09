@@ -1,0 +1,32 @@
+<%if !isset($menu_lines_oid)%>
+ Affichage du menu en page d'accueil
+<%elseif count($menu_lines_oid)%>
+<!-- <%$smarty.template%> -->
+ <ul class="menu-list clearfix disphomepagerub">
+  <%section name=i loop=$menu_lines_oid%>
+    <li>
+     <a href="#" onclick="home_viewpage('<%$menu_lines_oid[i]%>','<%$menu_lines_oalias[i]->raw%>','<%$menu_lines_otitle[i]->html|escape:"quotes"|escape:"html"%>','<%$menu_lines_ssrub[i]%>','<%$menu_lines_sections[i]%>'); return false;" title="<%$menu_lines_odescr[i]->html|escape:'html'%>">
+       <span class="haut">
+	 <%if !$menu_lines_oicon[i]->fielddef->isEmpty($menu_lines_oicon[i])%>
+	 <span class="icon"><%$menu_lines_oicon[i]->html%></span>
+	 <span class="title"><%$menu_lines_otitle[i]->html%></span>
+	 <%else%>
+	 <%if $menu_lines_opicto[i]->html%>
+	 <span class="icon"><img class="img-responsive" src="<%$menu_lines_opicto[i]->resizer%>&geometry=150x150%21&crop=150x150&gravity=Center"></span>
+	 <span class="title"><%$menu_lines_otitle[i]->html%></span>
+	 <%else%>
+	 <span class="icon"><span class="csico-letter-<%$menu_lines_otitle[i]->html|trim|substr:0:1|lower%> glyphicon"></span></span>
+         <span class="title"><%$menu_lines_otitle[i]->html%></span>
+	 <%/if%>
+         <%*<span class="text"><%$menu_lines_odescr[i]->html%></span>*%>
+	 <%/if%>
+      </span>
+     </a>
+   </li>
+  <%/section%>
+ </ul>
+
+  <script type="text/javascript">
+   jQuery('#cv8-module-<%$smarty.section.it.index%>').removeClass('cv8-module').addClass('cv8-module-withoutbg');
+  </script>
+<%/if%>

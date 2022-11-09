@@ -1,0 +1,60 @@
+/* Statistiques */
+.stats .widget {
+  border:1px solid #D2D9EB;
+  margin:10px 5px;
+  overflow:hidden;
+  width:98%;
+  float:left;
+  height:300px;
+}
+.stats .widget input, .stats #detailcsv input {
+  border:none;
+  vertical-align:bottom;
+}
+.stats .widgetTop {
+  background:#F0F0FA none repeat scroll 0 0;
+  border-bottom:1px solid #D2D9EB;
+  cursor:move;
+  height:25px;
+  font-weight:bold;
+  padding-bottom:4px;
+  font-size:13pt;
+  padding:5px 0 0 25px;
+  margin-bottom:10px;
+}
+.stats .widgetTop .button {
+  float:right;
+  margin:3px;
+  cursor:pointer;
+}
+.stats .widgetContent {
+  width:95%;
+  height:240px;
+  margin:auto;
+}
+.stats .widgetFooter {
+  text-align:right;
+  padding:0 25px 5px;
+  height:16px;
+}
+.stats .filter {
+  height:60px;
+  padding:0 25px;
+}
+.stats .otherPeriods {
+  padding-left:4px;
+}
+.stats .tools {
+  padding-left:4px;
+}
+.stats .view {
+  font-size:16px;
+}
+.stats #detailcsv {
+  border:1px solid #D2D9EB;
+  background:white;
+  z-index:2000;
+  position:absolute;
+  display:none;
+  padding:10px;
+}

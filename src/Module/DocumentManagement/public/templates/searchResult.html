@@ -1,0 +1,27 @@
+<input type="hidden" name="function" value="advsearch">
+<input type="hidden" name="moid" value="<%$moid%>">
+<input type="hidden" name="template" value="Module/DocumentManagement.advsearch2.html">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="clearrequest" value="1">
+<div class="table-responsive">
+<table class="table table-striped">
+ <%section name=i loop=$m.lines_oid%>
+  <%assign var="parent" value=$m.lines_obj[i]->parents[0]%>
+  <tr><!-- <%$m.lines_score[i]%> -->
+   <td>
+    <input type="hidden" name="oids[<%$m.lines_oid[i]%>]" value="1">
+    <div class="tzr-docmgt-doc1">
+     <%if $m.lines_obj[i]->node%>
+      <%assign var="url" value="function=index&template=Module/DocumentManagement.index2.html&tplentry=br"%>
+     <%else%>
+      <%assign var="url" value="function=display&template=Module/DocumentManagement.display.html&tplentry=br"%>
+     <%/if%>
+     <a class="cv8-ajaxlink d-inline-block" href="<%$self%>moid=<%$moid%>&oid=<%$m.lines_obj[i]->oid%>&<%$url%>"><%$m.lines_obj[i]->smallicon%></a>
+     <span class="d-inline-block" data-toggle="tooltip" data-html="true" title="Type: <%$m.lines_obj[i]->tpl.otitle->html|escape:'html'%><br><%$m.lines_obj[i]->fields.oUPD->html%><br><%$m.lines_obj[i]->fields.oOWN->text|escape:'html'%>"><a class="cv8-ajaxlink d-inline-block" href="<%$self%>moid=<%$moid%>&oid=<%$m.lines_obj[i]->oid%>&<%$url%>"><%$m.lines_obj[i]->short%></a></span> <span class="d-inline-block">in</span> <a class="cv8-ajaxlink d-inline-block" href="<%$self%>&moid=<%$moid%>&function=index&template=Module/DocumentManagement.index2.html&oid=<%$parent->oid%>&tplentry=br"><%$parent->parents[0]->title%> > <%$parent->title%><%if $parent->countdocs%>#<%$parent->countdocs%><%/if%></a>
+     <%$m.lines_obj[i]->docs%>
+    </div>
+   </td>
+  </tr>
+ <%/section%>
+</table>
+</div>

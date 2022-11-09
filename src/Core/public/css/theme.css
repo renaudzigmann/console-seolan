@@ -1,0 +1,13 @@
+:root {
+--primary: #cc0033;
+--default: #5a6c82;
+--info: #5c88be;
+--success: #28a745;
+--warning: #f89500;
+--danger: #dc3545;
+--light: #f6f6f6;
+--dark: #1e2226; /*texte - input*/
+--neutral-color: #99a2ad; /*table header - onglet - bord input*/
+--body-color: #fbfbfb;
+--radius: 5px;
+}

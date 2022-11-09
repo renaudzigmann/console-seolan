@@ -1,0 +1,22 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="<%$br_tag%>"%>
+<div class="tagtitle">
+<a class="tag" name="<%$br_tag%>"><%$br_tag%></a>
+</div>
+<div class="cv8-search-result">
+  <%foreach from=$br_modules item=m key=moid%>
+   <fieldset class="fieldsetAccordion fieldsetAccordionClose">
+    <legend><%$m.name%></legend>
+    <a id="viewresult_<%$moid%>" href="#" onclick="TZR.ajaxSubmitForm(document.resultform<%$moid%>);return false;"><%if $m.count > 1%><%$syslabels.Seolan_Module_TagUser_TagUser.display_results|sprintf:$m.count:$m.name%><%else%><%$syslabels.Seolan_Module_TagUser_TagUser.display_result|sprintf:$m.count:$m.name%><%/if%></a><br><br>
+    <div id="result_<%$moid%>">
+     <form action="<%$self%>" method="post" name="resultform<%$moid%>">
+      <%include file="`$smarty.const.TZR_SHARE_DIR``$m.template`"%>
+     </form>
+    </div>
+   </fieldset>
+  <%foreachelse%>
+   <%$syslabels.Seolan_Core_Field_Field.no_result%>
+  <%/foreach%>
+  <script type="text/javascript">
+   TZR.fieldsetAccordion(jQuery(v<%$uniqid%>.modulecontainer));
+  </script>
+</div>

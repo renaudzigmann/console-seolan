@@ -1,0 +1,392 @@
+/**
+ * Feuille de style générique pour le COMARQUAGE Service-public
+ *
+ * @author Camille Descombes
+ * @package ServicePublic
+ *
+**/
+
+/* Général */
+
+#noeudThemes {
+ clear: both;
+}
+#tzr-page-content div.comarquage .spLoader {
+ background:url(/tzr/modsp/images/loader.gif) no-repeat left 50%;
+ padding-left:30px;
+ margin:50px auto;
+ line-height:50px;
+ width:200px;
+}
+#tzr-page-content div.comarquage * {
+ font-size:1em;
+ margin:0;
+ padding:0;
+ background-image:none;
+}
+#tzr-page-content div.comarquage *::after {
+ clear:none;
+}
+#tzr-page-content div.comarquage h1 {
+ font-size:1.7em;
+ margin:0.8em 0;
+ text-align:left;
+}
+#tzr-page-content div.comarquage h2 {
+ font-size:1.2em;
+ margin:0.5em 0 0.3em 0;
+}
+#tzr-page-content div.comarquage h3 {
+ font-size:1.1em;
+ font-weight:bold;
+ margin:0.5em 0 0.3em 0;
+}
+#tzr-page-content div.comarquage div.spCenter {
+ clear: none;
+ text-align: center;
+}
+#tzr-page-content div.comarquage li h2,
+#tzr-page-content div.comarquage li h3,
+#tzr-page-content div.comarquage li h4,
+#tzr-page-content div.comarquage li h5,
+#tzr-page-content div.comarquage li p {
+ display:inline;
+ font-size:1em;
+ font-weight:normal;
+ line-height:1.1em;
+}
+#tzr-page-content div.comarquage table {
+ margin-bottom:0.8em;
+}
+#tzr-page-content div.comarquage th,
+#tzr-page-content div.comarquage td {
+ padding:2px 5px;
+ border: 1px solid gray;
+ text-align: left;
+}
+#tzr-page-content div.comarquage div.spPublicationPivotOSATitle h3 {
+ display: inline;
+}
+#tzr-page-content div.comarquage div.spFilDAriane {
+ clear: both;
+}
+#tzr-page-content div.comarquage div.spBarre10Themes {
+ display:none;
+}
+#tzr-page-content div.comarquage div.spBarre10ThemesFils {
+ float: left;
+ text-align: center;
+ width: 10%;
+}
+#tzr-page-content div.comarquage div.spTexteIntroduction {
+ border:1px dotted #666;
+ font-style:italic;
+ padding:10px;
+ margin-bottom:10px;
+}
+#tzr-page-content div.comarquage div.spThemeCFS,
+#tzr-page-content div.comarquage div.spThemeVA,
+#tzr-page-content div.comarquage div.spThemeActualite,
+#tzr-page-content div.comarquage div.spThemeSEL,
+#tzr-page-content div.comarquage div.spThemeQR,
+#tzr-page-content div.comarquage div.spThemeCDC,
+#tzr-page-content div.comarquage div.spThemeSIP {
+ border: 1px solid gray;
+ clear: both;
+}
+#tzr-page-content div.comarquage div.spTexteChapitre *,
+#tzr-page-content div.comarquage div.spNoeudDossierTexte *,
+#tzr-page-content div.comarquage div.spSousThemeDossier *,
+#tzr-page-content div.comarquage div.spNoeudDossierFiche * {
+ line-height:1.2em;
+}
+#tzr-page-content div.comarquage div.spSousThemeDossier h2 {
+ margin:1em 0;
+}
+#tzr-page-content div.comarquage div.spTexteChapitre ul li,
+#tzr-page-content div.comarquage div.spNoeudDossierTexte ul li,
+#tzr-page-content div.comarquage div.spNoeudDossierFiche ul li,
+#tzr-page-content div.comarquage div.spSousThemeDossier ul li {
+ margin:0.3em 0 0.4em 2em;
+ list-style-position:outside;
+}
+#tzr-page-content div.comarquage div.spSousThemeDossier ul li,
+#tzr-page-content div.comarquage div.spNoeudDossierTexte ul li,
+#tzr-page-content div.comarquage div.spNoeudDossierFiche ul li {
+ list-style:none;
+ margin-left:0;
+}
+#tzr-page-content div.comarquage li.spThemeSousThemeDossier,
+#tzr-page-content div.comarquage li.spNoeudDossierDossierFiche,
+#tzr-page-content div.comarquage li.spNoeudDossierFiche {
+ list-style:none;
+}
+#tzr-page-content div.comarquage li.spPublicationCFS,
+#tzr-page-content div.comarquage li.spPublicationVA,
+#tzr-page-content div.comarquage li.spPublicationActualite,
+#tzr-page-content div.comarquage li.spPublicationSEL,
+#tzr-page-content div.comarquage li.spPublicationQR,
+#tzr-page-content div.comarquage li.spPublicationCDC,
+#tzr-page-content div.comarquage li.spPublicationPESP,
+#tzr-page-content div.comarquage li.spPublicationSIP,
+#tzr-page-content div.comarquage li.spPublicationReference,
+#tzr-page-content div.comarquage li.spTexteListe,
+#tzr-page-content div.comarquage li.spPublicationSommaire,
+#tzr-page-content div.comarquage li.spServiceComplementaireSN,
+#tzr-page-content div.comarquage li.spTousDossiersAZ,
+#tzr-page-content div.comarquage li.spSousThemeDossierFiche {
+ list-style-position: inside;
+}
+#tzr-page-content div.comarquage div.spPublicationPivotOSA {
+ clear: both;
+}
+#tzr-page-content div.comarquage div.spPublicationAvertissement {
+ padding:10px;
+ margin:10px 0;
+ border:1px solid red;
+}
+#tzr-page-content div.comarquage div.spServiceComplementaireSN,
+#tzr-page-content div.comarquage div.spTousDossiersAZ,
+#tzr-page-content div.comarquage div.spTousMotsCles {
+ border:1px solid gray;
+}
+#tzr-page-content div.comarquage div.spPublicationPivotLocalOSA {
+ float: left;
+ max-width: 30.5%;
+ text-align: left;
+}
+#tzr-page-content div.comarquage div.spGoogleMaps {
+ border: 1px solid black;
+ border-radius: 0 0 0 0;
+ float: right;
+ height: 300px;
+ width: 66%;
+}
+#tzr-page-content div.comarquage div.spPublicationPartenaireLogo {
+ float: left;
+ text-align: center;
+}
+#tzr-page-content div.comarquage table.spTexteTableau {
+ border: 1px solid gray;
+ width: auto;
+}
+#tzr-page-content div.comarquage span.spTexteMontant {
+ color: #800080;
+ font-weight: bold;
+}
+#tzr-page-content div.comarquage div.spLetter {
+ float: left;
+ font-size: larger;
+ text-align: center;
+}
+#tzr-page-content div.comarquage div.spDossierLetter {
+ clear: both;
+}
+#tzr-page-content div.comarquage div.spThemeSousThemeImpair {
+ clear: both;
+}
+#tzr-page-content div.comarquage .entiteImageFloatRight,
+#tzr-page-content div.comarquage .entiteObjectFloatRight {
+ float:right;
+}
+#tzr-page-content div.comarquage .entiteImageFloatLeft,
+#tzr-page-content div.comarquage .entiteObjectFloatLeft {
+ float:left;
+}
+#tzr-page-content div.comarquage div.entiteImageFloatLeft {
+ display:none;
+}
+#tzr-page-content div.comarquage div.spTexteSousChapitreNote {
+ padding:10px;
+ margin:10px 0;
+ border:1px dotted #CCC;
+ font-style:italic;
+}
+#tzr-page-content div.comarquage div.spTexteSousChapitreNote.note {
+ background:#FFC;
+}
+#tzr-page-content div.comarquage div.spTexteSousChapitreNote.savoir {
+ background:#FDF;
+}
+#tzr-page-content div.comarquage div.spTexteSousChapitreNote.info {
+ background:#DDF;
+}
+#tzr-page-content div.comarquage div.spTexteSousChapitreNote.attention {
+ background:#FDC;
+}
+#tzr-page-content div.comarquage div.spNoeudDossierTexte,
+#tzr-page-content div.comarquage div.spTexteChapitre {
+ clear:left;
+ margin-bottom:10px;
+}
+#tzr-page-content div.comarquage p.spTexteParagraphe {
+ margin:0.3em 0 0.7em 0;
+}
+#tzr-page-content div.comarquage span.italic {
+ font-style:italic;
+}
+#tzr-page-content div.comarquage span.bold {
+ font-weight:bold;
+}
+#tzr-page-content div.comarquage .clearall {
+ clear:both;
+}
+
+
+/* Menu principal */
+
+#tzr-page-content div.noeudThemesFils {
+ width:50%;
+ float:right;
+ clear:right;
+}
+#tzr-page-content div.noeudThemesFils.gauche {
+ float:left;
+ clear:left;
+}
+#tzr-page-content div.noeudThemesFilsImage {
+ float: right;
+ margin:10px 0 2px 5px;
+ clear:none;
+}
+#tzr-page-content div.noeudThemesFilsLiens {
+ border-top: 1px solid #CCC;
+ margin:0 0 10px 10px;
+ padding:5px 0 10px 0;
+}
+#tzr-page-content div.noeudThemesFils.gauche div.noeudThemesFilsLiens {
+ margin-left:0;
+}
+#tzr-page-content div.noeudThemesFils.gauche div.noeudThemesFilsLiens,
+#tzr-page-content div.noeudThemesFils.gauche div.noeudThemesFilsImage {
+ margin-right:10px;
+}
+#tzr-page-content div.noeudThemesFils h2 {
+ display:block;
+ font-size:1.5em;
+ line-height:1.8em;
+}
+#tzr-page-content div.noeudThemesFils h3 {
+ font-size: 100%;
+ font-weight: normal;
+ clear:left;
+ display:inline;
+ margin:0;
+ padding:0;
+}
+#tzr-page-content div.noeudThemesFils h3 a {
+ font-weight:normal;
+ line-height:1em;
+}
+
+
+/* Menu Comment faire si... (N13042.xml) */
+
+#tzr-page-content div.spAccueilComentFaireSiFiche {
+ width:48%;
+ margin-right:2%;
+ float:left;
+}
+
+
+/* Colonne gauche */
+
+#tzr-page-content div.spPublicationMenuGaucheForTheme,
+#tzr-page-content div.spPublicationMenuGauche {
+ margin-top:0.5em;
+ float:left;
+ border:0;
+ width:70%;
+}
+#tzr-page-content div.spPublicationMenuGaucheForTheme > div,
+#tzr-page-content div.spPublicationMenuGauche > div {
+ border:1px solid #CCC;
+ padding:10px;
+ margin-bottom:10px;
+}
+#tzr-page-content div.spPublicationSommaire {
+ background-color:#F6F6FF;
+}
+#tzr-page-content div.spPublicationCFS,
+#tzr-page-content div.spServiceComplementaireSEL,
+#tzr-page-content div.spPublicationCDC {
+ background-color:white;
+}
+#tzr-page-content div.afterMenus {
+ clear:left;
+}
+
+/* Colonne droite */
+
+#tzr-page-content div.spPublicationMenuDroiteForTheme,
+#tzr-page-content div.spPublicationMenuDroite {
+ margin-top:0.5em;
+ float:right;
+ width:30%;
+ border:0;
+ clear:none;
+}
+#tzr-page-content div.spPublicationMenuDroiteForTheme > div,
+#tzr-page-content div.spPublicationMenuDroite > div {
+ border:1px solid #CCC;
+ margin:0 0 10px 10px;
+ padding:10px;
+ overflow:hidden;
+}
+#tzr-page-content div.spPublicationMenuDroiteForTheme ul,
+#tzr-page-content div.spPublicationMenuDroite ul {
+ list-style:none;
+ line-height:1.2em;
+}
+#tzr-page-content div.spPublicationMenuDroiteForTheme ul li,
+#tzr-page-content div.spPublicationMenuDroite ul li {
+ margin-top:0.5em;
+}
+#tzr-page-content div.spPublicationActualite h3 {
+ font-size:0.9em;
+ line-height:1.1em;
+ color:#666;
+ margin-top:1.4em;
+}
+#tzr-page-content div.spPublicationActualite,
+#tzr-page-content div.spPublicationSEL,
+#tzr-page-content div.spPublicationIC {
+ background-color:white;
+}
+
+
+/* Bottom */
+
+#tzr-page-content div.spPublicationOSA,
+#tzr-page-content div.spPublicationReference,
+#tzr-page-content div.spPublicationSIP,
+#tzr-page-content div.spPublicationCDC,
+#tzr-page-content div.spServiceComplementaireSN,
+#tzr-page-content div.spPublicationQR,
+#tzr-page-content div.spPublicationPartenaire,
+#tzr-page-content div.spPublicationPESP,
+#tzr-page-content div.spPublicationVA,
+#tzr-page-content div.spPublicationSEL,
+#tzr-page-content div.spPublicationActualite {
+ border:1px solid #CCC;
+ padding:10px;
+ margin:10px 0;
+ clear:both;
+}
+#tzr-page-content div.spPublicationOSA {
+ background-color:#FFD;
+ border:0;
+ border-left:3px solid #666;
+ padding:5px 20px;
+ margin:20px 0;
+}
+#tzr-page-content div.spPublicationPartenaire,
+#tzr-page-content div.spPublicationReference,
+#tzr-page-content div.spPublicationSIP,
+#tzr-page-content div.spPublicationCDC,
+#tzr-page-content div.spPublicationQR,
+#tzr-page-content div.spPublicationPESP,
+#tzr-page-content div.spPublicationVA,
+#tzr-page-content div.spPublicationSEL {
+ background-color:white;
+}

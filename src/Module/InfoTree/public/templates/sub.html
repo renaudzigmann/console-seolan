@@ -1,0 +1,36 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Subscription_Subscription.subscription_text%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Subscription_Subscription.subscription_text%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="_function" value="subscribe">
+  <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+  <input type="hidden" name="_next" value="&function=viewpage&moid=<%$smarty.request.moid%>&template=Module/InfoTree.viewpage.html&tplentry=br&oidit=<%$smarty.request.oid%>&tplentry=it">
+  <div class="table-responsive">
+  <table class="table list2" >
+   <tr><th>Abonnement aux modifications dans la rubrique</th><td><%$br_cat_mit.otitle->html%></td></tr>
+   <tr><th>Etendre l'abonnement aux sous-dossiers</th><td><input type="checkbox" name="subdir" checked></td></tr>
+   <%if $imod_sec.admin%>
+    <tr>
+     <th><label>Abonnement défini pour</label></th>
+     <td>
+      <select name="uid">
+       <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+	<%section name=u loop=$grps_lines_oid%>
+	 <option value="<%$grps_lines_oid[u]%>"><%$grps_lines_oGRP[u]->toText()%>
+	<%/section%>
+       </optgroup>
+       <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+	<%section name=u loop=$users_lines_oid%>
+	 <option value="<%$users_lines_oid[u]%>" <%if $users_lines_oid[u] eq $uid%>selected<%/if%>><%$users_lines_ofullnam[u]->toText()%>
+	<%/section%>
+       </optgroup>
+      </select>
+     </td>
+    </tr>
+   <%/if%>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+ </form>
+</fieldset>

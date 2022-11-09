@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+   <channel>
+      <title><%$application->society|default:$tzr.societe%><%if $labels.rss_title%><%$syslabels.i18ncolon%><%$labels.rss_title%><%/if%></title>
+      <%assign var='link' value=$smarty.server.REQUEST_SCHEME|cat:'://'|cat:$application->domain|default:$website%>
+      <link><%$link%>/<%$lang_data%>_rssnews.xml</link>
+      <description><%$labels.rss_description|default:"rss news"%></description>
+      <ttl>2160</ttl>
+      <%section name="item" loop=$rss_lines_oid%>
+      <item>
+         <title><![CDATA[<%$rss_lines_oF0001[item]->html%>]]></title>
+         <description><![CDATA[<%$rss_lines_oF0002[item]->html%>]]></description>
+         <link><![CDATA[<%$link%>]]></link>
+         <pubDate><%$rss_lines_oUPD[item]->raw|date_format:"%a, %d %b %Y %T %Z"%></pubDate>
+      </item>
+      <%/section%>
+   </channel>
+</rss>

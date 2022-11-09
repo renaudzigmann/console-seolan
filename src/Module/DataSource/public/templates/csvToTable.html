@@ -1,0 +1,91 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_DataSource_DataSource.csvtotable%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Module_DataSource_DataSource.csvtotable%></legend>
+  <form action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+    <input type="hidden" name="function" value="csvToTable">
+    <%if $import_csv.action == 'selectFields'%>
+      <input type="hidden" name="bname" value="<%$import_csv.bname%>">
+      <input type="hidden" name="btab" value="<%$import_csv.btab%>">
+      <input type="hidden" name="tmpFile" value="<%$import_csv.tmpFile%>">
+      <table class="cv8_tablelist">
+        <tr>
+          <th></th>
+          <th><%$syslabels.Seolan_Core_DataSource_DataSource.label%></th>
+          <th><%$syslabels.Seolan_Core_DataSource_DataSource.field%></th>
+          <th><%$syslabels.Seolan_Core_DataSource_DataSource.type%></th>
+          <th><%$syslabels.Seolan_Core_DataSource_DataSource.size%></th>
+          <th>Options</th>
+          <th>Exemple</th>
+          <th>Composant Oid</th>
+        </tr>
+        <%foreach from=$import_csv.labels key=i item=label%>
+          <tr>
+            <th><label><%$label%></label></th>
+            <td>
+              <input type="text" name="labels[<%$i%>]" value="<%$label%>">
+            </td>
+            <td>
+              <input type="text" name="fields[<%$i%>]" value="<%$import_csv.fields[$i]%>">
+            </td>
+            <td>
+              <select name="ftypes[<%$i%>]" class="ftype" data-index="<%$i%>">
+                <%foreach from=$import_csv.fieldTypes[0] key=j item=type%>
+                  <option value="<%$type%>" <%if $type == '\Seolan\Field\ShortText\ShortText'%>selected<%/if%>><%$import_csv.fieldTypes[1][$j]%></option>
+                <%/foreach%>
+              </select>
+            </td>
+            <td>
+              <input type="text" name="fcounts[<%$i%>]" value="<%$import_csv.fcounts[$i]%>" size="3">
+            </td>
+            <td class="opt">
+            </td>
+            <td>
+              <input type="text" readonly value="<%$import_csv.sample[$i]%>">
+            </td>
+            <td>
+              <input type="checkbox" name="oidstruct[]" value="<%$i%>">
+            </td>
+          </tr>
+        <%/foreach%>
+      </table>
+
+    <%else%>
+      <table class="list2">
+        <tr>
+          <th><label>CSV</label></th>
+          <td><input type="file" name="file" required></td>
+        </tr>
+        <tr>
+          <th><label>Séparateur</label></th>
+          <td><input type="text" name="separator" value=";"></td>
+        </tr>
+        <tr>
+          <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.table_name%></label></th>
+          <td><input type="text" name="bname" value="" required></td>
+        </tr>
+        <tr>
+          <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.table_code%></label></th>
+          <td><input type="text" name="btab" value="" required></td>
+        </tr>
+      </table>
+    <%/if%>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+      <input type="button" value="<%$syslabels.Seolan_Core_General.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+    </div>
+  </form>
+</fiedset>
+<script type="text/javascript">
+  jQuery('.ftype').change(function (e) {
+    var tdopt = jQuery(this).parent().siblings('.opt'),
+        index = jQuery(this).data('index');
+    switch (this.value) {
+      case '\Seolan\Field\Date\Date' :
+        tdopt.html('<input type="text" name="fmts['+index+']" value="d/m/Y">');
+        break;
+      default:
+        tdopt.html('');
+    }
+  });
+</script>

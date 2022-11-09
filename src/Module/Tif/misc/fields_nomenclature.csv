@@ -1,0 +1,153 @@
+"table";"forder";"field";"label[FR]";"ftype";"fcount";"target";"compulsory";"browsable";"multivalued";"published";"translatable";"queryable"
+"LS_CapaciteUnites";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_CapaciteUnites";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_CapaciteUnites";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_DistanceUnite";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_DistanceUnite";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_DistanceUnite";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_DureeUnite";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_DureeUnite";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_DureeUnite";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_SuperficiesUnites";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_SuperficiesUnites";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_SuperficiesUnites";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Classification";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Classification";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Classification";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ContrVoc";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ContrVoc";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ContrVoc";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Multimedia";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Multimedia";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Multimedia";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Civilite";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Civilite";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Civilite";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_MoyensCom";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_MoyensCom";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_MoyensCom";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Contact";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Contact";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Contact";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Personne";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Personne";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Personne";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ModeGestion";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ModeGestion";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ModeGestion";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_TypeClassement";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_TypeClassement";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_TypeClassement";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Classement";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Classement";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Classement";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_PrestationLiee";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_PrestationLiee";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_PrestationLiee";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Geolocalisation";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Geolocalisation";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Geolocalisation";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Carte";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Carte";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Carte";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Coordonnees";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Coordonnees";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Coordonnees";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Environnement";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Environnement";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Environnement";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ZoneNoms";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ZoneNoms";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ZoneNoms";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Point";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Point";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Point";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Acces";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Acces";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Acces";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Zone";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Zone";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Zone";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Periode";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Periode";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Periode";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Jour";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Jour";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Jour";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Jours";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Jours";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Jours";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Clienteles";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Clienteles";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Clienteles";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Client";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Client";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Client";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Usage";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Usage";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Usage";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ModeReservation";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ModeReservation";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ModeReservation";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Devises";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Devises";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Devises";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ModePaiement";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ModePaiement";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ModePaiement";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_TarifMode";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_TarifMode";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_TarifMode";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Tarifs";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Tarifs";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Tarifs";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_MontantPourcent";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_MontantPourcent";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_MontantPourcent";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_CapaciteGlobale";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_CapaciteGlobale";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_CapaciteGlobale";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_CapacitePrest";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_CapacitePrest";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_CapacitePrest";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_TypeBatiment";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_TypeBatiment";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_TypeBatiment";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Unite";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Unite";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Unite";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Disposition";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Disposition";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Disposition";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_OffrePrestation";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_OffrePrestation";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_OffrePrestation";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Prestation";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Prestation";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Prestation";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_DescrComp";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_DescrComp";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_DescrComp";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Description";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Description";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Description";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_ThesaurusOrigine";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_ThesaurusOrigine";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_ThesaurusOrigine";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Denivele";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Denivele";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Denivele";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Itineraires";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Itineraires";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Itineraires";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Planning";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Planning";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Planning";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Pays";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Pays";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_Pays";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1
+"LS_Commune";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_Commune";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;0;1
+"LS_EtatPlanning";1;"code";"Code";"XShortTextDef";30;;1;1;0;1;0;1
+"LS_EtatPlanning";2;"libelle";"Libellé";"XShortTextDef";255;;1;1;0;1;1;1
+"LS_EtatPlanning";3;"codesv2";"Codes V2";"XShortTextDef";255;;0;1;0;0;0;1

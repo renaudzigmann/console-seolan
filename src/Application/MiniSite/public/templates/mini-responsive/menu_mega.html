@@ -1,0 +1,61 @@
+<div class="navbar-collapse collapse bs-navbar-collapse">
+<ul class="nav navbar-nav">
+<%math assign=lastIndex equation="x-1" x=$topmenu_tree|@count%>
+<%foreach key=i item=item1 from=$topmenu_tree%>
+  <li class="dropdown yamm-fw<%if $item1.oid|in_array:$path_oidup || $item1.oid == $it_cat_mit['oid'] %> active<%/if%>">
+  <%if $item1.submenu|@count == 0%>
+    <a href="<%$self%><%$item1.selfurl%>"><%$item1.otitle->text%></a>
+  <%else%>
+    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" data-oid="<%$item1.oid%>" >
+      <%$item1.otitle->text%>
+      <span class="sub-arrow">...</span>
+    </a>
+    <ul class="dropdown-menu">
+      <li>
+        <div class="yamm-content">
+          <div class="container">
+            <div class="row">
+              <%foreach key=j item=item2 from=$item1.submenu%>
+              <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                  <ul class="menu-vertical">
+                    <li class="mv-item">
+                      <a href="<%$self%><%$item2.selfurl%>"<%if $item2.oid|in_array:$path_oidup %>class="active"<%/if%>><%$item2.otitle->text%></a>
+                      <ul class="menu-vertical">
+                        <%foreach key=k item=item3 from=$item2.submenu%>
+                        <li class="mt-item">
+                          <a href="<%$self%><%$item3.selfurl%>"<%if $item3.oid|in_array:$path_oidup %>class="active"<%/if%>><%$item3.otitle->text%></a>
+                          <ul class="menu-vertical">
+                            <%foreach key=k item=item4 from=$item3.submenu%>
+                              <%assign var="itemurl" value=""%>
+                              <%assign var="itemtarget" value=""%>
+                              <%if $item4.ourlext->raw!=''%>
+                                <%assign var="ourlext" value=";"|explode:$item4.ourlext->raw%>
+                                <%if $ourlext[1] != ""%>
+                                  <%assign var="itemurl" value=$ourlext[1]|rawurldecode%>
+                                  <%assign var="itemtarget" value=$ourlext[2]|default:"_self"%>
+                                <%/if%>
+                              <%/if%>
+                              <%if $itemurl!=""%>
+                              <li class="mst-item"><a href="<%$itemurl%>" <%if $item4.oid|in_array:$path_oidup %>class="active"<%/if%> data-oid="<%$item4.oid%>" target="<%$itemtarget%>"><%$item4.otitle->text%></a></li>
+                              <%else%>
+                              <li class="mst-item"><a href="<%$self%><%$item4.selfurl%>"<%if $item4.oid|in_array:$path_oidup %>class="active"<%/if%>data-oid="<%$item4.oid%>"><%$item4.otitle->text%></a></li>
+                              <%/if%>
+                            <%/foreach%>
+                          </ul>
+                        </li>
+                        <%/foreach%>
+                      </ul>
+                    </li>
+                  </ul>
+              </div>
+              <%/foreach%>
+            </div> <%*<!-- end row -->*%>
+          </div> <%*<!-- end container -->*%>
+        </div> <%*<!-- end yamm -->*%>
+      </li>
+    </ul>
+  <%/if%>
+  </li>
+<%/foreach%>
+</ul>
+</div>

@@ -1,0 +1,10 @@
+/*********************/
+/* page newsletter   */
+/********************/
+*{ padding:0; margin:0; }
+body.cv3-body-newsletter { font-size: 70%; font-family: Helvetica, Arial, Geneva, sans-serif; background-color:#fff; width: 100%; margin: 0; padding: 0 0 0; text-align:center;} 
+#cv3-page-newsletter { font-size: 1em; text-align:left;width:670px; clear: both; margin:0px auto 10px auto; padding: 0px; }
+.cv3-newsletter-top { width:auto; height:141px; background-color:#e7e7e7; background-repeat:no-repeat; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.cv3-newsletter-content { padding:10px; text-align:left;}
+.cv3-newsletter-bottom {padding:5px;text-align:center;}
+.cv3-newsletter-title {padding:5px; text-align:right;}

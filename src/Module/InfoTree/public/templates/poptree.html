@@ -1,0 +1,55 @@
+<%if empty($prefix)%><%assign var="prefix" value=$smarty.request.tplentry%><%/if%>
+<%if empty($action)%><%assign var="action" value=$smarty.request.action%><%/if%>
+<%if empty($ajaxurl)%><%assign var="ajaxurl" value=$smarty.request.ajaxurl%><%/if%>
+<%if $ajaxurl=="self"%><%assign var=ajaxurl value=$smarty.server.REQUEST_URI%><%/if%>
+
+<%$oid=$<%$prefix%>_lines_oid%>
+<%$level=$<%$prefix%>_lines_level%>
+<%$alias=$<%$prefix%>_lines_oalias%>
+<%$title=$<%$prefix%>_lines_otitle%>
+<%$sections=$<%$prefix%>_lines_sections%>
+<%$ssrub=$<%$prefix%>_lines_ssrub%>
+<%$publish=$<%$prefix%>_lines_oPUBLISH%>
+<%assign var="disp" value=true%>
+<%section name=i loop=$oid%>
+ <%if (!empty($selected) && array_key_exists($oid[i],$selected)) || $oid[i]==$from%>
+  <%assign var="disp" value=false%>
+  <%assign var="sublevel" value=$level[i]%>
+ <%elseif $sublevel==$level[i] || !$nosub%>
+  <%assign var="disp" value=true%>
+  <%assign var="sublevel" value=0%>
+ <%/if%>
+  <li id="node_<%$oid[i]%>">
+   <span <%if $publish[i]->raw==2%>class="napp-dataline"<%/if%>>
+    <%if $disp%>
+     <a href="#" <%if $publishedonlyselectable!=1 || $publish[i]->raw!=2%>onclick="<%$action%>('<%$oid[i]%>','<%$alias[i]->raw%>','<%$title[i]->html|escape:"quotes"|escape:"html"%>',<%$ssrub[i]%>,<%$sections[i]|default:0%>); return false;"<%else%>class="inactive"<%/if%>><%$title[i]->html%></a><%if $alias[i]->raw%>&nbsp;[<%$alias[i]->toText()%>]<%/if%>
+     <%else%>
+     <%$title[i]->html%>&nbsp;[<%$alias[i]->toText()%>]
+    <%/if%>
+    <%$ssrub[i]%><!--,<%$level[i]%>,<%$level[$smarty.section.i.index_next]%>-->
+   </span>
+   <%if $ssrub[i]>0 && $level[i]>=$level[$smarty.section.i.index_next] && $disp%>
+    <ul class="ajax">
+     <li>
+      <%capture name="nodeurl"%><%$ajaxurl%>&oidtop=<%$oid[i]%>&_raw=1&_silent=1&_skip=1<%/capture%>
+      {url:"<%$smarty.capture.nodeurl%>"}
+     </li>
+    </ul>
+   <%/if%>
+   <%if $level[i] < $level[$smarty.section.i.index_next]%><ul style="display:none"><%/if%>
+   <%if $level[$smarty.section.i.index_next]%>
+    <%assign var="levelNext" value=$level[$smarty.section.i.index_next]%>
+   <%else%>
+    <%assign var="levelNext" value="1"%>
+   <%/if%>
+   <%math equation="x-y" x=$level[i] y=$levelNext assign="jump"%>
+   <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+   <%if $jump>=0%></li><%/if%>
+   <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+   <%if $jump>0%>
+    <%section name=foo loop=$jump%>
+      </ul>
+     </li>
+    <%/section%>
+   <%/if%>
+<%/section%>

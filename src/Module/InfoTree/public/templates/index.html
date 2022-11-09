@@ -1,0 +1,266 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ 
+ v<%$uniqid%>.oidit = "<%$it_oid%>";
+
+
+ v<%$uniqid%>.checkSelected=function(){
+   return TZR.Infotree.checkSelected("<%$uniqid%>");
+ }
+ 
+ v<%$uniqid%>.exportselected=function() {
+   TZR.Dialog.openURL('<%$self%>&_function=export&template=Module/InfoTree.export.html&moid=<%$smarty.request.moid%>&tplentry=br');
+ }
+
+ v<%$uniqid%>.applyselected=function(func,_next,mono) {
+  var f=document['myform<%$uniqid%>'];
+  f._function.value=func;
+  f._next.value=_next;
+  f.template.value="Core.message.html";
+  TZR.ajaxSubmitForm(f);
+  return false;
+ }
+
+ v<%$uniqid%>.publishSelected=function(d) {
+  if(!this.checkSelected()) return false;
+  var f=document['myform<%$uniqid%>'];
+  f._function.value="publishCat";
+  if(d) f.value.value=1;
+  else f.value.value=0;
+  TZR.ajaxSubmitForm(f);
+  return false;
+ }
+ v<%$uniqid%>.deleteselected=function() {
+  if(!this.checkSelected()) return false;
+  var f=document['myform<%$uniqid%>'];
+  if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object_text%>')) {
+   <%if !empty($lang_trad) and ($lang_data ne $lang_trad)%>f._function.value="delCat";<%else%>f._function.value="moveToTrash";<%/if%>
+   TZR.ajaxSubmitForm(f<%if $sysmods.xmodbackofficeinfotree==$_moid%>,undefined,undefined,{cb:home_reloadMenu}<%/if%>);
+  }
+  return false;
+ }
+ v<%$uniqid%>.exportSelected=function() {
+   if(!this.checkSelected()) return false;
+   var f=document['myform<%$uniqid%>'];
+   f._function.value="exportPdfs";
+   f.submit();
+   return false;
+ }
+ v<%$uniqid%>.duplicateselected=function() {
+  if(!this.checkSelected()) return false;
+  var f=document['myform<%$uniqid%>'];
+  f._function.value="dupCat";
+  TZR.ajaxSubmitForm(f<%if $sysmods.xmodbackofficeinfotree==$_moid%>,undefined,undefined,{cb:home_reloadMenu}<%/if%>);
+  return false;
+ }
+ v<%$uniqid%>.viewpage=function(oidit) {
+  this.jQueryLoad('<%$self%>&function=viewpage&template=Module/InfoTree.viewpage.html&oidit='+oidit+'&moid=<%$mit_moid%>&tplentry=it');
+  return false;
+ }
+ v<%$uniqid%>.editpage=function(oidit,withlink) {
+  this.jQueryLoad('<%$self%>&function=editpage&template=Module/InfoTree.viewpage.html&oidit='+oidit+'&moid=<%$mit_moid%>&tplentry=it&_linkin='+withlink);
+  return false;
+ }
+ v<%$uniqid%>.translatePage=function(oidit, withlink) {
+  this.jQueryLoad('<%$self%>&function=editCat&template=Module/InfoTree.editcat.html&oid='+oidit+'&moid=<%$mit_moid%>&tplentry=editcat&_linkin='+withlink);
+  return false;
+ }   
+ v<%$uniqid%>.move=function(dir,oid,to) {
+  if(!to) to='';
+  TZR.jQueryLoad({url:'<%$self%>&tplentry=mit&function=moveCat&dir='+dir+'&to='+to+'&template=Module/InfoTree.index.html&oid='+oid+'&moid=<%$mit_moid%>&_next='+escape('<%$self%>&function=home&template=Module/InfoTree.index.html&moid=<%$_moid%>&tplentry=mit&_nohistory=1'),target:v<%$uniqid%>.modulecontainer<%if $sysmods.xmodbackofficeinfotree==$_moid%>,cb:home_reloadMenu<%/if%>});
+  return false;
+ }
+ v<%$uniqid%>.gonew=function(oid) {
+  this.jQueryLoad('<%$self%>&moid=<%$mit_moid%>&function=input&template=Module/InfoTree.new.html&linkup='+oid+'&order=01&oidit='+oid);
+  return false;
+ }
+TZR.Infotree.labels["Seolan_Core_General.no_obj_selected"] = "<%$syslabels.Seolan_Core_General.no_obj_selected|escape:javascript%>";
+
+ <%if $lang_data==$lang_def%>
+ jQuery(function($){
+   var canceldrag=function(e){
+     if(e.keyCode==27){
+       e.data.ui.item.data('drop',true);
+       jQuery(e.data.drag).sortable('cancel');
+     }
+   };
+   jQuery("ul.cv8-infotree-ctree ul",v<%$uniqid%>.modulecontainer).sortable({
+     handle:'.sortablehandler',
+     placeholder:"ui-sortable-placeholder",
+     distance:10,
+     opacity:0.6,
+     start:function(e,ui){
+       jQuery('.ui-sortable-placeholder',this).css('height',ui.item.outerHeight());
+       jQuery(document).on('keyup',{drag:this,ui:ui},canceldrag);
+     },
+     stop:function(e,ui){
+       jQuery(document).off('keyup',canceldrag);
+     },
+     update:function(e,ui){
+       if(ui.item.data('drop')){
+	 jQuery(this).sortable('cancel');
+         ui.item.removeData('drop');
+	 return;
+       }
+       var prev=ui.item.prev();
+       if(prev.length){
+         var oid=prev.data('oid');
+       }else{
+	 var oid='';
+       }
+       v<%$uniqid%>.move(oid,ui.item.data('oid'));
+     }
+   });
+   
+   jQuery("ul.cv8-infotree-ctree td.addcol,ul.cv8-infotree-ctree a.nodepicto>img",v<%$uniqid%>.modulecontainer).droppable({
+     accept:'.cv8-infotree-ctree-line',
+     activeClass:'ui-droppable-active',hoverClass:'ui-droppable-hover',tolerance:'pointer',
+     drop:function(e,ui){
+       ui.draggable.data('drop',true);
+       var p=jQuery(this).parents('li:first');
+       v<%$uniqid%>.move('',ui.draggable.data('oid'),p.data('oid'));
+     }
+   });
+
+   <%* Recherche rapide sur les rubriques *%>
+   $('.cv8-quicksearch input', v<%$uniqid%>.modulecontainer).on('change keyup',function(){
+     var titleFilter = $('.cv8-quicksearch input[name=title]', v<%$uniqid%>.modulecontainer).val();
+     var aliasFilter = $('.cv8-quicksearch input[name=alias]', v<%$uniqid%>.modulecontainer).val();
+     $('.cv8_tablelist tbody tr', v<%$uniqid%>.modulecontainer).hide().each(function(i,e){
+       if ((titleFilter.length && $('a', this).text().match(new RegExp(titleFilter,'i'))) ||
+           (aliasFilter.length && $('.aliascol', this).text().match(new RegExp(aliasFilter,'i'))) ||
+           (!titleFilter.length && !aliasFilter.length)) {
+         $(this).show();
+       }
+     });
+   });
+ });
+ <%/if%>
+//# sourceURL=src/Module/InfoTree/public/templates/index.js 
+</script>
+<%include file="Module/InfoTree.search.html"%>
+<div class="cv8-contenu-center">
+ <form action="<%$self%>" method="post" name="myform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="_function" value="publishCat">
+  <input type="hidden" name="template" value="Module/InfoTree.index.html">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="tplentry" value="mit">
+  <%if $mit_aliastop%>
+   <input type="hidden" name="aliastop" value="<%$mit_aliastop%>">
+  <%/if%>
+  <input type="hidden" name="value" value="1">
+  <input type="hidden" name="key" value="1">
+  <input type="hidden" name="_selectedok" value="ok">
+  <input type="hidden" name="_dest" value="">
+  <input type="hidden" name="_next" value="<%$self%>&function=home&template=Module/InfoTree.index.html&moid=<%$_moid%>&tplentry=mit">
+  <input type="hidden" name="marker" value="selectstart">
+  <div class="table-responsive">
+  <ul class="cv8-infotree-ctree">
+   <li data-oid="root">
+    <table class="table cv8_tablelist">
+     <tbody>
+      <tr>
+       <td class="dragcol"></td>
+       <td class="cbcol">
+	<input type="checkbox" name="checkall" onclick="TZR.toggleCheckBoxes(this.form);">
+	<input type="hidden" name="marker" value="selectstart">
+       </td>
+       <td class="pictocol"></td>
+       <td class="pictocol addcol">
+	<%if ($lang_data == $lang_def) && $imod_sec.$mit__editLevel%>
+	 <a href="#" onclick="return v<%$uniqid%>.gonew('');"><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_subtree%></a>
+	<%/if%>
+       </td>
+       <td></td>
+       <td class="aliascol"><%if $imod_sec.list%><a class="cv8-ajaxlink" href="<%$self%>&function=home&moid=<%$_moid%>&template=Module/InfoTree.index.html&tplentry=mit&editmode=1%>" title="<%$syslabels.Seolan_Core_General.edit_text%>"><%$syslabels.Seolan_Core_General.edit%></a><%/if%></td>
+      </tr>
+     </tbody>
+    </table>
+   </li>
+   <li>
+    <ul>
+     <%section name=i loop=$mit_lines_oid %>
+      <li data-oid="<%$mit_lines_oid[i]%>" class="cv8-infotree-ctree-line">
+       <table class="table table-border cv8_tablelist">
+	<%strip%>
+	 <tr<%if $mit_lines_oPUBLISH[i]->raw!="1" && $mit_lines_oPUBLISH[i]%> class="napp"<%/if%>>
+	  <td class="dragcol<%if $mit_objects_sec[i].$mit__editLevel%> sortablehandler<%/if%>"><span class="glyphicon csico-move" aria-hidden="true"></span></td>
+	  <td class="cbcol"><input type="checkbox" name="_selected[<%$mit_lines_oid[i]%>]" value="1"></td>
+	  <td class="pictocol">
+	   <%if isset($mit_objects_sec[i].$mit__editLevel)%>
+	    <a href="#" onclick="return v<%$uniqid%>.editpage('<%$mit_lines_oid[i]%>','0');"><%if $mit_lines_translation_ok[i] || ($lang_data==$lang_def)%><%$syslabels.Seolan_Core_General.edit%><%else%><%$syslabels.Seolan_Core_General.view%><%/if%></a>
+           <%elseif isset($mit_objects_sec[i].$mit__viewLevel)%>
+            <a href="#" onclick="return v<%$uniqid%>.viewpage('<%$mit_lines_oid[i]%>');"><%$syslabels.Seolan_Core_General.view%></a>
+	   <%/if%>
+	  </td>
+	  <td class="pictocol addcol">
+	   <%if ($lang_data == $lang_def) && isset($mit_objects_sec[i].$mit__inputLevel)%>
+	    <%if $mit_lines_locked[i] neq "1"%>
+	     <a href="#" onclick="return v<%$uniqid%>.gonew('<%$mit_lines_oid[i]%>');"><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_subtree%></a>
+	    <%/if%>
+	   <%/if%>
+	   <%if $lang_data!=$lang_def && !$mit_lines_translation_ok[i] && isset($mit_objects_sec[i].$mit__editLevel)%>
+	    <a href="#" onclick="return v<%$uniqid%>.translatePage('<%$mit_lines_oid[i]%>');"><%$syslabels.Seolan_Module_Table_Table.new_translation%></a> 
+	   <%/if%>
+	  </td>
+
+	  <td class="infotree-padding-level-<%$mit_lines_level[i]%>">
+	   <%if $mit_lines_ssrub[i]==0%>
+	    <a style="visibility:hidden;" href="#"><%$syslabels.Seolan_Module_InfoTree_InfoTree.nodeToggleOpen%></a>
+	   <%else%>
+	    <a class="cv8-ajaxlink" 
+	       href='<%$self%>&moid=<%$mit_moid%>&function=home&template=Module/InfoTree.index.html&tplentry=mit&aliastop=<%$mit_aliastop%>&oid=<%$mit_lines_oid[i]%><%if $mit_lines_deroule[i]=='0' %>&do=add'><%$syslabels.Seolan_Module_InfoTree_InfoTree.nodeToggleOpen%><%else%>&do=del'><%$syslabels.Seolan_Module_InfoTree_InfoTree.nodeToggleClose%><%/if%></a>
+	   <%/if%>
+	    <%assign var="title" value=$mit_lines_otitle[i]->html|escape:"html"%>
+	   <%if $smarty.request.editmode && $imod_sec.list && isset($mit_objects_sec[i].$mit__editLevel)%>
+	    <input type="text" name="multiple_edit_fields[<%$mit_lines_oid[i]%>][title]" value="<%$mit_lines_otitle[i]->html%>" size="25">
+	   <%elseif isset($mit_objects_sec[i].$mit__editLevel)%>
+	    <a <%if $mit_lines_sections[i]>0%>class="font-weight-bold" <%/if%>href="#" title="<%$title%>" onclick="return v<%$uniqid%>.editpage('<%$mit_lines_oid[i]%>','1');"><%$title|truncate:50:"..."%></a>
+	   <%elseif isset($mit_objects_sec[i].$mit__viewLevel)%>
+	    <a <%if $mit_lines_sections[i]>0%>class="font-weight-bold" <%/if%>href="#" title="<%$title%>" onclick="return v<%$uniqid%>.viewpage('<%$mit_lines_oid[i]%>');"><%$title|truncate:50:"..."%></a>
+           <%else%>
+            <%$title|truncate:50:"..."%>
+	   <%/if%>
+	   <%if $mit_lines_ssrub[i] neq "0" %> (<%$mit_lines_ssrub[i]%>)<%/if%>
+	   <%if $mit_lines_olinkin[i]->html%> &rarr; <small><%$mit_lines_olinkin[i]->html%></small><%/if%>
+	   <%if $mit_lines_translation_ok[i]%><span class="flag"><%$TZR.lang_data.long%></span> <%/if%>
+	  </td>
+	  <td class="aliascol">
+	   <%if $smarty.request.editmode && $imod_sec.list && isset($mit_objects_sec[i].$mit__editLevel)%>
+	    <input type="text" name="multiple_edit_fields[<%$mit_lines_oid[i]%>][alias]" value="<%$mit_lines_oalias[i]->html%>" size="15">
+	   <%else%>
+	    <span title="<%$mit_lines_oalias[i]->text%>"><%$mit_lines_oalias[i]->html|truncate:"30":"..."%></span>
+	   <%/if%>
+	  </td>
+	 </tr>
+	<%/strip%>
+       </table>
+
+       <%if $mit_lines_level[i]<$mit_lines_level[$smarty.section.i.index_next]%><ul><%/if%>
+    
+       <%if $mit_lines_level[$smarty.section.i.index_next]%>
+	<%assign var="levelNext" value=$mit_lines_level[$smarty.section.i.index_next]%>
+       <%else%>
+	<%assign var="levelNext" value="1"%>
+       <%/if%>
+
+       <%math equation="x-y" x=$mit_lines_level[i] y=$levelNext assign="jump"%>
+       <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+       <%if $jump>=0%></li><%/if%>
+       <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+       <%if $jump>0%>
+	<%section name=foo loop=$jump%>
+	  </ul>
+	 </li>
+	<%/section%>
+       <%/if%>
+     <%/section%>
+    </ul>
+   </li>
+  </ul>
+  </div>
+  <%if $smarty.request.editmode%>
+   <div class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" onclick="document.forms['myform<%$uniqid%>'].elements['_function'].value='procHome';"></div>
+  <%/if%>
+ </form>
+</div>

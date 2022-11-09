@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+   <channel>
+      <title><%$tzr.societe%> : <%$labels.rss_title%></title>
+      <link><%$website%><%$lang_odata->html%>_rssnews.xml</link>
+      <description><%$labels.rss_description%></description>
+      <ttl>2160</ttl>
+      <%section name="item" loop=$rss_lines_oid%>
+      <item>
+         <title><![CDATA[<%$rss_lines_oF0001[item]->html%>]]></title>
+         <description><![CDATA[<%$rss_lines_oF0002[item]->html%>]]></description>
+         <link><![CDATA[<%$website%>]]></link>
+         <pubDate><%$rss_lines_oUPD[item]->raw|date_format:"%a, %d %b %Y %T %Z"%></pubDate>
+      </item>
+      <%/section%>
+   </channel>
+</rss>

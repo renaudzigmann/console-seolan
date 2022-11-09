@@ -1,0 +1,38 @@
+<script>
+  var columns = [
+    <%foreach from=$tableLabels item="name" key="i"%>
+      {id: "col<%$i%>", field: "col<%$i%>", editor: Slick.Editors.Text, sortable: true, name: "<%$name%>"},
+    <%/foreach%>
+  ];
+
+  var data = [
+    <%foreach from=$table item="rows"%>
+      {<%strip%>
+      <%foreach from=$rows item="val" key="i"%>
+        col<%$i%>:"<%$val%>",
+      <%/foreach%>
+      <%/strip%>},
+    <%/foreach%>
+  ];
+
+  var grid = TZR.SlickGrid('<%$fname%>', columns, data);
+  grid.majDatas(true);
+</script>
+
+<div id="grid_<%$fname%>" style="width:<%$width*8%>px"></div>
+
+<ul id="contextMenu_<%$fname%>" class="contextMenuSlickGrid">
+  <%if !$cannot_add_col%>
+    <li data="addCol"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_addCol%></li>
+    <li data="delCol"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_delCol%></li>
+  <%/if%>
+  <%if !$cannot_add_row%>
+    <li data="addRow"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_addRow%></li>
+    <li data="delRow"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_delRow%></li>
+  <%/if%>
+  <%if !$table_labels_ro%>
+    <li data="editCol"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_editCol%></li>
+  <%/if%>
+  <li data="undo"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_undo%></li>
+  <li data="redo"><%$syslabels.Seolan_Core_Field_Field.tableContextMenu_redo%></li>
+</ul>

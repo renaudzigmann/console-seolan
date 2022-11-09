@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%strip%>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+<url><loc><%$website%></loc></url>
+<%section name=j loop=$menu_lines_oid%>
+<%if $menu_lines_ssrub[j] eq 0%>
+<url><loc><%$fullself%><%$menu_lines_selfurl[j]%></loc></url>
+<%/if%>
+<%/section%>
+</urlset>
+<%/strip%>

@@ -1,0 +1,41 @@
+<div id="cv3-links-reseaux-sociaux" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-links-button" href="#links-button"><%$labels.quicklinks|default:"Liens rapides"%></a>
+  <h4><%$labels.quicklinks|default:"Liens rapides"%></h4>
+  <div id="links-button" class="collapse">
+    <div class="middle">
+      <ul>
+        <%if $charte_oHTDIG->raw eq 1%>
+        <li>
+          <a href="#frmHtdig"><span class="fa fa-search fa-2x" aria-hidden="true"></span></a>
+        </li>
+        <%/if%>
+        <%if $charte_oRUB_AGENDA->url%>
+      	  <li><a href="<%$charte_oRUB_AGENDA->url%>" title="<%$charte_oRUB_AGENDA->title%>" ><i class="fa fa-calendar fa-2x"></i></a></li>
+      	<%/if%>
+        <%if $charte_oRUB_LOCATION_SALLE->url%>
+      	  <li><a href="<%$charte_oRUB_LOCATION_SALLE->url%>" title="<%$charte_oRUB_LOCATION_SALLE->title%>" ><i class="fa fa-church fa-2x"></i></a></li>
+      	<%/if%>
+        <%if $charte_oRUB_NEWSLETTER_IN->url%>
+          <li><a href="<%$charte_oRUB_NEWSLETTER_IN->url%>" title="<%$charte_oRUB_NEWSLETTER_IN->title%>" ><i class="fa fa-newspaper-o fa-2x"></i></a></li>
+        <%/if%>
+
+        <%if $charte_oSOCIAL_GOOGLEPLUS->url%>
+      	  <li><a href="<%$charte_oSOCIAL_GOOGLEPLUS->url%>" target="<%$charte_oSOCIAL_GOOGLEPLUS->target%>" title="<%$charte_oSOCIAL_GOOGLEPLUS->title%>" ><i class="fa fa-google-plus fa-2x"></i></a></li>
+      	<%/if%>
+        <%if $charte_oSOCIAL_INSTAGRAM->url%>
+      	  <li><a href="<%$charte_oSOCIAL_INSTAGRAM->url%>" target="<%$charte_oSOCIAL_INSTAGRAM->target%>" title="<%$charte_oSOCIAL_INSTAGRAM->title%>" ><i class="fa fa-instagram fa-2x"></i></a></li>
+      	<%/if%>
+        <%if $charte_oSOCIAL_TWITTER->url%>
+      	  <li><a href="<%$charte_oSOCIAL_TWITTER->url%>" target="<%$charte_oSOCIAL_TWITTER->target%>" title="<%$charte_oSOCIAL_TWITTER->title%>" ><i class="fa fa-twitter fa-2x"></i></a></li>
+      	<%/if%>
+        <%if $charte_oSOCIAL_FBPAGE->url%>
+      	  <li><a href="<%$charte_oSOCIAL_FBPAGE->url%>" target="<%$charte_oSOCIAL_FBPAGE->target%>" title="<%$charte_oSOCIAL_FBPAGE->title%>" ><i class="fa fa-facebook-official fa-2x"></i></a></li>
+      	<%/if%>
+
+        <%if $charte_oURL_DON_DIOCESE->url%>
+      	  <li><a href="<%$charte_oURL_DON_DIOCESE->url%>" target="$charte_oURL_DON_DIOCESE->target" title="<%$charte_oURL_DON_DIOCESE->title%>" ><i class="fa fa-euro fa-2x"></i></a></li>
+      	<%/if%>
+      </ul>
+    </div>
+  </div><!-- fin links-butto -->
+</div><!-- fin cv3-links-button -->

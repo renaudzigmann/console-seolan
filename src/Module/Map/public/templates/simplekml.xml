@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Document id="<%$website%>">
+<name><![CDATA[<%$website%>]]></name>
+<description><![CDATA[<%$br_modmap.name%>]]></description>
+<Style id="style1">
+      <IconStyle id="style1">
+      <color>FFFFFFFF</color> 
+      <scale>1</scale> 
+      <Icon>
+      <href><%$full_serverhome%><%$br_modmap.oricon1->url%>?foo=.png</href>
+      </Icon>
+      <hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction" />
+</IconStyle>
+<LabelStyle>
+  <color>FFFFFFFF</color> 
+  <scale>1.1</scale> 
+</LabelStyle>
+</Style>
+<Folder id="<%$br_modmap.name%>">
+<%if $br_modmap.orkmltpl->html%>
+<%assign var="filename" value=$br_modmap.orkmltpl->filename%>
+<%/if%>
+<%section name=p loop=$br_places%>
+<%if $br_places[p].valid%>
+<Placemark id="<%$smarty.section.p.index%>">
+<styleUrl>#style1</styleUrl>
+<%if $filename%>
+  <name><![CDATA[<%include file="$filename" mode='name'%>]]></name>
+  <description><![CDATA[<%include file="$filename" mode='description'%>]]></description>
+<%else%>
+  <name><![CDATA[<%$br_places[p].name%>]]></name>
+  <description><![CDATA[<%$br_places[p].description%>]]></description>
+<%/if%>
+  <Point><coordinates><%$br_places[p].latlng%></coordinates></Point>
+  </Placemark>
+<%/if%>
+<%/section%>
+</Folder>
+</Document>
+</kml>

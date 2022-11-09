@@ -1,0 +1,217 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.query_text%>
+<script type="text/javascript">
+ v<%$uniqid%>.tableRq=new Array();
+ <%section name=fields loop=$br_fields_object %>
+  v<%$uniqid%>.tableRq['<%$_moid%>-<%$br_fields_object[fields]->field%>']='<%$br_fields_object[fields]->html|escape:"javascript"%>';
+ <%/section%>
+  <%section name=ssm0 loop=$br_ssmodsearch%>
+  <%assign var=ssmodinfos0 value=$br_ssmodsearch[ssm0]%>
+  <%section name=ssfields loop=$ssmodinfos0.query.fields_object%>
+  v<%$uniqid%>.tableRq['<%$ssmodinfos0.mod->_moid%>-<%$ssmodinfos0.query.fields_object[ssfields]->field%>']='<%$ssmodinfos0.query.fields_object[ssfields]->html|escape:"javascript"%>';
+  <%/section%>
+  <%/section%>
+ v<%$uniqid%>.toggleSsModSearch = function(moid) {
+   var jssmodc = jQuery('#linkedfiles'+moid);
+   if (jssmodc.css('display') == 'none'){
+     jssmodc.css('display', '');
+   } else {
+     jssmodc.css('display', 'none');
+     jQuery('#rq'+moid+'_fields .form-group').remove();
+     jQuery('img.tzr-picto', jssmodc).parent().trigger('click');
+   }
+  }
+ v<%$uniqid%>.clearAll = function() {
+   jQuery('#<%$uniqid%>rq_fields .form-group').remove();
+   <%section name=ssm loop=$br_ssmodsearch%>
+     jQuery('#linkedfiles<%$br_ssmodsearch[ssm].mod->_moid%>').css('display', 'none');
+     jQuery('#rq<%$br_ssmodsearch[ssm].mod->_moid%>_fields .form-group').remove();
+   <%/section%>
+ }
+ v<%$uniqid%>.myaddline=function(field, options) {
+  var t=[];
+  t[0]='<a href="#" class="btn btn-default btn-close" onclick="jQuery(jQuery(this).parent()).remove();return false;"><span class="glyphicon csico-close"></span></a>';
+  t[1]='<label class="title">'+field.options[field.selectedIndex].text+'</label>';
+  t[2]=this.tableRq[options.moid+'-'+field.options[field.selectedIndex].value];
+  <%* transformation des name en sous tableau de _ssmodsearch *%>
+  if (options.moid != '<%$_moid%>'){
+  t[2] = t[2].replace(/name=(['"])([a-z0-9\_]+)(['"\[\]])/ig, 'name=\$1'+'_ssmodsearch'+options.moid+'[\$2]\$3');
+  }
+  TZR.Table.addSearchFieldToForm("#"+options.target, t);
+  field.selectedIndex=0;
+  jQuery('[data-toggle="popover"]').popover({placement: 'auto'});
+ }
+ TZR.Table.addSearchFieldToForm = function(target, values){
+   var container = jQuery(target);
+   var line = jQuery("<div class='form-group'></div>");
+   container.append(line);
+   line.append(values[0]);
+   line.append(values[1]);
+   line.append(values[2].replace(/xidxid/g,'xid'+TZR.idxidx));
+   TZR.idxidx++;
+ }
+
+  jQuery(function(){
+    <%foreach from=$current_search_fields key="key" item="search_field"%>
+      <%if $key === "operator"%>
+        jQuery('#<%$uniqid%>rq input[name="operator"][value="<%$search_field%>"]').prop('checked', true);
+      <%else%>
+        jQuery('#<%$uniqid%>rq select[name="champs"]').val('<%$search_field%>').change();
+      <%/if%>
+    <%/foreach%>
+    <%foreach from=$ssmod_search_fields item="searchfields" key="moid"%>
+      jQuery('#<%$uniqid%>rq select[name="ssmodsearch"]').val('<%$moid%>').change();
+      <%foreach from=$searchfields key="key" item="search_field"%>
+        <%if $key === "operator"%>
+          jQuery('#linkedfiles<%$moid%> input[name="_ssmodsearch<%$moid%>[operator]"][value="<%$search_field%>"]').prop('checked', true);
+        <%else%>
+          jQuery('#linkedfiles<%$moid%> select[name="champs"]').val('<%$search_field%>').change();
+        <%/if%>
+      <%/foreach%>
+    <%/foreach%>
+  });
+
+</script>
+
+<div class="cv8-quicksearch clearfix">
+<form class="form-inline" action="<%$self%>" method="post" name="search<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="procQuery">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="clearrequest" value="1">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="template" value="Module/Table.browse.html">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ 
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.query_text%></legend>
+  <div id="<%$uniqid%>rq">
+    <div class="form-group">
+      <label class="title"><%$syslabels.Seolan_Core_General.query_text%></label>
+      <input type="radio" name="operator" value="AND" <%if $br_operator eq "AND"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.and%>
+      <input type="radio" name="operator" value="OR" <%if $br_operator eq "OR"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.or%>
+    </div>
+    <div class="form-group">
+      <label class="title"><%$syslabels.Seolan_Module_Table_Table.selectafield%></label>
+      <select name="champs" onchange="v<%$uniqid%>.myaddline(this, {moid:'<%$_moid%>', target:'<%$uniqid%>rq_fields'});">
+        <option value="">--</option>
+          <%section name=fields loop=$br_fields_object%>
+            <%if $br_fields_object[fields]->html%>
+              <option value="<%$br_fields_object[fields]->field%>"><%$br_fields_object[fields]->fielddef->label%></option>
+            <%/if%>
+        <%/section%>
+     </select>
+    </div>
+  <div id="<%$uniqid%>rq_fields">
+  </div>
+    <%if $br_ssmodsearch%>
+      <div class="form-group">
+        <label class="title"><%$syslabels.Seolan_Module_Table_Table.selectlinkedfiles%></label>
+        <select name="ssmodsearch" onchange="v<%$uniqid%>.toggleSsModSearch(this.options[this.selectedIndex].value);this.selectedIndex=0;">
+          <option value="">--</option>
+            <%section name=ssm loop=$br_ssmodsearch%>
+            <%assign var=ssmodinfos value=$br_ssmodsearch[ssm]%>
+          <option value="<%$ssmodinfos.mod->_moid%>"><%$ssmodinfos.mod->getLabel()%></option>
+            <%/section%>
+        </select>
+      </div>
+    <%/if%>
+
+
+  </div>
+
+  <div class="cv8-quicksearch-content clearfix">
+  <%section name=ssm loop=$br_ssmodsearch%>
+  
+    <%assign var=ssmodinfos value=$br_ssmodsearch[ssm]%>
+    
+    <div class="cv8-quicksearch-line clearfix" id="linkedfiles<%$br_ssmodsearch[ssm].mod->_moid%>" style="display:none">
+    <%* ne pas mettre la classe tzr-picto comme aux autres delete *%>
+
+      <a class="btn btn-link" href="#" onclick="v<%$uniqid%>.toggleSsModSearch('<%$br_ssmodsearch[ssm].mod->_moid%>');return false;">
+        <span class="glyphicon csico-close" aria-hidden="true"></span><%$ssmodinfos.mod->getLabel()%>
+      </a>
+
+    <div id="rq<%$ssmodinfos.mod->_moid%>">
+      <div class="form-group">
+        <label class="title"><%$syslabels.Seolan_Core_General.query_text%></label>
+        <input type="radio" name="_ssmodsearch<%$ssmodinfos.mod->_moid%>[operator]" value="AND" <%if $br_operator eq "AND"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.and%>
+        <input type="radio" name="_ssmodsearch<%$ssmodinfos.mod->_moid%>[operator]" value="OR" <%if $br_operator eq "OR"%>checked<%/if%>> <%$syslabels.Seolan_Core_General.or%>
+      </div>
+      <div class="form-group">
+        <label class="title"><%$syslabels.Seolan_Module_Table_Table.selectafield%></label>
+        <select name="champs" onchange="v<%$uniqid%>.myaddline(this, {moid:'<%$ssmodinfos.mod->_moid%>', target:'rq<%$ssmodinfos.mod->_moid%>_fields'});">
+          <option value="">--</option>
+            <%section name=fields loop=$ssmodinfos.query.fields_object%>
+              <%if $ssmodinfos.query.fields_object[fields]->html  && $ssmodinfos.query.fields_object[fields]->field != $ssmodinfos.linkfield%>
+                <option value="<%$ssmodinfos.query.fields_object[fields]->field%>"><%$ssmodinfos.query.fields_object[fields]->fielddef->label%></option>
+              <%/if%>
+            <%/section%>
+        </select>
+      </div>
+      <div id="rq<%$ssmodinfos.mod->_moid%>_fields">
+      </div>
+    </div>
+
+    </div>
+
+  <%/section%>
+    </div>
+
+
+</fieldset>
+
+ <%if $imod_props.stored_query && $modsec_mods[$_moid].rw%>
+  <fieldset>
+   <legend>Actions</legend>
+     <div class="form-group">
+      <label class="title"><%$syslabels.Seolan_Module_Table_Table.storequery%></label>
+      <input type="text" value="" name="_storename">
+    </div>
+    <div class="form-group">
+      <label class="title"><%$syslabels.Seolan_Core_General.group%></label>
+      <input type="text" value="" name="_storegroup">
+    </div>
+  </fieldset>
+ <%/if%>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.query_text%>">
+  <button type="button" class="btn btn-default" aria-expanded="false" onclick="v<%$uniqid%>.clearAll();return false;">
+    <%$syslabels.Seolan_Core_General.reset_text%>
+  </button>
+ </div>
+</form>
+
+  <%if $queries_lines_oid %>
+<a name="storedqueries<%$uniqid%>"></a>
+<fieldset>
+  <legend><%$syslabels.Seolan_Module_Table_Table.stored_query%></legend>
+  <div class="table-responsive">
+    <table class="table list2">  
+      <tbody>
+	<%section name=i loop=$queries_lines_oid%>
+        <%if $queries_lines_ogrp[i]->html!=$queries_lines_ogrp[$smarty.section.i.index_prev]->html%>
+	<tr><th colspan="2" class="groupe"><%$queries_lines_ogrp[i]->html%></th></tr>
+        <%/if%>
+	<tr>
+	  <td>
+	    <ul class="ul-list-inline no-wrap">
+	      <%if $modsec_mods[$_moid].rw%>
+	      <li>
+		<a class="cv8-ajaxlink" href="<%$self%>&template=Module/Table.browse.html&_function=delStoredQuery&moid=<%$_moid%>&oidr=<%$queries_lines_oid[i]%>&_next=<%$here|escape:"url"%>&tplentry=br"><%$syslabels.Seolan_Core_General.delete%></a>
+	      </li>
+	      <%/if%>
+	      <li>
+		<a class="cv8-ajaxlink" href="<%$self%>&function=procQuery&moid=<%$_moid%>&template=Module/Table.browse.html&_storedquery=<%$queries_lines_oid[i]%>&tplentry=br"><%$queries_lines_otitle[i]->html%></a>
+	      </li>
+	    </ul>
+	  <td>
+            <%if $queries_lines_orem[i]->html%><%$queries_lines_orem[i]->html%><%/if%>
+	  </td>
+	</tr>
+	<%/section%>
+      </tbody>
+    </table>
+  </div>
+</fieldset>
+<%/if%>
+</div>

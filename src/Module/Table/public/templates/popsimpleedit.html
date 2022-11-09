@@ -1,0 +1,78 @@
+<%* edition en popup / modale *%>
+<!-- <%$smarty.template%> -->
+<%block name="configure"%>
+<%$rw=true%>
+<%/block%>
+<%if $smarty.request._closeandgoid%>
+<script type="text/javascript">
+ <%* on ferme et on force un reload *%>
+ TZR.JSpreadsheet.refresh.call(TZR.JSpreadsheet, "<%$smarty.request._closeandgoid|escape:"html"%>");
+ TZR.Dialog.closeDialog();
+</script>
+<%else%>
+<%include file="Module/Table.functions.html"%>
+<%$title = array_pop($inav_stack)%>
+<%$formname = "simpleeditform{$uniqid}"%>
+<div class="title"><%$syslabels.Seolan_Core_General.edit_text%> - <%$title->name|strip_tags%></div>
+
+<div id="editrecordcontainer<%$uniqid%>" class="cv8-module-container">
+
+  <form name="<%$formname%>"
+	      method="POST"
+	      action="<%$self%>"
+
+  >
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="oid" value="<%$br_oid%>">
+    <input type="hidden" name="function" value="procEdit"%>
+    <%* next = display + flag *%>
+    <%$next = http_build_query(['oid'=>$br_oid,
+                                'moid'=>$_moid,
+                                'tplentry'=>'br',
+                                'template'=>'Module/Table.popsimpleedit.html',
+                                'function'=>'display',
+                                '_closeandgoid'=>$smarty.request.openeruniqid])%>
+    <input type="hidden" name="_next" value="<%$self%><%$next%>">
+    <input type="hidden" name="template" value="Core.empty.html">
+
+    <%include file="Module/Table.edit-core.html"%>
+
+    <%* les actions spécifiques : l'utilisation de form='' est incompatible avec edge (03/2017)*%>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+      <%if $rw===true%>
+      <button class="btn btn-primary" type="submit" id="savesimpleedit<%$uniqid%>"><%$syslabels.Seolan_Core_General.save_text%></button>
+      <button class="btn btn-primary" type="button" data-dismiss="modal""><%$syslabels.Seolan_Core_General.cancel%></button>
+      <%else%>
+      <button class="btn btn-primary" type="button" data-dismiss="modal""><%$syslabels.Seolan_Core_General.close%></button>
+      <%/if%>
+
+    </div>
+    <%if $rw===true%>
+    <script type="text/javascript">
+
+     (function(){
+       var mysub = function(){
+	 return TZR.ajaxSubmitForm(document.forms["<%$formname%>"], jQuery("#editrecordcontainer<%$uniqid%>"));
+       };
+       document.forms["<%$formname%>"].onsubmit = function(){
+	 return mysub();
+       };
+       document.getElementById("savesimpleedit<%$uniqid%>").addEventListener('click', function(){
+	 return mysub();
+       });
+       TZR.fieldsetAccordion(jQuery("#editrecordcontainer<%$uniqid%>"));
+       TZR.activeDependency(document.forms["<%$formname%>"]);
+       TZR.addValidator([
+	 document.forms["<%$formname%>"],
+	 "ajaxProcEditCtrl",
+	 "module-container",
+	 '<%$tzr.error_color%>',
+	 'Form']);
+     })();
+    </script>
+    <%/if%>
+  </form>
+
+</div>
+
+<%/if%>

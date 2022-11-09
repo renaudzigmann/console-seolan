@@ -1,0 +1,143 @@
+<div id="cv8-uniqdiv-<%$uniqid%>"></div>
+<script type="text/javascript">
+ var v<%$uniqid%>={modulecontainer:jQuery('#cv8-uniqdiv-<%$uniqid%>').parent()};
+ v<%$uniqid%>.sendSec=function(uid,level){
+   form=document.seditform<%$uniqid%>;
+   form.validbutton.onclick=function(){};
+   var url="<%$self%>&_function=procSecEdit&moid=<%$imod_props._moid%>&LANG_USER=<%$lang_user%>&LANG_DATA=<%$lang_data%>";
+   if(form.applyrecursively && form.applyrecursively.checked){ url+="&applyrecursively=1"; }
+   if(form.applyalllangs.checked){ url+="&applyalllangs=1"; }
+   url+="&level="+level+"&uid="+uid;
+   <%if is_array($br_oid)%><%section name=i loop=$br_oid%>url+="&oid[]=<%$br_oid[i]%>";<%/section%><%else%>url+="&oid=<%$br_oid%>";<%/if%>
+   var next='<%$self%>function=secEdit&template=Core/Module.edit-sec-tabs.html&moid=<%$imod_props._moid%>&tplentry=br&oid=<%$br_oid%>&skip=1';
+   TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:url+'&_next='+escape(next)});
+ }
+</script>
+<fieldset>
+  <div class="table-responsive">
+    <legend><%$syslabels.Seolan_Core_Security.actual%></legend>
+    <table id="seclist" class="table table-striped">
+      <thead>
+	<tr>
+	  <th><%$syslabels.Seolan_Core_General.group_text%> / <%$syslabels.Seolan_Core_General.user_text%></th>
+	  <th><%$syslabels.Seolan_Core_Security.actual_text%></th>
+	</tr>
+      </thead>
+      <tbody>
+	<%section name=acl loop=$br_acl_uid%>
+	<%if $br_acl_own[acl].oalias%>
+	<tr><td><%$br_acl_own[acl].ofullnam->html%> - <%$br_acl_own[acl].oalias->html%> (<%$syslabels.Seolan_Core_General.user_text%>)</td><td><%$br_acl_longlevel[acl]%></td></tr>
+	<%else%>
+	<tr><td><%$br_acl_own[acl].oGRP->html%></td><td><%$br_acl_longlevel[acl]%></td></tr>
+	<%/if%>
+	<%/section%>
+      </tbody>
+    </table>
+  </div>
+</fieldset>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_Security.bygroup_text%></legend>
+
+  <div class="cv8-quicksearch form-inline clearfix"> 
+    <form action="<%$self%>" method="GET" name="lsform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this, jQuery('#cv8-uniqdiv-<%$uniqid%>').parents('div.tzr-tabcontentcontainer')[0]);" class="security-edit">
+      <input type="hidden" name="_function" value="secEdit">
+      <input type="hidden" name="template" value="Core/Module.edit-sec-tabs.html">
+      <input type="hidden" name="tplentry" value="br">
+      <input type="hidden" name="skip" value="1">
+      <input type="hidden" name="oid" value="<%$br_oid%>">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+      <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+
+      <div class="form-group">
+	<label ><%$syslabels.Seolan_Core_General.filter%></label>
+	<select name="filter_lvl" onchange="v<%$uniqid%>.filter(this.value);">
+	  <option value="all"><%$syslabels.Seolan_Core_General.all%></option>
+	  <%section name=l3 loop=$brg_lines_sec[0][$smarty.const.TZR_DEFAULT_LANG][1]%>
+	  <%assign var="t4" value=$brg_lines_sec[0][$smarty.const.TZR_DEFAULT_LANG][1][l3]%>
+	  <option value="<%$t4%>"><%$syslabels.Seolan_Core_Security.$t4%></option>
+	  <%/section%>
+	</select>
+	<select name="filter_lang" onchange="v<%$uniqid%>.filter();">
+	  <option value="all"><%$syslabels.Seolan_Core_General.alllang%></option>
+	  <%foreach from=$brg_lines_sec[0] key=l3 item=i3%>
+	  <option value="<%$l3%>"><%$l3%></option>
+	  <%/foreach%>
+	</select>
+	<input type="checkBox" name="withFO" id="withFO" <%if $smarty.request.withFO==1%>checked<%/if%> value="1" onclick="return TZR.ajaxSubmitForm(document.forms.lsform<%$uniqid%>, jQuery('#cv8-uniqdiv-<%$uniqid%>').parents('div.tzr-tabcontentcontainer')[0]);">
+	<label for="withFO"><%$syslabels.Seolan_Core_Module_Module.withfo%></label>
+	<input type="checkBox" name="withEmptyGrps" id="withEmptyGrps" <%if $smarty.request.withEmptyGrps==1%>checked<%/if%> value="1" onclick="return TZR.ajaxSubmitForm(document.forms.lsform<%$uniqid%>, jQuery('#cv8-uniqdiv-<%$uniqid%>').parents('div.tzr-tabcontentcontainer')[0]);">
+	<label for="withEmptyGrps"><%$syslabels.Seolan_Core_Module_Module.emptygroups%></label>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive">
+  <table class="table table-striped cv8_tablelist">
+    <thead>
+      <tr>
+	<th><%$syslabels.Seolan_Core_General.group_text%></th>
+	<th><%$syslabels.Seolan_Core_Security.actual_text%></th>
+	<th><%$syslabels.Seolan_Core_Security.inherited_text%></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%section name=u loop=$grps_lines_oid%>
+      <tr>
+	<td><%$grps_lines_oGRP[u]->html%></td>
+	<td>
+	  <%assign var=v1 value=$grps_lines_l1[u][0]%>
+	  <select onchange="v<%$uniqid%>.sendSec('<%$grps_lines_oid[u]%>',this.value);">
+	    <option value="default"><%$syslabels.Seolan_Core_Security.default%></option>
+	    <%foreach from=$grps_lines_l2[u] item=v2%>
+	    <option value="<%$v2%>" <%if $v2==$v1%>selected<%/if%>><%$syslabels.Seolan_Core_Security.$v2%></option>
+      <%/foreach%>
+     </select>
+    </td>
+    <td><%assign var=v3 value=$grps_lines_l3[u][0]%><%$syslabels.Seolan_Core_Security.$v3%></td>
+   </tr>
+  <%/section%>
+  </tbody>
+ </table>
+ </table>
+</fieldset>
+
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_Security.add_acl%></legend>
+ <form action="<%$self%>" method="post" name="seditform<%$uniqid%>">
+ <div class="table-responsive">
+  <table class="table table-striped list2" >
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_Security.add_acl_text%></label></th>
+    <td>
+     <select name="uid">
+      <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+       <%section name=u loop=$grps_lines_oid%>
+	<option value="<%$grps_lines_oid[u]%>"><%$grps_lines_oGRP[u]->text%></option>
+       <%/section%>
+      </optgroup>
+      <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+       <%section name=u loop=$users_lines_oid%>
+	<option value="<%$users_lines_oid[u]%>"><%$users_lines_ofullnam[u]->text%> (<%$users_lines_oalias[u]->text%>)</option>
+       <%/section%>
+      </optgroup>
+     </select>
+     <select name="level">
+      <option value="default"><%$syslabels.Seolan_Core_Security.default%></option>
+      <%section name=a loop=$acls_lines%>
+       <option value="<%$acls_lines[a]%>"><%assign var=v1 value=$acls_lines[a]%><%$syslabels.Seolan_Core_Security.$v1%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_Module_Module.apply_alllangs%></label></th>
+    <td><input name="applyalllangs" type="checkbox" class="checkbox" value="1" checked></td>
+   </tr>
+  </table>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.save_text%>" onclick="v<%$uniqid%>.sendSec(this.form.uid.value,this.form.level.value);" name="validbutton">
+  </div>
+  </div>
+ </form>
+</fieldset>

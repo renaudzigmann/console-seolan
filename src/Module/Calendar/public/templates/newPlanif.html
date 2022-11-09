@@ -1,0 +1,172 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Calendar_Calendar.insertplanif%>
+<script type="text/javascript">
+  v<%$uniqid%>.checkPlanForm=function(f){
+    if(jQuery("input[name='date[]']",f).length==0){
+      alert("<%$syslabels.Seolan_Module_Calendar_Calendar.nodateselected|escape:"javascript"%>");
+      return false;
+    }
+    jQuery("input[x-control='0']",f).removeClass("<%$tzr.error_color%>");
+    var emptyh=[];
+    jQuery("input[x-control='1']",f).each(function(i, e){
+      if (e.value == '')
+        emptyh.push(e);
+    })
+    if(emptyh.length>0){
+      jQuery(emptyh).addClass("<%$tzr.error_color%>").focus();
+      return false;
+    }
+    var juattval=jQuery("select[name='uattendees[]']",f).val();
+    if(jQuery("select[name='attendees[]'] option",f).length==0 && jQuery(".simpleTree .selected",f).length==0 && (!juattval || juattval && juattval.length==1 && juattval[0]=="")){
+      jQuery("#attendeestable<%$uniqid%> tr:eq(1)").addClass("<%$tzr.error_color%>");
+      return false;
+    }else{
+      jQuery("#attendeestable<%$uniqid%> tr:eq(1)").removeClass("<%$tzr.error_color%>");
+    }
+    return TZR.ajaxSubmitForm(f);
+  }
+  v<%$uniqid%>.deleteDate=function(isodate,datet){
+    jQuery('#'+isodate+"-<%$uniqid%>").remove();
+    var dp=jQuery.datepicker;
+    var inst=dp._getInst(jQuery('#dates<%$uniqid%>')[0]);
+    v<%$uniqid%>.selecteddates[datet]=undefined;
+    dp._updateDatepicker(inst);
+  }
+
+  v<%$uniqid%>.checkAllDay=function(cb,isodate){
+    if(cb.checked) var val="0";
+    else var val="1";
+    jQuery(cb.form.elements["begin["+isodate+"][0]"]).attr("x-control",val);
+  }
+</script>
+<form action="<%$self%>" method="post" ENCTYPE="multipart/form-data" onsubmit="return v<%$uniqid%>.checkPlanForm(this);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="procInsertPlanif">
+ <input type="hidden" name="oid" value="<%$brag_KOID%>">
+ <input type="hidden" name="ag" value="<%$brag_KOID%>">
+ <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&oid=<%$brag_KOID%>&template=Core.message.html">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.event%></legend>
+  <div class="table-responsive">
+  <table class="list2">
+   <tr>
+    <th><label><%$br_oag->fielddef->label%></label></th>
+    <td><%$br_oag->text%></td>
+   </tr>
+   <%section name=fields loop=$br_fields_object%>
+    <%if !$br_fields_object[fields]->sys && $br_fields_object[fields]->fielddef->field!="invitt" && $br_fields_object[fields]->fielddef->field!="datelim" && $br_fields_object[fields]->fielddef->field!="ag"%>
+     <tr id="cont-<%$br_fields_object[fields]->field%>">
+      <th <%if $br_fields_object[fields]->fielddef->comment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>]&nbsp;<%$br_fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+      <td><%$br_fields_object[fields]->html%></td>
+     </tr>
+    <%/if%>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.planification%></legend>
+  <div class="table-responsive">
+  <table class="list2">
+   <tr>
+    <th><label><%$br_odatelim->fielddef->label%></label></th>
+    <td><%$br_odatelim->html%></td>
+   </tr>
+  </table>
+  </div>
+  <div class="dates" id="dates<%$uniqid%>"></div>
+  <div class="table-responsive">
+  <table class="cv8_tablelist" id="dateslist<%$uniqid%>">
+   <tr>
+    <th width="20">&nbsp;</th>
+    <th><%$syslabels.Seolan_Module_Calendar_Calendar.date%></th>
+    <th><%$syslabels.Seolan_Module_Calendar_Calendar.hour1%></th>
+    <th><%$syslabels.Seolan_Module_Calendar_Calendar.hour2%></th>
+    <th><%$syslabels.Seolan_Module_Calendar_Calendar.hour3%></th>
+    <th><%$syslabels.Seolan_Module_Calendar_Calendar.allday%></th>
+   </tr>
+  </table>
+  </div>
+  <style>
+  </style>
+  <script type="text/javascript">
+   v<%$uniqid%>.selecteddates=new Object();
+   jQuery('#dates<%$uniqid%>').datepicker({
+    minDate:"+0 day",
+    beforeShowDay:function(datet){
+      var dp=jQuery.datepicker;
+      var inst=dp._getInst(jQuery('#dates<%$uniqid%>')[0]);
+      var df=dp.formatDate(dp._get(inst,"dateFormat"),datet,dp._getFormatConfig(inst));
+      if(v<%$uniqid%>.selecteddates[df]==undefined) return [1,'',''];
+      else return [1,'ui-state-active2',''];
+    },
+    onSelect:function(datet,picker){
+      var d=picker.currentDay;
+      if(d<10) d="0"+d;
+      var m=picker.currentMonth+1;
+      if(m<10) m="0"+m;
+      var y=picker.currentYear;
+      var isodate=y+"-"+m+"-"+d;
+      if(v<%$uniqid%>.selecteddates[datet]==undefined){
+	v<%$uniqid%>.selecteddates[datet]=1;
+	var newtr='<tr id="'+isodate+'-<%$uniqid%>">';
+	newtr+='<td><a href="#" onclick="v<%$uniqid%>.deleteDate(\''+isodate+'\',\''+datet+'\');return false;"><%$syslabels.Seolan_Core_General.delete%></a></td>';
+	newtr+='<td>'+datet+'<input type="hidden" name="date[]" value="'+isodate+'"></td>';
+	newtr+='<td><%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <input type="text" name="begin['+isodate+'][0]" id="bh0-'+isodate+'-<%$uniqid%>" x-control="1" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][0]\',\'end['+isodate+'][0]\'); TZR.isIdValid(\'bh0-'+isodate+'\');}"> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <input type="text" name="end['+isodate+'][0]" id="eh0-'+isodate+'-<%$uniqid%>" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][0]\',\'end['+isodate+'][0]\'); TZR.isIdValid(\'eh0-'+isodate+'\');}"></td>';
+	newtr+='<td><%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <input type="text" name="begin['+isodate+'][1]" id="bh1-'+isodate+'-<%$uniqid%>" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][1]\',\'end['+isodate+'][1]\'); TZR.isIdValid(\'bh1-'+isodate+'\');}"> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <input type="text" name="end['+isodate+'][1]" id="eh1-'+isodate+'-<%$uniqid%>" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][1]\',\'end['+isodate+'][1]\'); TZR.isIdValid(\'eh1-'+isodate+'\');}"></td>';
+	newtr+='<td><%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <input type="text" name="begin['+isodate+'][2]" id="bh2-'+isodate+'-<%$uniqid%>" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][2]\',\'end['+isodate+'][2]\'); TZR.isIdValid(\'bh2-'+isodate+'\');}"> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <input type="text" name="end['+isodate+'][2]" id="eh2-'+isodate+'-<%$uniqid%>" value="" size="5" maxlength="5" onblur="if(typeof(TZR)!=\'undefined\'){ TZR.format2hours(this,2,\'begin['+isodate+'][2]\',\'end['+isodate+'][2]\'); TZR.isIdValid(\'eh2-'+isodate+'\');}"></td>';
+	newtr+='<td><input type="checkbox" class="checkbox" value="1" name="allday['+isodate+']" onchange="v<%$uniqid%>.checkAllDay(this,\''+isodate+'\');"></td>';
+	newtr+='</tr>';
+	var trs=jQuery('#dateslist<%$unqidi%> tr');
+	var ok=false;
+	for(var i in trs){
+	  if(i>0 && trs[i].id>isodate){
+	    jQuery(trs[i]).before(newtr);
+	    ok=true;
+	    break;
+	  }
+	}
+	if(!ok) jQuery('#dateslist<%$uniqid%>').append(newtr);
+	TZR.addValidator(['bh0-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	TZR.addValidator(['eh0-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	TZR.addValidator(['bh1-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	TZR.addValidator(['eh1-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	TZR.addValidator(['bh2-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+	TZR.addValidator(['eh2-'+isodate+'-<%$uniqid%>',/^(()|(([0-1][0-9]|2[0-3]):[0-5][0-9]))$/,'','<%$tzr.error_color%>','\Seolan\Field\ShortText\ShortText']);
+      }else{
+	jQuery('#'+isodate+'-<%$uniqid%>').remove();
+	v<%$uniqid%>.selecteddates[datet]=undefined;
+      }
+      picker.currentDay=1;
+      picker.currentMonth=1;
+      picker.currentYear=1970;
+    }
+   });
+  </script>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.invitation%></legend>
+  <div class="table-responsive">
+  <table class="list2">
+   <tr>
+    <th><label><%$br_oinvitt->fielddef->label%></label></th>
+    <td><%$br_oinvitt->html%></td>
+   </tr>
+  </table>
+  </div>
+  <div class="table-responsive">
+  <table class="cv8_tablelist nohover" id="attendeestable<%$uniqid%>">
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.recipient%></label></th>
+    <%if !empty($br_oattendees->oidcollection)%><th><label><%$syslabels.Seolan_Module_Calendar_Calendar.plandiarieslist%></label></th><%/if%>
+   </tr>
+   <tr>
+    <td><%include file="Core./users-selector-tree.html" inputname="uattendees"%></td>
+    <%if !empty($br_oattendees->oidcollection)%><td><%$br_oattendees->html|replace:"agcons":"attendees"%></td><%/if%>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+ <div class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" name="btnNewField"/>
+ </div>
+</form>

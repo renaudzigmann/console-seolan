@@ -1,0 +1,30 @@
+<%if !empty($param_queryfields)%>
+<div style="margin-bottom:10mm;">
+  <label><%$syslabels.general.filter%></label> : <br>
+  <%foreach name=i from=$param_queryfields item=field%>
+  - <%$field->fielddef->label%> : <%$field->getQueryText()%><br>
+  <%/foreach%>
+</div>
+<%/if%>
+<table class="cv8_tablelist">
+  <thead>
+    <tr>
+      <%section name=header loop=$br_header_fields%>
+      <td><label><%$br_header_fields[header]->label%></label></td>
+      <%/section%>
+    </tr>
+  </thead>
+  <tbody>
+    <%section name=lines loop=$br_lines_oid %>
+    <tr>
+      <%section name=header loop=$br_header_fields %>
+	 <td>
+	   <%getvar var="br_lines_o`$br_header_fields[header]->field`[`$smarty.section.lines.index`]->html" assign="tmp"%>
+	   <%if $tmp%><%$tmp%><%else%>&nbsp;<%/if%>
+	 </td>
+	 <%/section%>
+    </tr>
+    <%/section%>
+  </tbody>
+</table>
+   

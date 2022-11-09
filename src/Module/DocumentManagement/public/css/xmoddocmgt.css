@@ -1,0 +1,277 @@
+/* //// STYLES BASE DOC //// */
+
+
+
+.csx-docmgt-path {
+	margin: -10px 0 15px 0;
+}
+
+.csx-docmgt-path ul {
+	display: inline-block;
+	font-size: 0.9em;
+	list-style: none;
+	padding: 0;
+	margin: 0 10px 0 5px;
+}
+
+.csx-docmgt-path ul > li {
+	display: inline-block;
+}
+
+.csx-docmgt-path ul > li + li:before {
+	content: "/\00a0";
+	padding: 0 5px;
+	color: #cccccc;
+}
+
+.csx-docmgt-path a {
+    color: #545e6a;
+}
+
+
+
+.tzr-docmgt-fd {
+	position: relative;
+	line-height: 1.1em;
+}
+
+.tzr-docmgt-fd p {
+	line-height: 1.1em;
+}
+
+.tzr-docmgt-fd .checkbox,
+.tzr-docmgt-fd .radio {
+	display: inline-block;
+	margin: 0 8px 0 0;
+}
+
+.tzr-docmgt-fd a,
+.tzr-docmgt-fd a:hover {
+	text-decoration: none;
+}
+
+.tzr-docmgt-fd .glyphicon {
+	color: #687483;
+}
+
+.tzr-docmgt-fd a:hover .glyphicon {
+	color: #cc0033;
+}
+.tzr-docmgt-doc1 .tzr-xdirdef-dir {
+  display:none;
+  
+}
+.tzr-docmgt-doc1 div.fileslistviewer>div {
+  display:inline-block;
+  white-space:nowrap;
+  padding-right:5px;
+}
+.tzr-docmgt-doc1 div.fileslistviewer>div::before {
+  content:'|';
+}
+.tzr-docmgt-doc1 div.fileslistviewer>div:first-child::before {
+  content:'';
+}
+.tzr-docmgt-doc1 div.fileslistviewer>div::after {
+  content:'';
+}
+.tzr-docmgt-doc1 div.fileslistviewer>a.toggle {
+  padding-right:5px;
+  font-weight:bold;
+}
+#tzr-docmgt-top{
+	padding:0px;
+	padding-bottom:5px;
+}
+
+.tzr-docmgt-comment {
+	margin-bottom: 15px;
+}
+
+fieldset.tzr-docmgt-fd legend {
+	text-transform: inherit;
+	padding-bottom: 0.75em;
+	margin-bottom: 0.75em;
+}
+
+.tzr-docmgt-doc1 {
+	padding: 12px 10px;
+}
+
+.cv8-search-result .tzr-docmgt-doc1 {
+	padding: 0;
+}
+
+.cv8-search-result .tzr-docmgt-doc1 .d-inline-block {
+	vertical-align: middle;
+	margin: 0 5px 5px 0;
+	padding: 0;
+}
+
+.cv8-search-result .tzr-docmgt-doc1 .tzr-xdirdef-dir {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 0 5px 0;
+	padding: 0;
+}
+
+.cv8-search-result .tzr-docmgt-doc1 .d-inline-block .d-inline-block {
+	margin: 0;
+	padding: 0;
+}
+
+
+.tzr-docmgt-doc1:nth-child(odd) {
+	background-color: #f5f5f5;
+}
+
+.tzr-docmgt-doc1 img {
+	vertical-align: middle;
+}
+
+.tzr-docmgt-docs {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.tzr-docmgt-block {
+	position: relative;
+	display: inline-block;
+	min-height: 50px;
+	width: 280px;
+	vertical-align: top;
+	padding-top: 15px;
+	margin: 0 15px 10px 0;
+}
+
+.tzr-docmgt-block:after {
+	content: "";
+	position: absolute;
+	width: 70px;
+	height: 1px;
+	background: #e5e5e5;
+	left: 0;
+	top: 0;
+}
+
+
+.tzr-docmgt-block img {
+	max-width: 25px;
+}
+
+.tzr-docmgt-blockfullwidth {
+	vertical-align:top;
+	display:block;
+	margin-top:5px;
+	margin-right:5px;
+}
+
+.tzr-docmgt-block-folder {
+	display: inline-block;
+	min-width: 25px;
+	vertical-align: top;
+	margin-bottom: 8px;
+	overflow: hidden;
+}
+
+.tzr-docmgt-block-folder .glyphicon {
+	font-size: 20px;
+}
+
+.tzr-docmgt-block-title {
+	display: inline-block;
+	width: calc(100% - 35px); 
+	max-width: 90%;
+	font-weight: 700;
+	vertical-align: top;
+	margin: 2px 0 6px 0;
+}
+
+.tzr-docmgt-subblock {
+	font-size: 0.95em;
+	margin-left: 30px;
+}
+
+.tzr-docmgt-fd .tzr-docmgt-subblock p {
+	margin-bottom: 8px;
+}
+
+.tzr-docmgt-ul {
+	padding: 0;
+	margin: 0;
+}
+
+.tzr-docmgt-ul > li {
+	display: inline-block;
+}
+
+.tzr-docmgt-ul > li + li:before {
+	content: "/\00a0";
+	padding: 0 5px;
+	color: #545e6a;
+}
+
+.tzr-docmgt-ulfullwidth li {
+	display: block;
+}
+
+
+.tzr-docmgt-ulfullwidth {
+	padding: 0px;
+	margin-top:0px;
+	margin-bottom:5px;
+	margin-left:0px;
+}
+
+
+.tzr-docmgt-tree {
+	overflow: hidden;
+}
+
+.tzr-docmgt-treesep {}
+
+.tzr-docmgt-treesep h1 {
+	font-size: 1.25em;
+}
+
+.tzr-docmgt-treesep .checkbox,
+.tzr-docmgt-treesep .radio {
+	display: inline-block;
+	margin: 0 8px 0 0;
+}
+
+.tzr-docmgt-treesep a,
+.tzr-docmgt-treesep a:hover {
+	text-decoration: none;
+}
+
+.tzr-docmgt-treesep .glyphicon {
+	color: #687483;
+}
+
+.tzr-docmgt-treesep a:hover .glyphicon {
+	color: #cc0033;
+}
+
+.tzr-docmgt-treesep .tzr-docmgt-paramblock {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+
+.tzr-docmgt-treesep .tzr-action {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #e5e5e5;
+}
+
+.tzr-docmgt-treesep .tzr-action .form-group {
+	display: inline-block;
+	max-width: 48%;
+}
+
+.tzr-docmgt-treesep .tzr-action label {
+	display: block;
+	margin: 0 0 5px 0;
+}

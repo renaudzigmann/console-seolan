@@ -1,0 +1,17 @@
+<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="#">
+<%capture name='userlogo' assign='userlogo'%><%user logo=1%><%/capture%>
+<%if  $userlogo != ''%>
+  <img class="profil csx-fade" src="<%$userlogo%>&geometry=36x36">
+  <%else%>
+  <span class="glyphicon csico-user"></span>
+<%/if%>
+</a>
+<ul class="dropdown-menu" aria-labelledby="profil">
+  <li class="dropdown-header"><span><span class="glyphicon csico-user" aria-hidden="true"></span><%user fullname=1%></span></li>
+  <%if empty($tzr.hiddenmyaccountlink)%>
+    <li><a href="<%$self%>moid=<%$sysmods.xmoduser2%>&function=myAccount&template=Module/User.myAccount.html&tplentry=br" class="cv8-ajaxlink"><span class="glyphicon csico-property" aria-hidden="true"></span><%$syslabels.Seolan_Module_User_User.myaccount%></a></li>
+  <%/if%>
+  <%if !$nobody%>
+    <li><a href="<%$self%>class=<%$smarty.const.TZR_SESSION_MANAGER%>&function=close&template=Core.layout/auth.html" <%if $tzr.RCisActive%> onclick="return RClogout();"<%/if%>><span class="glyphicon csico-log-out" aria-hidden="true"></span><%$syslabels.Seolan_Core_General.logout_text%></a></li>
+  <%/if%>
+</ul>

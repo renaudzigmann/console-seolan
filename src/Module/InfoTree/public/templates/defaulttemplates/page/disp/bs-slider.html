@@ -1,0 +1,41 @@
+<%if $admini%>
+    <img  class="img-responsive" src="<%$it_olines[it].oimg1->resizer%>&geometry=<%$geometry%>&crop=<%$crop%>&gravity=Center" alt="" />
+    <%$it_olines[it].oimg1->html_preview%>
+    <%$it_olines[it].oimg2->html_preview%>
+    <%$it_olines[it].oimg3->html_preview%>
+    <%$it_olines[it].oimg4->html_preview%>
+<%else%>
+    <%if $it_olines[it].otitsec->html%><h2><%$it_olines[it].otitsec->html%></h2><%/if%>
+    <div class="cv3-slider">
+        <div id="sectionCarousel-<%$it_olines[it].oid|replace:":":""%>" class="carousel slide carousel-v1" data-ride="carousel">
+            <div class="carousel-inner">
+                <%assign var=jump value=4%>
+                <%section name=foo loop=$jump%>
+                    <%assign var=img value="oimg`$smarty.section.foo.iteration`"%>
+                    <%assign var=lnk value="oimglnk`$smarty.section.foo.iteration`"%>
+                    <%assign var=url value="oimgurl`$smarty.section.foo.iteration`"%>
+                    <%assign var=leg value="oimgleg`$smarty.section.foo.iteration`"%>
+                    <%if $it_olines[it].$img->raw%>
+                        <div class="item <%if $smarty.section.foo.iteration==1%> active<%/if%>">
+                            <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].$img srcsetId='img_full'%>
+                            <%if $it_olines[it].$img->title %>
+                                <div class="carousel-caption">
+                                    <p><%$it_olines[it].$img->title|escape%></p>
+                                </div>
+                            <%/if%>
+                        </div>
+                    <%/if%>
+                <%/section%>        
+            </div>
+            <div class="carousel-arrow">
+	      <a class="left carousel-control" href="#sectionCarousel-<%$it_olines[it].oid|replace:":":""%>" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span>
+	      </a>
+	      <a class="right carousel-control" href="#sectionCarousel-<%$it_olines[it].oid|replace:":":""%>" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span>
+	      </a>
+	    </div>
+        </div>
+    </div>
+<%/if%>
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title><%$it_cat_mit.otitle->text%></title>
+ <base href="http://<%$server_name%>/"/>
+ <style type="text/css">
+  @page {
+    size: A4 portrait;
+    margin: 20mm 10mm 20mm 10mm;
+    padding: 12mm 0mm 12mm 0mm;
+    prince-image-resolution:100dpi;
+    background-image-resolution:100dpi;
+    /* Titre de la rubrique en haut à gauche */
+    @top-left {
+        padding-top:10mm;
+        border-bottom:1px solid #BBB;
+        content:"<%$it_cat_mit.otitle->text|escape%>";
+        color: #BBB;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+    }
+    /* Nom de la société en haut à droite */
+    @top-right {
+        padding-top:10mm;
+        border-bottom:1px solid #BBB;
+        content: "<%$tzr.societe|escape%>";
+        color: #BBB;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    /* Date courante en bas à gauche */
+    @bottom-left {
+        padding-bottom:10mm;
+        border-top:1px solid #BBB;
+        content:"<%$smarty.now|date_format:'%d/%m/%Y %H:%M'%>";
+        color: #BBB;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    /* Numéro de page en bas à droite */
+    @bottom-right {
+        padding-bottom:10mm;
+        border-top:1px solid #BBB;
+        content: counter(page)"/"counter(pages);
+        color: #BBB;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+  }
+  body {
+        padding: 0pt;
+        margin: 0pt;
+        background: none;
+        font: normal 10pt Arial, Helvetica, sans-serif;
+  }
+  /* Classe CSS pour empêcher le saut de page à l'intérieur de l'élément */
+  .page-break-inside-avoid {
+        page-break-inside:avoid;
+  }
+  <%if file_exists("`$smarty.const.TZR_WWW_DIR``$it_prop->pdf_css_content`")%><%include file="`$smarty.const.TZR_WWW_DIR``$it_prop->pdf_css_content`"%><%/if%>
+  <%if file_exists("`$smarty.const.TZR_WWW_DIR``$it_prop->pdf_css`")%><%include file="`$smarty.const.TZR_WWW_DIR``$it_prop->pdf_css`"%><%/if%>
+ </style>
+</head>
+<body>
+
+<div id="tzr-page-content">
+<%* Inclut toutes les sections avec le template d'impression par défaut ou avec le template d'affichage si ce dernier n'existe pas *%>
+<%if $it_zones%>
+    <%foreach item=zone key=name from=$it_zones%>
+        <%assign var="it_olines" value=$zone.olines%>
+        <%assign var="it_tlines" value=$zone.tlines%>
+        <%section name=it loop=$it_olines%>
+            <%assign var="filename" value=$it_tlines[it].oprint->filename|default:$it_tlines[it].odisp->filename%>
+            <%if file_exists($filename)%><%include file="$filename"%><%/if%>
+        <%/section%>
+    <%/foreach%>
+<%else%>
+    <%section name=it loop=$it_olines%>
+        <%assign var="filename" value=$it_tlines[it].oprint->filename|default:$it_tlines[it].odisp->filename%>
+        <%if file_exists($filename)%><%include file="$filename"%><%/if%>
+    <%/section%>
+<%/if%>
+</div>
+
+</body>
+</html>

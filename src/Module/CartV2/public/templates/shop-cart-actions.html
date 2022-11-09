@@ -1,0 +1,23 @@
+
+<%* Gestion des coupons *%>
+<%if $cart->coupons_availables%>
+<div class="form-group coupon">
+  <label><%"Utiliser un coupon"|__:'\Seolan\Module\Cart\CartV2'%></label>
+  <input name="coupon" value="<%$cart->total.coupon.code%>" placeholder="Ex: NOEL50" class="form-control">
+  <p class="help-block coupon_message">
+    <%$cart->total.coupon.message%>
+  </p>
+</div>
+<%/if%>
+
+<div class="edit-cart-actions">
+  <input type="submit" value="<%"Recalculer"|__:'\Seolan\Module\Cart\CartV2'%>" />
+  <script type="text/javascript">
+    jQuery(function($){
+      $('.edit-cart-actions input[type=submit]').prop('disabled', true).addClass('disabled');
+      $('.edit-cart-actions').closest('form').find(':input').on('change click', function(){
+        $(this).closest('form').find('.edit-cart-actions input[type=submit]').prop('disabled', false).removeClass('disabled');
+      });
+    });
+  </script>
+</div>

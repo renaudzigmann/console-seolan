@@ -1,0 +1,50 @@
+<%if !$br__langedit%>
+<%assign var='translatable_field_icon' value='<span class="glyphicon csico-translatable-field" aria-hidden="true"></span>'%>
+<%/if%>
+<%* gestion du multi colonnes *%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group])%>
+<%assign var="colnum" value=$imod_props.numberOfColumns%>
+<span class="colnum-1">
+<%/if%>
+<%foreach key=group item=fields from=$br__groups%>
+<%if $group != '_systemproperties' && $group != $syslabels.Seolan_Core_General.comment_text%>
+<%* gestion du multi colonnes *%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group]) && $br__cols[$group]!=$colnum%>
+</span>
+<%assign var="colnum" value=$br__cols[$group]%>
+<span class="colnum-<%$colnum%>">
+<%/if%>
+<fieldset>
+  <legend><%$group%></legend>
+  <div class="row-striped">
+    <%section name=f loop=$fields %>
+    <%if empty($smarty.request._linkedfields) || !in_array($fields[f]->field, $smarty.request._linkedfields)%>
+    <%call fieldline field=$fields[f]%>
+    <%/if%>
+    <%/section%>
+  </div>
+</fieldset>
+<%/if%>
+<%/foreach%>
+<%if (!empty($br__groups['_systemproperties']) && count($br__groups['_systemproperties'])>0) || isset($br_oid)%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+  <div class="row-striped">
+    <%include file="Module/Table.core-sysfields.html"
+    fields=$br__groups['_systemproperties']
+    inline
+    %>
+  </div>
+</fieldset>
+<%/if%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group])%>
+</span>
+<%/if%>
+<%if isset($inlineCommentsMoid)%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.comment_text%></legend>
+  <div class="row-striped">
+    <textarea rows="5" cols="70" class="form-control" name="_new_comment[<%$inlineCommentsMoid%>][<%if $br_oid%><%$br_oid%><%else%>newoid<%/if%>]" placeholder="<%$syslabels.Seolan_Core_General.comments_placeholder%>"></textarea>
+  </div>
+</fieldset>
+<%/if%>

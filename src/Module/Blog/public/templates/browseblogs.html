@@ -1,0 +1,51 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<div class="table-responsive">
+<table class="table table-striped cv8_tablelist">
+ <thead>
+  <tr>
+   <th>Actions</th>
+   <th>Blog</th>
+   <th><%$syslabels.Seolan_Module_Blog_Blog.posts%></th>
+   <th><%$syslabels.Seolan_Module_Blog_Blog.poststopublish%></th>
+   <th><%$syslabels.Seolan_Module_Blog_Blog.comments_text%></th>
+   <th><%$syslabels.Seolan_Module_Blog_Blog.commentstopublish%></th>
+   <th><%$syslabels.Seolan_Module_Blog_Blog.lastpostdate|default:'[Date dernier article]'%></th>
+  </tr>
+ </thead>
+ <tbody>
+  <%section name=i loop=$br_lines_oid%>
+   <tr<%if $br_lines_published && ($br_lines_published[i]!="1")%> class="napp"<%/if%>>
+     <td>
+       <ul class="ul-list-tools">
+	 <li><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.view_text%>" href="<%$self%>&function=browseBlog&moid=<%$_moid%>&template=Module/Blog.browseblog.html&oid=<%$br_lines_oid[i]%>&tplentry=br"><%$syslabels.Seolan_Core_General.view%></a></li>
+	 <%if $modsec_mods[$_moid].rw%>
+	 <li><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.edit_text%>" href="<%$self%>&function=editBlog&moid=<%$_moid%>&template=Module/Blog.editblog.html&oid=<%$br_lines_oid[i]%>&tplentry=br"><%$syslabels.Seolan_Core_General.edit%></a></li>
+	 <li><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.delete_text%>" href="<%$self%>&function=delBlog&template=message.html&moid=<%$_moid%>&oid=<%$br_lines_oid[i]%>&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.del%></a></li>
+	 <li><a title="<%$syslabels.Seolan_Core_General.security_text%>" href="#" onclick="TZR.editSec('<%$self%>','<%$_moid%>','<%$br_lines_oid[i]%>');return false;"><%$syslabels.Seolan_Core_General.security%></a></li>
+	 <%if $br_lines_published%>
+	 <%if $br_lines_published[i]==1%>
+	 <li><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.unapprove_text%>" href="<%$self%>&function=validateBlog&template=Module/Blog.browseblogs.html&moid=<%$_moid%>&tplentry=br&oid=<%$br_lines_oid[i]%>&value=0&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.approved%></a></li>
+	 <%else%>
+	 <li><a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Core_General.approve_text%>" href="<%$self%>&function=validateBlog&template=Module/Blog.browseblog.html&moid=<%$_moid%>&tplentry=br&oid=<%$br_lines_oid[i]%>&value=1&_next=<%$here|escape:url%>"><%$syslabels.Seolan_Core_General.not_approved%></a></li>
+	 <%/if%>
+	 <%/if%>
+	 <%/if%>
+       </ul>
+    </td>
+    <td>
+     <a class="cv8-ajaxlink" href="<%$self%>&function=browseBlog&moid=<%$_moid%>&template=Module/Blog.browseblog.html&oid=<%$br_lines_oid[i]%>&tplentry=br"><%$br_lines_otitle[i]->html%></a>
+    </td>
+    <td><%$br_lines_posts[i]%></td>
+    <td>
+     <a class="cv8-ajaxlink" href="<%$self%>&function=browseBlog&moid=<%$_moid%>&template=Module/Blog.browseblog.html&oid=<%$br_lines_oid[i]%>&tplentry=br"><%$br_lines_poststopublish[i]%></a>
+    </td>
+    <td><%$br_lines_comments[i]%></td>
+    <td>
+     <a class="cv8-ajaxlink" href="<%$self%>&function=browseBlog&moid=<%$_moid%>&template=Module/Blog.browseblog.html&oid=<%$br_lines_oid[i]%>&tplentry=br"><%$br_lines_commentstopublish[i]%></a>
+    </td>
+    <td><%if $br_lines_posts[i] > 0%><%$br_lines_lastpostdate[i]%><%/if%></td>
+   </tr>
+  <%/section%>
+ </tbody>
+</table>
+</div>

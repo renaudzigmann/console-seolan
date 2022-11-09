@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+ <head>
+  <%$header%>
+  <title><%if $page_title %><%$page_title|escape:"html"%>, <%elseif $it_cat_mit.otitle%><%$it_cat_mit.otitle->toText()%>, <%/if%><%$tzr.societe%></title>
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/templates/js/nyroModal/styles/nyroModal.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="<%$general_style%>" />
+  <%if !empty($it_cat_mit.odescr->html)%>
+   <%assign var="description" value=$it_cat_mit.odescr->toText()%>
+  <%/if%>
+  <%if empty($description) && !empty($it_olines[0].otxt1)%>
+   <%assign var="description" value=$it_olines[0].otxt1->toText()%>
+  <%/if%>
+  <%if ($it_cat_mit.oalias->html != $tzr.corailv3_home) && $description%>
+   <meta name="description" content="<%$description|truncate:"300":".."|strip:" "|escape:"html"%>">
+  <%else%>
+   <meta name="description" content="<%$charte_ometa01->html|escape:"html"%>">
+  <%/if%>
+  <meta name="keywords" content="<%$charte_ometa02->html%>">
+  <meta http-equiv="Content-Language" content="<%$locale.code%>">
+  <meta name="reply-to" content="info@xsalto.com">
+  <%if $tzr.rss%>
+   <link rel="alternate" type="application/rss+xml" title="<%$tzr.societe%> : <%$labels.rss_title%>" href="<%$website%><%$lang_data%>_rssnews.xml" />
+  <%/if%>
+  <meta name="robots" content="index, follow">
+  <meta name="distribution" content="global">
+  <meta name="revisit-after" content="1 days">
+  <meta name="author" lang="<%$locale.code%>" content="<%$tzr.societe|escape:"html"%>">
+  <meta name="copyright" content="<%$tzr.meta_copyright%>">
+  <meta name="identifier-url" content="<%$tzr.societe_url%>">
+  <meta name="msvalidate.01" content="<%$tzr.bingtag|default:"22BC5188D45EE4521CE5B6311942F9B9"%>" />
+  <meta name="expires" content="never">
+  <meta name="Date-Revision-yyyymmdd" content="<%$it_lastpageupdate->raw|date_format:"%Y%m%d"%>">
+  <meta http-equiv="Page-Enter" content="blendTrans(Duration=0.6)">
+<!--htdig_noindex-->
+  <%if $charte_oicon->html%><link rel="SHORTCUT ICON" href="<%$charte_oicon->url%>"><%/if%>
+  <script language="javascript" src="<%$smarty.const.TZR_SHARE_SCRIPTS%>onejs.php?files=templates/corail.js:<%$TZR.share%>generic.js:<%$TZR.share%>js/ufo.js:<%$TZR.share%>overlib/overlib.js" type="text/javascript"></script>
+  <%if $tzr.corailv3_menu_deroule%><%* Librairie pour menu deroulant *%>
+   <script type="text/javascript" src="<%$smarty.const.TZR_SHARE_SCRIPTS%>onejs.php?files=tzr/templates/js/jquery.js:tzr/templates/js/jquery.noconflict.js:templates/js/superfish.js:/templates/js/nyroModal/js/jquery.nyroModal-1.5.0.pack.js:/templates/js/jquery.form.js:/templates/js/swfobject.js<%if $tzr.corailv3_pngfix%>:/templates/js/iepngfix_tilebg.js<%/if%>" charset="utf-8"></script>
+   <script type="text/javascript">
+<!--
+jQuery(document).ready(function()
+{
+    jQuery('ul.sf-menu').superfish({
+    hoverClass:    'sfHover',          // the class applied to hovered list items 
+    pathClass:     'active', // the class you have applied to list items that lead to the current page 
+    pathLevels:    0,                  // the number of levels of submenus that remain open or are restored using pathClass 
+    delay:         100,                // the delay in milliseconds that the mouse can remain outside a submenu without it closing 
+    animation:     {opacity:'show'},   // an object equivalent to first parameter of s .animate() method 
+    speed:         'fast',           // speed of the animation. Equivalent to second parameter of s .animate() method 
+    autoArrows:    true,               // if true, arrow mark-up generated automatically = cleaner source code at expense of initialisation performance 
+    dropShadows:   false,               // completely disable drop shadows by setting this to false 
+    disableHI:     true,              // set to true to disable hoverIntent detection 
+    onInit:function(){
+       jQuery('#cv3-hnav-deroule-basecenter').width(jQuery(this).width());
+  }
+}); 
+});
+-->
+</script>
+<%else%>
+<script type="text/javascript" src="<%$smarty.const.TZR_SHARE_SCRIPTS%>onejs.php?files=tzr/templates/js/jquery.js:tzr/templates/js/jquery.noconflict.js:/templates/js/nyroModal/js/jquery.nyroModal-1.5.0.pack.js::/templates/js/jquery.form.js:/templates/js/swfobject.js<%if $tzr.corailv3_pngfix%>:/templates/js/iepngfix_tilebg.js<%/if%>" charset="utf-8"></script>
+<%/if%>
+<%$TZR.packs.header%>
+<%if defined('CORAILV3_JS') %>
+  <script language="javascript" type="text/javascript" src="<%$smarty.const.CORAILV3_JS%>"></script>
+<%/if%>
+<script language="javascript" type="text/javascript">
+   <%if $tzr.corailv3_photovisio%>
+    function onVisioComplete(o){
+      if(o.code=="addOK"){
+        alert("<%$labels.photo_addVisioOK%>");
+      }
+    }
+    function addToVisio(oid){
+      document.fvisio.oid.value=oid;
+      document.fvisio.submit();
+    }
+   <%/if%>
+   <%if $tzr.corailv3_cart%>
+    function onAddItemComplete(o){
+      if(o.code=="addOK"){
+        document.getElementById("cv3-panier-item").innerHTML=o.q;
+        alert("<%$labels.cart_addItemOK%>");
+      }
+    }
+    function addItem(oid,q){
+      document.fcart.oid.value=oid;
+      if(q){ document.fcart.q.value=q; }
+      document.fcart.submit();
+    }
+   <%/if%>
+   <%if $tzr.corailv3_photovisio || $tzr.corailv3_cart%>
+    function callAjax(fok,fnok){
+     var expression = /PHPSESSID=([^&]+)/;
+     if(!expression.test(location.href)){
+        eval(fnok);
+      }else{
+        eval(fok);
+      }
+    }
+   <%/if%>
+  </script>
+  <%if $tzr.corailv3_pngfix%>
+   <style>
+    <%$tzr.corailv3_pngfix%> { behavior: url(/templates/js/iepngfix.htc) }
+   </style>
+  <%/if%>
+  <%if $tzr.analytictag%>
+   <%include file="Application/MiniSite/public/templates/googleanalytics.html"%>
+  <%/if%>
+ <!--/htdig_noindex-->
+ </head>
+ <body>
+  <!--htdig_noindex-->
+  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+  <a name="top"></a>
+  <div id="cv3-page-contenu">
+    <%if $tzr.corailv3_menu_deroule%>
+      <div style="position:relative;">
+	<div id="cv3-hnav-deroule-base">
+	  <div id="cv3-hnav-deroule-basecenter">
+	    <div class="cv3-hnav-deroule" style="position:absolute;">
+	      <%include file="Application/MiniSite/public/templates/menu_deroule.html"%>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    <%/if%>
+    <div class="top">
+    <!-- A1 > TOP Drapeau / Nav + -->
+    <div class="cv3-sur-top"><!-- A1>01 Non du Site-->
+     <!-- Navigation Drapeau  -->
+<!--/htdig_noindex--> 
+     <div class="cv3-nav0">
+      <ul>
+       <%foreach from=$general_langs item="l"%><li><a href="<%$self%>&_lang=<%$l%>" title="<%$l%>"><%if file_exists("`$smarty.const.TZR_WWW_DIR`images/ico/`$l`.gif")%><img src="images/ico/<%$l%>.gif" border="0" /><%elseif file_exists("`$smarty.const.TZR_WWW_DIR`images/ico/`$l`.jpg")%><img src="images/ico/<%$l%>.jpg" border="0" /><%else%><img src="tzr/templates/ico/lang/<%$l%>.gif" border="0" /><%/if%></a></li><%/foreach%>
+      </ul>
+     </div>      			
+<!--htdig_noindex--> 
+     <!-- Navigation sup.  -->
+     <div class="nav1">
+      <ul><%section name=bm loop=$bm_lines_oid%><li><a href="<%$self%><%$bm_lines_selfurl[bm]%><%$bm_lines_ocurl[bm]->html%>"><%$bm_lines_otitle[bm]->html%></a></li><%/section%></ul>
+     </div>              
+    </div>
+    
+    <!-- A2 Image -->
+    <div class="top-image"><%if $charte_ologhome->html%><a href="<%$self%>alias=<%$tzr.corailv3_home%>"><%$charte_ologhome->html%></a><%/if%></div>
+
+    <!-- A3 TOP NAV H - Chemin -Recherche -->
+    <!-- A3-1 Navigation Horizontal -->
+    <div class="top-bottom">
+     <%if !$tzr.corailv3_menu_deroule%>
+     <div class="cv3-hnav">
+      <ul>
+       <%section loop=$tm_lines_oid name=tm%>
+         <li<%if $tm_lines_ostyle[tm]->link.oclass->html%> class="<%$tm_lines_ostyle[tm]->link.oclass->html%>"<%/if%>><%strip%>
+	   <%if $tm_lines_oid[tm]|in_array:$path_oidup %>
+	     <a class="path <%if $it_cat_mit.oid eq $tm_lines_oid[tm]%>active<%/if%>" href="<%$self%><%$tm_lines_selfurl[tm]%><%$tm_lines_ocurl[tm]->html%>"><%$tm_lines_otitle[tm]->html%></a>
+	   <%else%>
+	     <a href="<%$self%><%$tm_lines_selfurl[tm]%><%$tm_lines_ocurl[tm]->html%>"><%$tm_lines_otitle[tm]->html%></a>
+	   <%/if%>
+	 <%/strip%></li>
+      <%/section%>
+      </ul>
+     </div>
+     <%/if%>
+
+    </div><!-- end top bottom et hnav-->
+
+    <!-- Chemin -->
+    <div class="cv3-chemin">
+     <!-- calcul de la date de derniere mise a jour -->
+     <%assign var="dateupd" value=$it_cat_mit.oUPD->html%>
+     <%assign var="dateupdraw" value=$it_cat_mit.oUPD->raw%>
+     <%section name=it loop=$it_olines%>
+      <%if $it_olines[it].oUPD->raw > $dateupdraw%>
+       <%assign var="dateupd" value=$it_olines[it].oUPD->html%>
+       <%assign var="dateupdraw" value=$it_olines[it].oUPD->raw%>
+      <%/if%>
+     <%/section%>
+     <%if $tzr.corailv3_photovisio%>
+      <div class="visioneuseTop">
+       <a href="<%$self%>function=viewVisio"><img src="images/pictos_visioneuse.gif"><%$labels.photo_visionner%></a>
+      </div>
+     <%/if%>
+     <ul>
+      <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$labels.accueil%>" href="<%$self%>alias=<%$tzr.corailv3_home%>"><span itemprop="title"><%$labels.accueil%></span></a></li>
+      <%section loop=$path_stack name=path%><%if !$smarty.section.path.first AND $path_stack[path].oalias->raw neq $tzr.corailv3_home  %><%if $smarty.section.path.last OR $path_stack[path].sections %><li><%$path_stack[path].otitle->toText()%><%else%><li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$path_stack[path].otitle->toText()%>" href="<%$self%>alias=<%$path_stack[path].oalias->raw%>"><span itemprop="title"><%$path_stack[path].otitle->toText()%></span></a><%/if%></li><%/if%><%/section%>
+      <li id="maj">Mise &agrave; jour <%$dateupd%></li>
+     </ul>
+     <!-- Recherche -->
+     <div class="rechercheform">
+      <form name="frmHtdig" method="post" action="<%$self%>">
+       <input type="hidden" name="config" value="<%$tzr.htdigconf%>">
+       <input type="hidden" name="alias" value="<%$tzr.aliassearch%>">
+       <input type="hidden" name="page" value="1">
+       <input type="hidden" name="insidefile" value="search.html">
+       <%if !$tzr.htsearch_norestrict && $lang_data eq $smarty.const.TZR_DEFAULT_LANG && $general_langs[1]%>
+        <input type="hidden" name="exclude" value="<%foreach from=$general_langs item="lm"%><%if $lm neq $smarty.const.TZR_DEFAULT_LANG%>_lang=<%$lm%>|<%$lm%>_<%/if%><%/foreach%>">
+       <%elseif !$tzr.htsearch_norestrict && $general_langs[1]%>
+        <input type="hidden" name="restrict" value="_lang=<%$lang_data%>|<%$lang_data%>_">
+       <%/if%>	       
+       <input type="text" name="words" class="zone" value="<%$labels.recherche%>..." onclick="this.value=''" size="22" onblur="if (this.value=='') {this.value='<%$labels.recherche%>...';}" /> 
+       <input class="button" type="submit" name="button" value="<%$labels.recherche_go%>">
+      </form>
+     </div>
+    </div><!-- fin chemin -->
+   </div><!-- fin top -->
+  <!--/htdig_noindex--> 
+   <!-- B. MAIN -->
+   <div class="cv3-main2">
+    <div class="cv3-main">
+     <%include file=$general_tpl%>
+    </div>
+   </div>
+      <!--htdig_noindex--> 
+   <!-- C. basdepage  -->      
+   <div class="cv3-basdepage">
+    <%if $tzr.corailv3_photovisio%>
+     <div class="visioneuseTop">
+      <a href="<%$self%>function=viewVisio"><img src="images/pictos_visioneuse.gif"><%$labels.photo_visionner%></a>
+     </div>
+    <%/if%>
+    <p class="cv3-mentions"><a href="#top"><%$syslabels.Seolan_Core_General.topofpage%></a><%section name=bm loop=$bm_lines_oid%><span> | </span><a href="<%$self%><%$bm_lines_selfurl[bm]%><%$bm_lines_ocurl[bm]->html%>"><%$bm_lines_otitle[bm]->html%></a><%/section%></p>
+   </div>      
+  </div>
+ </body>
+ <script language="javascript" type="text/javascript">TZR.referer('<%$it_cat_mit.oalias->html%>','<%$lang_data%>');</script>
+<!--/htdig_noindex--> 
+</html>

@@ -1,0 +1,259 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.security_text%>
+<%if $sysmods.xmoduser2==$_moid%>
+ <%assign var="isusermod" value=1%>
+<%else%>
+ <%assign var="isusermod" value=0%>
+<%/if%> 
+<script language="javascript">
+ v<%$uniqid%>.voir_cacher=function(id,h) {
+  if(h){
+   jQuery(h).parent().nextUntil('h3').filter('.voir_cacher').each(function(){
+    v<%$uniqid%>.voir_cacher(this.id);
+   });
+  }else{
+   if(jQuery('#'+id).prev().is(':hidden')) return;
+   jQuery('#'+id).toggle();
+  }
+ }
+ v<%$uniqid%>.selectAllLine=function(levelNum,r){
+  jQuery('input[name^=level\\['+levelNum+'\\]][value='+r+']').prop('checked',true);
+ }
+ v<%$uniqid%>.filter=function(){
+  var f=document.editform<%$uniqid%>;
+  var lvl=document.editform<%$uniqid%>.filter_lvl.value;
+  var lang=document.editform<%$uniqid%>.filter_lang.value;
+  if(lvl=="all" && lang=="all") jQuery('div.line',f).show();
+  else{
+   var selector=[];
+   if(lang!="all") selector.push('.'+lang);
+   if(lvl!="all") selector.push('[value="'+lvl+'"]');
+   jQuery('div.line',f).hide();
+   jQuery('input'+selector.join(''),f).filter('.default').each(function(){
+    jQuery(this).closest('div.line').prev().show();
+   });
+  }
+ }
+ jQuery(function(){
+ //jQuery("#tzr-tablist-<%$uniqid%>").tabs({cache:true});
+ });
+
+</script>
+
+<div id="tzr-tablist-<%$uniqid%>">
+
+ <ul class="nav nav-responsive nav-tabs" role="tablist">
+
+  <li role="presentation"  class="active">
+    <a href="#sc1-<%$uniqid%>" 
+       data-overlay="none" 
+       aria-controls="#sc1-<%$uniqid%>" 
+       data-toggle="tab" 
+       role="tab" 
+       aria-expanded="true">
+      <%$syslabels.Seolan_Core_General.edit_text%>
+    </a>
+  </li>
+
+  <li role="presentation">
+    <a href="#sc2-<%$uniqid%>" id="tab2-<%$uniqid%>"
+       data-overlay="none" 
+       data-url="<%$self%>&moid=<%$_moid%>&function=secSummary&template=Module/User.secSummary.html&tplentry=br&oid=<%$br_lines_oid[0]%>&_uniqid=<%$uniqid%>&_skip=1"
+       aria-controls="#sc2-<%$uniqid%>"
+       data-toggle="tabajax"
+       role="tab"
+       aria-expanded="false" >
+      <%$syslabels.Seolan_Module_User_User.security_summary%>
+    </a>
+  </li>
+
+ </ul>
+
+ <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+  <div id="sc1-<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+   <form action="<%$self%>" method="post" ENCTYPE="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+    <input type="hidden" name="_function" value="procEditSec">
+    <input type="hidden" name="template" value="Module/User.secedit.html">
+    <input type="hidden" name="uniqid" value="<%$uniqid%>">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+    <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+    <%section name=i loop=$br_lines_oid%>
+     <input type="hidden" name="oid[]" value="<%$br_lines_oid[i]%>">
+    <%/section%>
+    <input type="hidden" name="skip" value="1">
+    <%if $back%>
+     <input type="hidden" name="_next" value="<%$back%>">
+    <%else%>
+     <input type="hidden" name="_next" value="<%$self%>moid=<%$_moid%>&_function=browse&template=Module/Table.browse.html&tplentry=br">
+    <%/if%>
+    <%assign var="title" value=""%>
+    <%if $br_last==1%>
+     <%if $isusermod%>
+      <%assign var="title" value=$br_lines_oalias[0]->html%>
+      <%if $br_lines_oGRP[0]->html%>
+       <fieldset>
+	<legend><%$syslabels.Seolan_Core_General.groups_text%> <%$title%></legend>
+	<table>
+	 <tr>
+	  <td><%$br_lines_oGRP[0]->html%></td>
+	 </tr>
+	</table>
+       </fieldset>
+      <%/if%>
+     <%else%>
+      <%assign var="title" value=$br_lines_oGRP[0]->html%>
+      <%if $br_lines_oGRPS[0]->html%>
+       <fieldset>
+	<legend><%$syslabels.Seolan_Core_General.groups_text%> <%$title%></legend>
+	<table>
+	 <tr>
+	  <td><%$br_lines_oGRPS[0]->html%></td>
+	 </tr>
+	</table>
+       </fieldset>
+      <%/if%>
+     <%/if%>
+    <%else%>
+     <fieldset>
+      <%if $isusermod%>
+       <legend><%$syslabels.Seolan_Core_General.users_text%></legend>
+      <%else%>
+       <legend><%$syslabels.Seolan_Core_General.groups_text%></legend>
+      <%/if%>
+      <table>
+       <%section name=i loop=$br_lines_oid%>
+	<tr>
+	 <td>
+	  <%if $isusermod%>
+	   <%$br_lines_oalias[i]->html%>
+	  <%else%>
+	   <%$br_lines_oGRP[i]->html%>
+	  <%/if%>
+	 </td>
+	</tr>
+       <%/section%>
+      </table>
+     </fieldset>
+    <%/if%>
+
+    <fieldset>
+      <legend><%$syslabels.Seolan_Core_General.filter%></legend>
+      <select name="filter_lvl" onchange="v<%$uniqid%>.filter(this.value);">
+        <option value="all"><%$syslabels.Seolan_Core_General.all%></option>
+        <%section name=l loop=$seceditlevellist_lines%>
+          <%assign var="t" value=$seceditlevellist_lines[l]%>
+          <option value="<%$t%>"><%$syslabels.Seolan_Core_Security.$t%></option>
+        <%/section%>
+      </select>
+      <select name="filter_lang" onchange="v<%$uniqid%>.filter();">
+        <option value="all"><%$syslabels.Seolan_Core_General.alllang%></option>
+        <%foreach from=$seceditlang_code item=l%>
+          <option value="<%$l%>"><%$l%></option>
+        <%/foreach%>
+      </select>
+    </fieldset>
+    
+    <fieldset>
+     <legend><%$syslabels.Seolan_Module_User_User.security_data_text%> <%$title%></legend>
+     <%section name=g loop=$seceditmods_groups%>
+      <h4>
+        <a href="javascript:void(0);" onclick="v<%$uniqid%>.voir_cacher('',this);;jQuery(this).toggleClass('active');return false;">
+          <span class="glyphicon csico-tree-open" aria-hidden="true"></span>
+          <span class="glyphicon csico-tree-close" aria-hidden="true"></span>
+        <%$seceditmods_groups[g]%></a>
+      </h4>
+      <%section name=m loop=$seceditmods_lines_oid%>
+       <%if $seceditmods_lines_group[m] eq $seceditmods_groups[g]%>
+	<%assign var="om" value=$seceditmods_lines_methods[m] %>
+	<%assign var="omc" value=$om.moduleclass%>
+	<div class="line clearfix">
+	  <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$seceditmods_lines_oid[m]%>&function=lsSecurity&template=Core/Module.lssecurity.html&tplentry=br"><%$syslabels.Seolan_Core_General.edit%></a>
+	  <a href="javascript:void(0);" onclick="v<%$uniqid%>.voir_cacher('t<%$smarty.section.m.index%>-<%$uniqid%>');"><span class="glyphicon csico-tree-open" aria-hidden="true"></span></a>
+	  <a href="javascript:void(0);" onclick="v<%$uniqid%>.voir_cacher('t<%$smarty.section.m.index%>-<%$uniqid%>');"><%$seceditmods_lines_name[m]%> (<%$seceditmods_lines_oid[m]%>)</a>
+	 <%if count($seceditlang_code)<=5 && $br_last==1%>
+	  (
+	  <%foreach key=lang item=sec from=$seceditmods_lines_level[m] name=l%>
+	   <%$lang%> : <%$syslabels.Seolan_Core_Security.$sec%> <%if !$smarty.foreach.l.last%>/<%/if%>
+	  <%/foreach%>
+	  )
+	 <%/if%>
+	</div>
+	<div class="voir_cacher security-edit line clearfix" id="t<%$smarty.section.m.index%>-<%$uniqid%>" style="display:none;">
+	 <%section name=l loop=$seceditlang_code%>
+	  <%assign var="t1" value=$seceditlang_code[l]%>
+	  <%assign var="t2" value=$seceditmods_lines_level[m][$t1]%>
+	  <%assign var="t3" value=$seceditmods_lines_fulllevel[m][$t1]%>
+	  <table class="table table-auto">
+	   <tr>
+	     <%if $smarty.section.l.first%>
+	     <th></th>
+	     <%if $smarty.section.l.total>1%>
+	     <th><%$syslabels.Seolan_Core_Security.selectall%></th>
+	     <%/if%>
+	     <%/if%>
+	     <th width="22"><label><%$seceditlang_code[l]%></label></th>
+	   </tr>
+	   <%section name=l3 loop=$t3%>
+	   <%assign var="t4" value=$t3[l3]%>
+	   <tr>
+	     <%if $smarty.section.l.first%>
+	     <td><%$syslabels.Seolan_Core_Security.$t4%></td>
+	     <%if $smarty.section.l.total>1%>
+	     <td>
+	       <input name="selectAll[<%$smarty.section.m.index%>][<%$t1%>]" type="radio" class="radio" value="<%$t4%>" onclick="v<%$uniqid%>.selectAllLine(<%$smarty.section.m.index%>,'<%$t4%>');">
+	     </td>
+	     <%/if%>
+	     <%/if%>
+	     <td align="center"<%if $t4 eq $t2%> class="default"<%/if%>>
+	       <input name="level[<%$smarty.section.m.index%>][<%$t1%>]" type="radio" class="<%$t1%> radio<%if $t4 eq $t2%> default<%/if%>" value="<%$t4%>">
+	     </td>
+	   </tr>
+	   <%/section%>
+	  </table>
+	 <%/section%>
+	</div>
+       <%/if%>
+      <%/section%>
+      <br>
+     <%/section%>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action">
+     <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+    </div>
+    </fieldset>
+   </form>
+   <%if count($br_lines_oid)==1%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.copy%> <%$syslabels.Seolan_Module_User_User.security_data_text%></legend>
+    <form action="<%$self%>" method="post" name="copyform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+      <input type="hidden" name="_function" value="copyACL">
+      <input type="hidden" name="template" value="Module/User.secedit.html">
+      <input type="hidden" name="uniqid" value="<%$uniqid%>">
+      <input type="hidden" name="tplentry" value="br">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+      <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+      <input type="hidden" name="skip" value="1">
+      <%if $back%>
+      <input type="hidden" name="_next" value="<%$back%>">
+      <%else%>
+      <input type="hidden" name="_next" value="<%$self%>moid=<%$_moid%>&_function=browse&template=Module/Table.browse.html&tplentry=br">
+      <%/if%>
+      <input type="hidden" name="to" value="<%$br_lines_oid[0]%>">
+      <%$syslabels.Seolan_Core_General.copy_of%> <%$_from->html%>
+      <input type="checkbox" name="clearBefore" checked="checked"> <%$syslabels.Seolan_Module_User_User.clear_existing_acl%>
+      <input type="checkbox" name="withGrp"> <%$syslabels.Seolan_Module_User_User.copy_group%>
+      <div class="tzr-action">
+        <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+      </div>
+    </form>
+   </fieldset>
+   <%/if%>
+  </div>
+
+  <div id="sc2-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel">
+Résumé...
+  </div>
+
+ </div>
+</div>

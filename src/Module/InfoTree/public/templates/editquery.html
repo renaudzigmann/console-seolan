@@ -1,0 +1,157 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_InfoTree_InfoTree.edit_a_section%>
+<script type="text/javascript">
+ v<%$uniqid%>.changeOrder=function(ki){
+  var tbl=document.getElementById('tblOrder<%$uniqid%>');
+  var tr=document.getElementById('trOrder<%$uniqid%>-'+(ki+1));
+  var sel=document.getElementById('sel<%$uniqid%>-'+ki);
+  if(tr==null && sel.value!="RAND()"){
+   this.addTrOrder(ki+1);
+  }else{
+   var tmp=ki+1; 
+   if(sel.value=="" || sel.value=='RAND()'){
+    while(document.getElementById('trOrder<%$uniqid%>-'+tmp)){
+     var tmptr=document.getElementById('trOrder<%$uniqid%>-'+tmp);
+     tbl.removeChild(tmptr);
+     tmp++;
+    }  
+   }
+  } 
+ }
+ v<%$uniqid%>.addTrOrder=function(){
+  var ki=jQuery('#tblOrder<%$uniqid%>>tr.trOrder').length-1;
+  var ntr=jQuery('#trOrder<%$uniqid%>-xxx').clone(true).attr('id','trOrder<%$uniqid%>-'+ki);
+  var re1=new RegExp('xxxx','g');
+  var re2=new RegExp('xxx','g');
+  ntr.html(ntr.html().replace(re1,ki+1).replace(re2,ki));  
+  ntr.appendTo('#tblOrder<%$uniqid%>').show();
+ }
+ v<%$uniqid%>.viewFormat=function(btn){
+  if(btn.checked){
+    document.getElementById("td-"+btn.name.substring(0,btn.name.length-4)+"-<%$uniqid%>").style.display="inline";
+  }else{
+    document.getElementById("td-"+btn.name.substring(0,btn.name.length-4)+"-<%$uniqid%>").style.display="none";
+  }
+ }
+ v<%$uniqid%>.addTrOrder();
+</script>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="savequery">
+ <input type="hidden" name="template" value="Module/InfoTree.viewpage.html">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <input type="hidden" name="oidit" value="<%$section_oidit%>">
+ <input type="hidden" name="oidsection" value="<%$section_oidsection%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="tplentry" value="it">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="_langs" value="">
+ <input type="hidden" name="_next" value="<%$self%>function=editpage&moid=<%$_moid%>&oidit=<%$section_oidit%>&template=Module/InfoTree.viewpage.html&tplentry=it">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.fields%></legend>
+  <div class="table-responsive">
+  <table class="table list2" >
+   <%section name=fields loop=$section_fields_object %>
+    <%assign var=fname value=$section_fields_object[fields]->field%>
+    <tr>
+     <td rowspan="2" style="vertical-align:top"><input type="checkbox" name="<%$fname%>_PAR"<%if !empty($section_fields_object[fields]->query_formats) && $imod_sec.rw%> onclick="v<%$uniqid%>.viewFormat(this)"<%/if%><%if $section_fields_par[fields]%> checked<%/if%>></td>
+     <th rowspan="2">
+      <label><%$section_fields_object[fields]->fielddef->label%></label>
+     </th>
+     <td><%$section_fields_object[fields]->html%></td>
+    </tr>
+    <tr>
+     <td>
+      <%if !empty($section_fields_object[fields]->query_formats)%>
+       <div id="td-<%$fname%>-<%$uniqid%>"<%if !$section_fields_par[fields] || !$imod_sec.rw%> style="display:none;"<%/if%>>
+	Format : <%$section_fields_object[fields]->query_formats%>
+       </div>
+      <%/if%>
+     </td>
+    </tr>
+   <%/section%>
+   <%if $imod_sec.admin%>
+    <tr>
+     <td></td>
+     <th><label><%$syslabels.Seolan_Core_General.advanced%></label></th>
+     <td colspan="1"><textarea name="_select" cols="60" rows="3"><%$section__select%></textarea></td>
+    </tr>
+   <%else%>
+    <%if $section__select%>
+     <tr>
+      <td></td>
+      <th><label><%$syslabels.Seolan_Core_General.advanced%></label></th>
+      <td colspan="1"><%$section__select%><input type="hidden" name="hasselect" value="1"></td>
+     </tr>
+    <%/if%>
+   <%/if%>
+  </table>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+  <div class="table-responsive">
+  <table class="table list2" >
+   <tbody id="tblOrder<%$uniqid%>">
+    <tr<%if !$imod_sec.admin%> style="display:none;"<%/if%>>
+     <th><label><%$syslabels.Seolan_Core_Field_Field.label_in%></label></th>
+     <td><input type="checkbox" name="labelin" value="in"<%if $section_labelin%> checked<%/if%>></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.max_nb%></label></th>
+     <td><input type="text" name="pagesize" value="<%$section_pagesize%>"></td>
+    </tr>
+    <tr id="trOrder<%$uniqid%>-xxx" class="trOrder" style="display:none;">
+     <th><label><%$syslabels.Seolan_Core_General.order%> - xxxx</label></th>
+     <td>
+      <%$section_emptyfieldselector|replace:"<select ":"<select id=\"sel`$uniqid`-xxx\" onchange=\"v`$uniqid`.changeOrder(xxx)\""%>
+      <select name="_order[]">
+       <option value="ASC" <%if $section__order[$ki] eq "ASC"%>selected<%/if%>><%$syslabels.Seolan_Module_InfoTree_InfoTree.asc%></option>
+       <option value="DESC" <%if $section__order[$ki] eq "DESC"%>selected<%/if%>><%$syslabels.Seolan_Module_InfoTree_InfoTree.desc%></option>
+      </select>
+     </td>
+    </tr>
+    <%foreach from=$section_fieldselector key="ki" item="sel" %>
+     <tr id="trOrder<%$uniqid%>-<%$ki%>" class="trOrder">
+      <th><label><%$syslabels.Seolan_Core_General.order%> - <%$ki+1%></label></th>
+      <td>
+       <%$sel|replace:"<select ":"<select id=\"sel`$uniqid`-`$ki`\" onchange=\"v`$uniqid`.changeOrder(`$ki`)\""%>
+       <select name="_order[]">
+	<option value="ASC" <%if $section__order[$ki] eq "ASC"%>selected<%/if%>><%$syslabels.Seolan_Module_InfoTree_InfoTree.asc%></option>
+	<option value="DESC" <%if $section__order[$ki] eq "DESC"%>selected<%/if%>><%$syslabels.Seolan_Module_InfoTree_InfoTree.desc%></option>
+       </select>
+      </td>
+     </tr>
+    <%/foreach%>
+   </tbody>
+  </table>
+  </div>
+  <div class="table-responsive">
+  <table class="table list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.weborderselector%></label></th>
+    <td><%$section_weborderselector%></td>
+   </tr>
+  </table>
+  </div>
+  <div class="table-responsive">
+  <table class="table list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout%></label></th>
+    <td>
+     <select name="setup">
+      <%section name="tpl" loop=$tple_lines_oid%>
+       <option value="<%$tple_lines_oid[tpl]%>" <%if $tple_lines_oid[tpl] eq $section_setup%>selected<%/if%>><%$tple_lines_otitle[tpl]->html%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+   <%if $modsec_mods[$_moid].rwv && $lang_data==$lang_def && count($lang_code)>1%>
+    <input type="submit" onclick="if(confirm('<%$syslabels.Seolan_Core_General.savealllangwarning%>')) this.form._langs.value='all'; else return false;" value="<%$syslabels.Seolan_Core_General.savealllang%>">
+   <%/if%>
+ </div>
+</form>

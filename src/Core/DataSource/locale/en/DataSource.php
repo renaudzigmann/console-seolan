@@ -1,0 +1,56 @@
+<?php
+if(\Seolan\Core\Shell::admini_mode()){
+\Seolan\Core\Labels::$LABELS['Seolan_Core_DataSource_DataSource']
+= array(
+'aliasmodule'=>'Module pour alias',
+'automatic_translation'=>'Automatic translation',
+'browsable'=>'Browsable',
+'cannot_delete'=>'You cannot delete it',
+'content_propagated'=>'In this module, data in following languages will also be updated:',
+'content_propagate'=>'In this module, data in language "%s" and in language "%s" are equivalent. "%s" data can only be edited from "%s".',
+'compulsory'=>'Compulsory',
+'data_dictionary'=>'Data dictionary',
+'delete_table'=>'Delete table',
+'duplicatedata'=>'Duplicate data',
+'empty_data'=>'Empty Table',
+'field'=>'Field name',
+'field_label'=>'Field label',
+'field_order'=>'Order',
+'freelang'=>'Libre',
+'gen_parameters'=>'Templates Generation Parameters',
+'gen_template'=>'Templates Generation',
+'label'=>'Label',
+'lang_propagated'=>'same as',
+'multivalued'=>'Multivalued',
+'new_field'=>'New field',
+'new_label'=>'New Label',
+'new_table'=>'New Table',
+'oid'=>'Identifier',
+'order'=>'Order',
+'prefix'=>'Prefix',
+'published'=>'Published',
+'queryable'=>'Queryable',
+'random'=>'Random',
+'readonly'=>'Read Only',
+'repair_translations'=>'Create empty translations',
+'size'=>'Size',
+'table_code'=>'SQL Name of the table',
+'table_in_use'=>'This table is used in modules',
+'table_name'=>'Table Name',
+'target'=>'Target',
+'templates_table'=>'Templates Table',
+'translatable'=>'Translatable',
+'type'=>'Field Type',
+'update_ok'=>'Update succeeded',
+'insert_ok'=>'Insert succeeded',
+'usage'=>'Usage',
+'user_field'=>'Champ utilisateur',
+'\seolan\module\infotree\infotree'=>'Topics Management',
+'tolog'=>'Keep log entries',
+'\seolan\module\table\table'=>'File Management',
+'invalid_characters'=>'The field contains invalid characters'
+);
+} else {
+\Seolan\Core\Labels::$LABELS['Seolan_Core_DataSource_DataSource']=array();
+}
+?>

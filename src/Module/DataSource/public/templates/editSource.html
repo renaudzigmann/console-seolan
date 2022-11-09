@@ -1,0 +1,48 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if empty($title)%><%assign var="title" value="`$syslabels.Seolan_Core_Module_Module.editsource`"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="boid" value="<%$_boid%>">
+ <input type="hidden" name="function" value="<%$fprefix%>ProcEditSourceProperties">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$back%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+  <div class="table-responsive">
+   <table class="table list2">
+    <tr><th><label><%$syslabels.Seolan_DataSource_DataSource.table_code%></label></th><td><%$_table%></td></tr>
+    <%section name=i loop=$_optionsglob%>
+     <tr><th><label><%$_optionsglob[i].label%></label></th><td><%$_optionsglob[i].edit%></td></tr>
+    <%/section%>
+   </table>
+   </div>
+  </fieldset>
+  <%section name=i loop=$_options%>
+   <%if $_options[$smarty.section.i.index_prev].group!=$_options[i].group%>
+    <fieldset>
+     <legend><%$_options[i].group%></legend>
+     <div class="table-responsive">
+      <table class="table list2">
+        <%if $_options[i].groupcomment%>
+        <tr><td colspan="2"><%$_options[i].groupcomment%></td></tr>
+        <%/if%>
+    <%/if%>
+        <tr>
+          <th<%if $_options[i].comment%> class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$_options[i].comment|escape:'html'%>"<%/if%>><label><%$_options[i].label%></label></th>
+          <td><%$_options[i].edit%></td>
+        </tr>
+    <%if $_options[i].group!=$_options[$smarty.section.i.index_next].group%>
+        </table>
+      </div>
+      </fieldset>
+    <%/if%>
+  <%/section%>
+  
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.approve%>">
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+  </div>
+ </fieldset>
+</form>

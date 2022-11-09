@@ -1,0 +1,21 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" nohistory=true%>
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <fieldset>
+   <legend>Source Wizard</legend>
+   <%if $wd_message%><div class="info info-message"><%$wd_message%></div><%/if%>
+  <div class="table-responsive">
+  <table class="table list2">
+   <%section name=i loop=$wd_options%>
+    <tr><th><label><%$wd_options[i].label%></label></th><td><%$wd_options[i].edit%></td></tr>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" name="submit" value="<%$syslabels.Seolan_Core_General.next_text|escape:"quotes"%>">
+ </div>
+ <input type="hidden" name="class" value="<%$wd_classname%>">
+ <input type="hidden" name="function" value="<%$wd_functionname%>">
+ <input type="hidden" name="template" value="<%$wd_template%>">
+ <input type="hidden" name="tplentry" value="<%$wd_tplentry%>">
+</form>

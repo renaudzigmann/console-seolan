@@ -1,0 +1,102 @@
+<%* Affichage de la section slider *%>
+<%assign var=section value=$it_olines[it]%>
+<%assign var=params value=$section._functionparams.params%>
+<%assign var=tploptions value=$section._tploptions%>
+<%if $admini%>
+      <%foreach name=slide key=i item=oid from=$section.lines_oid %>
+        <%foreach name=f item=field from=$section.header_fields%>
+          <%assign var=lines_field value="lines_o`$field->field`"%>
+          <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Image\Image' or $section.$lines_field.$i->isImage%>
+            <%if $section.$lines_field.$i->resizer%>
+              <div style="float:left;"><img src="<%$section.$lines_field.$i->resizer%>&amp;geometry=50x&crop=50x50&gravity=Center" alt="<%$section.$lines_field.$i->title|escape%>" /></div>
+            <%/if%>
+          <%/if%>
+        <%/foreach%>
+      <%/foreach%>
+  </table>
+<%else%>
+<div class="cv8d-browsediv cv8d-browsediv-<%$params.moid%> <%if $tploptions.expand === true%>fullheight<%/if%>" id="cv8d-browsediv<%$it_itoid[it]%>">
+  <div id="cv8d-slider<%$it_itoid[it]%>" class="carousel slide" data-ride="carousel">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+    <%foreach name=slide key=i item=oid from=$section.lines_oid %>
+       <div class="item <%if $smarty.foreach.slide.first%>active<%/if%>">
+        <%foreach name=f item=field from=$section.header_fields%>
+          <%assign var=lines_field value="lines_o`$field->field`"%>
+          <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Image\Image' or $section.$lines_field.$i->isImage%>
+            <%if $section.$lines_field.$i->resizer%>
+              <%capture assign="image"%>
+                <img src="<%$section.$lines_field.$i->resizer%>&amp;geometry=<%$tploptions.imageGeometry%>" alt="<%$section.$lines_field.$i->title|escape%>" />
+              <%/capture%>
+            <%/if%>
+          <%else%>
+            <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Url\Url' && $section.$lines_field.$i->url%>
+              <%capture assign="link"%>
+                  <a href="<%$section.$lines_field.$i->url%>" title="">
+              <%/capture%>
+            <%/if%>
+            <%capture assign="caption"%><%strip%>
+                <%$caption%>
+                <%if $section.$lines_field.$i->raw%>
+                  <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Date\Date' or $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\DateTime\DateTime' or $section.$lines_field.$i->fielddef->ftype eq XTimestampDef%>
+                    <p class="caption-item-<%$section.$lines_field.$i->field%> date">
+                      <%$section.$lines_field.$i->raw|date_format:$tploptions.dateFormat%>
+                    </p>
+                  <%else%>
+                    <%if $section.$lines_field.$i->fielddef->ftype eq '\Seolan\Field\Url\Url'%>
+                      <%if $section.$lines_field.$i->raw|strpos:";" != 0%>
+                        <p class="caption-item-<%$section.$lines_field.$i->field%>">
+                          <%$section.$lines_field.$i->html%>
+                        </p>
+                      <%/if%>
+                    <%else%>
+                      <p class="caption-item-<%$section.$lines_field.$i->field%>">
+                        <%$section.$lines_field.$i->html%>
+                      </p>
+                    <%/if%>
+                  <%/if%>
+                <%/if%>
+            <%/strip%><%/capture%>
+          <%/if%>
+        <%/foreach%>
+        <!-- Item -->
+          <%if $link%>
+            <%$link%>
+          <%/if%>
+            <%$image%>
+          <%if $link%>
+            </a>
+          <%/if%>
+          <!-- ItemCaption -->
+          <%if $caption|strlen > 1%>
+            <div class="carousel-caption ">
+              <%$caption%>
+            </div>
+          <%/if%>
+          <%assign var=caption value=""%>
+          <!-- /ItemCaption -->
+        <!-- /Item -->
+        </div>
+      <%/foreach%>
+    </div>
+    <!-- /Wrapper for slides -->
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#cv8d-slider<%$it_itoid[it]%>" data-slide-to="0" class="active"></li>
+      <%section name="li" start=1 loop=$i%>
+      <li data-target="#cv8d-slider<%$it_itoid[it]%>" data-slide-to="<%$smarty.section.li.index%>"></li>
+      <%/section%>
+      <li data-target="#cv8d-slider<%$it_itoid[it]%>" data-slide-to="<%$smarty.section.li.index%>"></li>
+    </ol>
+     <!-- Left and right controls -->
+    <a class="left carousel-control" href="#cv8d-slider<%$it_itoid[it]%>" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only"><%$syslabels.Seolan_Core_General.previous%></span>
+    </a>
+    <a class="right carousel-control" href="#cv8d-slider<%$it_itoid[it]%>" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only"><%$syslabels.Seolan_Core_General.next%></span>
+    </a>
+  </div>
+</div>
+<%/if%>

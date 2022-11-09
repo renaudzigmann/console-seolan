@@ -1,0 +1,22 @@
+<div class="allowed-websites" <%if $system_allowed_sites_apps|@count < 2%>style="display: none;"<%/if%>>
+  <h3><%$syslabels.Seolan_Module_Application_Application.admin_choose_site%></h3>
+  <br/>
+  <select id="allowed_site_choose_<%$uniqid%>">
+    <%foreach from=$system_allowed_sites_apps item="app"%>
+      <option
+          value="<%$app.app_oid%>"<%if $app.app_oid|@in_array:$sub_site_forceds_apps or $sub_site_current_app->oid == $app.app_oid%> selected="selected"<%/if%>
+          data-xmodinfotree_moid="<%$app.xmodinfotree_moid%>">
+        <%$app.site_title%>
+      </option>
+    <%/foreach%>
+  </select>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery('#allowed_site_choose_<%$uniqid%>').each(function() {
+        TZR.XSiteApp.prototype.listenChoices(this);
+      }
+    );
+  });
+</script>

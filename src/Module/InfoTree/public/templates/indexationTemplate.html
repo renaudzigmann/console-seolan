@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <%*
+  gabarit basique/lights pour généréer les pages lors de l'indexation des contenus
+  il doit rendre les contenus textuels correctement
+  packs, js etc sont pas nécessaires
+  *%>
+  <head>
+    <%$header%>
+    <%capture assign="title"%><%strip%>
+    <%if $page_title %>
+    <%$page_title|escape:"html"%>,
+    <%elseif $it_cat_mit.otitle2->html%>
+    <%$it_cat_mit.otitle2->html%>,&nbsp;
+    <%elseif $it_cat_mit.otitle->html%>
+    <%$it_cat_mit.otitle->toText()%>,&nbsp;
+    <%/if%>
+    <%$_corail->society|default:$tzr.societe%>
+    <%/strip%><%/capture%>
+    
+    <title><%$title%></title>
+    
+    <%if !empty($it_cat_mit.odescr->html)%>
+    <%assign var="description" value=$it_cat_mit.odescr->toText()%>
+    <%/if%>
+    <%if empty($description) %>
+     <%foreach from=$it_olines item=section%>
+      <%if $section.otxt1 && !$section.otxt1->isEmpty() %>
+       <%assign var="description" value=$section.otxt1->toText()%>
+       <%continue%>
+      <%elseif $section.ochapeau && !$section.ochapeau->isEmpty() %>
+       <%assign var="description" value=$section.ochapeau->toText()%>
+       <%continue%>
+      <%/if%>
+     <%/foreach%>
+    <%/if%>
+    <%if ($it_cat_mit.oalias->html != $tzr.corailv3_home) && $description%>
+    <meta name="description" content="<%$description|truncate:"300":".."|strip:" "|escape:"html"%>">
+    <%else%>
+    <meta name="description" content="<%$charte_ometa01->html|escape:"html"%>">
+    <%/if%>
+  </head>
+  <body>
+    <!-- <%$it_zones|array_keys|@var_dump%> -->
+    <%if count(array_keys($it_zones))>1%>
+     <!-- <%$it_cat_mit.otpl->link.odisp->filename%> -->
+     <%include file=$it_cat_mit.otpl->link.odisp->filename%>
+     <!-- //// <%$it_cat_mit.otpl->link.odisp->filename%> -->
+    <%else%>
+     <%capture name=tzrcontent%>
+     <%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+      <%if file_exists($filename)%><%include file="$filename"%><%/if%>
+     <%/section%>
+     <%/capture%>
+     <%if !preg_match('/(<h1>)/i',$smarty.capture.tzrcontent) && !isset($smarty.request.contentonly)%><h1><%$it_cat_mit.otitle->html%></h1><%/if%>
+     <%$smarty.capture.tzrcontent%>
+    <%/if%>
+  </body>
+</html>

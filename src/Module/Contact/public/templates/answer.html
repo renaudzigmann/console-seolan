@@ -1,0 +1,76 @@
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+<div class="table-responsive">
+ <table class="list2 table table-striped" >
+   <tbody>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.subject%></label></th>
+   <td><%$letter_osubject->html%></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.send_email%></label></th>
+   <td><input type="checkbox" name="sendemail" class="checkbox" checked></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.mark_as_processed%></label></th>
+   <td><input type="checkbox" name="processed" class="checkbox" checked></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.save_answer%></label></th>
+   <td><input type="checkbox" name="saveanswer" class="checkbox" checked></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.pdf_answer%></label></th>
+   <td><input type="checkbox" name="pdfanswer" class="checkbox"></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.sender%></label></th>
+   <td>
+    <input type="text" name="sender" value="<%$br_mod.sender%>"><br><input type=text name=sendername value="<%$br_mod.sendername%>">
+   </td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.layout%></label></th>
+   <td><%$letter_odisp->html%></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.recipient%></label></th>
+   <td><input type="text" name="email" value="<%$brcust_email%>"></td>
+  </tr>
+  <tr>
+   <th><label>Envoyer la demande en copie à</label><br>Emails séparés par des ';'<%if $imod_props.mlmodule%><br>Groupes<%/if%></th>
+   <td>
+    <input type="text" name="cc" value="" size="30">
+    <%if $imod_props.mlmodule%>
+     <br><select name="groups[]" multiple size="6">
+      <option value="">---</option>
+      <%section name=q loop=$queries_lines_oid%>
+       <option value="<%$queries_lines_oid[q]%>"><%$queries_lines_otitle[q]->html%></option>
+      <%/section%>
+     </select>
+    <%/if%>
+   </td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.body%></label></th>
+   <td><%$letter_oletter->html%></p></td>
+  </tr>
+  <tr>
+   <th><label><%$syslabels.Seolan_Core_Module_Module.attachments%></label></th>
+   <td><input type="file" name="attachment"></td>
+  </tr>
+  </tbody>
+ </table>
+</div>
+
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <button class="btn btn-primary" type="submit"><%$syslabels.Seolan_Core_General.send_text%></button>
+ </div>
+ <input type="hidden" name="_function" value="procAnswer">
+ <input type="hidden" name="tplentry" value="br">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="oidcust" value="<%$br_oidcust%>">
+ <input type="hidden" name="oidtpl" value="<%$br_oidtpl%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$self%>function=browse&moid=<%$_moid%>&template=Module/Table.browse.html&tplentry=br">
+
+</form>

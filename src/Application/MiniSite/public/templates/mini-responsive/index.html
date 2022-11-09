@@ -1,0 +1,129 @@
+<%strip%><!DOCTYPE html>
+<html lang="<%$locale.code%>">
+  <head>
+    <%$header%>
+    <%assign var="aliashome" value=$charte_oRUB_HOME->link.oalias->raw %>
+    <title><%if $page_title %><%$page_title|escape:"html"%><%elseif $it_cat_mit.otitle2->html%><%$it_cat_mit.otitle2->html%><%elseif $it_cat_mit.otitle->html%><%$it_cat_mit.otitle->toText()%>, <%$tzr.societe%><%/if%></title>
+    <%if $general_minisite.PUBLISH == 2 %><meta name="robots" content="noindex,nofollow"><%else%><meta name="robots" content="index, follow"><%/if%>
+  <%if !empty($it_cat_mit.odescr->html)%>
+   <%assign var="description" value=$it_cat_mit.odescr->toText()%>
+  <%/if%>
+  <%if empty($description) && !empty($it_olines[0].otxt1->html)%>
+   <%assign var="description" value=$it_olines[0].otxt1->toText()%>
+  <%/if%>
+  <%if ($it_cat_mit.oalias->html != $aliashome) && $description%>
+   <meta name="description" content="<%$description|truncate:"300":".."|strip:" "|escape:"html"%>">
+  <%else%>
+   <meta name="description" content="<%$charte_ometa01->html|escape:"html"%>">
+  <%/if%>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="<%$charte_ometa02->html%>">
+  <meta name="reply-to" content="info@xsalto.com">
+  <meta name="distribution" content="global">
+  <meta name="revisit-after" content="1 days">
+  <meta name="author" lang="<%$locale.code%>" content="<%$tzr.societe|escape:"html"%>">
+  <meta name="copyright" content="<%$tzr.meta_copyright%>">
+  <meta name="identifier-url" content="<%$tzr.societe_url%>">
+  <%if $tzr.bingtag %>
+    <meta name="msvalidate.01" content="<%$tzr.bingtag%>" />
+  <%/if%>
+  <meta name="expires" content="never">
+  <meta name="Date-Revision-yyyymmdd" content="<%$it_lastpageupdate->raw|date_format:"%Y%m%d"%>">
+  <!-- favicon - icon -->
+  <%if $charte_oicon->html%><link rel="shortcut icon" href="<%$charte_oicon->url%>"><%/if%>
+  <%if $charte_oappletouchicon->html%><link rel="apple-touch-icon" href="<%$charte_oappletouchicon->url%>"><%/if%>
+  <%* CSS *%>
+  <link href="/templates/css/normalize.css" rel="stylesheet">
+  <link href="/templates/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/templates/css/jquery.smartmenus.bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/templates/js/nyroModal/styles/nyroModal.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="http://fonts.xsalto.com/awesome/css/font-awesome.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/<%$general_style%>" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/templates/css/menu_mega.css" />
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="<%$self%>function=surchargecss&template=css/skin.css&nocache=1&_<%$smarty.now%>" />
+  <!--[if lt IE 9]>
+      <link rel="stylesheet" type="text/css" href="/templates/css/ie.css" />
+  <![endif]-->
+  <%include file="javascripts-head.html" %>
+</head>
+<body>
+<a id="top"></a>
+<div class="hidden-print top">
+  <div class="container">
+    <div class="row"></div>
+  </div>
+</div>
+
+<!-- B. MAIN -->
+<div class="container">
+  <div class="cv3-main">
+    <!-- Chemin -->
+    <div class="row">
+      <div class="col-md-12 cv3-chemin visible-md visible-lg">
+	<ol class="breadcrumb">
+	  <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$labels.accueil%>" href="<%$self%>alias=<%$aliashome%>"><span itemprop="title"><%$labels.accueil%></span></a></li>
+	  <%section loop=$path_stack name=path%><%if !$smarty.section.path.first AND $path_stack[path].oalias->raw neq $aliashome  %><%if $smarty.section.path.last OR $path_stack[path].sections %><li><%$path_stack[path].otitle->toText()%><%else%><li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" title="<%$path_stack[path].otitle->toText()%>" href="<%$self%>alias=<%$path_stack[path].oalias->raw%>"><span itemprop="title"><%$path_stack[path].otitle->toText()%></span></a><%/if%></li><%/if%><%/section%>
+	</ol>
+      </div>
+    </div><!-- fin chemin -->
+    <div class="row">
+      <%include file=$general_tpl%>
+    </div>
+  </div><!-- fin cv3-main -->
+</div>
+
+<!-- C. basdepage  -->
+<footer class="hidden-print footer" role="contentinfo">
+  <div class="container">
+    <div class="cv3-basdepage">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <%include file="cv3-infosite.html"%></div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <%if $charte_oRUB_NEWSLETTER_IN->url%>
+           <%include file="cv3-newsletter.html"%>
+          <%/if%>
+          <%if $charte_oHTDIG->raw eq 1 %>
+            <%include file="cv3-recherche.html"%>
+          <%/if%>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+          <%include file="cv3-social.html"%>
+          <%include file="cv3-navbas.html"%>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <%include file="cv3-partner.html"%></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</footer>
+
+<header class="navbar yamm navbar-default navbar-fixed-top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <%include file="cv3-logo.html"%>
+      <%*include file="links_reseaux-sociaux.html"*%>
+      <%include file="cv3-quicklinks.html"%>
+    </div>
+    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+      <span class="sr-only">Menu</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <%*include file="menu_deroule.html"*%>
+    <%include file="menu_mega.html"%>
+  </div>
+</header>
+
+<div id="scrollToTop"><a href="#"><span class="glyphicon csico-arrow_up"></span></a></div>
+
+<%include file="javascripts-footer.html" %>
+</body>
+</html>
+<%/strip%>

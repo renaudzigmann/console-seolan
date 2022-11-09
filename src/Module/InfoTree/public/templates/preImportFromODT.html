@@ -1,0 +1,41 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title="Import"%>
+<script type="text/javascript">
+ v<%$uniqid%>.selectedtopic='';
+ v<%$uniqid%>.selectedtopics_title='';
+ v<%$uniqid%>.selectTopic=function(t1,t2) {
+  this.selectedtopic=t1;
+  this.selectedtopic_title=t2;
+  TZR.Dialog.openURL('<%$self%>skip=1&function=home&template=Module/InfoTree.popaction.html&moid=<%$_moid%>&tplentry=mit&do=showtree&action=selectTopic&from=<%$editcat_oid%>&nosub=1&varname=v<%$uniqid%>.selectedtopic&maxlevel=1');
+}
+</script>
+<fieldset>
+ <legend>Import</legend>
+ <form enctype="multipart/form-data" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="importFromODT">
+  <input type="hidden" name="template" value="Core.message.html">
+  <div class="table-responsive">
+  <table class="table list2">
+   <%if empty($smarty.request.oidit)%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.linkup%></label></th>
+    <td>
+     <input type="hidden" name="linkup" value="<%$editcat_fields_object[fields]->raw%>">
+     <input type="text" name="linkup_title" value="<%$editcat_fields_object[fields]->text%>" readonly onclick="v<%$uniqid%>.selectTopic(this.form.linkup,this.form.linkup_title)">
+    </td>
+   </tr>
+    <%else%>
+    <tr><td colspan="2">
+     <input type="hidden" NAME="linkup" value="<%$smarty.request.oidit%>"/></td></tr>
+    <%/if%>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_Field_Field.xfiledef%></label></th>
+    <td><input type="file" name="odtfile" ID="odtfile"></td>
+   </tr>
+  </table>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>"/>
+  </div>
+ </form>
+</fieldset>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<%strip%>
+  <%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+  <%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:20%>
+  <%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+  <%math equation="w-(2*m)" w=$nlwidth m=$nlmarginwidth assign="msonlwidth" %>
+  <%assign var="nllinklabel" value=$labels.newsletteronline|default:"Si vous ne visualisez pas ce message correctement, <a href=\"%s\">consultez la page en ligne</a>"%>
+<%/strip%>
+<head>
+  <title><%$nltitle%></title>
+  <base href="<%$website%>" />
+  <%assign var="nltitle" value="`$tzr.societe` `$it_cat_mit.otitle->html`"|strip_tags  %>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <%if $tzr.newsletter_css%>
+    <%assign var="cssFile" value="application:`$tzr.newsletter_css`" %>
+    <style type="text/css" media="screen">
+      <%include file=$cssFile%>
+    </style>
+  <%/if%>
+  <%if $tzr.newsletter2_css %>
+    <%assign var="cssFile2" value="application:`$tzr.newsletter2_css`" %>
+    <style data-convert="no" type="text/css" media="screen">
+    <%include file=$cssFile2%>
+  </style>
+  <%/if%>
+  <link rel="shortcut icon" href="<%$website%>favicon.ico" />
+</head>
+
+<body style="margin: 0 !important; padding: 0 !important;">
+
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="body">
+  <tr>
+    <td align="center">
+    <!--[if (gte mso 9)|(IE)]>
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$msonlwidth%>">
+    <tr>
+    <td align="center" valign="top" width="<%$msonlwidth%>">
+    <![endif]-->
+
+
+    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-tab-lien">
+      <tr>
+        <td align="center" style="padding: 0px 0px 0px 0px">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$msonlwidth%>">
+        <tr>
+        <td align="center" valign="top" width="<%$msonlwidth%>">
+        <![endif]-->
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+            <tr>
+              <td>
+                <p><%"`$website`/index.php?alias=`$it_cat_mit.oalias->raw`&template=`$smarty.request.template`"|string_format:$nllinklabel%></p>
+              </td>
+            </tr>
+          </table>
+
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </td>
+      </tr>
+    </table>
+
+
+    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-tab-bandeau">
+      <tr>
+        <td align="center" style="padding: 0px 0px 0px 0px">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$msonlwidth%>">
+        <tr>
+        <td align="center" valign="top" width="<%$msonlwidth%>">
+        <![endif]-->
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+            <tr>
+              <td align="center">
+                <a href="<%$website%>" title="Voir le site"><img src="<%$website%><%$tzr.newsletter_image_bandeau%>" width="<%$nlwidth%>" alt="<%$nltitle%>" class="img-max" /></a>
+              </td>
+            </tr>
+          </table>
+
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </td>
+      </tr>
+    </table>
+
+
+    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-tab-title">
+      <tr>
+        <td align="center">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$msonlwidth%>">
+        <tr>
+        <td align="center" valign="top" width="<%$msonlwidth%>">
+        <![endif]-->
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+            <tr>
+              <td style="padding: <%$nlspacingheight%>px 0px <%$nlspacingheight%>px 0px" class="content">
+                <div><%$it_cat_mit.otitle->html%></div>
+              </td>
+            </tr>
+            <%if $tzr.newsletter_image_titrebas && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_image_titrebas`")%>
+                <tr><td width="100%" align="center"><img src="<%$website%><%$tzr.newsletter_image_titrebas%>" width="<%$nlwidth%>" class="img-max" /></td></tr>
+                <%elseif $tzr.newsletter_image_titrebas%><%* autorise le resizer *%>
+                  <tr><td width="100%" align="center"><img src="<%$website%><%$tzr.newsletter_image_titrebas%>" width="<%$nlwidth%>" class="img-max" /></td></tr>
+                <%else%>
+                <tr><td width="100%"></td></tr>
+              <%/if%>
+          </table>
+
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </td>
+      </tr>
+    </table>
+
+
+    <%* Section Contenu *%>
+      <%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+        <%if $it_olines[it].oid  && file_exists($filename) %><%include file="$filename"%><%/if%>
+      <%/section%>
+    <%* Fin Section Contenu *%>
+
+
+    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-tab-bottom">
+      <tr>
+        <td align="center" style="padding: 0px 0px 0px 0px">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$msonlwidth%>">
+        <tr>
+        <td align="center" valign="top" width="<%$msonlwidth%>">
+        <![endif]-->
+
+          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+              <tr>
+                <td style="padding: <%$nlspacingheight%>px 0px <%$nlspacingheight%>px 0px" class="content">
+                  <div><a href="<%$website%>" ><%$labels.newsletter_siteurl|default:"Voir notre site : `$website`"%></a>&nbsp;&nbsp;&mdash;&nbsp;&nbsp;<a href="<%$website%>/scripts/admin.php?class=\Seolan\Module\MailingList\MailingList&function=genSubscribe&tplentry=sub&moid=<%$smarty.request.nlmoid|default:$tzr.CorailNewsLetter%>&template=Core.layout/raw.html&insidefile=Module/MailingList.unsubscribe.html"><%$labels.newsletter_unsubscribe|default:"D&eacute;sabonnement"%></a></div>
+                </td>
+              </tr>
+              <%if $tzr.newsletter_image_bas && file_exists("`$smarty.const.TZR_WWW_DIR``$tzr.newsletter_image_bas`")%>
+                <tr><td align="center"><img src="<%$website%><%$tzr.newsletter_image_bas%>" width="<%$nlwidth%>" class="img-max" /></td></tr>
+              <%/if%>
+          </table>
+
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+        </td>
+      </tr>
+    </table>
+
+
+    <!--[if (gte mso 9)|(IE)]>
+    </td>
+    </tr>
+    </table>
+    <![endif]-->
+    </td>
+  </tr>
+</table>
+</body>
+</html>

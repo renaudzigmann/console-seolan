@@ -1,0 +1,52 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<script language="javascript">
+ v<%$uniqid%>.updateAnswer=function(loid,lang){
+  var f=document.forms['letterform<%$uniqid%>'];
+  if(!loid) var loid=f.tpl.value;
+  if(!lang) var lang=f.lang.value;
+  jQuery('#tdanswer<%$uniqid%>').load('<%$self%>function=answer&template=Module/Contact.answer.html&moid=<%$_moid%>&oidtpl='+loid+'&tplentry=br&oidcust=<%$br_oid%>&lang='+lang+'&skip=1');
+ }
+</script>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Contact_Contact.request%></legend>
+ <div class="table-responsive">
+ <table class="table table-striped list2" >
+  <%section name=fields loop=$br_fields_object %>
+   <tr>
+    <th><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+    <td><%$br_fields_object[fields]->html%></td>
+   </tr>
+  <%/section%>
+ </table>
+</div>
+</fieldset>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_Contact_Contact.answer%></legend>
+ <div class="table-responsive">
+ <table class="table striped list2" >
+   <tbody>
+  <tr>
+   <th><label><%$syslabels.Seolan_Module_Contact_Contact.letter_template%></label></th>
+   <td>
+    <form name="letterform<%$uniqid%>">
+     <select name="tpl" onchange="v<%$uniqid%>.updateAnswer();">
+      <%section name=m loop=$tpls_lines_oid%>
+       <option value="<%$tpls_lines_oid[m]%>"><%$tpls_lines_oname[m]->html%></toption>
+      <%/section%>
+     </select>
+     <select name="lang" onchange="v<%$uniqid%>.updateAnswer();">
+      <%section name=lang loop=$lang_code%>
+       <option value="<%$lang_code[lang]%>" <%if $lang_data eq $lang_code[lang]%>selected<%/if%>><%$lang_text[lang]%></option>
+      <%/section%>
+     </select>
+    </form>
+   </td>
+  </tr>
+</tbody>
+ </table>
+</div>
+ <div id="tdanswer<%$uniqid%>"></div>
+</fieldset>
+<%if $tpls_lines_oid[0]%>
+ <script type="text/javascript">v<%$uniqid%>.updateAnswer('<%$tpls_lines_oid[0]%>','<%$lang_data%>');</script>
+<%/if%>

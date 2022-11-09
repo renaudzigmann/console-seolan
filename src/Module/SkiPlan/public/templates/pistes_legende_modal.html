@@ -1,0 +1,85 @@
+
+<div class="modal fade" id="legenderemontee" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel"><%$labels.skiplanLegenderemontee%></h4>
+          </div>
+          <div class="modal-body">
+              <ul class="modal-legende">
+                  <%foreach from=$section.legenderemontees.lines item=legenderemontees name=foo%>
+                  <li><span class="glyphicon xssp-type-<%$legenderemontees.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%$legenderemontees.olibelle->html%></li>
+                  <%/foreach%>
+              </ul>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal"><%$labels.skiplanClose%></button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="legendelvl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><%$labels.skiplanLegendelvl%></h4>
+            </div>
+            <div class="modal-body">
+                <ul class="modal-legende">
+                    <%foreach from=$section.legendelvl.lines item=legendelvl name=foo%>
+                    <li><span class="glyphicon xssp-niveau <%$legendelvl.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%$legendelvl.olibelle->html%></li>
+                    <%/foreach%>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%$labels.skiplanClose%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="legendeetat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><%$labels.skiplanLegendeetat%></h4>
+            </div>
+            <div class="modal-body">
+                <ul class="modal-legende">
+                    <%foreach from=$section.legendeetat.lines item=legendeetat name=foo%>
+                    <li><span class="glyphicon xssp-etat <%$legendeetat.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%$legendeetat.olibelle->html%></li>
+                    <%/foreach%>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%$labels.skiplanClose%></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="legendepiste" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><%$labels.skiplanLegendepiste%></h4>
+            </div>
+            <div class="modal-body">
+                <ul class="modal-legende">
+                    <%foreach from=$section.legendepiste.lines item=legendepiste name=foo%>
+                    <li><span class="glyphicon xssp-type-<%$legendepiste.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%$legendepiste.olibelle->html%></li>
+                    <%/foreach%>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><%$labels.skiplanClose%></button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,23 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.browse.html" title=$syslabels.Seolan_Module_Calendar_Calendar.browseplanif_text%>
+<script type="text/javascript">
+ v<%$uniqid%>.deleteselected=function() {
+   var f=document.forms['browse<%$uniqid%>'];
+   var e;
+   var selecteds = false;
+   for(var i=0;i<f.elements.length;i++){
+     e = f.elements[i];
+     if (e.name.match('_selected')){
+       if (e.checked == true){
+	 selecteds = true;
+	 break;
+       }
+     }
+   }
+   if (!selecteds){ alert('<%$syslabels.Seolan_Core_General.error_select_object|escape:"quotes"%>');return };
+   if(confirm('<%$syslabels.Seolan_Core_General.confirm_delete_object|escape:"quotes"%>')) {
+     f._function.value='delPlanif';
+     f._next.value=this.go_browse('urlonly',0)+'&_raw=1';
+     TZR.ajaxSubmitForm(f);
+   }
+ }
+</script>

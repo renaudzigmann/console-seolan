@@ -1,0 +1,42 @@
+<html>
+<head>
+<%$header%>
+<link href="<%$smarty.const.TZR_DEFAULT_CSS_PATH%>print.css" rel="stylesheet" type="text/css">
+</head>
+<body onload="window.print();">
+<h1>Module : <%$imod_props.modulename%></h1>
+<ul>
+<li><%$syslabels.Seolan_Core_General.group%>: <%$imod_props.group%></li>
+<li>Identifiant: <b><%$imod_props._moid%></b></li>
+<%if $imod_props.objects_sec%><li><%$imod_props.objects_sec%></li><%/if%>
+<%if $imod_props.theclass%><li><%$syslabels.Seolan_Core_General.theclass%>: <%$imod_props.theclass%></li><%/if%>
+<%if $imod_props.title%><li><%$syslabels.Seolan_Core_General.title%>: <%$imod_props.title1%></li><%/if%>
+<%if $imod_props.sender%><li><%$syslabels.Seolan_Core_General.sender%>: <%$imod_props.sender%></li><%/if%>
+<%if $imod_props.sendername%><li><%$syslabels.Seolan_Core_General.sendername%>: <%$imod_props.sendername%></li><%/if%>
+<li><%$syslabels.Seolan_Core_General.defaultispublished%>: <%$imod_props.defaultispublished%></li>
+<li><%$syslabels.Seolan_Core_Module_Module.reportto%>: <%$imod_props.reportto%></li>
+<%if $imod_props.color%><li><%$syslabels.Seolan_Core_General.color%>: <%$imod_props.color%></li><%/if%>
+<li><%$syslabels.Seolan_Core_Module_Module.sendacopyto%>: <%$imod_props.sendacopyto%></li>
+</ul>
+<h1>Table : <%$imod_props.table%> </h1>
+<%foreach name=fields key=field item=ofield from=$br_tableObject%>
+<H2><%$ofield->label%></H2>
+<ul>
+<%if $ofield->fgroup%><li><%$syslabels.Seolan_Core_General.group_text%>: <%$ofield->fgroup%></li><%/if%>
+<%if $ofield->acomment%><li>Backoffice <%$syslabels.Seolan_Core_General.comment_text%>: <%$ofield->acomment%></li><%/if%>
+<%if $ofield->comment%><li><%$syslabels.Seolan_Core_General.comment_text%>: <%$ofield->comment%></li><%/if%>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.field%>: <b><%$ofield->field%></b></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.order%>: <%$ofield->get_forder()%></li>
+<%if $ofield->get_readonly()%><li><%$syslabels.Seolan_Core_DataSource_DataSource.readonly%></li><%/if%>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.type_text%>: <%$ofield->get_ftype()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.size%>: <%$ofield->get_fcount()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.compulsory%>: <%$ofield->get_compulsory()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.queryable%>: <%$ofield->get_queryable()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.translatable%>: <%$ofield->get_translatable()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.browsable%>: <%$ofield->get_browsable()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.multivalued%>: <%$ofield->get_multivalued()%></li>
+<li><%$syslabels.Seolan_Core_DataSource_DataSource.published%>: <%$ofield->get_published()%></li>
+</ul>
+<%/foreach%>
+</body>
+</html>

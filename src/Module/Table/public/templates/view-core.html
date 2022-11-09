@@ -1,0 +1,45 @@
+<%if $br__langdisplay%>
+<%capture name='translatable_field_icon' assign='translatable_field_icon'%>
+<button type="button" class="btn btn-default btn-md btn-inverse" style="cursor:pointer" title="<%label v='translate_copy_label' t='Copier le texte source'%>"><span class="glyphicon csico-duplicate" aria-hidden="true"></span></button>
+<%/capture%>
+<%else%>
+<%assign var='translatable_field_icon' value='<span class="glyphicon csico-translatable-field" aria-hidden="true"></span>'%>
+<%/if%>
+
+<%if !empty($br__archive)%>
+<h3>[<%if $br__archive neq $smarty.request._archive%>Date : <%$smarty.request._archive|date_format:"%d-%m-%Y %H:%M:%S" %>,<%/if%><%if $smarty.request._trash%><%$syslabels.Seolan_Core_General.trashon%><%$syslabels.Seolan_Core_General.i18ncolon%><%else%><%$syslabels.Seolan_Core_General.archivedon%><%/if%> <%$br__archive|date_format:"%d-%m-%Y %H:%M:%S"%> ]</h3>
+<%/if%>
+
+<%* gestion du multi colonnes *%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group])%>
+<%assign var="colnum" value=$imod_props.numberOfColumns%>
+<span class="colnum-1">
+<%/if%>
+
+<%foreach key=group item=fields from=$br__groups %>
+<%if $group != '_systemproperties'%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group]) && $br__cols[$group]!=$colnum%>
+</span>
+<%assign var="colnum" value=$br__cols[$group]%>
+<span class="colnum-<%$colnum%>">
+<%/if%>
+<fieldset>
+  <legend><%$group%></legend>
+  <div class="row-striped">
+    <%section name=f loop=$fields %>
+    <%assign var="thclasses" value=""%>
+    <%assign var="fieldicon" value=""%>
+    <div id="cont-<%$fields[f]->fielddef->field%>" class="row view-field view-field-<%$fields[f]->fielddef->field%>">
+      <div class="row-striped-content">
+        <%call fieldlabel field=$fields[f]%>
+        <div class="col-xs-12 col-sm-9 col-lg-10"><%$fields[f]->html%></div>
+      </div>
+    </div>
+    <%/section%>
+  </div>
+</fieldset>
+<%/if%>
+<%/foreach%>
+<%if ($imod_props.numberOfColumns >1) && !empty($br__cols[$group])%>
+</span>
+<%/if%>

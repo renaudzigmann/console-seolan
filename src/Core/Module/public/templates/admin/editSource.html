@@ -1,0 +1,4 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="admin"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Core/Module.admin/"%><%/if%>
+<%assign var="title" value="`$syslabels.Seolan_Core_Module_Module.editsource`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/DataSource.editSource.html"%>

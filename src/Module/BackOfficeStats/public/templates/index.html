@@ -1,0 +1,197 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.info%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.filter%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="function" value="index">
+  <input type="hidden" name="tplentry" value="mods">
+  <input type="hidden" name="template" value="Module/BackOfficeStats.index.html">
+  <table class="list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.module%></label></th>
+    <td>
+     <select name="module" onchange="TZR.ajaxSubmitForm(this.form);">
+      <option value=""><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.all_modules%></option>
+      <optgroup label="<%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.functions%>">
+       <option value="procAuth"<%if $smarty.request.module=="procAuth"%> selected<%/if%>><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.login%></option>
+       <option value="close"<%if $smarty.request.module=="close"%> selected<%/if%>><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.logout%></option>
+      </optgroup>
+      <%section name=g loop=$mods_groups%>
+       <optgroup label="<%$mods_groups[g]%>">
+	<%section name=m loop=$mods_lines_oid%>
+	 <%if $mods_lines_group[m] eq $mods_groups[g]%>
+	  <%assign var="om" value=$mods_lines_methods[m] %>
+	  <%assign var="omc" value=$om.moduleclass%>
+	  <option value="<%$mods_lines_oid[m]%>" <%if $smarty.request.module eq $mods_lines_oid[m]%> selected<%/if%>><%$mods_lines_name[m]%></option>
+	 <%/if%>
+	<%/section%>
+       </optgroup>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_General.user%></label></th>
+    <td>
+     <select name="user" onchange="TZR.ajaxSubmitForm(this.form);">
+      <option value=""><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.all_users%></option>
+      <optgroup label="<%$syslabels.Seolan_Core_General.groups%>">
+       <%section name=u loop=$grps_lines_oid%>
+	<option value="<%$grps_lines_oid[u]%>" <%if $br_user->_curoid eq $grps_lines_oid[u]%> selected<%/if%>><%$grps_lines_oGRP[u]->raw%>
+       <%/section%>
+      </optgroup>
+      <optgroup label="<%$syslabels.Seolan_Core_General.users%>">
+       <%section name=u loop=$users_lines_oid%>
+	<option value="<%$users_lines_oid[u]%>" <%if $br_user->_curoid eq $users_lines_oid[u]%> selected<%/if%>><%$users_lines_ofullnam[u]->raw%>
+       <%/section%>
+      </optgroup>
+     </select>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_Field_Field.datemin%></label></th>
+    <td><%$param_begin->html%></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_Field_Field.datemax%></label></th>
+    <td><%$param_end->html%></td>
+   </tr>
+  </table>
+  <div class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.approve_text%>"></div>
+ </form>
+</fieldset>
+
+<fieldset>
+  <legend><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.monthly_text%></legend>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+      <thead>
+	<tr>
+	  <th></th>
+	  <%section name=s loop=12%>
+	  <th width="40"><%$smarty.section.s.iteration|string_format:"%02d"%></th>
+	  <%/section%>
+	</tr>
+      </thead>
+      <tbody>
+	<%foreach from=$cnt_monthly item=i key=y%>
+	<tr>
+	  <td><%$y%></td>
+	  <%foreach from=$i key=m item=c%>
+	  <td><a class="cv8-ajaxlink" href="<%$self%>&user=<%$smarty.request.user%>&function=index&moid=<%$smarty.request.moid%>&template=Module/BackOfficeStats.index.html&tplentry=mods&ym=<%$y%>-<%$m+1%>&module=<%$smarty.request.module%>"><%$c%></a></td>
+	  <%/foreach%>
+	</tr>
+	<%/foreach%>
+      </tbody>
+    </table>
+  </div>
+</fieldset>
+
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.daily_text%> <%if $param_begin->text && $param_end->text%>(<%$param_begin->text%> - <%$param_end->text%>)<%/if%></legend>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+      <thead>
+	<tr>
+	  <th>Date</th>
+	  <th>Total</th>
+	</tr>
+      </thead>
+      <tbody>
+	<%section loop=$cnt_daily name=d%>
+	<tr>
+	  <td><%$cnt_daily[d].TS%></td>
+	  <td align="right"><%$cnt_daily[d].F1%></td>
+	</tr>
+	<%/section%>
+      </tbody>
+    </table>
+  </div>
+</fieldset>
+
+<%if $cnt_details%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.udaily_text%> <%if $param_begin->text && $param_end->text%>(<%$param_begin->text%> - <%$param_end->text%>)<%/if%></legend>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist">
+      <thead>
+	<tr>
+	  <th><%$syslabels.Seolan_Core_General.user%></th>
+	  <%foreach from=$cnt_days key=d item=it%>
+	  <th><%$d|date_format:"%d/%m"%></th>
+	  <%/foreach%>
+	</tr>
+      </thead>
+      <tbody>
+	<%foreach from=$cnt_users item=s key=uid%>
+	<tr>
+	  <td align="left"><%if $s%><%$s%><%else%>--<%/if%></td>
+	  <%foreach from=$cnt_details[$uid] item=cnt key=date%>
+	  <td align="right"><%if $cnt neq 0%><%$cnt%><%else%>&nbsp;<%/if%></td>
+	  <%/foreach%>
+	</tr>
+	<%/foreach%>
+      </tbody>
+    </table>
+  </div>
+ </fieldset>
+<%/if%>
+ 
+<%if $cnt_details2%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_BackOfficeStats_BackOfficeStats.mdaily_text%> <%$smarty.request.ym|date_format:"%Y-%m"%></legend>
+  <div class="table-responsive">
+    <table class="table table-striped cv8_tablelist"  id="userstats_<%$uniqid%>">
+      <%section name=g loop=$mods_groups%>
+      <tbody>
+	<tr class="noalternate">
+	  <th><%$mods_groups[g]%></th>
+	  <%foreach from=$cnt_days key=d item=it%>
+	  <th><%$d|date_format:"%d/%m"%></th>
+	  <%/foreach%>
+	</tr>
+	<%section name=m loop=$mods_lines_oid%>
+	<%assign var="om" value=$mods_lines_methods[m] %>
+	<%assign var="omc" value=$om.moduleclass%>
+	<%if $mods_lines_group[m] eq $mods_groups[g]%>
+	<tr>
+	  <td><%$mods_lines_name[m]%></td>
+	  <%foreach from=$cnt_details2[$mods_lines_oid[m]] item=cnt key=date%>
+	  <td align="right"><%if $cnt neq 0%><%$cnt%><%else%>&nbsp;<%/if%></td>
+	  <%foreachelse%>
+	  <%foreach from=$cnt_days key=d item=it%>
+	  <td>&nbsp;</td>
+	  <%/foreach%>
+	  <%/foreach%>
+	</tr>
+	<%/if%>
+	<%/section%>
+	<tr>
+	  <td><b>Total</b></td>
+	  <%foreach from=$cnt_days key=d item=it%>
+	  <td align="right">&nbsp;</td>
+	  <%/foreach%>
+	</tr>
+      </tbody>
+      <%/section%>
+    </table>
+  </div>
+ </fieldset>
+ <script type="text/javascript">
+  jQuery('#userstats_<%$uniqid%>>tbody').each(function(){
+   var tot=[];
+   jQuery(this).find('>tr:gt(0)').each(function(){
+    jQuery(this).find('>td:gt(0)').each(function(i){
+     if(!isNaN(this.innerHTML)){
+      if(!tot[i]) tot[i]=parseInt(this.innerHTML);
+      else tot[i]+=parseInt(this.innerHTML);
+     }
+    });
+   });
+   var tottr=jQuery(this).find('tr:last>td:gt(0)');
+   for(var i in tot){
+    tottr[i].innerHTML="<b>"+tot[i]+"</b>";
+   }
+  });
+ </script>
+<%/if%>

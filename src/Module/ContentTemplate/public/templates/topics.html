@@ -1,0 +1,28 @@
+<%foreach from=$topics_array key=tname item=infotreeTopics %>
+<fieldset class="fieldsetAccordion fieldsetAccordionClose"><legend><%$infotreeTopics->mod->getLabel()%> (<%$tname%>)</legend>
+<div class="table-responsive">
+  <table class="table table-striped cv8_tablelist">
+    <thead>
+      <tr>
+        <th><%$syslabels.Seolan_Module_ContentTemplate_ContentTemplate.topics_alllinks%></th>
+        <th><%$syslabels.Seolan_Module_ContentTemplate_ContentTemplate.topics_simplelink%></th>
+        <th><%$syslabels.Seolan_Core_General.last_update%></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%foreach from=$infotreeTopics->oids key=oid item=topicLink%>
+      <tr <%if $topicLink.PUBLISH!=1%>class="napp"<%/if%> >
+        <td><%$topicLink.html%></td>
+        <td><a class="cv8-ajaxlink" href="<%$topicLink.url%>" title="<%$syslabels.Seolan_Module_ContentTemplate_ContentTemplate.topicstab%>"><%$topicLink.title%></a></td>
+        <td><%$topicLink.UPD%></td>
+      </tr>
+  <%/foreach%>
+    </tbody>
+  </table>
+</div>
+<%/foreach%>
+
+<script>
+  TZR.fieldsetAccordion(jQuery(".cv8-contenu-center"));
+</script>
+</fieldset>

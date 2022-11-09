@@ -1,0 +1,56 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+<%assign var=sectiondivid value="cv8d-browsediv-`$it_itoid[it]`"%>
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript" language="javascript">function browsedivinitpage(sectiondivid){}</script>
+<%assign var=section value=$it_olines[it]%>
+<%if !isset($smarty.request.contentonly)%>
+<div class="cv8d-browsediv cv8d-browsediv-<%$section._functionparams.moid%>" id="<%$sectiondivid%>">
+<%assign var=end value="</div>"%>
+<%else%>
+<%assign var=end value=""%>
+<%/if%>
+<%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+<%capture assign=pager%>
+<%section name=p loop=$section.pages%>
+  <%if $section.first==$section.pages[p]%>
+    <a class="active-page" href="#" onclick="return false;"><%$smarty.section.p.index+1%></a>
+  <%else%>
+    <a href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$section.pages[p]%> " 
+    onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>&contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$section.pages[p]%>'});return false;"><%$smarty.section.p.index+1%></a>
+  <%/if%>
+<%/section%>
+  <%/capture%>
+  <div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div>
+<%/if%>
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html" browsetype="div" sectiondivid="`$sectiondivid`"%>
+
+<%*** object list ***%>
+<%if $section.groups %>
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-group.html" groups=$section.groups%>
+<%else%>
+<%foreach key=i item=oid from=$section.lines_oid %>
+  <div class="cv8d-object">
+   <%foreach item=field from=$section.header_fields%>
+    <div class="cv8d-fieldvalue cv8d-field-<%$field->field%>">
+     <%getvar var=section[lines_o`$field->field`][$i]->html%>
+    </div>
+   <%/foreach%>
+<%if $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit%>
+    <div>
+<%if $admini%>
+     <a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._functionparams.params.__linktodetail_oidit%>&oid=<%$oid%>&from[oidit]=<%$it_cat_mit.oid%>&from[itoid]=<%$it_itoid[it]%>"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+<%else%>
+     <a href="<%$self%>alias=<%$section._functionparams.params.__linktodetail%>&oid=<%$oid%>&from[alias]=<%$it_cat_mit.oalias->raw%>&from[itoid]=<%$it_itoid[it]%>&keywords=<%$section.lines_tlink[$i]%>" class="cv8-ajaxlink cv8d-object-link"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+<%/if%>
+    </div>
+<%/if%>
+   <div class="fin_float"></div>
+  </div>
+<%/foreach%>
+<%/if%>
+
+<%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+<div class="cv8d-pagelist cv8d-pagelist-bottom"><%$pager%></div>
+<%/if%>
+<%$end%>

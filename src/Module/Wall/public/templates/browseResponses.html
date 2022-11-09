@@ -1,0 +1,32 @@
+<%*
+*%>
+<style>
+  <%* à traiter : les tags induits pas # dans le contenu *%>
+  div.wall-response-list a.cketag{
+  display:none;
+  }
+</style>
+<div class="title"><%$syslabels.Seolan_Module_Wall_Wall.responseto%><%$syslabels.Seolan_Core_General.i18ncolon%><%$br__post.oOWN->link.ofullnam->html%>   <%$br__post.oUPD->html%></div>
+<div class="tzr-action"><button class="btn btn-default" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button></div>
+
+<div class="wall-response-list">
+
+<%section loop=$br_lines_oid name=i%>
+
+  <div class="wall-publisher">
+
+    <%if $br_lines_oOWN[i]->link.ologo->raw%>
+    <img src="<%$br_lines_oOWN[i]->link.ologo->resizer%>&geometry=40x40^&crop=40x40">
+    <%/if%>
+    <div class="wall-name"><%$br_lines_oOWN[i]->link.ofullnam->html%></div>
+    <div class="wall-date"><%$br_lines_oUPD[i]->html%></div>
+
+  </div>
+
+  <div class="wall-content">
+    <%$br_lines_ocontent[i]->html%>
+  </div>
+
+<%/section%>
+
+</div>

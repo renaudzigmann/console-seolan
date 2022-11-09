@@ -1,0 +1,98 @@
+<%section name=it loop=$it_olines%>
+  <%if $it__tp.oedit->filename%>
+    <%assign var="filename" value=$it__tp.oedit->filename%>
+    <%include file=$filename%>
+  <%else%>
+    <div id="edit-section<%$uniqid%>" class="edit-section">
+      <%if $it_olines[it].__advancedfields%>
+      <div class="checkbox input-toggle-advanced-fields" style="margin-bottom:2em;">
+        <label><input type="checkbox" class="toggle-advanced-fields" <%if $uid eq 'USERS:1'%> checked="checked"<%/if%> /> <%$syslabels.Seolan_Core_General.advanced%></label>
+      </div>
+      <%/if%>
+      <%* Options de mise en page *%>
+      <%if $it_olines[it]._tploptions%>
+        <fieldset>
+          <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout%></legend>
+          <div class="table-responsive">
+            <table class="table  table-striped list2">
+              <%section name=i loop=$it_olines[it]._tploptions%>
+                <%assign var=option value=$it_olines[it]._tploptions[i]%>
+                <tr class="<%$option.group|asciify%> <%$option.field%><%if $option.advanced%> advanced-field<%/if%>">
+                  <th>
+                    <%if $option.comment%>
+                      <label  class="fieldHelp" tabindex="0" role="button" data-html="true" data-toggle="popover" data-trigger="" data-content="<%$option.comment|escape:'html'%>" title="" data-original-title="[<%$syslabels.Seolan_Core_General.help_text%>] <%$option.label|wordwrap:"50"%>"><span class="glyphicon csico-infos" aria-hidden="true"></span> <%$option.label|wordwrap:"50"%></label>
+                    <%else%>
+                      <label><%$option.label|wordwrap:"50"%></label>
+                    <%/if%>
+                  </th>
+                  <td><%$option.edit%></td>
+                </tr>
+              <%/section%>
+            </table>
+          </div>
+        </fieldset>
+      <%/if%>
+      <%* Options de la fonction *%>
+      <%if $it_olines[it]._comment%>
+        <fieldset><%$it_olines[it]._comment%></fieldset>
+      <%/if%>
+      <%if $it_olines[it]._groups%>
+        <%foreach key=group item=fields from=$it_olines[it]._groups %>
+          <fieldset>
+            <legend><%$group%></legend>
+            <div class="table-responsive">
+              <table class="table table-striped list2">
+                <%section name=f loop=$fields %>
+                  <tr class="<%$fields[f]->fielddef->field%>" id="cont-<%$fields[f]->fielddef->field%>">
+                    <th>
+		      <%if $fields[f]->fielddef->comment%>
+                      <label  data-toggle="tooltip" title="[<%$syslabels.Seolan_Core_General.help_text%>] <%$fields[f]->fielddef->comment|escape:'html'%>"><%$fields[f]->fielddef->label|wordwrap:"50"%></label>
+		      <%else%>
+		      <label><%$fields[f]->fielddef->label|wordwrap:"50"%></label>
+		      <%/if%>
+                    </th>
+                    <td><%$fields[f]->html%></td>
+                  </tr>
+                <%/section%>
+              </table>
+            </div>
+          </fieldset>
+        <%/foreach%>
+      <%elseif $it_olines[it].fields_object%>
+        <fieldset>
+          <legend><%$syslabels.Seolan_Core_General.edit_text%></legend>
+          <div class="table-responsive">
+            <table class="table table-striped list2" >
+              <%section name=fields loop=$it_olines[it].fields_object%>
+                <tr class="<%$it_olines[it].fields_object[fields]->fielddef->field%>" id="cont-<%$it_olines[it].fields_object[fields]->fielddef->field%>">
+                  <th>
+                    <label <%if $it_olines[it].fields_object[fields]->fielddef->comment%> data-toggle="tooltip" title="[<%$syslabels.Seolan_Core_General.help_text%>] <%$it_olines[it].fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>><%$it_olines[it].fields_object[fields]->fielddef->label|wordwrap:"50"%></label>
+                  </th>
+                  <td><%$it_olines[it].fields_object[fields]->html%></td>
+                </tr>
+              <%/section%>
+            </table>
+          </div>
+        </fieldset>
+      <%/if%>
+    </div>
+  <%/if%>
+  <script type="text/javascript">
+    jQuery(function($){
+      var $wrapper = $('div#edit-section<%$uniqid%>');
+      var advancedFields = <%$it_olines[it].__advancedfields|@json_encode%>;
+      for (var i in advancedFields) {
+        $('tr.' + advancedFields[i], $wrapper).addClass('advanced').toggle($('input.toggle-advanced-fields', $wrapper).is(':checked'));
+      }
+      var testToggleAdvancedFields = function() {
+        $('tr.advanced', $wrapper).toggle($('input.toggle-advanced-fields', $wrapper).is(':checked'));
+      };
+      $('input.toggle-advanced-fields', $wrapper).click(function(e) {
+        testToggleAdvancedFields();
+      });
+      testToggleAdvancedFields();
+      TZR.fieldsetAccordion($wrapper);
+      TZR.activeDependency(document.editform<%$uniqid%>);
+    });
+  </script>
+<%/section%>

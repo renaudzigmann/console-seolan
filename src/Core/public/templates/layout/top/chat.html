@@ -1,0 +1,36 @@
+<%if $chat_enable_chat%>
+<li id="cvx-chat" class="chat">
+  <a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="#<%$self%>?&moid=<%$sysmods.xmodchat%>&function=browse&tplentry=br&template=Module/Table.browse.html&_persistent=1" ondblclick="home_activatelink(jQuery(this));" data-togglepage='{"action":"home_viewmodule","arguments":[]}' title="<%$syslabels.Seolan_Module_Chat_Chat.modulename%>" >
+    <span class="glyphicon csico-chat"></span>
+    <span class="label notification selection new-messages-count"></span>
+  </a>
+</li>
+<script type="text/javascript">
+ // rafraichir le nombre de message
+ var refresh_delay = 25;
+ (function chat_count_loop(){
+   setTimeout(function(){
+     var activeChatRoom = jQuery('#activeChatRoom').val();
+     var url = '/scripts/admin.php?moid=<%$sysmods.xmodchat%>&class=_Seolan_Module_Chat_Chat&function=newMessages&template=Module/Chat.chat.html&tplentry=br&_silent=1&activeChatRoom='+encodeURIComponent(activeChatRoom);
+     jQuery.get(url, function(data, status){
+       if (status == "success") {
+	 jQuery('ul','#cvx-chat').first().remove();
+	 jQuery('#cvx-chat').append(data);
+	 var total = jQuery('input[name=new-messages-count]', '#cvx-chat').first().val();
+	 var notifier = jQuery('.new-messages-count','#cvx-chat').first();
+	 var blinker = jQuery('.dropdown-toggle','#cvx-chat').first();
+	 if(total > 0) {
+	   notifier.html(total);
+	   blinker.addClass('blink_notification');
+	 } else {
+	   notifier.html('');
+	   blinker.removeClass('blink_notification');
+	 }
+       }
+       refresh_delay = 10000;
+       chat_count_loop();
+     });     
+   }, refresh_delay);
+ })();
+</script>
+<%/if%>

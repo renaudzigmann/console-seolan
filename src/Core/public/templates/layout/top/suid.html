@@ -1,0 +1,9 @@
+<%if $smarty.session._TZR.SUID%>
+
+<li id="cvx-user-profile" class="suid">
+
+<a  aria-haspopup="true" <%if $tzr.RCisActive%> onclick="return RClogout();"<%/if%> class="" role="button" href="<%$self%>&moid=<%$sysmods.xmoduser2%>&function=setbackuid&_next=<%$here|escape:"url"%>"><span class="glyphicon csico-log-as" aria-hidden="true"></span></a>
+
+</li>
+
+<%/if%>

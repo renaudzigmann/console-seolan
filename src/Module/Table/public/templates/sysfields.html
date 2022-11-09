@@ -1,0 +1,33 @@
+<%* affichage des champs "système" dans un groupe dédié *%>
+<%assign var='translatable_field_icon' value='<span class="glyphicon csico-translatable-field" aria-hidden="true"></span>'%>
+<%if !empty($smarty.request._archive)%>
+<%$archivedate=$smarty.request._archive%>
+<%/if%>
+
+<fieldset>
+
+  <legend>
+    <%$syslabels.Seolan_Core_General.properties_text%>
+  </legend>
+  <div class="row-striped">
+
+    <%if !empty($archiveDate)%>
+    <%if !empty($br_lst_created)%>
+    <%$createdtext=sprintf("%s / %s", $br_lst_created[0], $br_lst_created[1])%>
+    <%call simplefieldline field="lstcreated" label=$syslabels.Seolan_Core_General.created_date fieldhtml=$createdtext%>
+    <%/if%>
+    <%$datetext=$archiveDate|date_format:"%d-%m-%Y %H:%M:%S"%>
+    <%call simplefieldline field="archivedate" label="Archive date" fieldhtml=$datetext%>
+    <%/if%>
+
+    <%* anciennement : $br_lst_upd.dateupd $br_lst_upd.usernam *%>
+    <%if !empty($br__lock_user) %>
+    <%$locktext="%s (%s %s %s %s)"|sprintf:$br__lock_user.user:$syslabels.Seolan_Core_General.lockdstart:$br__lock_user.dstart:$syslabels.Seolan_Core_General.lockdend:$br__lock_user.dend%>
+    <%call simplefieldline field="lockuser" label=$syslabels.Seolan_Core_General.lockuser fieldhtml=$locktext%>
+    <%/if%>
+
+    <%include file="Module/Table.core-sysfields.html" fields=$br__groups['_systemproperties'] inline%>
+    
+  </div>
+ 
+</fieldset>

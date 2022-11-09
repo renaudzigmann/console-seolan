@@ -1,0 +1,33 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if !isset($title)%><%assign var="title" value=$syslabels.Seolan_Core_General.clone%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.clone%></legend>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="boid" value="<%$br_boid%>">
+  <input type="hidden" name="function" value="<%$fprefix%>ProcDuplicate">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <div class="table-responsive">
+    <table class="table list2">
+    <tr>
+      <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.table_name%></label></th>
+      <td><input type="text" name="mtxt" value="<%$br_mtxt%>" size="50"></td>
+    </tr>
+    <tr>
+      <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.table_code%></label></th>
+      <td><input type="text" name="newtable" required pattern="<%$br_tablenamepattern%>" value="<%$br_newtable%>"></td>
+    </tr>
+    <tr>
+      <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.duplicatedata%></label></th>
+      <td><input type="checkbox" class="checkbox" name="data" vlue="1"></td>
+    </tr>
+    </table>
+  </div>
+  <div class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+ </form>
+</fieldset>

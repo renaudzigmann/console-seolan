@@ -1,0 +1,138 @@
+<%include file="Module/Table.functions.html"%>
+
+<%$fieldslist=$bp_fields%>
+<%$formname="fieldselector$uniqid"%>
+
+<div class="title"><%$syslabels.Seolan_Core_General.browse_text%><%$syslabels.Seolan_Core_General.i18ncolon%><%$syslabels.Seolan_Core_General.properties_text|strtolower%></div>
+
+<div class="fieldSelector">
+  
+  <form name="<%$formname%>" action="<%$self%>" method="POST" data-browseid="<%$bp_browseid%>">
+    <div class="form-inline">
+      <ul class="nav nav-tabs" role="tablist">
+	<li role="presentation" class="active"><a href="#fieldsselector" aria-controls="fieldsselector" role="tab" data-toggle="tab">Champs</a></li>
+	<li role="presentation"><a href="#browseoptions" aria-controls="browseoptions" role="tab" data-toggle="tab">Options</a></li>
+      </ul>
+      <div class="tab-content">
+	<div role="tabpanel" class="tab-pane active" id="fieldsselector"><%*=== les champs ===*%>
+	  <div class="panel-group" id="<%if isset($querymode) && $querymode === 1%>query-<%/if%>field-selector-accordion-<%$uniqid%>" role="tablist" aria-multiselectable="true">
+	    <%foreach name='group' key='groupname' item='fields' from=$fieldslist%>
+	    <%assign var='panelid' value="panel"|cat:$uniqid|cat:$smarty.foreach.group.index%>
+	    <div class="panel panel-default">
+	      <div class="panel-heading" role="tab" id="heading<%$panelid%>">
+		<h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#<%if isset($querymode) && $querymode === 1%>query-<%/if%>field-selector-accordion-<%$uniqid%>" href="#<%$panelid%>" aria-expanded="true" aria-controls="<%$panelid%>"><%$groupname%></a></h4>
+	      </div>
+	      <div id="<%$panelid%>" class="panel-collapse collapse <%if $smarty.foreach.group.first && $querymode !== 1%>in<%/if%>" role="tabpanel" aria-labelledby="heading<%$panelid%>">
+		<div class="panel-body">
+		  <%foreach key='fieldname' item='fieldProperties' from=$fields%>
+		  <%$field=$fieldProperties.object%>
+		  <%$fieldStatus=$fieldProperties.status%>
+		  <div class="checkbox field-<%$fieldname%>">
+		    <label id="statusselector<%$fieldname%>"
+			   class="selectedfield <%if $field->queryable%>queryable<%/if%>"
+		      <%if !$fieldStatus.ro%>
+		      onclick="TZR.Table.FieldSelector.setFieldState.call(TZR.Table.FieldSelector, '<%$fieldname%>');"
+		      <%/if%>
+		      >
+		      <%if $fieldStatus.compulsory%><small class="pull-right text-info"><%$syslabels.Seolan_Core_Field_Field.compulsoryfield%></small><%/if%>
+		      <script>jQuery("#statusselector<%$fieldname%>").data('fieldprops', {queryable:<%$field->queryable%>});</script>
+		      <%$browse="display:none"%>
+		      <%$none="display:none"%>
+		      <%$search="display:none"%>
+		      <%$status=''%>
+		      <%if $fieldStatus.selected && !$fieldStatus.qqueryselected%>
+		      <%$browse=''%>
+		      <%$status='browse'%>
+		      <%elseif $fieldStatus.selected && $fieldStatus.qqueryselected%>
+		      <%$search=''%>
+		      <%$status='search'%>
+		      <%else%>
+		      <%$none=''%>
+		      <%$status='none'%>
+		      <%/if%>
+		      <span style="<%$browse%>" class="glyphicon csico-browse" title="Liste"></span>
+		      <span style="<%$search%>" class="glyphicon csico-search" title="Recherche rapide"></span>
+		      <span style="<%$none%>"   class="glyphicon csico-none" title=""></span>
+		      <%$field->label%>
+		    </label>
+		    <input type="hidden" data-order="<%$field->order%>" name="fieldstatus[<%$fieldname%>]" value="<%$status%>" <%if $fieldname === $br_query_comp_field%>onclick="this.checked=true"<%/if%>>
+		  </div>
+		  <%/foreach%>
+		</div>
+	      </div>
+	    </div>
+	    <%/foreach%>
+	  </div>
+	  <div role="alert" class="alert alert-info">
+	    <p>
+	      <%$syslabels.Seolan_Module_Table_Table.fieldselectorlegend%><%$syslabels.Seolan_Core_General.i18ncolon%><br>
+	      <span class="glyphicon csico-none"></span><%$syslabels.Seolan_Core_General.i18ncolon%><%$syslabels.Seolan_Module_Table_Table.fieldselectorlegend_none%>.<br>
+	      <span class="glyphicon csico-browse"></span><%$syslabels.Seolan_Core_General.i18ncolon%><%$syslabels.Seolan_Module_Table_Table.fieldselectorlegend_list%>.<br>
+	      <%if $imod_props.quickquery%>
+	      <span class="glyphicon csico-search"></span><%$syslabels.Seolan_Core_General.i18ncolon%><%$syslabels.Seolan_Module_Table_Table.fieldselectorlegend_quicksearch%>.
+	      <%/if%>
+	    </p>
+	  </div>
+	</div>
+	
+	<div id="browseoptions" class="tab-pane row-striped" role="tabpanel"><%*=== la recherche et les pages ===*%>
+	  <%if $imod_props.quickquery%>
+	  <div class="row">
+	    <div class="row-striped-content">
+	      <%call simplefieldlabel2 label=$syslabels.Seolan_Module_Table_Table.quick_query_open%>
+	      <div class="col-xs-12 col-sm-8">
+		<input type="checkbox" name="quickquery_open" value="1"  <%if $bp_properties.quickquery_open%>checked="checked"<%/if%>/>
+	      </div>
+	    </div>
+	  </div>
+	  <%/if%>
+	  <%if $imod_props.quickquery && $imod_props.submodsearch%>
+	  <div class="row">
+	    <div class="row-striped-content">
+	      <%call simplefieldlabel2 label=$syslabels.Seolan_Module_Table_Table.quick_query_submodsearch%>
+	      <div class="col-xs-12 col-sm-8">
+		<input type="checkbox" name="quickquery_submodsearch" value="1" <%if $bp_properties.quickquery_submodsearch%>checked="checked"<%/if%> >
+	      </div>
+	    </div>
+	  </div>
+	  <%/if%>
+	  <div class="row view-field">
+	    <div class="row-striped-content">
+	      <%call simplefieldlabel2 label=$syslabels.Seolan_Module_Table_Table.pagesize%>
+	      <div class="col-xs-12 col-sm-8">
+		<input type="number" min="10" step="10" value="<%$bp_properties.pagesize|default:$imod_props.pagesize%>" name="pagesize" />
+	      </div>
+	    </div>
+	  </div>
+	  <%if !empty($bp_properties.orderText)%>
+	  <div class="row">
+	    <div class="row-striped-content">
+	      <%call simplefieldlabel2 label=$syslabels.Seolan_Core_Module_Module.pref_order%>
+	      <div class="col-xs-12 col-sm-8">
+		<%$bp_properties.orderText%>
+	      </div>
+	    </div>
+	  </div>
+	  <%/if%>
+	  
+	</div>
+      </div>
+      
+    </div>
+
+  </form>
+  
+</div>
+
+<div class="tzr-action">
+  <button type="button" onclick="TZR.Table.FieldSelector.save.call(TZR.Table.FieldSelector, '<%$formname%>');" class="btn btn-primary"><%$syslabels.Seolan_Core_General.ok%></button>
+  <button type="button" class="btn btn-default" onclick="TZR.Table.FieldSelector.reset.call(TZR.Table.FieldSelector, '<%$formname%>'); return false;"><%$syslabels.Seolan_Core_General.default_text%></button>
+  <button type="button" data-dismiss="modal" class="btn btn-default"><%$syslabels.Seolan_Core_General.close_text%></button>
+  <div class="pull-left"><p class="text-info">
+    <%if $imod_props.saveUserPref%><%$syslabels.Seolan_Core_Module_Module.userprefsactives%>
+    <%else%>
+    <%$syslabels.Seolan_Core_Module_Module.userprefsnotactives%>
+    <%/if%>
+  </p>
+  </div>
+</div>

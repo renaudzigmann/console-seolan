@@ -1,0 +1,24 @@
+<%* affichage des sous rubriques *%>
+<%if !$cspc_KOID%>
+<div class="bo-page-links clearfix">
+ <%strip%>
+  <%section name=i loop=$ssrubs_lines_oid%>
+    <div class="bo-page-link">
+     <a href="#" onclick="home_viewpage('<%$ssrubs_lines_oid[i]%>','<%$ssrubs_lines_oalias[i]->html%>','<%$ssrubs_lines_otitle[i]->html|escape:"javascript"%>','<%$ssrubs_lines_ssrub[i]%>','<%$ssrubs_lines_sections[i]%>'); return false;">
+      <span class="bo-page-link-icon">
+	<%if $ssrubs_lines_oicon[i]->html%> <%* fielddef->isEmpty($ssrubs_lines_oicon[i] *%>
+	<span class="icon"><%$ssrubs_lines_oicon[i]->html%></span>
+        <%elseif $ssrubs_lines_opicto[i]->html%>
+          <img src="<%$ssrubs_lines_opicto[i]->resizer%>&geometry=x150&gravity=Center&crop=150x150">
+        <%else%>
+	 <span class="icon"><span class="csico-letter-<%$ssrubs_lines_otitle[i]->html|trim|substr:0:1|lower%> glyphicon"></span></span>
+        <%/if%>
+      </span>
+      <span class="bo-page-link-title"><%$ssrubs_lines_otitle[i]->html%></span>
+      <span class="bo-page-link-text"><%$ssrubs_lines_odescr[i]->html%></span>
+     </a>
+   </div>
+  <%/section%>
+ <%/strip%>
+</div>
+<%/if%>

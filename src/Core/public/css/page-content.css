@@ -1,0 +1,206 @@
+
+
+.cv3-titrepage {}
+
+
+.cv3-grdimage {
+	margin-bottom: 1em;
+}
+
+.cv3-grdimage a img {
+	margin: 0 0 0 0;
+	padding: 0;
+	border: 0;
+}
+
+.cv3-grdimage .legende {
+	display: block;
+	margin-top: 10px;
+}
+
+.cv3-txtseul {
+	margin-bottom: 1em;
+}
+
+.cv3-txtimage {
+	margin-bottom: 1em;
+}
+
+.cv3-txtimage img {
+	float: right;
+	max-width: 48%;
+	margin: 0 0 10px 4%;
+	padding: 0;
+}
+
+.cv3-imagetxt {
+	margin-bottom: 1em;
+}
+
+.cv3-imagetxt img {
+	float: left;
+	max-width: 48%;
+	margin: 0 4% 10px 0;
+	padding: 0;
+}
+
+
+.cv3-1234images {
+	margin-bottom: 1em;
+}
+
+.cv3-1234images:before,
+.cv3-1234images:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.cv3-1234images:after {
+  clear: both;
+}
+
+.cv3-1234images .diaporama4 {
+	-moz-box-sizing: border-box;
+	display: block;
+	float: left;
+	width: 23.0769%;
+	margin-left: 2.5641%;
+	min-height: 30px;
+}
+
+.cv3-1234images [class*="diaporama"]:first-child {
+	margin-left: 0;
+}
+
+.cv3-1234images .diaporama4 img {
+	margin-bottom: 8px;
+}
+
+.diaporama4 a {
+	position: relative;
+	display: block;
+}
+
+.cv3-1234images .diaporama4 .legende {
+	display: block;
+}
+
+
+.cv3-download {
+	margin-bottom: 1em;
+}
+
+.cv3-download img {
+	float: left;
+	max-width: 48%;
+	margin: 0 4% 10px 0;
+	padding: 0;
+}
+
+.cv3-download a {
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.cv3-download .tzr-picto {
+	vertical-align: middle;
+	margin: 0 10px 0 0;
+	padding: 0;
+}
+
+.cv3-flash,
+.cv3-video,
+.cv3-video-externe,
+.cv3-audio,
+.cv3-slider,
+.cv3-siteexterne,
+.pad-contenu2col {
+	margin-bottom: 1em;
+}
+
+
+
+.cv3-audio .flex-video {
+	padding-top: 0;
+	padding-bottom: 30px;
+	margin-bottom: 0;
+}
+
+
+
+
+/* mise en valeur */
+.cv3-envaleur {
+	margin-bottom: 1em;
+}
+
+.cv3-envaleur .titrage_envaleur {
+	padding: 20px 20px 0 20px;
+}
+
+.cv3-envaleur .txt_envaleur {
+	padding: 0 20px 20px 20px;
+}
+
+.cv3-envaleur .txt_envaleur img {
+	float: left;
+	max-width: 45%;
+	margin: 0 5% 10px 0;
+}
+
+
+
+
+
+/* 2 colonnes */
+.cv3-2cols {
+	margin-bottom: 1em;
+}
+
+.cv3-2cols .colg, .cv3-2cols .cold {
+	display: block;
+	float: left;
+	width: 48%;
+	margin-left: 4%;
+	min-height: 30px;
+}
+
+.cv3-2cols .colg {
+	margin-left: 0;
+}
+
+.cv3-2cols img {
+	padding: 3px 0 10px 0;
+}
+
+
+
+/* 3 col centrale */
+.cv3-3cols {
+	margin-bottom: 1em;
+}
+
+.cv3-3cols .cols1, .cv3-3cols .cols2, .cv3-3cols .cols3 {
+	display: block;
+	float: left;
+	width: 31.6239%;
+	margin-left: 2.5641%;
+}
+
+.cv3-3cols .cols1 {
+	margin-left: 0;
+}
+
+.cv3-3cols .top,
+.cv3-3cols .bas {
+	display: none;
+}
+
+.cv3-3cols .titre {
+	font-size: 1.35em;
+	font-weight: 700;
+	padding: 15px;
+}
+
+

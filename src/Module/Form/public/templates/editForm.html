@@ -1,0 +1,286 @@
+<%* 
+ - les manipulations js sont depéndantes de la structure html
+ - 2 blocs à l'identique : les questions existantes et le modèle pour les nouvelles questions
+*%>
+<script type="text/javascript">
+ v<%$uniqid%>.num=<%$br___lastnum%>;
+ v<%$uniqid%>.delquestionmess="<%$syslabels.Seolan_Module_Form_Form.answerdelconf|escape:"javascript"%>";
+ v<%$uniqid%>.addQuestion=function(after){
+   return TZR.Form.addQuestion(v<%$uniqid%>, after);
+ };
+ v<%$uniqid%>.changeQuestion=function(o){
+   return TZR.Form.changeQuestion(v<%$uniqid%>,o);
+ };
+ v<%$uniqid%>.changeQType=function(o, num){
+   return TZR.Form.changeQType(v<%$uniqid%>,o,num);
+ };
+ v<%$uniqid%>.delQuestion=function(o){
+   return TZR.Form.delQuestion(v<%$uniqid%>,o);
+ };
+ v<%$uniqid%>.moveQuestion=function(o, to){
+   return TZR.Form.moveQuestion(v<%$uniqid%>,o,to);
+ };
+ v<%$uniqid%>.addAnswer=function(a){
+   return TZR.Form.addAnswer(v<%$uniqid%>,a);
+ };
+ v<%$uniqid%>.delAnswer=function(a){
+   return TZR.Form.delAnswer(v<%$uniqid%>,a);
+ };
+ v<%$uniqid%>.moveAnswer=function(o, to){
+   return TZR.Form.moveAnswer(v<%$uniqid%>,o, to);
+ };
+ v<%$uniqid%>.checkForm=function(f){
+   return TZR.Form.checkForm(f);
+ };
+ v<%$uniqid%>.changeGroup=function(o){
+   return TZR.Form.changeGroup(v<%$uniqid%>);
+ };
+ TZR.Form.changeGroup = function(vuniqid){
+   var values = TZR.Form.collectGroups(vuniqid);
+   TZR.Form.updateGroups(vuniqid, values);
+ };
+ jQuery(document).ready(function(){
+
+   TZR.Form.initEdit.call(TZR.Form, v<%$uniqid%>);
+
+   // masquer / fermer
+   jQuery("#questions-<%$uniqid%>").on('click', "div.cv8-infotree-sectiontoolbar>span.showhide", function(){
+     jQuery(this).parent().next("div.table-responsive").toggle(500);
+     jQuery("span.csico-showhide", jQuery(this)).toggleClass("active");
+     return false;
+   });
+   
+ });
+</script>
+<fieldset>
+ <legend><%$br_otitle->html%></legend>
+ <%$br_ointro->html%>
+ <form action="<%$self%>" method="post" onsubmit="return v<%$uniqid%>.checkForm(this);">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="function" value="procEditForm">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="oid" value="<%$br_oid%>">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <div id="questions-<%$uniqid%>">
+   <%section name="i" loop=$br___table%>
+    <%assign var="f" value=$br___table[i]%>
+    <div class="cv8-form-question-edit" id="question-<%$f.field%>-<%$uniqid%>">
+     <div class="cv8-infotree-sectiontoolbar">
+      <span class="showhide"><span class="csico-showhide<%if $smarty.section.i.index<1%> active<%/if%>"></span></span>
+      <a href="#" onclick="v<%$uniqid%>.addQuestion(this); return false;"><%$syslabels.Seolan_Module_Form_Form.addquestion%></a>
+      <a href="#" onclick="v<%$uniqid%>.delQuestion(this); return false;"><%$syslabels.Seolan_Core_General.delete%></a>
+      <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,1); return false;"><%$syslabels.Seolan_Core_General.down%></a>
+      <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,-1); return false;"><%$syslabels.Seolan_Core_General.up%></a>
+      <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,'last'); return false;"><%$syslabels.Seolan_Core_General.bottom%></a>
+      <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,'first'); return false;"><%$syslabels.Seolan_Core_General.top%></a>
+      <%assign var=l value="qtype_`$f.type`"%>
+      <small><span><%$syslabels.Seolan_Module_Form_Form.$l%></span> | <span<%if $f.type == 'separator'%> style="display:none"<%/if%>><%$f.q[$lang_user]%></span></small>
+     </div>
+     <div class="table-responsive"  <%if $smarty.section.i.index>0%> style="display:none"<%/if%>>
+     <table class="table list2">
+     <%section name="lang" loop=$lang_code%>
+     <%assign var="mylang" value=$lang_code[lang]%>
+       <%if count($lang_code)>1%>
+       <tr data-field-type="query-lang">
+	 <td></td>
+	 <td><%$lang_long[$smarty.section.lang.index]%></td>
+       </tr>
+       <%/if%>
+      <tr data-field-type="query-title">
+       <th><%*<%if count($lang_code)>1%><%$lang_long[$smarty.section.lang.index]%><%/if%>*%><label><%$syslabels.Seolan_Module_Form_Form.question%></label></th>
+       <td><input type="text" value="<%$f.q[$mylang]|escape:'html'%>" name="question[<%$f.field%>][<%$mylang%>]" size="40" class="cv8-form-question-title" onchange="v<%$uniqid%>.changeQuestion(this);"></td>
+      </tr>
+     <tr data-field-type="query-group">
+       <th><label><%$syslabels.Seolan_Core_General.group%></label></th>
+       <td><input type="text" name="fgroup[<%$f.field%>][<%$mylang%>]" size="40" value="<%$f.fgroup[$mylang]|escape:'html'%>" onchange="v<%$uniqid%>.changeGroup(this);"/></td>
+      </tr>
+      <tr data-field-type="query-comment">
+       <th><label><%$syslabels.Seolan_Module_Form_Form.comment%></label></th>
+       <td><textarea name="comment[<%$f.field%>][<%$mylang%>]" cols="60" rows="5"><%$f.comment[$mylang]|replace:"<br />":""%></textarea></td>
+      </tr>
+      <%/section%>
+      <tr data-field-type="query-compulsory">
+       <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.compulsory%></label></th>
+       <td><input type="checkbox" name="compulsory[<%$f.field%>]"<%if $f.compulsory%> checked<%/if%>></td>
+      </tr>
+      <tr>
+       <th><label><%$syslabels.Seolan_Module_Form_Form.qtype%></label></th>
+       <td>
+	<select name="qtype[<%$f.field%>]" data-field="<%$f.field%>" onchange="v<%$uniqid%>.changeQType(this,'<%$f.field%>');">
+	 <option value="shorttext"<%if $f.type=="shorttext"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_shorttext%></option>
+	 <option value="date"<%if $f.type=="date"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_date%></option>
+	 <option value="file"<%if $f.type=="file"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_file%></option>
+	 <option value="longtext"<%if $f.type=="longtext"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_longtext%></option>
+	 <option value="select"<%if $f.type=="select"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_select%></option>
+	 <option value="checkbox"<%if $f.type=="checkbox"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_checkbox%></option>
+	 <option value="radio"<%if $f.type=="radio"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_radio%></option>
+
+	 <option value="boolean"<%if $f.type=="boolean"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_boolean%></option>
+	 <option value="image"<%if $f.type=="image"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_image%></option>
+	 <option value="objectlink"<%if $f.type=="objectlink"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_object%></option>
+
+	 <option value="separator"<%if $f.type=="separator"%> selected<%/if%>><%$syslabels.Seolan_Module_Form_Form.qtype_separator%></option>
+
+	</select>
+       </td>
+      </tr>
+
+       <tr class="objectlink_field_option" style="display: none">
+         <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.target%></label></th>
+         <td>
+           <%$f.moduleSelect%>
+         </td>
+       </tr>
+       <tr class="objectlink_field_option" style="display: none">
+         <th class="tzr-hottip-c" bt-xTitle="<%$syslabels.Seolan_Core_General.tokens_available%><br />%_[nom_champ_SQL]<br />%_KOID, %_email, ..."><label><%$syslabels.Seolan_Core_Field_Field.display_text_format%></label></th>
+         <td>
+           <input type="text" name="display_text_format[<%$f.field%>]" value="<%$f.display_text_format%>" />
+         </td>
+       </tr>
+       <tr class="objectlink_field_option" style="display: none">
+         <th class="tzr-hottip-c" bt-xTitle="<%$syslabels.Seolan_Core_General.tokens_available%><br />%_[nom_champ_SQL]<br />%_KOID, %_email, ..."><label><%$syslabels.Seolan_Core_Field_Field.display_format%></label></th>
+         <td>
+           <input type="text" name="display_format[<%$f.field%>]" value="<%$f.display_text_format%>" />
+         </td>
+       </tr>
+      <tr <%if $f.ftype!="XLinkDef"%>style="display:none;" <%/if%>id="answerlist-<%$f.field%>-<%$uniqid%>">
+       <th><label><%$syslabels.Seolan_Module_Form_Form.answerlist%></label></th>
+       <td>
+	<%section name=j loop=$f.answers.FR.lines_oid%>
+	 <div class="form-group">
+	  <input type="text" name="scores[<%$f.field%>][<%$f.answers.FR.lines_oid[j]%>]" value="<%$f.answers.FR.lines_oscore[j]->raw%>" size="1">
+	  <%section name="h" loop=$lang_code%>
+	  <%assign var="mylang" value=$lang_code[h]%>
+	  <%if count($lang_code)>1%><%$lang_long[h]%><%/if%><input type="text" name="answers[<%$f.field%>][<%$f.answers.FR.lines_oid[j]%>][<%$mylang%>]" value="<%$f.answers.$mylang.lines_otitle[j]->raw|escape:'html'%>">
+          <%/section%>
+	  <a href="#" onclick="v<%$uniqid%>.addAnswer(this); return false;"><%$syslabels.Seolan_Module_Form_Form.addquestion%></a>
+	  <a href="#" onclick="v<%$uniqid%>.delAnswer(this); return false;"><%$syslabels.Seolan_Core_General.delete%></a>
+	  <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,1); return false;"><%$syslabels.Seolan_Core_General.down%></a>
+	  <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,-1); return false;"><%$syslabels.Seolan_Core_General.up%></a>
+	 </div>
+	<%sectionelse%>
+	 <div  class="form-group">
+	   <input type="text" name="scores[<%$f.field%>][foo]" value="0" size="1">
+	   <%section name="h" loop=$lang_code%>
+	   <%assign var="mylang" value=$lang_code[h]%>
+	   <%if count($lang_code)>1%><%$lang_long[h]%><%/if%><input type="text" name="answers[<%$f.field%>][foo][<%$mylang%>]" value="">
+	   <%/section%>
+	   <a href="#" onclick="v<%$uniqid%>.addAnswer(this); return false;"><%$syslabels.Seolan_Module_Form_Form.addquestion%></a>
+	   <a href="#" onclick="v<%$uniqid%>.delAnswer(this); return false;"><%$syslabels.Seolan_Core_General.delete%></a>
+	   <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,1); return false;"><%$syslabels.Seolan_Core_General.down%></a>
+	   <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,-1); return false;"><%$syslabels.Seolan_Core_General.up%></a>
+	 </div>
+	<%/section%>
+       </td>
+      </tr>
+     </table>
+     </div>
+    </div>
+   <%/section%>
+  </div>
+  <div class="tzr-action">
+   <input type="button" value="<%$syslabels.Seolan_Module_Form_Form.addquestion_text%>" onclick="v<%$uniqid%>.addQuestion();">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_and_editone%>" onclick="this.form._next.value='<%$self%>moid=<%$_moid%>&function=edit&template=Module/Table.edit.html&oid=<%$br_oid%>&tplentry=br&_tabs=<%math equation="x+1" x=$br___ssmod|@count%>';">
+   <%* voir dashboard ? *%>
+   <input type="submit" value="<%$syslabels.Seolan_Module_Form_Form.saveandsend%>" onclick="this.form._next.value='<%$self%>moid=<%$_moid%>&function=display&tplentry=br&template=Module/Table.view.html&_tabs=dashboard&oid=<%$br_oid%>';">
+  </div>
+ </form>
+ <%*gabarit nouvelle questgion question*%>
+ <div style="display:none;" id="question-<%$uniqid%>">
+  <div class="cv8-form-question-edit" id="question-xxx-<%$uniqid%>">
+   <div class="cv8-infotree-sectiontoolbar">
+     <span class="showhide"><span class="csico-showhide<%if $smarty.section.i.index<1%> active<%/if%>"></span></span>
+    <a href="#" onclick="v<%$uniqid%>.addQuestion(this); return false;"><%$syslabels.Seolan_Module_Form_Form.addquestion%></a>
+    <a href="#" onclick="v<%$uniqid%>.delQuestion(this); return false;"><%$syslabels.Seolan_Core_General.delete%></a>
+    <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,1); return false;"><%$syslabels.Seolan_Core_General.down%></a>
+    <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,-1); return false;"><%$syslabels.Seolan_Core_General.up%></a>
+    <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,'last'); return false;"><%$syslabels.Seolan_Core_General.bottom%></a>
+    <a href="#" onclick="v<%$uniqid%>.moveQuestion(this,'first'); return false;"><%$syslabels.Seolan_Core_General.top%></a>
+    <small><span><%$syslabels.Seolan_Module_Form_Form.qtype_shorttext%></span> | <span></span></small>
+   </div>
+   <div class="table-responsive">
+   <table class="table list2">
+     <%section name="lang" loop=$lang_code%>
+     <%assign var="mylang" value=$lang_code[lang]%>
+     <%if count($lang_code)>1%>
+     <tr data-field-type="query-lang">
+       <td colspan="2" style="padding-top0;padding-bottom:0"><%$lang_long[$smarty.section.lang.index]%></td>
+     </tr>
+     <%/if%>
+    <tr data-field-type="query-title">
+     <th><label><%$syslabels.Seolan_Module_Form_Form.question%></label></th>
+     <td><input class="cv8-form-question-title" type="text" value="" name="question[xxx][<%$mylang%>]" size="40" onchange="v<%$uniqid%>.changeQuestion(this);"></td>
+    </tr>
+     <tr data-field-type="query-group">
+       <th><label><%$syslabels.Seolan_Core_General.group%></label></th>
+       <td><input type="text" name="fgroup[xxx][<%$mylang%>]" size="40" value="" onchange="v<%$uniqid%>.changeGroup(this);"/></td>
+     </tr>
+     <tr data-field-type="query-comment">
+     <th><label><%$syslabels.Seolan_Module_Form_Form.comment%></label></th>
+     <td><textarea name="comment[xxx][<%$mylang%>]" cols="60" rows="5"></textarea></td>
+    </tr>
+    <%/section%>
+    <tr data-field-type="query-compulsory">
+     <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.compulsory%></label></th>
+     <td><input type="checkbox" name="compulsory[xxx]"></td>
+    </tr>
+    <tr>
+     <th><label><%$syslabels.Seolan_Module_Form_Form.qtype%></label></th>
+     <td>
+      <select name="qtype[xxx]" data-field="xxx" onchange="v<%$uniqid%>.changeQType(this,'xxx');">
+       <option value="shorttext"><%$syslabels.Seolan_Module_Form_Form.qtype_shorttext%></option>
+       <option value="date"><%$syslabels.Seolan_Module_Form_Form.qtype_date%></option>
+       <option value="file"><%$syslabels.Seolan_Module_Form_Form.qtype_file%></option>
+       <option value="longtext"><%$syslabels.Seolan_Module_Form_Form.qtype_longtext%></option>
+       <option value="select"><%$syslabels.Seolan_Module_Form_Form.qtype_select%></option>
+       <option value="checkbox"><%$syslabels.Seolan_Module_Form_Form.qtype_checkbox%></option>
+       <option value="radio"><%$syslabels.Seolan_Module_Form_Form.qtype_radio%></option>
+       <option value="boolean"><%$syslabels.Seolan_Module_Form_Form.qtype_boolean%></option>
+       <option value="image"><%$syslabels.Seolan_Module_Form_Form.qtype_image%></option>
+       <option value="objectlink"><%$syslabels.Seolan_Module_Form_Form.qtype_object%></option>
+
+       <option value="separator"><%$syslabels.Seolan_Module_Form_Form.qtype_separator%></option>
+
+      </select>
+     </td>
+    </tr>
+     <tr class="objectlink_field_option" style="display: none">
+       <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.target%></label></th>
+       <td>
+         <%$br___newQuestionModuleSelect%>
+       </td>
+     </tr>
+     <tr class="objectlink_field_option" style="display: none">
+       <th class="tzr-hottip-c" bt-xTitle="<%$syslabels.Seolan_Core_General.tokens_available%><br />%_[nom_champ_SQL]<br />%_KOID, %_email, ..."><label><%$syslabels.Seolan_Core_Field_Field.display_text_format%></label></th>
+       <td>
+         <input type="text" name="display_text_format[<%$f.field%>]" value="<%$f.display_text_format%>" />
+       </td>
+     </tr>
+     <tr class="objectlink_field_option" style="display: none">
+       <th class="tzr-hottip-c" bt-xTitle="<%$syslabels.Seolan_Core_General.tokens_available%><br />%_[nom_champ_SQL]<br />%_KOID, %_email, ..."><label><%$syslabels.Seolan_Core_Field_Field.display_format%></label></th>
+       <td>
+         <input type="text" name="display_format[<%$f.field%>]" value="<%$f.display_text_format%>" />
+       </td>
+     </tr>
+    <tr style="display:none;" id="answerlist-xxx-<%$uniqid%>">
+     <th><label><%$syslabels.Seolan_Module_Form_Form.answerlist%></label></th>
+     <td>
+      <div>
+       <input type="text" name="scores[xxx][foo]" value="0" size="1">
+       <%section name="lang" loop=$lang_code%>
+       <%assign var="mylang" value=$lang_code[lang]%>
+       <%if count($lang_code)>1%><%$lang_long[lang]%><%/if%><input type="text" name="answers[xxx][foo][<%$mylang%>]">
+       <%/section%>
+       <a href="#" onclick="v<%$uniqid%>.addAnswer(this); return false;"><%$syslabels.Seolan_Module_Form_Form.addquestion%></a>
+       <a href="#" onclick="v<%$uniqid%>.delAnswer(this); return false;"><%$syslabels.Seolan_Core_General.delete%></a>
+       <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,1); return false;"><%$syslabels.Seolan_Core_General.down%></a>
+       <a href="#" onclick="v<%$uniqid%>.moveAnswer(this,-1); return false;"><%$syslabels.Seolan_Core_General.up%></a>
+      </div>
+     </td>
+    </tr>
+   </table>
+   </div>
+  </div>
+ </div>
+</fieldset>

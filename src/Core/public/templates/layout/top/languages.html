@@ -1,0 +1,44 @@
+<!-- <%$lang_data%>/<%$lang_trad%>/<%$lang_def%>, <%$TZR.lang_data.code%>/<%$TZR.lang_trad.code%> <%$syslabels.Seolan_Core_General.languages_text%> -->
+<a class="dropdown-toggle" aria-expanded="false" role="button" aria-haspopup="true" data-toggle="dropdown" data-target="#">
+   <span class="flag">
+    <%if $TZR.lang_trad%><%$TZR.lang_trad.long%><span class="glyphicon csico-arrow_right" aria-hidden="true"></span><%/if%>
+    <%if count($langsort_code)>1%><%$TZR.lang_data.long%>
+<%/if%>
+  </span>
+</a>
+  <ul class="dropdown-menu langs-dropdown">
+  <%if count($langsort_code)>1%>
+  <li class="dropdown-header"><%$syslabels.Seolan_Core_General.languages_change%></li>
+  <li>
+    <ul>
+      <%* retour à la langue de base *%>
+      <li><a <%if $lang_data != $lang_def%>href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$lang_def%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"<%/if%>><strong><%$TZR.lang_def.text%></strong></a></li>
+      <%section name=lang loop=$langsort_code%>
+      <%if empty($TZR.lang_trad)%>
+      <%if $langsort_code[lang] neq $lang_def 
+      && $langsort_code[lang] neq $lang_trad
+      && $langsort_code[lang] neq $lang_data%>
+      <li><a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$langsort_text[lang]%></a></li>
+      <%/if%>
+      <%if $langsort_code[lang] eq $lang_data && $langsort_code[lang] neq $lang_def%>
+      <li><a class="currentlang"><%$langsort_text[lang]%></a></li>
+      <%/if%>
+      <%elseif $langsort_code[lang]  != $lang_trad%>
+      <li>
+      <a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=&_setlang=1'+location.hash; return false;"><%$langsort_text[lang]%></a>
+      </li>
+      <%/if%>
+      <%/section%>
+    </ul>
+  </li>
+  <li class="dropdown-header"><%$syslabels.Seolan_Core_General.languages_translation_mode%></li>
+<li>
+    <ul>
+      <%section name=lang loop=$langsort_code%>
+      <%if $langsort_code[lang] neq $lang_def%>
+      <li><a href="#" onclick="location.href='<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail&LANG_DATA=<%$langsort_code[lang]%>&LANG_TRAD=<%$lang_def%>&_setlang=1'+location.hash; return false;"><%$langsort_text[lang]%></a></li><%/if%>
+      <%/section%>
+    </ul>
+  </li>
+  <%/if%>
+</ul>

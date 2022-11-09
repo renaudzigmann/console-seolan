@@ -1,0 +1,33 @@
+<%if empty($br_hid)%>
+ No History
+<%else%>
+ <%section name=br loop=$br_container%>
+  <%assign var="filename" value=$it_tlines[it].odisp->filename%>
+  <%if !empty($br_container[br])%>
+   <div class="cv8-module" id="cv8-module-<%$smarty.section.br.index%>"> 
+    <div class="cv8-module-bg">
+     <div class="cv8-module-container" id="cv8-module-container-<%$smarty.section.br.index%>">
+      <script type="text/javascript">
+       if(TZR.historymode=='loadnav'){
+        TZR.jQueryLoad({url:'<%$br_container[br]%>&_nohistory=1',target:'#cv8-module-container-<%$smarty.section.br.index%>'});
+       }else{
+        TZR.jQueryLoad({url:'<%$br_container[br]%>&_bdxnewstack=1',target:'#cv8-module-container-<%$smarty.section.br.index%>'});
+       }
+      </script>
+     </div>
+    </div>
+   </div>
+  <%/if%>
+ <%/section%>
+<%/if%>
+<%assign var=history value=$smarty.const.HISTORY_SESSION_VAR%>
+<script type="text/javascript">
+ TZR.maintitle='<%$smarty.session.$history[$smarty.request.hid].maintitle|escape:"javascript"%>';
+ TZR.mainurl='';
+ TZR.setInfoText('<%$smarty.session.$history[$smarty.request.hid].comment|escape:"javascript"%>');
+ if(TZR.historymode!='loadnav'){
+  //TZR.addNavHistory("<%$smarty.session.$history[$smarty.request.hid].title|escape:"javascript"%>");
+ }else{
+  TZR.setDocumentTitle("ou alors <%$smarty.session.$history[$smarty.request.hid].title|escape:"javascript"%>");
+ }
+</script>

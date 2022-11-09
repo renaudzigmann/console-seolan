@@ -1,0 +1,25 @@
+<%if isset($br_geninfos.login)%>
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.general_text%></legend>
+  <table class="list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Module_Project_Project.nblogin%></label></th>
+    <td><%$br_geninfos.login%><%if $br_statsmodule%><a class="cv8-ajaxlink" href="<%$self%>moid=<%$br_statsmodule%>&function=index&template=Module/BackOfficeStats.index.html&tplentry=mods&module=procAuth&ym=<%$smarty.now|date_format:"%Y-%m"%>"> (<%$syslabels.Seolan_Core_Module_Module.allstats%>)</a><%/if%></td>
+   </tr>
+  </table>
+ </fieldset>
+<%/if%>
+<%foreach name=i from=$br_modsinfos key=moid item=minfos%>
+ <fieldset>
+  <legend><%$minfos.modulename%></legend>
+  <table class="list2">
+   <%foreach from=$minfos.infos item=info key=name%>
+    <tr>
+     <th><label><%$info->label%></label></th>
+     <td><%$info->html%><%if $name=='stats' && $br_statsmodule%><a class="cv8-ajaxlink" href="<%$self%>moid=<%$br_statsmodule%>&function=index&template=Module/BackOfficeStats.index.html&tplentry=mods&module=<%$moid%>&ym=<%$smarty.now|date_format:"%Y-%m"%>"> (<%$syslabels.Seolan_Core_Module_Module.allstats%>)</a><%/if%></td>
+</td>
+    </tr>
+   <%/foreach%>
+  </table>
+ </fieldset>
+<%/foreach%>

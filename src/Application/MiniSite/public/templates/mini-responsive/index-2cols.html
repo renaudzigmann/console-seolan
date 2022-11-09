@@ -1,0 +1,49 @@
+
+
+<!--/htdig_noindex-->
+<!-- B.2 CONTENU -->
+<article class="col-xs-12  col-sm-8 col-sm-pull-0 col-md-8 col-md-pull-0 col-lg-8 col-lg-pull-0 cv3-main-contenu" id="2cols" role="main">
+	<div class="tzr-page-content cv3-col-contenu" id="tzr-page-content">
+		<%capture name=tzrcontent%>
+		<%if $smarty.request.insidefile %><%include file=$smarty.request.insidefile%><%else%>
+			<%section name=it loop=$it_olines%><%assign var="filename" value=$it_tlines[it].odisp->filename%>
+			<%if $it_olines[it]._dynquery && !$done && $it_cat_mit.oalias->html!=$tzr.corailv3_photorslt%>
+				<%assign var="v1" value=$it_olines[it]._dynquery%>
+				<%assign var="done" value=1%>
+				<%if $v1.fields_object[0] %>
+					<table border="0" id="tabquery">
+					<form name=myform action="<%$self%>" method=post>
+					<input type=hidden name="alias" value="<%$it_cat_mit.oalias->html%>">
+					<%section name=f loop=$v1.fields_object %>
+					<tr><td valign=top><%$v1.fields_object[f]->fielddef->label%></td><td><%$v1.fields_object[f]->html%></td></tr>
+					<%/section%>
+					<tr><th colspan=2></th></tr>
+					<tr><td colspan=2><input type="submit" name=submit value="<%$labels.query_text%>" ></td></tr>
+					</form>
+					</table>
+				<%/if%>
+			<%/if%>
+			<%if file_exists($filename)%><%include file="$filename"%><%/if%>
+			<%/section%>
+		<%/if%>
+		<%/capture%>
+                <%if !preg_match('/(<h1>)/i',$smarty.capture.tzrcontent)%>
+		<header>
+                <h1><%$it_cat_mit.otitle->html%></h1>
+		</header>
+		<%/if%>
+		<%$smarty.capture.tzrcontent%>
+	</div>
+</article>
+
+<!-- B.1 BColonne de gauche -->
+<!--htdig_noindex-->
+<div class="col-xs-12 col-sm-4 col-sm-push-0 col-md-4 col-md-push-0 col-lg-4 col-lg-push-0 hidden-print cv3-main-gauche">
+	<div class="cv3-col-gauche">
+		<%if $it_cat_mit.oalias->html neq $tzr.corailv3_home%><h4 class="rubrique"><%$path_stack[1].otitle->html%></h4>
+		<%else%>
+		<%/if%>
+		<%include file="cv3-news.html"%>
+		
+	</div><!-- fin col gauche -->
+</div><!-- fin main gauche -->

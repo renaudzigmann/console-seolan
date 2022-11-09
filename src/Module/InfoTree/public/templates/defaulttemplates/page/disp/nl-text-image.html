@@ -1,0 +1,82 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:680%>
+<%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:20%>
+<%assign var="nlspacingheight" value=$tzr.newsletter_spacing_height|default:15%>
+<%math equation="w/2" w=$nlwidth assign="nlcontentwidth" %>
+<%math equation="w-(2*m)" w=$nlcontentwidth m=$nlmarginwidth assign="imgResize" %>
+
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;" class="nl-text-image">
+  <tr>
+    <td align="center" style="padding: <%$nlspacingheight%>px 0px 0px 0px" height="100%" valign="top" width="100%">
+      <!--[if (gte mso 9)|(IE)]>
+      <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+      <tr>
+      <td align="center" valign="top" width="<%$nlwidth%>">
+      <![endif]-->
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlwidth%>px;">
+        <tr>
+          <td align="center" valign="top" class="font-0">
+          <!--[if (gte mso 9)|(IE)]>
+          <table align="center" border="0" cellspacing="0" cellpadding="0" width="<%$nlwidth%>">
+          <tr>
+            <td align="center" valign="top" width="<%$nlcontentwidth%>">
+            <![endif]-->
+
+
+            <div style="display:inline-block; max-width:50%; min-width:<%$imgResize%>px; vertical-align:top; width:100%;" class="mobile-center">
+            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlcontentwidth%>px;">
+              <tr>
+                <td valign="top">
+                  <%if $it_olines[it].otitsec->raw %><h1><%$it_olines[it].otitsec->html%></h1><%/if%>
+                  <%if $it_olines[it].osubtit->raw %><h2><%$it_olines[it].osubtit->html%></h2><%/if%>
+                  <%if $it_olines[it].ochapeau->raw %><h3><%$it_olines[it].ochapeau->html%></h3><%/if%>
+                  <%if $it_olines[it].otxt1->raw%><%$it_olines[it].otxt1->html%><%/if%>
+                </td>
+              </tr>
+            </table>
+            </div>
+
+            <!--[if (gte mso 9)|(IE)]>
+              </td>
+              <td align="center" valign="top" width="300">
+              <![endif]-->
+
+            <div style="display:inline-block; max-width:50%; min-width:260px; vertical-align:top; width:100%;" class="mobile-center">
+            <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:<%$nlcontentwidth%>px;">
+              <tr>
+                <td align="center" valign="top">
+                  <%if $it_olines[it].oimg1->filename%>
+                    <p>
+                      <%if $it_olines[it].oimgurl1->url%>
+                        <a href="<%$it_olines[it].oimgurl1->url%>" title="<%$it_olines[it].oimg1->title%>">
+                      <%/if%>
+                      <%html_image file="`$website``$it_olines[it].oimg1->resizer`&geometry=`$imgResize|floor`" title=$it_olines[it].oimg1->title %>
+                      <%if $it_olines[it].oimgurl1->url%>
+                        </a>
+                      <%/if%>
+                    </p>
+                  <%/if%>
+                </td>
+              </tr>
+            </table>
+            </div>
+
+              <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+            </table>
+            <![endif]-->
+          </td>
+        </tr>
+      </table>
+
+      <!--[if (gte mso 9)|(IE)]>
+      </td>
+      </tr>
+      </table>
+      <![endif]-->
+    </td>
+  </tr>
+</table>
+

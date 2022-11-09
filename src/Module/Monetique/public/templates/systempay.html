@@ -1,0 +1,18 @@
+<div class="xmodmonetique xmodmonetique-systempay">
+  <%if $sytemPayForm_noECard%>
+    <div class="xmodmonetique-systempay-form">
+      <img src="/csx/src/Module/Monetique/public/logo/NO_E_CARD.png" title="<%$syslabels.Seolan_Module_Monetique_Monetique.no_ecard%>">
+    </div>
+  <%/if%>
+  <%foreach from=$sytemPayForm_forms key=cardType item=fields%>
+    <div class="xmodmonetique-systempay-form">
+      <form method="POST" action="<%$sytemPayForm_url%>">
+        <%$fields%>
+        <input type="image" src="/csx/src/Module/Monetique/public/logo/<%$cardType|default:'CB'%>.jpg" title="<%$sytemPayForm_cardTypes.$cardType|default:'CB'%>">
+        <%if count($sytemPayForm_forms) == 1%>
+          <input type="submit" value="<%$buttonText|default:$labels.mntq_bqvalidate|default:'[Payer ma commande]'%>">
+        <%/if%>
+      </form>
+    </div>
+  <%/foreach%>
+</div>

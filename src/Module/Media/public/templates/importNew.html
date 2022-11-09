@@ -1,0 +1,72 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Media_Media.importnew%>
+<%include file="Module/Table.functions.html"%>
+
+<script type="text/javascript">
+ v<%$uniqid%>.checkForm=function(){
+  var f=document.forms['editform<%$uniqid%>'];
+  if(!TZR.isFormValidWithFocus(f,true)) return false;
+  jQuery('select.doublebox[name*="[]"] option', 'form[name="flegend<%$uniqid%>"]').prop('selected', true);
+  f.legend.value=jQuery(document.forms['flegend<%$uniqid%>']).serialize();
+  return TZR.ajaxSubmitForm(f);
+ }
+</script>
+<div class="cv8-contenu-center">
+ <form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return v<%$uniqid%>.checkForm(this);">
+  <fieldset>
+   <legend><%$syslabels.Seolan_Core_General.new_text%></legend>
+   <div class="row-striped">
+     <%section name=fields loop=$br_fields_object%>
+     <%if !$br_fields_object[fields]->sys%>
+     <%call fieldline field=$br_fields_object[fields]%>
+     <%/if%>
+     <%/section%>
+     <%if $br_oPUBLISH%>
+     <%call fieldline field=$br_oPUBLISH%>
+     <%/if%>
+   </div>
+  </fieldset>
+  <input type="hidden" name="_function" value="importProcInput">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="template" value="Core.empty.html">
+  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <input type="hidden" name="skip" value="1">
+  <input type="hidden" name="legend" value="">
+ </form>
+
+ <form name="flegend<%$uniqid%>">
+  <fieldset id="legend<%$uniqid%>">
+   <legend><%$syslabels.Seolan_Module_Media_Media.legend%></legend>
+   <%foreach key=group item=fields from=$br___edit._groups %>
+   <%if $group != '_systemproperties'%>		    
+   <fieldset>
+     <legend><%$group%></legend>
+     <div class="row-striped">
+       <%section name=f loop=$fields%>
+       <%if $fields[f]->fielddef->ftype!="\Seolan\Field\File\File" && $fields[f]->fielddef->ftype!="\Seolan\Field\Folder\Folder"%>
+       <%call fieldline field=$fields[f]%>
+       <%/if%>
+       <%/section%>
+     </div>
+   </fieldset>
+   <%/if%>
+   <%/foreach%>
+  </fieldset>
+  <%if count($br__groups['_systemproperties'])>0 || isset($br_oid)%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+  <div class="row-striped">
+    <%include file="Module/Table.core-sysfields.html"
+    fields=$br__groups['_systemproperties']
+    inline
+    %>
+  </div>
+</fieldset>
+  <%/if%>
+ </form>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="button" onclick="v<%$uniqid%>.checkForm();" value="<%$syslabels.Seolan_Core_General.save_text%>">
+ </div>
+</div>

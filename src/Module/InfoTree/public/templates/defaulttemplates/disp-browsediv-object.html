@@ -1,0 +1,61 @@
+<div class="cv8d-object" id="cv8d-object-<%$oid%>">
+
+  <%assign var=globalLinkSelectedFields value=explode('||',$section._functionparams.params.__globalLinkSelectedFields)%>
+  <%assign var="globalLinkField" value="lines_o`$section._functionparams.params.__globalLinkField`" %>
+  <%assign var="globalLinkValue" value=$lines[$globalLinkField][$i] %>
+  <%if !$globalLinkValue->url%>
+    <%assign var="globalLinkValue" value="" %>
+  <%/if%>
+
+  <%foreach name="fofield" item=field from=$section.header_fields%>
+  <%assign var="key" value="lines_o`$field->field`" %>
+  <%assign var="fieldobject" value=$lines[$key][$i] %>
+  <%assign var=displayGlobalLink value=(is_object($globalLinkValue) && in_array($field->field, $globalLinkSelectedFields)
+    && !in_array($field->ftype, ['\Seolan\Field\Url\Url','\Seolan\Field\File\File']) && !preg_match("/<\s*a[^>]*>[^<]*<\/\s*a\s*>/", $fieldobject->html)) %>
+  <%assign var=displayLinkToDetailOnField value=(!$displayGlobalLink && in_array($field->field, $globalLinkSelectedFields)
+    && $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit
+    && !preg_match("/<\s*a[^>]*>[^<]*<\/\s*a\s*>/", $fieldobject->html))%>
+
+<%if is_object($fieldobject) && !$fieldobject->isEmpty() %>
+  <%if !isset($lastgroup) || $field->fgroup neq $lastgroup %>
+  <%if $grpopened%><%assign var="grpopened" value=0 %></div></div><%/if%>
+    <%assign var="grpopened" value=1 %>
+    <div class="cv8d-fieldgroup cv8d-fieldgroup-<%$field->fgroup|asciify|default:"general"%>">
+      <div class="cv8d-fieldgrouplabel cv8d-fieldgrouplabel-<%$field->fgroup|asciify|default:"general"%>">
+	<%$field->fgroup%>
+      </div>
+      <div class="cv8d-fieldgroup-fields" >
+  <%/if%>
+  
+  <%if $displayGlobalLink%>
+    <a href="<%$globalLinkValue->url%>" target="<%$globalLinkValue->target%>" title="<%$globalLinkValue->title%>" class="">
+  <%elseif $displayLinkToDetailOnField%>
+    <%if $admini%>
+      <a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._functionparams.params.__linktodetail_oidit%>&oid=<%$oid%>&from[oidit]=<%$it_cat_mit.oid%>&from[itoid]=<%$it_itoid[it]%>">
+    <%else%>
+      <a href="<%$self%>alias=<%$section._functionparams.params.__linktodetail%>&oid=<%$oid%>&from[alias]=<%$it_cat_mit.oalias->raw%>&from[itoid]=<%$it_itoid[it]%>&keywords=<%$section.lines_tlink[$i]%>" class="cv8-ajaxlink cv8d-object-link">
+    <%/if%>
+  <%/if%>
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-object-field.html" fieldobject=$fieldobject %>
+  <%if $displayGlobalLink || $displayLinkToDetailOnField%>
+    </a>
+  <%/if%>
+  
+  <%assign var="lastgroup" value=$field->fgroup %> 
+<%/if%>
+  <%if $grpopened && $smarty.foreach.fofield.last %>
+    <%assign var="grpopened" value=0 %>
+    </div></div>
+  <%/if%> 
+
+  <%/foreach%>
+  <%if $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit%>
+  <div>
+    <%if $admini%>
+    <a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._functionparams.params.__linktodetail_oidit%>&oid=<%$oid%>&from[oidit]=<%$it_cat_mit.oid%>&from[itoid]=<%$it_itoid[it]%>"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+    <%else%>
+    <a href="<%$self%>alias=<%$section._functionparams.params.__linktodetail%>&oid=<%$oid%>&from[alias]=<%$it_cat_mit.oalias->raw%>&from[itoid]=<%$it_itoid[it]%>&keywords=<%$section.lines_tlink[$i]%>" class="cv8-ajaxlink cv8d-object-link"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+    <%/if%>
+  </div>
+  <%/if%>
+</div>

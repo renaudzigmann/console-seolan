@@ -1,0 +1,93 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ jQuery(document).ready(function(){
+ TZR.fieldsetAccordion(jQuery(v<%$uniqid%>.modulecontainer));
+ });
+</script>
+<div class="cv8-contenu-center">
+  <div id="tzr-tablist-<%$uniqid%>">
+    <ul class="nav nav-responsive nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+	<a data-toggle="tab" role="tab" aria-expanded="true" aria-controls="#sc1-<%$uniqid%>" href="#sc1-<%$uniqid%>"><%$syslabels.Seolan_Core_General.general_text%></a>
+      </li>
+      <li role="presentation">
+	<a  data-toggle="tab" role="tab" aria-expanded="false" aria-controls="#sc2-<%$uniqid%>" href="#sc2-<%$uniqid%>"><%$syslabels.Seolan_Core_General.systemproperties_text%></a>
+      </li>
+    </ul>
+    
+    <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+
+      <div id="sc1-<%$uniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+	<%if $br__groups%>
+	<%foreach key=group item=fields from=$br__groups %>
+	<%if $group != '_systemproperties'%>	
+	<fieldset>
+	  <legend><%$group%></legend>
+	  <div class="table-responsive">
+	    <table class="table table-striped list2" >
+	      <%section name=f loop=$fields %>
+	      <tr>
+		<th <%if $fields[f]->fielddef->comment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$fields[f]->fielddef->comment|escape:'html'%>"<%/if%>>
+		  <label><%$fields[f]->fielddef->label|wordwrap:"50":"<br>"%></label>
+		</th>
+		<td><%$fields[f]->html%></td>
+	      </tr>
+	      <%/section%>
+	    </table>
+	  </div>
+	</fieldset>
+	<%/if%>
+	<%/foreach%>
+	<%else%>
+	<div class="table-responsive">
+	  <table class="table table-striped list2">
+	    <%section name=fields loop=$br_fields_object %>
+	    <%if !$br_fields_object[fields]->sys %>
+	    <tr>
+	      <th <%if $br_fields_object[fields]->fielddef->comment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>] <%$br_fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>>
+		<label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label>
+	      </th>
+	      <td><%$br_fields_object[fields]->html%></td>
+	    </tr>
+	    <%/if%>
+	    <%/section%>
+	  </table>
+	</div>
+	<%/if%>
+      </div>
+      
+      <div id="sc2-<%$uniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel" >
+	<div class="table-responsive">
+	  <table class="list2 table table-striped">
+	    <%if $br_lst_created%>
+	    <tr><th><label><%$syslabels.Seolan_Core_General.created_date%></label></th><td><%$br_lst_created[0]%> / <%$br_lst_created[1]%></td></tr>
+	    <%/if%>
+	    <tr>
+	      <th><label><%$syslabels.Seolan_Core_General.last_update%></label></th>
+	      <td><%$br_lst_upd.dateupd%><%if $br_lst_upd.usernam%> / <%$br_lst_upd.usernam%><%/if%></td>
+	    </tr>
+	    <%if $br__lock_user %>
+	    <tr>
+	      <th><label><%$syslabels.Seolan_Core_General.lockuser%></label></th>
+	      <td><%$br__lock_user.user%> ( <%$syslabels.Seolan_Core_General.lockdstart%> <%$br__lock_user.dstart%> <%$syslabels.Seolan_Core_General.lockdend%> <%$br__lock_user.dend%> )</td>
+	    </tr>
+	    <%/if%>
+	    <%section name=fields loop=$br_fields_object%>
+	    <%if $br_fields_object[fields]->sys && ($br_fields_object[fields]->field neq 'UPD') %>
+	    <tr>
+	      <th><label><%$br_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label><%$f%></th>
+	      <td ><%$br_fields_object[fields]->html%></td>
+	    </tr>
+	    <%/if%>
+	    <%/section%>
+	    <tr>
+	      <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.oid%></label></th>
+	      <td><%$br_oid%></td>
+	    </tr>
+	  </table>
+	</div>
+
+      </div>
+    </div>
+  </div>
+</div>

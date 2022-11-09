@@ -1,0 +1,28 @@
+<script src="/templates/js/bootstrap.min.js"></script>
+<%if false %>
+<!-- SmartMenus jQuery plugin -->
+<script type="text/javascript" src="/templates/js/jquery.smartmenus.js"></script>
+<!-- SmartMenus jQuery Bootstrap Addon -->
+<script type="text/javascript" src="/templates/js/jquery.smartmenus.bootstrap.js"></script>
+<%/if%>
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+      jQuery.cookieBar({
+    	  acceptButton: false,
+    	  acceptOnContinue: true,
+    	  policyButton: true,
+    	  policyText: '<%$labels.cookiesconsent_txtlink%>',
+    	  policyURL: '/cookies.html',
+    	  message: '<%$labels.cookiesconsent_txt%>'
+      });
+    <%if $charte_oHTDIG->raw eq 1 %>
+    $('div#links-button a[href="#frmHtdig"]').click(function(){
+      $('html,body').animate({scrollTop: $("#frmHtdig").offset().top},'slow');
+    })
+    <%/if%>
+  });
+</script>
+<%if $charte_oTAGANALYTICS->raw%>
+<%include file="googleanalytics.html"%>
+<%/if%>
+<script type="text/javascript">TZR.referer('<%$it_cat_mit.oalias->html%>','<%$lang_data%>');</script>

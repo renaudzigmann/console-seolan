@@ -1,0 +1,72 @@
+<%if $admini%>
+<%assign var=ts value="Module/InfoTree.viewsection.html"%>
+<%else%>
+<%if $tzr.templates_viewsection%>
+<%assign var=ts value=$tzr.templates_viewsection%>
+<%else%>
+<%assign var=ts value="application:viewsection.html"%>
+<%/if%>
+<%/if%>
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript" language="javascript">function browseinitpage(sectiondivid){}</script>
+<%assign var=section value=$it_olines[it]%>
+<%assign var=sectiondivid value="cv8d-browse-`$it_itoid[it]`"%>
+<%if !isset($smarty.request.contentonly)%>
+<div class="cv8d-browse cv8d-browse-<%$it_olines[it]._functionparams.moid%>"  id="<%$sectiondivid%>">
+<%assign var=end value="</div>"%>
+<%else%>
+<%assign var=end value=""%>
+<%/if%>
+ <%if $it_olines[it]._functionparams.params.__viewpagination==1 && !empty($it_olines[it].pages)%>
+  <%capture assign=pager%>
+   <%section name=p loop=$it_olines[it].pages%>
+    <a<%if $it_olines[it].first==$it_olines[it].pages[p]%> class="active-page" <%/if%> href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$it_olines[it].pages[p]%>&sectionopts[<%$it_itoid[it]%>][order]=<%$it_olines[it].order|escape:"url"%>" onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>&contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$it_olines[it].pages[p]%>&sectionopts[<%$it_itoid[it]%>][order]=<%$it_olines[it].order|escape:"url"%>'}); return false;"><%$smarty.section.p.index+1%></a>
+   <%/section%>
+   <%/capture%>
+  <div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div>
+ <%/if%>
+
+ <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html"  browsetype="" sectiondivid="`$sectiondivid`"%>
+
+ <div class="table-responsive">
+ <table class="table cv8d-list">
+  <%if $it_olines[it]._functionparams.params.__viewheader==1%>
+  <thead>
+   <tr>
+    <%section name=header loop=$it_olines[it].header_fields %>
+     <th><%$it_olines[it].header_fields[header]->get_label()%></th>
+    <%/section%>
+    <%if $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit%>
+     <th></th>
+    <%/if%>
+   </tr>
+  </thead>
+  <%/if%>
+  <tbody>
+   <%section name=lines loop=$it_olines[it].lines_oid%>
+    <%assign var="oid" value=$it_olines[it].lines_oid[lines]%>
+    <%* debut de ligne *%>
+    <tr <%if $it_olines[it].lines_published && ($it_olines[it].lines_published[lines] neq "1")%>style="background-image: url(/tzr/templates/images/bg-invalid.gif);"<%/if%> <%if $it_olines[it].lines_trclass[lines]%>class="<%$it_olines[it].lines_trclass[lines]%>"<%/if%>>
+     <%section name=header loop=$it_olines[it].header_fields%>
+      <td class="cv8d-fieldvalue cv8d-field-<%$it_olines[it].header_fields[header]->field%>">
+	<%$it_olines[it]["lines_o<%$it_olines[it].header_fields[header]->field%>"][lines]->html%>
+      </td>
+     <%/section%>
+     <%if $section._functionparams.params.__linktodetail && $section._functionparams.params.__linktodetail_oidit%>
+      <td>
+       <%if $admini%>
+	<a class="cv8-ajaxlink" href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._functionparams.params.__linktodetail_oidit%>&oid=<%$oid%>&from[oidit]=<%$it_cat_mit.oid%>&from[itoid]=<%$it_itoid[it]%>"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+	<%else%>
+	<a href="<%$self%>alias=<%$section._functionparams.params.__linktodetail%>&oid=<%$oid%>&from[alias]=<%$it_cat_mit.oalias->raw%>&from[itoid]=<%$it_itoid[it]%>&keywords=<%$section.lines_tlink[$i]%>" class="cv8-ajaxlink cv8d-object-link"><%$section._functionparams.params.__linktodetaillabel|default:'[+]'%></a>
+       <%/if%>
+      </td>
+     <%/if%>
+    </tr>
+   <%/section%>
+  </tbody>
+ </table>
+ </div>
+ <%if $it_olines[it]._functionparams.params.__viewpagination==1 && !empty($it_olines[it].pages)%>
+  <div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div>
+ <%/if%>
+<%$end%>

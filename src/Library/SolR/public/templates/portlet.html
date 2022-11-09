@@ -1,0 +1,44 @@
+<div id="searchFormContainer" class="search collapse" role="search" aria-expanded="true">
+  <div class="container">
+<form id="collapseSearch" class="navbar-form nav-search clearfix" action="<%$self%>" name="searchengineform" onSubmit="return home_search(this);" role="search">
+  <input type="hidden" name="class" value="<%$search_portlet.instanceClassname%>">
+  <input type="hidden" name="_function" value="globalSearch">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="template" value="Library/SolR.result.html">
+  <input type="hidden" name="_bdxnewstack" value="1">
+  <div class="dropdown search-filter">
+    <button id="rechfiltre" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false"><span class="glyphicon csico-menu-down" aria-hidden="true"></span></button>
+    <ul class="dropdown-menu" aria-labelledby="rechfiltre">
+      <%foreach from=$search_portlet.filters key=sfnum name=search_filter item=search_filter%>
+      <li><input id="searchfilter_<%$sfnum%>" name="case" type="checkbox" <%if $search_filter.checked%>checked<%/if%> value=""><label for="searchfilter_<%$sfnum%>"><%$search_filter.label%></label></li>
+      <%/foreach%>
+    </ul>
+  </div>
+  <div class="form-group"><input class="form-control" id="search_query" name="query" type="text" placeholder="<%$syslabels.Seolan_Library_SolR_SolR.query_text_placeholder%>" value="" autocomplete="off"></div>
+  <script type="text/javascript">
+   jQuery('input[name="query"]').on('keyup focus', function(e) {
+     var strings = jQuery(this).val().split(' ');
+     var string = strings[strings.length-1];
+     var firstChar = string.charAt(0);
+     var lastChar = jQuery(this).val().charAt(string.length-1);
+     if (firstChar == '<%$search_portlet.tagPrefix%>' && lastChar != ' ') {
+       if (!TZR.isAutoCompleteTagSearch("search_query")) {
+         jQuery("#search_query").data("autocomplete", {url:"<%$smarty.const.TZR_AJAX8%>?class=_Seolan_Field_Tag_Tag&function=tag_autocomplete&no_add=1", params:{id:"search_query"}});
+         TZR.addAutoCompleteTagSearch("search_query", {count:0, list:true});
+       }
+     } else {
+       if (TZR.isAutoCompleteTagSearch("search_query")) {
+         TZR.removeAutoCompleteTagSearch("search_query");
+       }
+     }
+   });
+  </script>
+  <button class="btn btn-primary" type="submit" data-target="#searchFormContainer" data-toggle="collapse" ><%$syslabels.Seolan_Core_General.ok_text%></button>
+  <%if $search_portlet.userguide%>
+  <a class="btn btn-primary" target="usermanual" href="<%$search_portlet.userguide.url%>"><span class="glyphicon csico-help"></span></a>
+  <%/if%>
+  <button type="button" class="close" data-target="#searchFormContainer" data-toggle="collapse" aria-label="<%$syslabels.Seolan_Core_General.close_text%>"><span aria-hidden="true">&times;</span></button>
+</form>
+
+  </div>
+</div>

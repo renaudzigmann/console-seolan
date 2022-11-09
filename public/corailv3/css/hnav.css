@@ -1,0 +1,13 @@
+/*********************/
+/*NAVIGATION HORIZONTALE*/
+/*********************/
+.cv3-hnav { font-size: 12px; font-family: Helvetica, Arial, Geneva, SunSans-Regular, sans-serif; text-align: center; }
+.cv3-hnav, .cv3-hnav ul li a{padding-top: 3px; padding-bottom: 4px;}
+.cv3-hnav ul, .cv3-hnav ul li{display: inline;list-style-type: none;margin: 0;padding: 0;}
+.cv3-hnav ul li a{  margin: 0 -1px 0 0; padding-left: 10px; padding-right: 10px;	/* l'attribut de remplissage de sténographie recouvrirait la remplissage
+de top/bottom réglée dans une règle précédente */border-left: 1px solid #000; border-right: 1px solid #585858; white-space: nowrap; }
+.cv3-hnav ul li a:link,.cv3-hnav ul li a:visited, .cv3-hnav ul li a:active, .cv3-hnav ul li a:hover { text-decoration: none; }
+/*modification des couleurs (txt + Fond)*/
+.cv3-hnav, .cv3-hnav ul li a{color: #28284b;}
+.cv3-hnav ul li a:hover{background-color: #314c53;color: #fff;}
+.cv3-hnav ul li span.divBlanc{display: none;}

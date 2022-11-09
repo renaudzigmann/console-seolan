@@ -1,0 +1,39 @@
+<div class="title"><%$syslabels.Seolan_Module_MultiTable_MultiTable.checkimport%></div>
+<div class="modal-body">
+  <div class="panel-group" role="tablist" aria-multiselectable="true">	
+    <%if $_message%>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="panel-title">
+	  <a data-toggle="collapse" aria-expanded="true" href="#message-panel"><%$syslabels.Seolan_Module_MultiTable_MultiTable.checkresults%></a>
+	</div>
+      </div>
+      <div class="panel-collapse collapse out" id="message-panel">
+	<div class="panel-body table-responsive">
+	  <pre><%$_message%></pre>
+	  <div class="alert alert-info">
+	    <p>En test d'import l'insertion de valeurs pour les champs de type liens n'est jamais effectuée, quel que soit l'option choisie dans le paramétrage d'import du champ.</p>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <%/if%>
+    <%if $br_specs%>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="panel-title">
+	  <a data-toggle="collapse" aria-expanded="true" href="#specs-panel"><%$syslabels.Seolan_Module_MultiTable_MultiTable.specification%></a>
+	</div>
+      </div>
+      <div class="panel-collapse collapse out" id="specs-panel">
+	<div class="panel-body table-responsive">
+	  <pre><%$br_specs%></pre>
+	</div>
+      </div>
+    </div>
+    <%/if%>
+  </div>
+</div>
+<div class="tzr-action">
+<button class="btn btn-primary" type="button" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button>
+</div>

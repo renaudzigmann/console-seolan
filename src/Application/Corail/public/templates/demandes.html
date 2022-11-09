@@ -1,0 +1,33 @@
+<!--<%$smarty.template%>-->
+<div class="cv3-contact">
+<form action="<%$self%>" method=post name="editform">
+<input name="function" value="procInsert" type="hidden">
+<input name="pok" value="2" type="hidden">
+<input name="tplentry" value="br" type="hidden">
+<input name="moid" value="23" type="hidden">
+<input name="_next" value="<%$self%>&alias=demande_ok" type="hidden">
+
+<table cellpadding="5" cellspacing="5">
+<tr ><td ><%$br_oF0006->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0006->html%></td></tr>
+<tr ><td ><%$br_oF0001->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0001->html%></td></tr>
+<tr ><td ><%$br_oF0002->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0002->html%></td></tr>
+<tr ><td ><%$br_oF0005->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0005->html%></td></tr>
+<tr height=15><td colspan="2">&nbsp;</td></tr>
+<tr ><td ><%$br_oF0007->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0007->html%></td></tr>
+<tr ><td ><%$br_oF0008->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0008->html%></td></tr>
+<tr ><td ><%$br_oF0009->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0009->html%></td></tr>
+<tr ><td ><%$br_oF0010->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0010->html%></td></tr>
+<tr height=15><td colspan="2">&nbsp;</td></tr>
+<tr ><td ><%$br_oF0011->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0011->html%></td></tr>
+<tr ><td ><%$br_oF0012->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0012->html%></td></tr>
+<tr ><td ><%$br_oF0013->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0013->html%></td></tr>
+<tr height=15><td colspan="2">&nbsp;</td></tr>
+<tr ><td ><%$br_oF0015->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_oF0015->html%></td></tr>
+<tr ><td ><%$br_omailok->fielddef->label%>&nbsp;&nbsp;</td><td><%$br_omailok->html%></td></tr>
+<%if $br_captcha%><%$br_captcha%><%/if%>
+<tr height=15><td colspan="2">&nbsp;</td></tr>
+<tr>
+<td colspan="2" align=center><span class="bt"><a href="#" onClick="if(TZR.isFormValidWithFocus(document.editform,true)) document.editform.submit();"><%if $labels.btvalidate%><%$labels.btvalidate%><%else%>Valider<%/if%></a></span></td></tr>
+</table>
+</form>
+</div>

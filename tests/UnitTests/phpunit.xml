@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.5/phpunit.xsd"
+         bootstrap="config.php"
+         forceCoversAnnotation="true"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+	 cacheResult="false"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         convertErrorsToExceptions="false" 
+         colors="false"
+         verbose="true">
+  <!-- attributs de phpunit 
+       même à false ... c'est pas top ?
+       __convertErrorsToExceptions="false"
+       __convertNoticesToExceptions="false"
+       __convertWarningsToExceptions="false"
+  -->
+  <php>
+  <!--
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
+    -->
+  </php>
+  <testsuites>
+    <testsuite name="All ">
+      <directory suffix="Tests.php">.</directory>
+      <exclude>LabelsTests.php</exclude>
+    </testsuite>
+    <testsuite name="Labels">
+      <file>DataSourceAndFieldsTests</file>
+      <file>LabelsTests.php</file>
+    </testsuite>
+  </testsuites>
+
+</phpunit>

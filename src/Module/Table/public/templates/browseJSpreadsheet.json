@@ -1,0 +1,21 @@
+<%*
+
+browse en json pour JSpreadsheet 
+
+http://consolex2-dev/csx/scripts-admin/admin.php?moid=143&function=browse&tplentry=br&template=Module/Table.browseJSpreadsheet.json
+exemple : 
+https://bossanova.uk/jspreadsheet/books.json
+ 
+ *%>
+<%strip%>
+[
+  <%section name="l" loop=$br_lines_oid%>
+  {
+    <%section name="h" loop=$br_header_fields%>
+    "<%$br_header_fields[h]->field%>":"<%$br_lines_o<%$br_header_fields[h]->field%>[l]->text|escape:'javascript'%>",
+    <%/section%>
+    "id": "<%$br_lines_oid[l]%>"
+  }<%if !$smarty.section.l.last%>,<%/if%>
+  <%/section%>
+]
+<%/strip%>

@@ -1,0 +1,28 @@
+<%section name=i loop=$br_bks%>
+<%if $br_bks[i].group!=$br_bks[$smarty.section.i.index_prev].group%>
+<li class="dropdown-header"><span><%$br_bks[i].group%></span></li>
+<%/if%>
+<li>
+  <a href="#<%$br_bks[i].key%>" 
+     title="<%$br_bks[i].text|escape:'html'%>" 
+     onclick="home_viewbookmark('<%$br_bks[i].key%>'); return false;">
+    <span><%$br_bks[i].title%></span>
+  </a>
+</li>
+<%if $smarty.section.i.last%>
+<li role="separator" class="divider"><span></span></li>
+<%/if%>
+<%/section%>
+
+  <li>
+    <a href="<%$self%>&moid=<%$sysmods.xmoduser2%>&_bdxnewstack=1&function=getBookmarks&tplentry=br&template=Module/User.bookmarks.html" class="cv8-ajaxlink">
+      <span class="csico-property glyphicon"></span>
+      <span><%$syslabels.Seolan_Core_Module_Module.bookmark_manage%></span>
+    </a>
+  </li>
+  <li>
+    <a href="#" onclick="home_addBookmark(); return false;">
+      <span class="csico-new glyphicon"></span>
+      <span><%$syslabels.Seolan_Core_Module_Module.bookmark_add%></span>
+    </a>
+  </li>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%$header%>
+  <meta content='text/html;charset=utf-8' http-equiv='content-type'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+  <title>[ <%$tzr.console_release_name%> ] <%$tzr.societe%> </title>
+  <link href="<%$smarty.const.TZR_DEFAULT_CSS%>" rel="stylesheet" type="text/css">
+  
+  <%if defined('TZR_USER_LOGINCSS')%>
+  <link href="<%$smarty.const.TZR_USER_LOGINCSS%>" rel="stylesheet" type="text/css" />
+  <%/if%>
+  <%section name="css" loop=$tzr_css%>
+  <link href="<%$tzr_css[css]%>" rel="stylesheet" type="text/css">
+  <%/section%>
+  
+  <%onejs id="jquery-base" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`Vendor/jquery/" minify=$minify%>
+jquery-1.11.3.js
+  <%/onejs%>
+  <%onejs id="Core" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/" minify=0%>
+Core/public/generic.js
+  <%/onejs%>
+
+  <%include file="Core.header/favicons.html"%>
+
+  <script type="text/javascript">
+   function sendPassword(){
+    if(!document.authform.login.value) {
+     alert('<%$syslabels.Seolan_Core_Session.loginisempty|escape:"javascript"%>');
+     return false;
+    }
+    document.authform._function.value="newPassword";
+    document.authform.which.value="forgotten";
+    document.authform._next.value="";
+    document.authform.submit();
+   }
+  </script>
+  <style>
+  .directories_ui:before {
+    content:"<%$syslabels.Seolan_Core_General.or%>";
+   }
+
+  </style>
+</head>
+
+<body class="login">
+<div class="jumbotron vertical-center">
+  <%assign var="directories_content" value=false%>
+  <%assign var="directories_hidden_fields" value=""%>
+  <%if count($directories_list)>0%>
+  <%capture name="directoriesfields" assign="directories_hidden_fields"%>
+  <%section name=d loop=$directories_list%>
+  <%section name="dhf" loop=$directories_list[d].data.hidden_fields%>
+  <input type="hidden" name="oauth[<%$directories_list[d].id%>][<%$directories_list[d].data.hidden_fields[dhf]%>]" value="">
+  <%/section%>
+  <%/section%>
+  <%/capture%>
+  <%capture name="directories" assign="directories_content"%>
+  <%section name=d loop=$directories_list%>
+  <%if $directories_list[d].data.template%>
+  <%include file=$directories_list[d].data.template formname="authform" dir=$directories_list[d].data%>
+  <%/if%>
+  <%/section%>
+  <%/capture%>
+  <%/if%>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="navbar-brand" role="banner">
+	  <%if $smarty.const.TZR_CUSTOM_CONSOLE_LOGO || $smarty.const.TZR_CUSTOM_CONSOLE_LOGO_HOME%>
+	  <%if $smarty.const.TZR_CUSTOM_CONSOLE_LOGO_HOME%>
+	  <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="" src="<%$smarty.const.TZR_CUSTOM_CONSOLE_LOGO_HOME%>"></span>
+	  <%else%>
+	  <%if $smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>
+	  <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="" src="<%$smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>"></span>
+	  <%/if%>
+	  <%/if%>
+	  <%if $smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>
+	  <span class="slogan"><%$labels[<%$smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>]%></span>
+	  <%/if%>
+	  <%else%>
+	  <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="Console Séolan X" src="<%$smarty.const.TZR_WWW_CSX%>src/Core/public/images/logo.svg"></span>
+	  <span class="slogan">Console Séolan X</span>
+	  <%/if%>
+        </div><!--/login-brand-->
+      </div>
+    </div>
+    <div class="row">
+     <div class="col-xs-12">
+       <div class="login-content<%if !empty($token_id)%> passwd-content<%/if%> clearfix" role="main">
+       <%if !empty($smarty.request.message)%>
+         <p class="text-warning"><%$smarty.request.message|escape:'html'%></p>
+       <%/if%>
+       <form name="authform" action="<%$self%>" method="post" <%if !empty($token_id)%>onsubmit="return TZR.isFormValidWithFocus(this,true);"<%/if%>>
+       <input type="hidden" name="template" value="Core.layout/main.html">
+       <input type="hidden" name="admin" value="true">
+       <input type="hidden" name="admini" value="true">
+       <%if !empty($token_id)%>
+       <input type="hidden" name="id" value="<%$token_id%>">
+       <input type="hidden" name="_function" value="procNewPassword">
+       <%else%>
+       <input type="hidden" name="_function" value="procAuth">
+       <%/if%>
+       <%if count($directories_list)>0%>
+       <input type="hidden" name="oauth[directoryid]" value="">
+       <%$directories_hidden_fields%>
+       <%/if%>
+       <input type="hidden" name="which" value="">
+       <input type="hidden" name="class" value="<%$smarty.const.TZR_SESSION_MANAGER%>">
+       <input type="hidden" name="onerror" value="<%$self%>">
+       <%if !empty($smarty.request.next)%>
+         <input type="hidden" name="_next" value="<%$smarty.request.next|escape:'html'%>">
+       <%else%>
+         <input type="hidden" name="_next" value="<%$self%>&template=Core.layout/main.html&function=portail&moid=<%$sysmods.xmodadmin%>">
+       <%/if%>
+
+       <%if $lang_nb_lang_system>1 && $user_mod.choose_lang_on_login %>
+         <%if !empty($smarty.request.LANG_USER)%>
+	 <%assign var="_langRequest" value=$smarty.request.LANG_USER|escape:'html'%>
+        <%else%>
+          <%assign var="_langRequest" value=""%>
+        <%/if%>
+         <div class="form-group lang">
+           <label id="labellang"><%$syslabels.Seolan_Core_General.language%></label>
+           <input type="hidden" value="<%$_langRequest%>" name="LANG_USER">
+           <ul><%section name=l loop=$lang_text%><%if $lang_system[l]%><li><a href="<%$self%>&LANG_USER=<%$lang_code[l]%>&_setlang=1" <%if $lang_code[l] eq $_langRequest%>class="active"<%/if%>><%$lang_long[l]%></a></li><%/if%><%/section%></ul>
+         </div>
+	 <%/if%>
+	 <%* =======================
+	 saisie nouveau mot de passe
+	 =========================== *%>
+	 <%if !empty($token_id)%>
+	 <div class="alert alert-info"><%$token_message%></div>
+	 <div class="form-group ident">
+           <label id="labellogin"><%$syslabels.Seolan_Core_Session.login%></label>
+	   <p><%$token_alias%></p>
+         </div>
+	 <%if $token_passwdInput%>
+	 <%include file=$token_passwdInput.template data=$token_passwdInput.data%>
+	 <%else%>
+         <div class="form-group passw">
+           <label id="labelpassword"><%$syslabels.Seolan_Core_Session.password%></label>
+	   <input name="password" type="password" class="form-control" size="22" placeholder="<%$syslabels.Seolan_Core_Session.password%>">
+	 </div>
+         <div class="form-group passw">
+           <label id="labelpassword"><%$syslabels.Seolan_Core_Field_Field.field_psswd_confirm|replace:['(',')']:['','']%></label>
+	   <input name="password_confirm" type="password" class="form-control" size="22" placeholder="<%$syslabels.Seolan_Core_Field_Field.field_psswd_confirm|replace:['(',')']:['','']%>">
+	   <button type="submit" class="btn btn-default">Ok</button>
+	 </div>
+	 <%/if%>
+	 <%else%>
+         <div class="form-group ident">
+           <label id="labellogin"><%$syslabels.Seolan_Core_Session.login%></label>
+           <input name="login" type="text" class="form-control" value="<%if $smarty.request.alias%><%$smarty.request.alias|escape:'html'%><%/if%>" size="22" placeholder="Identifiant">
+         </div>
+         <div class="form-group passw">
+           <label id="labelpassword"><%$syslabels.Seolan_Core_Session.password%></label>
+           <input name="password" type="password" class="form-control" size="22" placeholder="Password">
+           <button type="submit" class="btn btn-default">Ok</button>
+         </div>
+         
+	 <%/if%><%* /token / std *%>
+      </form>
+      <%if empty($token_id)%>
+      <%if $user_mod.lost_password || $user_mod.account_request%>
+      <div class="lost clearfix">
+        <ul>
+          <%if $user_mod.lost_password%>
+          <li><a href="#" onClick="sendPassword();return false;"><span class="glyphicon csico-arrow_right" aria-hidden="true"></span><%$syslabels.Seolan_Module_User_User.lost_password%></a></li>
+          <%/if%>
+          <%if $user_mod.account_request%>
+          <li><a href="<%$self%>moid=<%$user_mod._moid%>&function=requestAnAccount&tplentry=br&template=Core.layout/raw.html&insidefile=Module/User.requestAnAccount.html"><span class="glyphicon csico-arrow_right" aria-hidden="true"></span><%$syslabels.Seolan_Module_User_User.account_request%></a></li>
+          <%/if%>
+        </ul>
+      </div>
+      <%/if%>
+      <%/if%>
+      <%if count($directories_list)>0%>
+        <div class="directories_ui">
+          <%$directories_content%>
+        </div>
+      <%/if%>
+      <div class="copyright clearfix">
+       <p>Console S&eacute;olan &copy; v<%$smarty.const.TZR_CONSOLE_RELEASE%>.<%$smarty.const.TZR_CONSOLE_SUB_RELEASE%> <%$smarty.const.TZR_CONSOLE_RELEASE_NICKNAME%> (<%$smarty.const.TZR_STATUS%>)&nbsp;<a href="<%if !empty($tzr.mail_xsalto)%><%$tzr.mail_xsalto%><%else%>mailto:commercial@xsalto.com<%/if%>">XSALTO</a><%if $smarty.const.TZR_DEBUG_MODE eq 1%><br><font color="red">Debug mode activated</font><%/if%></p>
+      </div>
+
+       </div><!--/login-content-->
+     </div>
+
+
+  </div><!--/container-->
+</div>
+</body>
+</html>

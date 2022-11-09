@@ -1,0 +1,37 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$br_oname->raw%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+  <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.general%></legend>
+    
+    <div class="row-striped">	
+      
+      <%foreach from=[$br_oname,$br_ourl,$br_ologin,$br_opasswd,$br_oquery] item="field"%>	
+      
+      <div id="cont-<%$field->fielddef->field%>" class="row view-field view-field-<%$field->fielddef->field%>">
+	<div class="row-striped-content">
+          <%call fieldlabel field=$field%>
+          <div class="col-xs-12 col-sm-9 col-lg-10"><%$field->html%></div>
+	</div>
+      </div>
+      
+      <%/foreach%>
+
+      <div id="cont-repertoire" class="row view-field view-field-repertoire">
+	<div class="row-striped-content">
+          <%call simplefieldlabel label='Répertoire'%>
+          <div class="col-xs-12 col-sm-9 col-lg-10"><%$br_ocplt.dir%></div>
+	</div>
+      </div>
+
+      <div id="cont-reportto" class="row view-field view-field-reportto">
+	<div class="row-striped-content">
+          <%call simplefieldlabel label='Rapport à'%>
+          <div class="col-xs-12 col-sm-9 col-lg-10"><%$br_ocplt.reportto%></div>
+	</div>
+      </div>
+
+    </div>
+
+</fieldset>
+</div>

@@ -1,0 +1,22 @@
+<%if $charte_oADDTHIS->raw%> 
+<div id="cv3-social" class="cv3-block">
+<script type="text/javascript">
+  var addthis_config = {
+    "data_track_clickback":true
+  };
+</script>
+  <script type="text/javascript" src="//s7.addthis.com/js/250/addthis_widget.js#username=<%$charte_oADDTHIS->raw%>" async="async"></script>
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-social" href="#social"><%$labels.partager|default:"Partager"%></a>
+  <h4><%$labels.partager|default:"Partager"%></h4>
+  <div id="social" class="collapse">
+    <div class="middle addthis_toolbox addthis_default_style">
+      <ul>
+       <li><a href="#" class="addthis_button_facebook at300b"><i class="fa fa-facebook-official fa-2x"></i></a></li>
+       <li><a href="#" class="addthis_button_twitter at300b"><i class="fa fa-twitter-square fa-2x"></i></a></li>
+       <li><a href="#" class="addthis_button_google_plusone_share at300b"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
+       <li><a href="#" class="addthis_button"><i class="fa fa-plus-square fa-2x"></i></a></li>
+      </ul>
+    </div>
+  </div><!-- fin social -->
+</div><!-- fin cv3-social -->
+<%/if%>

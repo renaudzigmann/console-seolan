@@ -1,0 +1,21 @@
+<h2><%"Vos commandes"|__:'\Seolan\Module\FrontUsers'%></h2>
+
+<div class="row">
+  <div class="col-md-3"><label>Date</label></div>
+  <div class="col-md-3"><label>Montant</label></div>
+  <div class="col-md-3"><label>Etat</label></div>
+  <div class="col-md-3"><label>Actions</label></div>
+</div>
+<%foreach from=$section.orders key=key item=order%>
+<hr>
+<div class="row">
+  <div class="col-md-3"><%$order->date%></div>
+  <div class="col-md-3 price"><%$order->amount|price_format%></div>
+  <div class="col-md-3"><%$order->status%></div>
+  <div class="col-md-3"><%$order->actions%></div>
+</div>
+<%foreachelse%>
+<div class="alert alert-info">
+  <%"Vous n'avez passé aucune commande sur ce site"|__:'\Seolan\Module\FrontUsers'%>
+</div>
+<%/foreach%>

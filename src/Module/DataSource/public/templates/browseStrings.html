@@ -1,0 +1,46 @@
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if empty($title)%><%assign var="title" value="`$syslabels.Seolan_Core_Module_Module.browsestrings_text`"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.deleteall=function() {
+  if(TZR.confirmDelete()) {
+   this.jQueryLoad("<%$self%>&moid=<%$smarty.request.moid%>&boid=<%$_boid%>&function=<%$fprefix%>ClearStrings&field=<%$_field%>&skip=1&_next=<%$here|escape:"url"%>");
+  }
+ }
+</script>
+<fieldset>
+ <legend><%$syslabels.Seolan_Core_General.labels%></legend>
+ <div class="table-responsive">
+  <table class="table cv8_tablelist">
+    <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Id</th>
+      <%section name=langs loop=$lang_code%>
+      <th><%$lang_long[langs]%></th>
+      <%/section%>
+    </tr>
+    </thead>
+    <tbody>
+    <%section name=soid loop=$_tset_oid%>
+      <tr>
+	<td>
+	  <ul class="ul-list-tools">
+	    <li><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=<%$fprefix%>EditString&boid=<%$_boid%>&field=<%$_field%>&template=<%$tprefix%>editString.html&soid=<%$_tset_oid[soid]%>"><%$syslabels.Seolan_Core_General.edit%></a></li>
+            <li><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$smarty.request.moid%>&function=<%$fprefix%>DelString&boid=<%$_boid%>&field=<%$_field%>&soid=<%$_tset_oid[soid]%>&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.delete%></a></li>
+	  </ul>
+      </td>
+      <td><%$_tset_oid[soid]%></td>
+      <%section name=stxt loop=$_tset_txt[soid]%>
+        <td><%$_tset_txt[soid][stxt]%></td>
+      <%/section%>
+      </tr>
+    <%/section%>
+    </tbody>
+  </table>
+ </div>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <button class="btn btn-primary" type="button" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>&moid=<%$smarty.request.moid%>&boid=<%$_boid%>&function=<%$fprefix%>NewString&template=<%$tprefix%>newString.html&field=<%$_field%>');"><%$syslabels.Seolan_Core_General.new_text%></button>
+ </div>
+</fieldset>

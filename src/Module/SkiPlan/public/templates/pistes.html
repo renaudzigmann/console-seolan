@@ -1,0 +1,175 @@
+<%if !$section%>
+  <%assign var=section value=$it_olines[it] %>
+<%/if%>
+<%if !isset($id)%>
+  <%assign var=id value=0 %>
+<%/if%>
+
+<div id="skiplan_etatspiste">
+  <div class="station-infos-container">
+    <div class="datemaj" style="display:none;">
+      <label><%$syslabels.Seolan_Core_General.last_update%></label><%$section.stationInfos.lines_odatmaj[0]->raw|date_format:'%d %B %Y %H:%M'%>
+    </div>
+  </div>
+
+  <%if $section.recapOn == 1%>
+  <div class="pistes-recap-container">
+    <div class="pistes-recap" >
+      <div class="etat-pistes-titre">
+        <%$labels.skiPlanPistesOuvertes|default:'Pistes ouvertes'%>
+      </div>
+      <div class="recap">
+        <span class="main-title-1 h-font-chocolate-bold h-align-center h-margin-bottom-0"><%$section.recap.totalPistesOuvertes%> / <%$section.recap.totalPistes%></span>
+      </div>
+    </div>
+    <div class="pistes-recap">
+      <div class="etat-pistes-titre">
+        <%$labels.skiPlanRemonteesOuvertes|default:'Remontées mécaniques ouvertes'%>
+      </div>
+      <div class="recap">
+          <span class="main-title-1 h-font-chocolate-bold h-align-center h-margin-bottom-0"><%$section.recap.totalRemonteesOuvertes%> / <%$section.recap.totalRemontees%></span>
+      </div>
+    </div>
+  </div>
+  <%/if%>
+
+  <%if $section.smenuOn != 2%>
+  <div class="etat_menu clearfix">
+    <ul>
+      <%foreach from=$section.datasBySecteur item=secteur name=secteurs%>
+        <%if $secteur.pistes|@count+$secteur.remontees|@count > 0%>
+        <li>
+          <a href="#<%$secteur.nom%>">
+            <%$secteur.nom%>
+          </a>
+        </li>
+        <%/if%>
+      <%/foreach%>
+    </ul>
+  </div>
+  <%/if%>
+
+  <div class="etat-pistes-legende clearfix">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendepiste"><span class="glyphicon xssp-type-skialpin" aria-hidden="true"></span><%$labels.skiplanLegendepiste%></button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendeetat"><span class="glyphicon xssp-etat" aria-hidden="true"></span><%$labels.skiplanLegendeetat%></button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legendelvl"><span class="glyphicon xssp-niveau" aria-hidden="true"></span><%$labels.skiplanLegendelvl%></button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#legenderemontee"><span class="glyphicon xssp-type-teleski" aria-hidden="true"></span><%$labels.skiplanLegenderemontee%></button>
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/SkiPlan.pistes_legende_modal.html" %>
+  </div>
+
+  <%if $section.liaisons.lines|@count%>
+  <div class="etat-liaisons">
+      <div class="etat-pistes-titre"><%$labels.skiplanLiaisons %></div>
+      <div class="liaisons-container">
+          <table class="table table-striped etat_tab">
+              <thead>
+                  <tr>
+                      <th><%$labels.skiplanLiaison %></th>
+                      <th><%$labels.skiplanEtat %></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <%foreach from=$section.liaisons.lines item=liaison name=liaison %>
+                  <tr>
+                      <td><strong><%$liaison.onom->html %></strong></td>
+                      <td><%if $liaison.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$liaison.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                  </tr>
+                  <%/foreach %>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  <%/if%>
+
+  <div class="etat-pistes clearfix">
+    <div class="etat_col1 stationId<%$id%>"></div>
+    <div class="etat_col2 stationId<%$id%>"></div>
+  </div>
+
+  <div style="display: none">
+    <%assign var=totalLinesLeftColumn value=0%>
+    <%assign var=totalLinesRightColumn value=0%>
+    <%foreach from=$section.datasBySecteur item=secteur name=secteurLoop%>
+      <%assign var=totalPistesLinesSecteur value=$secteur.pistes|@count%>
+      <%assign var=totalRemonteesLinesSecteur value=$secteur.remontees|@count%>
+      <%assign var=totalLinesSecteur value=$totalPistesLinesSecteur+$totalRemonteesLinesSecteur%>
+      <%if $totalLinesSecteur == 0%>
+        <%continue%>
+      <%/if%>
+      <div
+      <%if $smarty.foreach.secteurLoop.iteration eq "1"%>
+      class="col1 stationId<%$id%>"
+      <%assign var=totalLinesLeftColumn value=$totalLinesLeftColumn+$totalLinesSecteur%>
+      <%else%>
+      <%if $totalLinesLeftColumn <= $totalLinesRightColumn %>
+      class="col1 stationId<%$id%>"
+      <%assign var=totalLinesLeftColumn value=$totalLinesLeftColumn+$totalLinesSecteur%>
+      <%else%>
+      class="col2 stationId<%$id%>"
+      <%assign var=totalLinesRightColumn value=$totalLinesRightColumn+$totalLinesSecteur%>
+      <%/if%>
+      <%/if%>
+      >
+        <a name="<%$secteur.nom%>" class="ancre">&nbsp;</a>
+        <div class="etat-pistes-titre"><%$secteur.nom%></div>
+        <%if $totalPistesLinesSecteur > 0%>
+          <div class="table-responsive pistes">
+              <table class="table table-striped etat_tab">
+                  <thead>
+                      <tr>
+                          <th><%$labels.skiplanPiste %></th>
+                          <th>Type</th>
+                          <th><%$labels.skiplanEtat %></th>
+                          <th><%$labels.skiplanNiveau %></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <%foreach from=$secteur.pistes item=piste%>
+                      <tr>
+                          <td><strong><%$piste.onom->html%></strong></td>
+                          <td><%if $piste.otype->link.ostylesheet->raw%><span class="glyphicon xssp-type-<%$piste.otype->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                          <td><%if $piste.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$piste.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                          <td><%if $piste.oniveau->link.ostylesheet->raw %><span class="glyphicon xssp-niveau <%$piste.oniveau->link.ostylesheet->raw %>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                      </tr>
+                    <%/foreach%>
+                  </tbody>
+              </table>
+          </div>
+        <%/if%>
+        <%if $totalRemonteesLinesSecteur > 0%>
+          <div class="table-responsive remontees">
+            <table class="table table-striped etat_tab">
+              <thead>
+                <tr>
+                  <th><%$labels.skiplanRemontee %></th>
+                  <th>Type</th>
+                  <th><%$labels.skiplanEtat %></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <%foreach from=$secteur.remontees item=remontee%>
+                  <tr>
+                      <td><strong><%$remontee.onom->html%></strong></td>
+                      <td><%if $remontee.otype->link.ostylesheet->raw%><span class="glyphicon xssp-type-<%$remontee.otype->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                      <td><%if $remontee.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$remontee.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
+                      <td></td>
+                  </tr>
+                <%/foreach%>
+              </tbody>
+            </table>
+          </div>
+        <%/if%>
+      </div>
+    <%/foreach%>
+  </div>
+<script type="text/javascript" language="javascript">
+    jQuery(function ($) {
+        // Active les tooltip bootstrap
+        $('#skiplan_etatspiste').tooltip({selector: '[data-toggle="tooltip"]'});
+        jQuery( ".col1.stationId<%$id%>" ).detach().appendTo('.etat_col1.stationId<%$id%>');
+        jQuery( ".col2.stationId<%$id%>" ).detach().appendTo('.etat_col2.stationId<%$id%>');
+    });
+</script>
+</div> <%* #skiplan_etatspiste *%>
+

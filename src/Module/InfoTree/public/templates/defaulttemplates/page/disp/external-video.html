@@ -1,0 +1,9 @@
+<%assign var="player" value=$it_olines[it].osubtit->raw|@player_from_video_url%>
+<%if $player%>
+<div class="cv3-video-externe clearfix">
+ <%if $it_olines[it].otitsec->html%><h2><%$it_olines[it].otitsec->html%></h2><%/if%>
+ <div class="flex-video widescreen">
+  <%$it_olines[it].osubtit->raw|html_from_video_url%>
+ </div>
+</div>
+<%/if%>

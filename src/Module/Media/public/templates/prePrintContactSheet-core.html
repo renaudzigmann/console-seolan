@@ -1,0 +1,104 @@
+
+<div <div id="preprintcontactsheet<%$uniqid%>">
+
+  <form id="preprintcontactsheet<%$uniqid%>form" name="preprintcontactsheet<%$uniqid%>form" action="<%$self%>" method="post" onsubmit="return TZR.isFormValidWithFocus(this,true);">
+   <input type="hidden" name="fromfunction" value="<%$smarty.request.fromfunction%>" />
+   <input type="hidden" name="function" value="printContactSheet" />
+   <input type="hidden" name="tplentry" value="br"/>
+   <input type="hidden" name="moid" value="<%$_moid%>" />
+   <input type="hidden" name="select" value="<%$smarty.request.select%>"/>
+   <input type="hidden" name="_selectedok" value="ok"/>
+   <%foreach from=$br__selected item=v key=k %>
+    <input type="hidden" name="_selected[<%$k%>]" value="on">
+   <%/foreach%>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.print_text%></legend>
+    <b><%$br_record_count%></b> <%$syslabels.Seolan_Module_Table_Table.exportrecord%><br>
+    <%foreach name=i from=$br_queryfields item=field%>
+     <%$field->fielddef->label%> : <%$field->getQueryText()%><br>
+    <%/foreach%>
+   </fieldset>
+   <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.options_text%></legend>
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <tr>
+      <th><label><%$syslabels.Seolan_Core_General.title%></label></th>
+      <td><input type="text" value="<%$imod_props.modulename|escape:"html"%> - <%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%>" name="title" size="40"></td>
+     </tr>
+     <tr>
+      <th><label>Description</label></th>
+      <td><textarea name="descr" rows="3" cols="50"></textarea></td>
+     </tr>
+     <tr>
+      <th><label>Format</label></th>
+      <td>
+       <select name="fmt">
+	<option value="pdf">PDF</option>
+	<%section name=pr loop=$brt_lines_oid%>
+	 <option value="<%$brt_lines_oid[pr]%>"><%$brt_lines_otitle[pr]->raw%></option>
+	<%/section%>
+       </select>
+      </td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Core_General.order%></label></th>
+      <td>
+       <select name="order" size="1">
+	<%section name="f" loop=$br_header_fields%>
+	 <option value="<%$br_header_fields[f]->field%> ASC"><%$br_header_fields[f]->label%> (<%$syslabels.Seolan_Core_Field_Field.asc%>)</option>;
+	 <option value="<%$br_header_fields[f]->field%> DESC"><%$br_header_fields[f]->label%> (<%$syslabels.Seolan_Core_Field_Field.desc%>)</option>;
+	<%/section%>
+       </select>
+      </td>
+     </tr>
+     <tr><th><label><%$syslabels.Seolan_Core_General.recipient_text%></label></th><td><input type="text" name="dest" size=""/></td></tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_Media_Media.pageformat%></label></th>
+      <td>
+       <select name="pformat">
+	<option value="A4">A4</option>
+	<option value="A4 landscape">A4 <%$syslabels.Seolan_Module_Media_Media.landscape%></option>
+	<option value="A3">A3</option>
+	<option value="A3 landscape">A3 <%$syslabels.Seolan_Module_Media_Media.landscape%></option>
+       </select>
+      </td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_Media_Media.zonesize|wordwrap:40:"<br>"%></label></th>
+      <td><input type="text" value="<%$tzr.xmodmedia_contactsheet_default_width|default:60%>" name="mmsize[w]" size="3" id="mmsizew">x <input type="text" name="mmsize[h]" size="3" id="mmsizeh" value="<%$tzr.xmodmedia_contactsheet_default_height|default:60%>"></td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_Media_Media.dpi%></label></th>
+      <td><input type="text" name="dpi" size="3" id="dpi" value="<%$tzr.xmodmedia_contactsheet_default_dpi|default:150%>"></td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_Media_Media.pagemargin|wordwrap:40:"<br>"%></label></th>
+      <td>
+	<input type="text" name="margin[t]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_margin_top|default:20%>" id="margint">/ <input type="text" name="margin[r]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_margin_right|default:5%>" id="marginr">/ <input type="text" name="margin[b]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_margin_bottom|default:10%>" id="marginb">/ <input type="text" name="margin[l]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_margin_left|default:10%>" id="marginl"></td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_Media_Media.imgmargin|wordwrap:40:"<br>"%></label></th>
+      <td><input type="text" name="imargin[t]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_image_margin_top|default:5%>" id="imargint">/ <input type="text" name="imargin[r]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_image_margin_right|default:2%>" id="imarginr">/ <input type="text" name="imargin[b]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_image_margin_bottom|default:0%>" id="imarginb">/ <input type="text" name="imargin[l]" size="3" value="<%$tzr.xmodmedia_contactsheet_default_image_margin_left|default:2%>" id="imarginl"></td>
+     </tr>
+    </table>
+    </div>
+   </fieldset>
+   <div id="tzr-action<%$uniqid%>" class="tzr-action">
+     <button form="preprintcontactsheet<%$uniqid%>form" onclick="document.forms['preprintcontactsheet<%$uniqid%>form'].submit();" class="btn btn-primary" type="submit"><%$syslabels.Seolan_Core_General.print_text%></button>
+   </div>
+  </form>
+</div>
+  <script type="text/javascript">
+   TZR.addValidator(["mmsizew",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["mmsizeh",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["dpi",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["margint",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["marginr",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["marginb",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["marginl",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["imargint",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["imarginr",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["imarginb",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+   TZR.addValidator(["imarginl",/([0-9]+)/,"","<%$tzr.error_color%>","\Seolan\Field\ShortText\ShortText"]);
+  </script>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+  <%include file="Core.header/layout.html"%>
+</head>
+<body>
+  <header class="navbar-default navbar-fixed-top">
+    <nav class="navbar">
+    <a class='toggle-nav btn' href='#'><span class='glyphicon csico-menu'></span></a>
+    <div class="navbar-brand" role="banner">
+    <%if $tzr.hiddenwebsitelink%>
+        <a href="<%$self%>moid=17&template=Core.layout/main.html&function=portail">
+    <%else%>
+        <a href="<%$fullself%>">
+    <%/if%>
+	<%if $smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>
+        <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="" src="<%$smarty.const.TZR_CUSTOM_CONSOLE_LOGO%>"></span>
+	<%if $smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>
+        <span class="slogan"><%$labels[<%$smarty.const.TZR_CUSTOM_CONSOLE_SLOGAN%>]%></span>
+	<%/if%>
+	<%else%>
+        <span class="logo"><img style="shape-rendering:optimizeSpeed;" alt="Console Séolan X" src="<%$smarty.const.TZR_WWW_CSX%>src/Core/public/images/logo.svg"></span>
+        <span class="slogan">Console Séolan X</span>
+	<%/if%>
+      </a>
+    </div><!--/login-brand-->
+    <ul class="nav-item">
+    <%if $allowed_apps && count($allowed_apps) > 1%>
+      <li class="dropdown applist" id="cvx-app-selector">
+        <%include file="Core.layout/top/applications.html"%>
+      </li>
+    <%/if%>
+    <%if $tzr.RCisActive%>
+    <li><a onclick="displayChat()"><span id="chat-top-bar" class="glyphicon csico-chat"></span><span class="RCbadge label notification selection new-messages-count"></span></a></li>
+    <%/if%>
+    <%if $search_portlet%>
+    <li><a data-toggle="collapse"
+	   href="#searchFormContainer"
+	   aria-expanded="false"
+	   aria-control="searchFormContainer"
+	   onclick="jQuery(this).toggleClass('active');return false;"
+	><span class="glyphicon csico-search" aria-hidden="true"></span></a></li>
+    <%/if%>
+    
+    <%if $TZR.lang_trad || count($langsort_code)>1%> 
+    <li class="dropdown language" id="cvx-languages-selector">
+      <%include file="Core.layout/top/languages.html"%>
+    </li>
+    <%/if%>
+      
+    <%if empty($tzr.hiddenwebsitelink)%>
+    <!-- -->
+      <li><a target="_blank" data-placement="bottom" data-toggle="tooltip" title="<%$syslabels.Seolan_Core_General.website|escape:"javascript"%>" href="<%$tzr.societe_url%>"><span class="glyphicon csico-world" aria-hidden="true"></span></a></li>
+    <%/if%>
+    <li id="cvx-bookmarks" class="dropdown user-bookmarks">
+      <%include file="Core.layout/top/bookmarks.html"%>
+    </li>
+    <li id="cvx-panier" style="display:none" class="dropdown user-selection" >
+      <%include file="Core.layout/top/cart.html"%>
+    </li>
+
+    <%include file="Core.layout/top/chat.html"%>
+    
+    <li id="cvx-user-profile" class="dropdown profil">
+      <%include file="Core.layout/top/profile.html"%>
+    </li>
+
+    <%include file="Core.layout/top/suid.html"%>
+
+    </ul>
+
+    </nav>
+    
+    <%if $search_portlet%><%include file=$search_portlet.template%><%/if%>
+    
+  </header><!--/header-->
+
+  
+  
+
+<div id='wrapper'>
+  <%* factorisation entree de menu *%>
+  <%function name="menuitem"%>
+  <a href="<%$itemHref|escape:'javascript'%>" 
+     class="<%if !empty($itemGroup)%>dropdown-collapse<%/if%>" 
+     <%if !empty($itemClick)%>onClick="<%$itemClick|escape:javascript%>"<%/if%>
+     title="<%$itemTitle|escape:'html'%>">
+    <span class="<%$itemIcon%> glyphicon"></span>
+    <span><%$itemTitle%></span>
+    <%if !empty($itemGroup)%><span class="glyphicon csico-menu-down"></span><%/if%>
+  </a>
+  <%/function%>
+  <div id='main-nav-bg'></div>
+  <nav id='main-nav'>
+    
+    <!-- Menu deroulant : menu gestionnaire de rubrique + tous les modules -->
+    <div id="cv8-navigation" class='navigation' role="navigation">
+      <ul id="cv8-menu" class="nav nav-stacked">
+	<%if $smarty.const.TZR_NAVIGATION_LOGO_BLOCK%>
+	<li class="navigation-logo-block"><!-- <%$smarty.const.TZR_NAVIGATION_LOGO_BLOCK%> --><%include file=$smarty.const.TZR_NAVIGATION_LOGO_BLOCK%></li>
+	<%/if%>
+        <li id="cv8-infotreemenu-home" data-oid="<%$menu_self.oid%>">
+	  <%call name="menuitem"
+		    itemTitle=$syslabels.Seolan_Core_General.home
+		    itemHref="`$self`moid=`$sysmods.xmodadmin`&template=Core.layout/main.html&function=portail"
+		    itemIcon="csico-home"
+		    %>
+        </li>
+
+        <span id="cv8-infotreemenu" class="inlineTreeMenuAjax" data-url="<%$self%>moid=<%$sysmods.xmodbackofficeinfotree%>&function=home&do=showtree&norubric=1&tplentry=menu&template=Module/InfoTree.menu.html&maxlevel=1&aliastop=<%$xuser->botop()%>&_raw=1&skip=1&_ajax=1&action=home_viewpage&ajaxurl=self&action=home_viewpage" data-target="#cv8-infotreemenu" data-overlay="none" action="home_viewpage" prefix="menu">
+        </span>
+        
+        <span id="cv8-infotreemenu-after" class="cv8-navigation-separation"></span>
+        
+        <%if $infotreeadmin_sec.admin%>
+        <li>
+	  <%call name="menuitem"
+		    itemTitle=$syslabels.Seolan_Module_InfoTree_InfoTree.managemenu
+		    itemHref="#`$self`&moid=`$sysmods.xmodbackofficeinfotree`&function=home&tplentry=mit&template=Module/InfoTree.index.html" 
+		    itemClick="home_viewmodule(this); return false;"
+		    itemIcon="csico-menu-admin"
+		    %>
+        </li>
+        <%/if%>
+
+        <%if $admin_sec.ro%>
+        <li id="cv8-navigation-allmodules"> 
+          <a title="<%$syslabels.Seolan_Core_General.modulesall|escape:'html'%>" class="dropdown-collapse treeMenuAjax" href="#" data-url="<%$self%>moid=<%$sysmods.xmodadmin%>&function=ajaxModuleMenu&template=Core.menu/module.html&tplentry=mods&skip=1&_ajax=1&_raw=2&_silent=1" data-target="#cv8-navigation-allmodules-ajax" data-overlay="none"  >
+            <span class="csico-modules-admin glyphicon"></span>
+            <span><%$syslabels.Seolan_Core_General.modulesall%></span>
+            <span class="glyphicon csico-menu-down"></span>
+          </a>
+          <ul class="nav nav-stacked" id="cv8-navigation-allmodules-ajax" style="display:none;"></ul>
+        </li>
+        <%/if%>
+      </ul>
+     </div><!-- end cv8 navigation -->
+    
+    <!-- Fin menu -->
+    
+    <!-- Historique -->
+    <div id="cv8-history" class="navigation"><!--  -->
+      <ul  class="nav nav-stacked" role="navigation"><!--navbar-collapse -->
+        <li>
+	  <%call name="menuitem"
+		    itemTitle=$syslabels.Seolan_Core_General.navhistory
+		    itemHref=$self
+		    itemIcon="csico-history"
+		    itemGroup=1
+		    %>
+            <ul id="cv8-history-list" class="nav nav-stacked" style="display:none;">
+              <script type="text/javascript">
+                var jh=jQuery('#cv8-history-list');
+                <%assign var=history value=$smarty.const.HISTORY_SESSION_VAR%>
+                <%foreach item=i key=k from=$smarty.session.$history%>
+                  var tmp="<%$i.title|escape:"javascript"%>";
+                  jh.prepend('<li id="_<%$k%>"><a  href="#" onclick="TZR.loadNavHistory(\'<%$k%>\');return false;"><span class="csico-left-submenu glyphicon"></span><span>'+(tmp.length>34?tmp.substr(0,34)+'...':tmp)+'</span></a></li>');
+                <%/foreach%>
+                if(location.hash!="#") jQuery(location.hash.replace('#','#_')).addClass('active');
+              </script>
+            </ul>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Fin historique -->
+
+  </nav><!-- //main-nav -->
+
+
+
+
+  <section id='content'>
+    <div class='container'>
+      <div class='row' id='content-wrapper'>
+
+        <div class='col-xs-12'>
+
+          <!-- contenu -->
+          <div class="cv8-titre-page"><h1 id="cs-maintitle" ><%$syslabels.Seolan_Core_General.home%></h1></div>
+          <div id="cv8-content">
+	    <%if !empty($autostartbookmark_num) || $autostartbookmark_num === 0%><script type="text/javascript">jQuery(document).ready(function(){home_viewbookmark("<%$autostartbookmark_num%>");});</script><%/if%>
+	    
+       <%section name=it loop=$it_olines%>
+       <%assign var="filename" value=$it_tlines[it].odisp->filename%>
+       <%if file_exists($filename)%>
+	   <div id="cv8-module-<%$smarty.section.it.index%>"  class="<%$it_cat_mit.oalias->raw%>"> 
+	       <div class="cv8-module-container" id="cv8-module-container-<%$smarty.section.it.index%>">
+	         <%include file="$filename" moduleid="cv8-module-container-`$smarty.section.it.index`"%>
+	       </div>
+	   </div>
+       <%/if%>
+       <%/section%>
+	   <div class="clearfix"></div>
+          </div><!--/contenu-->
+        </div>
+      </div><!-- content-wapper -->
+
+      <footer class="footer" role="contentinfo"><!-- bas de page -->
+	<div class="row">
+	  
+	  <div class="col-xs-12 col-sm-6 basnav">
+	    <ul>
+	      <li><a id="cv8-footer" name="cv8-footer" href="#wrapper"><%$syslabels.Seolan_Core_General.top_text%></a></li>
+	      <li><a href="<%$self%>moid=<%$sysmods.xmodadmin%>&template=Core.layout/main.html&function=portail"><%$syslabels.Seolan_Core_General.home_text%></a></li>
+	      <%section name=i loop=$menub_lines_oid%>
+	      <li><a href="#" onClick="home_viewpage('<%$menub_lines_oid[i]%>','<%$menub_lines_oalias[i]->raw%>','<%$menub_lines_otitle[i]->html|escape:"quotes"%>','<%$menub_lines_ssrub[i]%>','<%$menub_lines_sections[i]%>'); return false;"><%$menub_lines_otitle[i]->html%></a></li>
+	      <%/section%>
+	    </ul>
+	  </div>
+	  
+	  <div class="col-xs-12 col-sm-6 cv8-copyright">
+	    Console S&eacute;olan &copy; v<%$smarty.const.TZR_CONSOLE_RELEASE%>.<%$smarty.const.TZR_CONSOLE_SUB_RELEASE%> <%$smarty.const.TZR_CONSOLE_RELEASE_NICKNAME%> (<%$smarty.const.TZR_STATUS%>)&nbsp;<a href="<%if !empty($tzr.mail_xsalto)%><%$tzr.mail_xsalto%><%else%>mailto:commercial@xsalto.com<%/if%>">XSALTO</a><%if $smarty.const.TZR_DEBUG_MODE eq 1%><br><font color="red">Debug mode activated</font><%/if%>
+	  </div>
+	</div>
+      </footer><!-- fin bas de page -->
+
+    </div><!-- container -->
+
+  </section><!--/content -->
+
+</div><!-- //wrapper -->
+
+
+<div id="scrollToTop"><a href="#"><span class="glyphicon csico-arrow_up"></span></a></div>
+<%* outils et composants *%>
+<%include file="Core.layout/tools.html"%>
+<%include file="Core.layout/modal.html"%>
+<%include file="Core.cart.html"%>
+
+
+<%onejs id="bottom-scripts" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/"%>
+#Core/public/event-calendar.js
+#Module/Social/public/seolan-social.js
+#devrait être un pack ? est-ce le bon ?
+Core/public/seolan-social.js
+<%/onejs%>
+
+<%onejs id="bottom-scripts" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`assetsX/javascripts/"%>
+# RR, je ne trouve pas ou celui-ci sert
+stats-chart.js
+# DateRangePicker Bootstrap
+#plugins/bootstrap_daterangepicker/bootstrap-daterangepicker.js
+#plugins/common/moment.min.js
+# fin DateRangePicker Bootstrap
+plugins/bootbox/bootbox.min.js
+plugins/slimscroll/jquery.slimscroll.min.js
+plugins/timeago/jquery.timeago.js
+plugins/common/wysihtml5.min.js
+plugins/common/bootstrap-wysihtml5.js
+plugins/fullcalendar/fullcalendar.min.js
+#plugins/bootbox/bootbox.min.js
+<%/onejs%>
+<%if $tzr.RCisActive%>
+<%include file="Core/Rocketchat.rocketchat.html"%>
+<%/if%>
+</body>
+</html>

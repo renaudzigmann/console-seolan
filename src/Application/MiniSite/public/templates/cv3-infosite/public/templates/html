@@ -1,0 +1,10 @@
+<div id="cv3-infosite" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-infosite" href="#infosite"><%$labels.coordonnees|default:"Coordonn&eacute;es"%></a>
+  <h4><%$labels.coordonnees|default:"Coordonn&eacute;es"%></h4>
+  <div id="infosite" class="collapse">
+    <div class="middle">
+      <%$charte_oadresse->html%>
+    </div>
+    <%if $charte_oRUB_PLUSINFO->raw%><div class="link"><a href="<%$self%>alias=<%$charte_oRUB_PLUSINFO->oalias->raw%>"><%$labels.plusindo|default:"Plus d'infos"%></a></div><%/if%>
+  </div><!-- fin infosite -->
+</div><!-- fin cv3-infosite -->

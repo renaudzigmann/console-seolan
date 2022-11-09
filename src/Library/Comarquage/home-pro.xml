@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Home>
+  <Item type="Theme" ID="N24264">
+    <Titre>Création - Cessation</Titre>
+    <Item type="Dossier" ID="F23264"><Titre>Auto-entrepreneur</Titre></Item>
+    <Item type="Dossier" ID="N16178"><Titre>Formalités</Titre></Item>
+    <Item type="Dossier" ID="F23573"><Titre>Fonds de commerce</Titre></Item>
+    <Item type="Dossier" ID="N31143"><Titre>Modification</Titre></Item>
+    <Item type="Dossier" ID="N16594"><Titre>Reprise</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N24266">
+    <Titre>Gestion - Finances</Titre>
+    <Item type="Dossier" ID="F23208"><Titre>Facturation</Titre></Item>
+    <Item type="Dossier" ID="N31386"><Titre>Marchés publics</Titre></Item>
+    <Item type="Dossier" ID="N31379"><Titre>Bail commercial</Titre></Item>
+    <Item type="Dossier" ID="N22284"><Titre>Financement</Titre></Item>
+    <Item type="Dossier" ID="N31383"><Titre>Comptabilité</Titre></Item>
+    <Item type="Dossier" ID="F22352"><Titre>Dépôt de bilan</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N24265">
+    <Titre>Fiscalité</Titre>
+    <Item type="Dossier" ID="F23267"><Titre>Micro-entreprise</Titre></Item>
+    <Item type="Dossier" ID="N13445"><Titre>TVA</Titre></Item>
+    <Item type="Dossier" ID="F23547"><Titre>CFE</Titre></Item>
+    <Item type="Dossier" ID="N22250"><Titre>Taxes - Contributions</Titre></Item>
+    <Item type="Dossier" ID="N10812"><Titre>Crédits d’impôt</Titre></Item>
+    <Item type="Dossier" ID="N22471"><Titre>Taxes locales</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N24267">
+    <Titre>Ressources humaines</Titre>
+    <Item type="Dossier" ID="N22781"><Titre>Embauche</Titre></Item>
+    <Item type="Dossier" ID="N17109"><Titre>Contrats</Titre></Item>
+    <Item type="Dossier" ID="F23261"><Titre>Rupture conventionnelle</Titre></Item>
+    <Item type="Dossier" ID="N10779"><Titre>Déclarations sociales</Titre></Item>
+    <Item type="Dossier" ID="N31006"><Titre>Licenciement</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N24268">
+    <Titre>Vente - Commerce</Titre>
+    <Item type="Dossier" ID="F20566"><Titre>Soldes</Titre></Item>
+    <Item type="Dossier" ID="F23175"><Titre>Prix</Titre></Item>
+    <Item type="Dossier" ID="N31355"><Titre>Enseignes</Titre></Item>
+    <Item type="Dossier" ID="N31358"><Titre>Restauration</Titre></Item>
+    <Item type="Dossier" ID="N22281"><Titre>Import - export</Titre></Item>
+    <Item type="Dossier" ID="N17163"><Titre>Litiges</Titre></Item>
+    <Item type="Dossier" ID="F23455"><Titre>Vente en ligne</Titre></Item>
+  </Item>
+  <Item type="Theme" ID="N24269">
+    <Titre>Secteurs</Titre>
+    <Item type="Dossier" ID="N13352"><Titre>Tourisme</Titre></Item>
+    <Item type="Dossier" ID="N13345"><Titre>BTP</Titre></Item>
+    <Item type="Dossier" ID="N23662"><Titre>Agriculture</Titre></Item>
+    <Item type="Dossier" ID="N18568"><Titre>Poids lourds</Titre></Item>
+    <Item type="Dossier" ID="N22120"><Titre>Taxi</Titre></Item>
+    <Item type="Dossier" ID="N18471"><Titre>Édition</Titre></Item>
+    <Item type="Dossier" ID="N31351"><Titre>Artistes</Titre></Item>
+    <Item type="Dossier" ID="N13337"><Titre>Sécurité</Titre></Item>
+  </Item>
+</Home>

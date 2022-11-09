@@ -1,0 +1,84 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+            <h4 class="modal-title">Image Editor</h4>
+            <div id="imageInfo" style="display: none">
+                <span id="widthInfo"></span> x <span id="heightInfo"></span>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div id="image_zone" style="position:relative;"></div>
+            <div id='information'>
+                <div class="progress progress-striped active">
+                    <div id="progressBar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+                <img id='loading_circle'/>
+            </div>
+            <div class="tab-content">
+                <div id="cropper" class="row center-block tab-pane fade in btn-group">
+                    <div id="crop" class="group-option">
+                        <label>Recadrage/Rotation</label>
+                        <br/>
+                        <div id="crop-ratio-list" class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary" id="crop-ratio-free">
+                                <input type="radio" name="crop-ratio" value="NaN" autocomplete="off"><span id="crop-free-text">Libre</span>
+                            </label>
+                        </div>
+                        <input id="rotate-input" data-method="rotateTo" type="range" max="360" min="0" value="180">
+                        <br/>
+                        <div id="validation" class="btn-group" style="display:none">
+                            <button id="valider" type="button" value="true" class="btn">Valider</button>
+                            <button id="annuler" type="button" value="false" class="btn">Annuler</button>
+                        </div>
+                    </div>
+                    <div id="mirror" class="group-option">
+                        <label>Miroir</label>
+                        <br/>
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary"><input type="checkbox" data-method="scaleX" data-option="1" autocomplete="off"><span class="glyphicon glyphicon-resize-horizontal"></span></label>
+                            <label class="btn btn-primary"><input type="checkbox" data-method="scaleY" data-option="1" autocomplete="off"><span class="glyphicon glyphicon-resize-vertical"></span></label>
+                        </div>
+                        <br/>
+                        <div id="validation" class="btn-group" style="display:none">
+                            <button id="valider" type="button" value="true" class="btn">Valider</button>
+                            <button id="annuler" type="button" value="false" class="btn">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="filtre_zone" class="row center-block tab-pane fade in">
+                    <div id="filtre"></div>
+                    <div id="validation" class="row center-block btn-group"></div>
+                </div>
+                <div id="traitement_zone" class="row center-block tab-pane fade in">
+                </div>
+                <div id="border_zone" class="row center-block tab-pane fade in">
+                    <div id="border_zone_list" class="row equal-height">
+                        
+                    </div>
+                    <div class="btn-group" id="validation">
+                        <button id="valider" type="button" value="" class="btn">Valider</button>
+                        <button id="annuler" type="button" value="" class="btn">Annuler</button>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <ul id="famille" class="center-block nav nav-pills nav-justified">	
+                <li><a id='li_cropper' href="javascript:void(0)" data-toggle="tab" data-target="#cropper">Recadrer</a></li>
+                <li><a id='li_filtre' href="javascript:void(0)" data-toggle="tab" data-target="#filtre_zone">Filtre</a></li>
+                <!--	<li><a onclick="annuler()" href="#">Amélioration auto</a></li>-->
+                <li><a id='li_traitement' href="javascript:void(0)" data-toggle="tab" data-target="#traitement_zone">Traitement image</a></li>
+                <li><a id='li_border' href="javascript:void(0)" data-toggle="tab" data-target="#border_zone">Cadre</a></li>
+                <li><a id='li_comparer' href="javascript:void(0)">Comparer</a></li>
+                <li><a id='li_reset' href="javascript:void(0)">Tout annuler</a></li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <div id='button-action'>
+            </div>
+        </div>
+    </div>
+</div>

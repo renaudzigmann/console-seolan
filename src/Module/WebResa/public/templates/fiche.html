@@ -1,0 +1,83 @@
+<link href="<%$smarty.const.TZR_SHARE_URL%>css8/xmodwebresa.css" rel="stylesheet" media="all" type="text/css"> 
+
+<%assign var=section value=$it_olines[it]%>
+
+<div class="cv8d-object-nav">
+<%if $admini%>
+  <%if $section._prev_oid%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._prev_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.previous%></a>
+  <%/if%>
+  <%if $section._from%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$section._from.oidit%>&sectionopts[<%$section._from.itoid%>][oid]=<%$section.oid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.back%></a>
+  <%/if%>
+  <%if $section._next_oid%>
+    <a href="<%$self%>moid=<%$it_moid%>&function=editpage&template=Module/InfoTree.viewpage.html&tplentry=it&oidit=<%$it_cat_mit.oid%>&oid=<%$section._next_oid%>&from[oidit]=<%$section._from.oidit%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.next%></a>
+  <%/if%>
+<%else%><%** !admini **%>
+  <%if $section._prev_oid%>
+    <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._prev_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.previous%></a>
+  <%/if%>
+  <%if $section._from%>
+    <a href="<%$self%>&alias=<%$section._from.alias%>&sectionopts[<%$section._from.itoid%>][oid]=<%$section.oid%>#cv8d-object-<%$section.oid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.back%></a>
+  <%/if%>
+  <%if $section._next_oid%>
+    <a href="<%$self%>&alias=<%$it_cat_mit.oalias->raw%>&oid=<%$section._next_oid%>&from[alias]=<%$section._from.alias%>&from[itoid]=<%$section._from.itoid%>" class="cv8-ajaxlink"><%$syslabels.Seolan_Core_General.next%></a>
+  <%/if%>
+<%/if%>
+</div>
+
+<div class="cv8-displayobj cv8-displaywebresa cv8-displayobj-<%$section._functionparams.moid%>">
+ <%foreach item=field from=$section.fields_object%>
+  <%if $field->field neq 'complement' AND $field->field neq 'urlIframeDate' AND $field->field neq 'url2IframeDate'%>
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Module/WebResa.disp-field.html" field=$field%>
+      <%/if%>
+ <%/foreach%>
+ <div class="cv8d-display-group" id="tabs<%$uniqid%>">
+  <ul>  <%foreach key=i item=ssmod from=$section.__ssmod%>
+   <%if $ssmod.lines_oid %>
+    <%if $i == 5%><%* chapitre libre *%>
+     <%foreach key=j item=field from=$ssmod.lines_oid%>
+      <li><a href="#tabs-ssmod<%$i%><%$j%>"><%$ssmod.lines_olibelle[$j]->raw%></a></li>
+     <%/foreach%>
+    <%else%>
+     <li><a href="#tabs-ssmod<%$i%>"><%$section.__ssprops[$i].modulename%></a></li>
+    <%/if%>
+   <%/if%>
+  <%/foreach%>
+ </ul>
+ <%** les sous-moules **%>
+ <%foreach key=i item=ssmod from=$section.__ssmod%>
+  <%if $ssmod.lines_oid %>
+   <%if $i != 5 %><div id="tabs-ssmod<%$i%>"><%/if%>
+   <%if $i == 3 && $section.ocomplement->raw%><%* Programme *%>
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Module/WebResa.disp-field.html" field=$section.ocomplement%>
+   <%/if%>
+   <%if $section.ourlIframeDate->raw && $i==2%>
+    <%* Iframe webresa en lieu et place des dates *%>
+    <iframe width="100%" height="300" frameborder="0" align="left" name="showframe" src="<%$section.ourlIframeDate->url%>&q=resa.html" xmlns=""></iframe>
+    <div class="fin_float"></div>
+   <%else%>
+   <%foreach key=j item=field from=$ssmod.lines_oid%>
+     <%if $i == 5%><div id="tabs-ssmod<%$i%><%$j%>" class="tabs-ssmod<%$i%>"><%/if%><%* Chapitre libre en onglet *%>
+     <div class="cv8d-object">
+      <%foreach item=field from=$ssmod.header_fields%>
+       <%assign var="thefield" value=$ssmod["lines_o<%$field->field%>"][$j]%>
+       <%include file="`$smarty.const.TZR_SHARE_DIR`Module/WebResa.disp-field.html" field=$thefield%>
+      <%/foreach%>
+      <div class="fin_float"></div>
+     </div>
+     <%if $i == 5%></div><%/if%>
+    <%/foreach%>
+   <%/if%>
+    <%if $i != 5 %></div><%/if%>
+   <%/if%>
+  <%/foreach%>
+
+</div>
+</div>
+<script>
+ jQuery(function() {
+ jQuery( "#tabs<%$uniqid%>" ).tabs();
+ });
+</script>
+

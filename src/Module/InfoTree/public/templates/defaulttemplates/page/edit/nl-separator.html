@@ -1,0 +1,4 @@
+<%assign var="nlwidth" value=$tzr.newsletter_width|default:730%>
+<%assign var="nlmarginwidth" value=$tzr.newsletter_margin_width|default:730%>
+<%math equation="w-(2*m)" w=$nlwidth m=$nlmarginwidth assign="nlcontentwidth" %>
+<img src="http://<%$server_name%>/<%$tzr.newsletter_image_hr%>" width="<%$nlcontentwidth%>" height="27" alt="" />

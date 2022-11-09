@@ -1,0 +1,59 @@
+<%if !$br_oid%>
+<script type="text/javascript">
+ var v<%$smarty.request.varid%>={
+   uniqid:"<%$uniqid%>",
+   varid:"<%$smarty.request.varid%>",
+   moid:"<%$_moid%>",
+   toid:"<%$imod_props->toid%>",
+   mediatoid:"<%$smarty.const.XMODMEDIA_TOID%>",
+   tabletoid:"<%$smarty.const.XMODTABLE_TOID%>",
+   formname:"editform<%$uniqid%>",
+   closelabel:"<%$syslabels.Seolan_Core_General.close%>"
+};
+</script>
+
+<div class="title"><%$syslabels.Seolan_Core_General.new_text%></div>
+<div id="newrecordcontainer<%$uniqid%>" class="cv8-module-container">
+  <%* appel initial :  TODO mediatheque TESTER*%>
+  <%capture name="action_handled"%> .... <%/capture%>
+  <%if $imod_mod->toid == $smarty.const.XMODMEDIA_TOID%>
+  <%include file="`$smarty.const.TZR_SHARE_DIR`Module/Media.new.html"%>
+  <%else%>
+  <%include file="Module/Table.new.html"%>
+  <%/if%>
+</div>
+
+<%* les actions spécfiques : l'utilisation de form='' est incompatible avec edge (03/2017)*%>
+<div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <button class="btn btn-primary" type="submit" onclick="var f = document.forms['editform<%$uniqid%>']; f.elements['_nextmode'].value=''; return TZR.ajaxSubmitForm(f);"><%$syslabels.Seolan_Core_General.save_text%></button>
+</div>
+<script type="text/javascript">
+ document.forms["editform<%$uniqid%>"].onsubmit = function(){
+   return TZR.ajaxSubmitForm(this, jQuery("#newrecordcontainer<%$uniqid%>"));
+ };
+ //# sourceURL=popinsert.js 
+</script>
+<%else%>
+<div id="newrecordcontainer<%$uniqid%>" class="cv8-module-container"></div>
+<%* retour de l'ajout : lecture de la fiche *%>
+<%if !$smarty.request.myflag%>
+<%* on s'appelle avec myflag *%>
+<script type="text/javascript">
+ setTimeout(function(){
+ TZR.jQueryLoad({
+   url:"<%$fullself%>&myvarid=<%$smarty.request.myvarid%>&moid=<%$_moid%>&function=display&template=Module/Table.popinsert.html&tplentry=br&myflag=1&oid=<%$br_oid%>&tabsmode=2&skip=1&_publishedonly=1&tlink=1",
+   target:"#newrecordcontainer<%$uniqid%>"
+ });
+ }, 10);
+ //# sourceURL=popinsert.js 
+</script>
+<%else%>
+<%* maj de l'appelant et close *%>
+<script type="text/javascript">
+ TZR.Record.setObjectSelection("<%$smarty.request.myvarid%>", "<%$br_tlink|default:'...'|escape:'javascript'%>", "<%$br_oid%>");
+ TZR.Dialog.closeDialog();
+ //# sourceURL=popinsert.js 
+</script>
+<%/if%>
+<%/if%>
+

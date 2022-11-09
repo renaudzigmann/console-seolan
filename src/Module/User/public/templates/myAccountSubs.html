@@ -1,0 +1,22 @@
+<%if count($br_sub) > 0%>
+<div class="table-responsive">
+ <table class="table cv8_tablelist"">
+<tr><th></th><th>Module</th><th>Abonnement</th><th><%$syslabels.Seolan_Module_Subscription_Subscription.subscriber_text%></th><th><%$syslabels.Seolan_Core_General.last_update%></th></tr>
+  <%foreach from=$br_sub item=mod key=mmoid%>
+   <%foreach from=$mod.content item=sub key=koid%>
+    <tr>
+     <td><%if $sub.deletable%><a class="cv8-ajaxlink" href="<%$self%>&moid=<%$imod_props._moid%>&function=rmSub&suboid=<%$koid%>&_next=<%$here|escape:"url"%>" x-confirm="var ret=TZR.confirmDelete();"><%$syslabels.Seolan_Core_General.delete%></a><%/if%></td>
+     <td><%$mod.title%></td>
+     <td><%$sub.title%></td>
+     <td><%if $sub.user%><label><%$syslabels.Seolan_Core_General.user_text%></label> : <%$sub.user.ofullnam->html%><%/if%><%if $sub.group%> <label><%$syslabels.Seolan_Core_General.group_text%></label> : <%$sub.group.tlink%><%/if%></td>
+     <td><%$sub.upd%></td>
+    </tr>
+   <%/foreach%>
+  <%/foreach%>
+ </table>
+</div>
+<%else%>
+<div>
+  <%$syslabels.Seolan_Module_Subscription_Subscription.abonnementempty%>
+</div>
+<%/if%>

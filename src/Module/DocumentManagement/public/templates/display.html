@@ -1,0 +1,69 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$br_here->title%>
+<%include file="Module/DocumentManagement.top.html" templateType="display"%>
+<%include file="Module/DocumentManagement.bdscripts.js"%>
+<%include file="Module/Table.functions.html"%>
+<script type="text/javascript">
+ v<%$uniqid%>.update=function(url){
+  TZR.jQueryLoad({target:this.modulecontainer,url:url});
+ }
+ v<%$uniqid%>.updateSubModule=function(url,link){
+  TZR.jQueryLoad({target:jQuery(link).parents('div.ui-tabs-panel'),url:url});
+ }
+ v<%$uniqid%>.ssmodsave=function(moid,url,button){
+  var f=document.forms['editssmodform<%$uniqid%>-'+moid];
+  if(!TZR.isFormValidWithFocus(f,true)){
+    alert('Some data are not valid.');
+    return false;
+  }
+  TZR.jQueryLoad({target:jQuery(button).parents('div.ui-tabs-panel'),url:url,data:jQuery(f).serializeArray()});
+ }
+ v<%$uniqid%>.deleteselected=function() {
+
+   var form = document.forms["editform<%$uniqid%>"];
+   // parentoid est renseigné pour les documents seulement
+   return TZR.DocMngt.preDelFiche({_parentoid:"<%$smarty.request._parentoid%>",
+				   oid:form.elements['oid'].value,
+				   moid:form.elements['moid'].value});
+
+ }
+
+ v<%$uniqid%>.downloadselected=function() {
+  document.location='<%$self%>function=documentsDownload&moid=<%$_moid%>&oid=<%$br_oid%>&physical=0';
+ }
+ v<%$uniqid%>.moveselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=1&_copy=0&oid='+escape(oid)+'&formname=editform<%$uniqid%>&_parentoid=<%$smarty.request._parentoid%>');
+ }
+ v<%$uniqid%>.copyselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=0&_copy=1&oid='+escape(oid)+'&formname=editform<%$uniqid%>');
+ }
+ v<%$uniqid%>.linkselected=function(oid) {
+  TZR.Dialog.openURL('<%$self%>&skip=1&function=index2Light&template=Module/DocumentManagement.poptree.html&_raw=1&moid=<%$smarty.request.moid%>&tplentry=br&action=linkTo&nosess=1&_move=0&_copy=0&oid='+escape(oid)+'&formname=editform<%$uniqid%>');
+ }
+ jQuery(document).ready(function(){
+   TZR.activeDependency(document.editform<%$uniqid%>);
+ });
+</script>
+<%if $br_here->tpl.odisp->filename%>
+ <%include file=$br_here->tpl.odisp->filename%>
+<%else%>
+<%include file="Module/DocumentManagement.template-display.html"%>
+<%* formulaire pour action sur le doc (copie, lien, export, ...)*%>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="_move" value="">
+ <input type="hidden" name="_copy" value="">
+ <input type="hidden" name="targetoid" value="">
+ <input type="hidden" name="uniqid" value="<%$uniqid%>">
+ <input type="hidden" name="_mode" value="">
+ <input type="hidden" name="_function" value="">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="oid" value="<%$smarty.request.oid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <%if $smarty.request.findex !='index2'%>
+  <input type="hidden" name="_next" value="<%$back%>">
+  <%else%>
+  <input type="hidden" name="_next" value="<%$self%>&function=index2&moid=<%$smarty.request.moid%>&template=Module/DocumentManagement.index3.html&oid=<%$smarty.request.oid%>&tplentry=br">
+ <%/if%>
+</form>
+
+<%/if%>

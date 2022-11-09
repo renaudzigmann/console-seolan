@@ -1,0 +1,6 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%if !empty($_back) || !empty($br_back)%>
+ <div class="tzr-action">
+  <input type="button" value="<%$syslabels.Seolan_Core_General.back_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$_back%><%$br_back%>');">
+ </div>
+<%/if%>

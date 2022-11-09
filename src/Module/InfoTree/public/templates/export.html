@@ -1,0 +1,59 @@
+<html>
+<%$header%>
+<link href="<%$smarty.const.TZR_DEFAULT_CSS_PATH%>print.css" rel="stylesheet" type="text/css">
+<body>
+<H1><%$tzr.societe%></H1>
+<ul>
+<li>Date: <%$smarty.now%></li>
+</ul>
+<hr>
+<%section name=i loop=$mit_lines_oid %>
+<a class="tdm<%$mit_lines_level[i]%>" href="#<%$mit_lines_oid[i]%>"><%$mit_lines_otitle[i]->text%></a>
+<%/section%>
+<hr>
+<%section name=i loop=$mit_lines_oid %>
+<A NAME="<%$mit_lines_oid[i]%>"></A>
+<H1><%$mit_lines_otitle[i]->html%></H1>
+<ul>
+<li><%$mit_lines_oUPD[i]->html%></li>
+<li>Alias: <%$mit_lines_oalias[i]->html%></li>
+</ul>
+<div id="<%$mit_lines_oid[i]%>">
+<%assign var="it_olines" value=$mit_lines__it[i]%>
+<%assign var="it_tlines" value=$mit_lines__tt[i]%>
+<%section name=it loop=$it_olines%>
+<!-- <%$it_olines[it].oid%> <%$it_tlines[it].oid%> <%$it_itoid[it]%> -->
+<div id="<%$it_olines[it].oid%>">
+<small>Section: <%$it_olines[it].oUPD->html%>|<%$it_tlines[it].otitle->html%></small>
+<%assign var="oo" value=$it_olines[it]%>
+<%assign var="filename" value=$it_tlines[it].odisp->filename%>
+<%if !file_exists($filename) %>
+<%assign var="filename" value="`$smarty.const.TEMPLATES_DIR`Module/InfoTree.section-display.html"%>
+<%/if%>
+<%if file_exists($filename) %>
+<%if !$oo._empty %><!-- aucune section dans la requete -->
+<div style="clear:both;">
+<%assign var=$it_olines[it] value=$tr%>
+<%include file="$filename"%>
+</div>
+<%else%>
+<div style="clear:both;">
+<%$syslabels.Seolan_Module_InfoTree_InfoTree.query_is_empty%>
+</div>
+<%/if%>
+<%else%>
+
+<!-- CAS D'UNE SECTION CLASSIQUE ############################ -->
+<%if is_array($oo)%>
+<%include file="$filename"%>
+<%/if%>
+<%/if%>
+</div>
+<%/section%>
+</diV>
+<hr>
+<%/section%>
+</table>
+
+</body>
+</html>

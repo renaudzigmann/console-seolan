@@ -1,0 +1,18 @@
+<div class="xmodmonetique xmodmonetique-paybox">
+  <%if $monetico_noECard%>
+    <div class="xmodmonetique-paybox-form">
+      <img src="/csx/src/Module/Monetique/public/logo/NO_E_CARD.png" title="<%$syslabels.xmodmonetique.no_ecard%>">
+    </div>
+  <%/if%>
+  <%foreach from=$monetico_forms key=cardType item=fields%>
+    <div class="xmodmonetique-paybox-form">
+      <form method="POST" action="<%$monetico_url%>">
+        <%$fields%>
+        <input type="image" src="/csx/src/Module/Monetique/public/logo/<%$cardType|default:'CB'%>.jpg" title="CB">
+        <%if count($monetico_forms) == 1%>
+          <input type="submit" value="<%$labels.mntq_bqvalidate|default:'[Payer ma commande]'%>">
+        <%/if%>
+      </form>
+    </div>
+  <%/foreach%>
+</div>

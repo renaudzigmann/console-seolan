@@ -1,0 +1,33 @@
+<div class="comarquage">
+  <!--<ul class="comarquage_categories">
+       <li class="comarquage_categorie"><a href="#" onclick="TZR.comarquage(TZR.comarquageURL+'&CATEGORIE=part');">Particuliers</a></li>
+       <li class="comarquage_categorie"><a href="#" onclick="TZR.comarquage(TZR.comarquageURL+'&CATEGORIE=pro');">Professionnels</a></li>
+       <li class="comarquage_categorie"><a href="#" onclick="TZR.comarquage(TZR.comarquageURL+'&CATEGORIE=asso');">Associations</a></li>
+       </ul>-->
+  <div id="spLoader" class="spLoader">Chargement en cours...</div>
+  <script type="text/javascript">
+   TZR.comarquageURL = '<%$smarty.const.TZR_COMARQUAGE_AJAX_URL%>'+location.search;
+   TZR.comarquage = function(url) {
+     jQuery.ajax({
+       url : url,
+       async : true,
+       data : {},
+       method : 'GET',
+       success : function(data) {
+	 $('#spLoader').html(data);
+	 $('.spLienInterne', '#spLoader').on('click', function(event) {
+	   event.preventDefault();
+	   TZR.comarquage(jQuery(this).attr('href'));
+	 });;
+       }
+     });
+
+   };
+
+   jQuery(function() {
+     jQuery('<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/csx/src/Library/Comarquage/public/css/comarquage.css" />').appendTo("head");
+     TZR.comarquage(TZR.comarquageURL);
+   });
+
+  </script>
+</div>

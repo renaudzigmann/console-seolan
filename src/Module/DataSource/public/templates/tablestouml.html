@@ -1,0 +1,176 @@
+<%**%>
+<html>
+<head>
+<LINK HREF="<%$smarty.const.TZR_DEFAULT_CSS%>" REL="stylesheet" TYPE="text/css" />
+<%if defined('TZR_USER_CSS') %>
+<LINK HREF="<%$smarty.const.TZR_USER_CSS%>" REL="stylesheet" TYPE="text/css" />
+<%/if%>
+<%include file="Core.header/layout.html"%>
+<%onejs id="joint" type="text/javascript"
+	base="`$smarty.const.TZR_WWW_CSX`src/" minify=0%>
+Module/DataSource/public/joint.all.min.js
+<%/onejs%>
+<title>Diagramme</title>
+</head>
+<body class="tzr-raw-body">
+<div id="content" style="margin:0 0 0 0;padding:5px 5px;">
+  <div style="border-bottom:1px solid #dadada; width:100%;padding-bottom:10px" id="tools">
+    <div style="float:left;padding:5px">
+      <label for="tables">Tables : </label>
+      <select ondblclick='TZR.doubleAdd(jQuery("#alltables")[0], jQuery("#selecttables")[0], false)' style="vertical-align:top" id="alltables" multiple size="5" name="alltables">
+      <%section name=l loop=$br_lines_tablelabel%>
+        <option order="<%$smarty.section.l.index%>" value="<%$br_lines_tablecode[l]%>"><%$br_lines_tablelabel[l]%></option>
+      <%/section%>
+      </select>
+    </div>
+    <div style="float:left;padding:5px">
+      <input type="button" class="button" onclick='TZR.doubleAdd(jQuery("#alltables")[0], jQuery("#selecttables")[0], false)' value=">>">
+      <br><br>
+      <input type="button" class="button" onclick='TZR.doubleAdd(jQuery("#selecttables")[0], jQuery("#alltables")[0], true)' value="<<">
+    </div>
+    <div style="float:left;padding:5px">
+      <select ondblclick='TZR.doubleAdd(jQuery("#selecttables")[0], jQuery("#alltables")[0], true)'  style="vertical-align:top" id="selecttables" multiple size="5" name="tables">
+      <%section name=l loop=$br_lines_tablelabel%>
+        <%if $br_lines_tableselected[l]%><option order="<%$smarty.section.l.index%>" value="<%$br_lines_tablecode[l]%>"><%$br_lines_tablelabel[l]%></option><%/if%>
+      <%/section%>
+      </select>
+    </div>
+    <div style="float:left;padding:5px">
+      <label for="field">Détails sur les champs</label><input type="checkbox" id="fielddetail" name="fielddetail" value="1"  >
+      <label for="fieldsql">Nom SQL des champs</label><input type="checkbox" id="fieldsql" name="fieldsql" value="1"  >
+      <label for="linksname">Noms des liens</label><input type="checkbox" id="linksname" name="linksname" value="1" checked>
+      <span style="width:10px"> </span>
+      <input type="button" value="Afficher" onclick="refresh();">
+    </div>
+    <div style="float:none;clear:both"></div>
+  </div>
+<div style="height:100%;width:100%" id="diagramme"></div>
+</div>
+
+<script type="text/javascript">
+ var fielddetail = true;
+ var fieldsql = false;
+var linksname = true;
+var tables = [];
+var linkto = [];
+var uml = null;
+var pos = {x:10, y:10};
+var classdefault = {w:250, h:300, paddingTop:15, paddingRight:30, color:"#fafafa"};
+var classdefaultoptim = {w:250, h:100, paddingTop:15, paddingRight:30, color:"#fafafa"};
+jQuery(document).ready(function(){initDiagramme()});
+function reorg(select){
+  var opts = jQuery("option", select).sort(function(a, b){
+       return jQuery(a).html() > jQuery(b).html();
+    }
+  );
+  jQuery(select).html('').append(opts);
+}
+function refresh(){
+   fielddetail = (jQuery("#fielddetail").attr('checked')=="checked");
+   fieldsql = (jQuery("#fieldsql").attr('checked')=="checked");
+  linksname = (jQuery("#linksname").attr('checked')=="checked");
+  for(var i=0; i<tables.length; i++){
+    if (tables[i].shape != null){
+      tables[i].current.x = tables[i].shape.attr('x');
+      tables[i].current.y = tables[i].shape.attr('y');
+    }
+    tables[i].tableselected = (jQuery("#selecttables option[value='"+tables[i].tablecode+"']").length>0);
+  }
+  Joint.paper("diagramme").clear();
+  Joint.paper("diagramme").remove();
+  jQuery("#diagramme").remove();
+  jQuery("#content").append('<div style="height:100%;width:100%" id="diagramme"></div>');
+  initDiagramme();
+}
+function initDiagramme(){
+  uml = Joint.dia.uml;
+  initPaper();
+  initClasses();
+}
+function initPaper(){
+  Joint.paper("diagramme", '100%', '100%');
+}
+function initClasses(){
+  pos = {x:10, y:10};
+  var rg = 0;
+  for(var i=0; i<tables.length; i++){
+    if (!tables[i].tableselected)
+      continue;
+    initTable(tables[i], rg++);
+  }
+  var linksfrom = {};
+  for(var i=0; i<linkto.length; i++){
+    if (tables[linkto[i].from].tableselected && tables[linkto[i].to].tableselected){
+	var linkkey = "from_"+linkto[i].from+"_"+linkto[i].to;
+	var ljoint = null;
+	if (typeof(linksfrom[linkkey]) != "undefined"){
+	    ljoint =  linksfrom[linkkey];
+	    if (typeof(linkto[i].fn) != "undefined"){
+		ljoint.label += ","+linkto[i].fn;
+	    }
+	} else {
+	    ljoint = {join:tables[linkto[i].from].shape.joint(tables[linkto[i].to].shape, Joint.dia.uml.arrow), label:((typeof(linkto[i].fn)!="undefined")?linkto[i].fn:"")};
+	    linksfrom[linkkey] = ljoint;
+	}
+	if (linksname){
+	    ljoint.join.label(ljoint.label);
+	}
+    }
+  }
+}
+function initTable(table, i){
+  var classpec = (fielddetail||fieldsql)?classdefault:classdefaultoptim;
+  if (table.current != null){
+    var x = table.current.x;
+    var y = table.current.y;
+  } else {
+    var r = i%4;
+    var x = pos.x+(classpec.w+classpec.paddingRight)*r;
+    var y = pos.y;
+    if (r==3)
+      pos.y += classpec.h+classpec.paddingTop;
+  }
+   var fields = [];
+   if (fielddetail)
+     fields = table.fields;
+   else if(fieldsql)
+     fields = table.fieldssql;
+   
+  var umltable = uml.Class.create({
+  rect: {x: x, y: y, width: classpec.w, height: classpec.h},
+  label: table.tablelabel,
+  shadow: false,
+  attrs: {
+    fill: classpec.color
+  },
+  labelAttrs: {
+    'font-weight': 'bold'
+  },
+  methods: fields
+});
+table.shape=umltable;
+table.current = {x:x, y:y};
+
+return umltable;
+
+}
+</script>
+<script type="text/javascript">
+<%section name=l loop=$br_lines_tablelabel%>
+var fields = [], fieldssql = []; 
+<%foreach name=f from=$br_lines_tableset[l]->desc item=fo key=fn%>
+ fields.push("<%$fn%> <%$fo->_card%>, <%$fo->label|escape:'javascript'%>, <%$fo->ftype%><%if $fo->ftype == '\Seolan\Field\Link\Link'%>, <%$fo->target%><%/if%>");
+ fieldssql.push("<%$fn%>");
+<%/foreach%>
+tables.push({tableselected:<%if $br_lines_tableselected[l]%>true<%else%>false<%/if%>, tablelabel:"<%$br_lines_tablelabel[l]|escape:'javascript'%> [<%$br_lines_tablecode[l]%>]", tablecode:"<%$br_lines_tablecode[l]%>", fieldssql:fieldssql, fields:fields, shape:null, current:null});
+<%/section%>
+<%section name=t loop=$br_lines_linkto%>
+<%section name=tl loop=$br_lines_linkto[t].link%>
+<%if $smarty.section.t.index neq $br_lines_linkto[t].link[tl].it%>
+linkto.push({from:<%$smarty.section.t.index%>, to:<%$br_lines_linkto[t].link[tl].it%>, fn:"<%$br_lines_linkto[t].link[tl].fn%>"});
+<%/if%>
+<%/section%>
+<%/section%>
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<html>
+ <head>
+  <base href="<%$full_serverhome%>">
+  <style type="text/css">
+    <%section name="css" loop=$tzr_css%>
+    <%fetch file=$full_serverhome|cat:$tzr_css[css]%>
+    <%/section%>
+   @page {
+    size: <%$_pformat%>;
+    margin: <%$_margin.t%>mm <%$_margin.r%>mm <%$_margin.b%>mm <%$_margin.l%>mm;
+    padding: 0mm;
+    @top {
+     content: flow(header)
+    }
+    @top-right {
+      content:counter(page) " / " counter(pages);
+      text-align:right;
+      font-size:8pt;
+    }
+    @top-left {
+      content:"Emis le <%$smarty.now|date_format:'%d/%m/%Y %H:%M'%>";
+      text-align:left;
+      font-size:8pt;
+    }
+    @bottom-right {
+      content:'<%$labels.site_adresse%>';
+      text-align:center;
+      font-size:8pt;
+    }
+   }
+   .media{
+    page-break-inside:avoid;
+    float:left;
+    width:<%$_mmsize.w+$_imargin.r+$_imargin.l%>mm;
+   }
+   .image{
+    width:<%$_mmsize.w%>mm;
+    height:<%$_mmsize.h%>mm;
+    display:block;
+    line-height:<%$_mmsize.h%>mm;
+    padding:<%$_imargin.t%>mm <%$_imargin.r%>mm <%$_imargin.b%>mm <%$_imargin.l%>mm;
+    text-align:center;
+   }
+   .image span{
+    display:inline-block;
+   }
+   .image img{
+    vertical-align:middle;
+   }
+   .text{
+    display:block;
+    text-align:center;
+    line-height:15px;
+   }
+   a{
+    color:black;
+    text-decoration:none;
+   }
+   div.header {
+    flow: static(header);
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    font-weight: normal;
+    margin: 0;
+   }
+   #descr{
+    margin-top:10mm;
+   }
+  </style>
+ </head>
+ <body class="printContactSheet printContactSheet-<%$_moid%>">
+ <div class="header"><h1><%$_title%></h1></div>
+  <%section name=i loop=$br_lines_oid%>
+   <%if $br_lines_omedia[i]->isImage %>
+    <%assign var=url value="`$fullself`moid=`$_moid`&function=goto1&oid=`$br_lines_oid[i]`&_direct=1"%>
+    <div class="media">
+     <span class="image">
+      <span></span>
+       <a href="<%$url%>" border="0"><img border="0" src="//<%$smarty.server.SERVER_NAME%><%$br_lines_omedia[i]->resizer%>&geometry=<%$_imgsize%>" style="<%if ($br_lines_omedia[i]->getImageSize('fullwidth')/$br_lines_omedia[i]->getImageSize('fullheight'))>($_mmsize.w/$_mmsize.h)%>width:100%;<%else%>height:100%;<%/if%>"></a>
+      <span></span>
+     </span>
+     <span class="text">
+      <a href="<%$url%>" border="0">
+       <%section name=h loop=$br_header_fields%>
+	<%if ($br_header_fields[h]->field neq 'media') && $br_header_fields[h]->published%>
+	 <%getvar var="br_lines_o`$br_header_fields[h]->field`[`$smarty.section.i.index`]->html" assign="foo"%>
+	 <%if $foo%><div class="cv8-media-<%$br_header_fields[h]->field%>"><%$foo|mock_striptags:"<br>"%></div><%/if%>
+	<%/if%>
+       <%/section%>
+      </a>
+     </span>
+    </div>
+   <%/if%>
+  <%/section%>
+  <div style="clear:both;"></div>
+  <%if $_descr%><div id="descr"><%$_descr|nl2br%></div><%/if%>
+ </body>
+</html>

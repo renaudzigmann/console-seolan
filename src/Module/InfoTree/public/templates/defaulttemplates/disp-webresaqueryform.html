@@ -1,0 +1,36 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+
+<%assign var=section value=$it_olines[it]%>
+<div class="cv8d-query cv8d-query-<%$section._functionparams.moid%>">
+  <%if $admini%>
+    <div id="formquery<%$uniqid%>">
+  <%else%>
+    <form id="formquery<%$uniqid%>"  action="<%$self%>" method="post" >
+      <input type="hidden" name="oidit" value="<%$section._functionparams.params.linkup%>">
+      <input type="hidden" name="initsearch" value="1">
+  <%/if%>
+  <%foreach key=field item=filterfield from=$section.filterfields%>
+    <div class="cv8_inlineblock cv8d-filter cv8-filter-item<%$field->fielddef->name%>">
+      <label><%$filterfield->fielddef->label%></label>
+      <%$filterfield->html%>
+    </div>
+  <%/foreach%>
+  <%if $section._functionparams.params.__searchondate==1%>
+    <div class="cv8_inlineblock cv8d-filter cv8-filter-item-date">
+      <label><%$section.date_depart->fielddef->label%></label>
+      <%$section.date_depart->html%>
+    </div>
+    <%if $section._functionparams.params.__searchondate_flexi%>
+      <div class="cv8_inlineblock cv8d-filter cv8-filter-item-date-flexi">
+        <label><%$section._functionparams.params.__searchondate_flexi|string_format:$syslabels.Seolan_Module_WebResa_WebResa.uiquery_searchondate_flexi_web%></label>
+        <input type="checkbox" name="date_depart_flexi" value="<%$section._functionparams.params.__searchondate_flexi%>"<%if $smarty.request.date_depart_flexi%> checked<%/if%>>
+      </div>
+    <%/if%>
+  <%/if%>
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>">
+  <%if $admini%>
+    </div>
+  <%else%>
+    </form>
+  <%/if%>
+</div>

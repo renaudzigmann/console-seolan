@@ -1,0 +1,654 @@
+<div class="title"><%$syslabels.Seolan_Module_Table_Table.filledreporting_title%> - <%$imod_props.modulename%></div>
+
+<div id="preexportbrowse<%$uniqid%>">
+  <form name="exportForm_<%$uniqid%>" id="exportForm_<%$uniqid%>" class="form-horizontal" action="<%$self%>" onsubmit="return TZR.ajaxSubmitForm(this);" method="post">
+    <input type="hidden" name="fromfunction" value="<%$smarty.request.fromfunction%>" />
+    <input type="hidden" name="function" value="filledReporting_display" />
+    <input type="hidden" name="tplentry" value="br" />
+    <input type="hidden" name="moid" value="<%$_moid%>" />
+    <input type="hidden" name="select" value="<%$smarty.request.select%>" />
+    <input type="hidden" name="template" value="Core.empty.html" />
+    <input type="hidden" name="_linkedfield" value="" />
+    <input type="hidden" name="_recordcount" value="<%$br_record_count|default:0%>" />
+    <input type="hidden" name="_selectedok" value="ok" />
+    <input type="hidden" name="statusFileId" value="" />
+    <%foreach from=$br__selected item=v key=k %>
+      <input type="hidden" name="_selected[<%$k%>]" value="on" />
+    <%/foreach%>
+    <%* champs pour la gestion des procedures stockées *%>
+    <input type="hidden" name="storedprocedurename" value="" />
+    <input type="hidden" name="storedprocedureid" value="" />
+    <input type="hidden" name="_next" value="" />
+    <div class="form-group">
+      <div class="col-xs-12">
+        <div class="cs-selection-count">
+          <label class="btn-block"><strong><%$br_record_count%></strong> <%$syslabels.Seolan_Module_Table_Table.exportrecord%></label>
+        </div>
+      </div>
+    </div>
+    <div class="row export-select">
+      <div class="col-xs-12 col-sm-12 col-md-4">
+        <h5><%$syslabels.Seolan_Module_Table_Table.export_allfields_text%></h5>
+        <input type="hidden" name="_target" id="_target<%$uniqid%>" value="<%$imod_props._moid%>">
+        <div class="export-fields" id="export-fields<%$uniqid%>">
+          <ul class="export-list"></ul>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <h5><%$syslabels.Seolan_Module_Table_Table.export_actions_text%></h5>
+        <div class="export-actions">
+          <ul class="ul-list-inline">
+            <li><button type="button" class="btn btn-default" aria-expanded="false" onclick="exportAddAllFields('<%$uniqid%>')"><span class="glyphicon csico-list-add" aria-hidden="true"></span><%$syslabels.Seolan_Module_Table_Table.export_addall_text%></button></li>
+            <li><button type="button" class="btn btn-default" aria-expanded="false" onclick="exportAddFields('<%$uniqid%>')"><span class="glyphicon csico-plus" aria-hidden="true"></span><%$syslabels.Seolan_Module_Table_Table.export_add_text%></button></li>
+            <li><button type="button" class="btn btn-default" aria-expanded="false" onclick="exportRemoveField('<%$uniqid%>')"><span class="glyphicon csico-minus" aria-hidden="true"></span><%$syslabels.Seolan_Module_Table_Table.export_del_text%></button></li>
+            <li><button type="button" class="btn btn-default" aria-expanded="false" onclick="clearAllFields('<%$uniqid%>')"><span class="glyphicon csico-list-remove" aria-hidden="true"></span><%$syslabels.Seolan_Module_Table_Table.export_clear_text%></button></li>
+          </ul>
+        </div>
+        <%if $lang_code|@count>1%>
+          <h5><%$syslabels.Seolan_Module_Table_Table.export_langs_text%></h5>
+          <div class="export-langs">
+            <select class="form-control" name="langs[]" multiple>
+              <%section name=lang loop=$lang_code%>
+                <option value="<%$lang_code[lang]%>"<%if $lang_data==$lang_code[lang]%> selected<%/if%>><%$lang_text[lang]%></option>
+              <%/section%>
+            </select>
+          </div>
+        <%/if%>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <h5><%$syslabels.Seolan_Module_Table_Table.export_selectedfields_text%></h5>
+        <div class="export-fields-selected" id="export-fields-selected<%$uniqid%>"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="tzr-action<%$uniqid%>" class="tzr-action col-lg-12">
+  <ul>
+    <li><label><%$syslabels.Seolan_Module_Table_Table.stored_export%><label><%$syslabels.Seolan_Core_General.i18ncolon%></li>
+    <li>
+      <input type="text" list="storedprocedureslist" value="" class="ui-autocomplete-input" placeholder="<%$syslabels.Seolan_Core_General.name%>" name="storedprocedurename" id="storedprocedurename" >
+      <input type="hidden" value="" name="storedprocedureid">
+      <datalist id="storedprocedureslist">
+        <%section name=le loop=$br__procedures.lines_oid%>
+          <%if $br__procedures.lines_otitle[le]->html|@strstr:'REP_'%>
+            <option data-oid="<%$br__procedures.lines_oid[le]%>"><%$br__procedures.lines_otitle[le]->html|@substr:4%></option>
+          <%/if%>
+        <%/section%>
+      </datalist>
+    </li>
+    <li>
+      <button type="button" class="btn btn-primary" aria-expanded="false" onclick="exportProcedure('load');"><%$syslabels.Seolan_Module_Table_Table.load_text%></button>
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon csico-ellipsis-h" aria-hidden="true" style="margin-right:0"></span></button>
+      <ul class="dropdown-menu" style="padding: 5px;">
+        <li><button type="button" class="btn btn-primary" aria-expanded="false" onclick="exportProcedure('save');"><%$syslabels.Seolan_Core_General.save_text%></button></li>
+        <li><button type="button" class="btn btn-primary" aria-expanded="false" onclick="exportProcedure('savedefault');"><%$syslabels.Seolan_Core_General.savedefault_text%></button></li>
+        <%if $root%>
+          <li><button type="button" class="btn btn-primary" aria-expanded="false" onclick="exportProcedure('savedefaulteverybody');"><%$syslabels.Seolan_Core_General.savedefaulteverybody_text%></button></li>
+        <%/if%>
+        <li><button type="button" class="btn btn-default" aria-expanded="false" onclick="exportProcedure('delete');"><%$syslabels.Seolan_Core_General.del_text%></button></li>
+      </ul>
+    </li>
+  </ul>
+  <ul>
+    <li><button class="btn btn-primary" type="button" data-dismiss="modal" onclick="TZR.ajaxSubmitForm(document.forms['exportForm_<%$uniqid%>']);"><span class="glyphicon csico-view" aria-hidden="true"></span><%$syslabels.Seolan_Module_Table_Table.filledreporting_see%></button></li>
+    <li><button class="btn btn-default" type="button" data-dismiss="modal"><%$syslabels.Seolan_Core_General.close_text%></button></li>
+  </ul>
+</div>
+
+<div id="exportoverlay<%$uniqid%>" style="display:none">
+  <h4><%$syslabels.Seolan_Core_General.downloading%></h4>
+  <label><strong><%$syslabels.Seolan_Module_Table_Table.export%><span class="recordcount">0</strong> /  <span class="totalrecord"><%$br_record_count%></span></span> <%$syslabels.Seolan_Module_Table_Table.records%></label>
+  <div class="progress">
+    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</div>
+
+
+<script>
+
+
+  /* Ajout des champs */
+
+
+  function ssmods_compOrders(a, b){
+    if (a.order < b.order)
+      return -1;
+    else if(a.order > b.order)
+      return 1;
+    else
+      return 0;
+  }
+
+  <%assign var=defaultgroup value=$syslabels.Seolan_Core_General.general_text%>
+  <%if $smarty.request._dialogid%><%assign var='downloaderid' value=$smarty.request._dialogid%><%else%><%assign var='downloaderid' value=$uniqid%><%/if%>
+  var act = false;
+  var ssmodfields = []
+  var ssmodbfields = [];
+  var ssmodlf = [];
+  var ssmodgroups = [];
+  ssmodlf[<%$imod_props._moid%>] = ""; // linkfield
+  ssmodfields[<%$imod_props._moid%>] = []; // fields
+  <%* les champs du module *%>
+  <%section name="f" loop=$br_header_fields%>
+  ssmodfields[<%$imod_props._moid%>].push(
+    {
+      group:"<%$br_header_fields[f]->fgroup|default:$defaultgroup|escape:'javascript'%>",
+      label:"<%$br_header_fields[f]->label|escape:'javascript'%>",
+      order:"<%$br_header_fields[f]->fgroup|escape:'javascript'%><%"%06d"|sprintf:$br_header_fields[f]->forder|default:0%>",
+      field:"<%$br_header_fields[f]->field%>",
+      target:"<%$br_header_fields[f]->target%>",
+      targetfields : [],
+      type:"<%"\\"|explode:$br_header_fields[f]->ftype|array_pop%>",
+      tofollow:<%if $br_header_fields[f]->targetfields%>true<%else%>false<%/if%>,
+      isAnImage:<%if $br_header_fields[f]|is_a:'\Seolan\Field\Image\Image'%>true<%else%>false<%/if%>,
+      isAFile:<%if $br_header_fields[f]|is_a:'\Seolan\Field\File\File'%>true<%else%>false<%/if%>,
+      browsable:<%if $br_header_fields[f]->browsable%>true<%else%>false<%/if%>
+    }
+  );
+  <%/section%>
+  ssmodfields[<%$imod_props._moid%>].sort(ssmods_compOrders);
+  var act = false;
+
+  function getTargetFieldGroup(moid, fn, tf){
+    var groups = getGroups(moid,fn);
+    if (groups.length <= 1)
+      return '';
+    return ssmodfields[moid][fn].targetfields[tf].group;
+  }
+
+  function getFieldGroup(moid,fn){
+    var groups = getGroups(moid);
+    if (groups.length <= 1)
+      return '';
+    return ssmodfields[moid][fn].group;
+  }
+
+  function getGroups(moid,lfn){
+    if (lfn){
+      var k = moid+'-'+lfn;
+      var fields = ssmodfields[moid][lfn].targetfields;
+    } else {
+      var k = moid;
+      var fields = ssmodfields[moid];
+    }
+    if (typeof(ssmodgroups[k]) != "undefined"){
+      return ssmodgroups[k];
+    }
+    ssmodgroups[k] = [];
+
+    for(o in fields){
+      if (fields[o].group != ''
+        && ssmodgroups[k].indexOf(fields[o].group) == -1){
+        ssmodgroups[k].push(fields[o].group);
+      }
+    }
+    return ssmodgroups[k];
+  }
+
+  // affichage de la liste des champs du module (sous module) selectionné
+  function changeTarget() {
+
+    hideFieldsOptions("<%$uniqid%>");
+
+    var form = document.forms['exportForm_<%$uniqid%>'];
+    var v = form.elements['_target'].value;
+    if (typeof form.elements['_target'].selectedIndex != "undefined"){
+      var l = form.elements['_target'].options[form.elements['_target'].selectedIndex].label;
+      TZR.Dialog.changeTitle('Export - '+l);
+    }
+
+    var allFields = jQuery('div#export-fields<%$uniqid%> .export-list');
+    allFields.html('');
+
+    var selectedFields = jQuery('div#export-fields-selected<%$uniqid%>');
+    selectedFields.html('');
+
+    form.elements["_linkedfield"].value = ssmodlf[v];
+    var group = '';
+    var allFieldsHtml = '';
+    var allToClose = [];
+    var selectedFieldsHtml = '';
+    for (var c in ssmodfields[v]) {
+      var fn = ssmodfields[v][c].field;
+      var target = ssmodfields[v][c].target;
+      var fgroup = getFieldGroup(v,c);
+      if (group != fgroup){
+        group = fgroup;
+        if (allFieldsHtml != '') {
+          allFieldsHtml += allToClose.pop();
+        }
+        allFieldsHtml += '<li><label class="tree-toggle fieldgroup" data-groupname="'+group+'"><span class="glyphicon csico-triangle-right" aria-hidden="true"></span>';
+        allFieldsHtml += '<span class="glyphicon csico-triangle-bottom" aria-hidden="true"></span><strong>'+group+'</strong></label><ul class="tree">';
+        allToClose.push('</ul></li>');
+
+        var newgroup = document.createElement('OPTGROUP');
+        newgroup.label = group;
+
+      }
+
+      var objectFieldsHtml = '';
+      var objectToClose = [];
+      var ftypes = JSON.stringify({isAnImage:ssmodfields[v][c].isAnImage,isAFile:ssmodfields[v][c].isAFile});
+
+      allFieldsHtml += '<li class="field" data-fieldname="'+fn+'" data-type=\''+ftypes+'\' data-target="'+target+'">'+ssmodfields[v][c].label+'</li>';
+
+
+      if (ssmodfields[v][c].browsable) {
+        selectedFieldsHtml += '<div class="selected-field"><span class="glyphicon csico-move" aria-hidden="true"></span>';
+        selectedFieldsHtml += '<span class="field" title="%_'+fn+'" data-fieldname="'+fn+'" data-type=\''+ftypes+'\' data-target="'+target+'">'+ssmodfields[v][c].label+'</span>';
+        selectedFieldsHtml += '<input type="hidden" name="selectedfields[]" value="'+fn+'">';
+
+        if (ssmodfields[v][c].isAFile){
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][format]" value="origin">';
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][size]" value="origin">';
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][crop]" value="">';
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][extent]" value="">';
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][naming_convention]" value="">';
+          selectedFieldsHtml += '<input type="hidden" name="optionsfields['+fn+'][exportfileurl]" value="">';
+        }
+
+        selectedFieldsHtml += '</div>';
+      }
+    }
+    if (allToClose.length >0){
+      allFieldsHtml+=allToClose.join('');
+      allToClose = [];
+    }
+
+    allFields.html(allFieldsHtml);
+    selectedFields.html(selectedFieldsHtml);
+  }
+
+
+  /* Export procedure */
+
+
+  var pparam = null;
+  function initStoredProc(){
+    // les champs
+    if (typeof(pparam.selectedfields) != "undefined" && pparam.selectedfields.length >0){
+      clearAllFields("<%$uniqid%>");
+      var fields = jQuery("#export-fields<%$uniqid%>");
+      for(var i in pparam.selectedfields){
+        var parts = pparam.selectedfields[i].split("#");
+        var field = null;
+        if(parts.length == 1){
+          field = jQuery('li.field[data-fieldname="'+parts[0]+'"]:not([data-parentfield])',fields);
+          // ou champ objet avec sous champs
+          if (field.length == 0){
+            field = jQuery('li>label.field[data-fieldname="'+parts[0]+'"]:not([data-parentfield])',fields);
+          }
+        } else if(parts.length == 2){
+          field = jQuery('ul>li.field[data-fieldname="'+parts[1]+'"][data-parentfield="'+parts[0]+'"]',fields);
+        }
+        // on fait des clicks plutôt que des addClass puis export add pour avoir le bon ordre
+        if (field != null){
+          jQuery(field).trigger('dblclick');
+          jQuery(field).removeClass('selected');
+        }
+      }
+    }
+  }
+
+  function exportProcedure(action) {
+    if (!action)
+      return;
+    var proc = getExport();
+    console.log(proc);
+
+    if (proc.name == ''){
+      proc.jinput.focus();
+      return;
+    }
+    if (action == 'delete'){
+      if (proc.oid == null){
+        proc.jinput.focus();
+        return;
+      }
+      if (confirm("<%$syslabels.Seolan_Module_Table_Table.export_format_confirm_del_text|escape:'javascript'%>")) {
+        subProcAction(proc, "delExportProcedure", delProcFromList);
+      } else {
+        jQuery("#storedprocedurename").val("");
+      }
+    } else if(action == 'save'){
+      if (proc.oid !== null){
+        if (confirm("<%$syslabels.Seolan_Module_Table_Table.export_format_confirm_replace_text|escape:'javascript'%>")) {
+          subProcAction(proc, "procSaveExportProcedure", addProcToList);
+        } else {
+          jQuery("#storedprocedurename").val("");
+        }
+      } else {
+        subProcAction(proc, "procSaveExportProcedure", addProcToList);
+      }
+    } else if(action == 'savedefault'){
+      subProcAction(proc, "procSaveDefaultExportProcedure", addProcToList);
+    } else if(action == 'savedefaulteverybody'){
+      subProcAction(proc, "procSaveDefaultExportProcedureForEverybody", addProcToList);
+    } else if(action == 'load'){
+      if (proc.oid == null){
+        proc.jinput.focus();
+        return;
+      }
+      console.log(proc);
+      TZR.Table.filledreporting(TZR.Dialog.currentId(), {storedprocedureid:proc.oid});
+    }
+  }
+
+  // soumission d'un trt sur une procedure (del, add/update)
+  function subProcAction(proc, method, actionCb){
+    var form = document.forms['exportForm_<%$uniqid%>'];
+    var oldfunc = form.elements['function'].value;
+    form.elements['function'].value=method;
+    form.elements['storedprocedurename'].value = proc.name;
+    form.elements['storedprocedureid'].value = proc.oid;
+    var obj = {
+      url:"<%$self%>"+jQuery(form).serialize(),
+      mode:"post",
+      nocache:true,
+      dataType:'json',
+      overlay:"preexportbrowse<%$uniqid%>",
+      cb:function(){
+        form.elements['function'].value = oldfunc;
+        try{
+          var res = JSON.parse(arguments[0]); // response text
+        }
+        catch(e){
+          res = {ok:false};
+        }
+        if (typeof(res.ok) != "undefined" && res.ok && typeof(res.oid) != "undefined"){
+          actionCb(proc,res);
+        }
+      }
+    };
+    // todo deconnexion depuis une dialog ... à vérifier ?
+    TZR.jQueryAjax(obj);
+  }
+
+  function delProcFromList(proc, res){
+    jQuery('#storedprocedureslist>option[data-oid="'+proc.oid+'"]').remove();
+    jQuery("#storedprocedurename").val("");
+  }
+
+  function addProcToList(proc, res){
+    var list = jQuery('#storedprocedureslist');
+    if (res.oid && proc.oid == null && proc.name.substr(0, 4) == 'REP_'){
+      proc.name = proc.name.substr(4);
+      var joption = jQuery("<option/>");
+      joption.attr('data-oid', res.oid);
+      joption.html(proc.name);
+
+      var done = false;
+      var name = proc.name.toUpperCase();
+      var last = '';
+      jQuery('option', list).each(function(i){
+        var jo = jQuery(this);
+        var current = jo.html().toUpperCase();
+        if (name > last && name <= jo.html().toUpperCase()){
+          joption.insertBefore(jo);
+          done = true;
+          return false;
+        }
+        last = jo.html().toUpperCase();
+      });
+      if (!done){
+        list.append(joption);
+      }
+    } else {
+      // deja en place
+    }
+    proc.jinput.val("");
+  }
+
+  function getExport(){
+    var proc = {name:null,oid:null,jinput:null};
+    proc.jinput = jQuery("#storedprocedurename");
+    proc.name = jQuery.trim(proc.jinput.val());
+    if(proc.name != '') proc.name = 'REP_' + proc.name;
+    // recherche oid
+    var list = jQuery('#storedprocedureslist>option');
+    list.each(function(i){
+      var jo = jQuery(this);
+      if (jo.html().toUpperCase() == proc.name.toUpperCase().substr(4)){
+        proc.oid = jo.attr('data-oid');
+        return false;
+      }
+    });
+    return proc;
+  }
+
+  function exportSelectedFieldsSelect() {
+    var container = jQuery('#preexportbrowse<%$uniqid%>');
+    if (jQuery('div.selected-field.active',container).length > 0) {
+      jQuery('.img-value .filecomplement',container).focusout();
+      jQuery('.naming_convention',container).focusout();
+    }
+
+    jQuery(this).parent().toggleClass('active');
+
+    var current_field = jQuery(this).data('fieldname');
+
+    jQuery('div.export-field-options').hide(200);
+    jQuery('div.export-image-field').hide(200);
+    jQuery('div.export-field-options div.export-types').hide();
+
+    jQuery('#preexportbrowse<%$uniqid%> div.selected-field .field').each(function(index, item) {
+      if (jQuery(item).data('fieldname') != current_field) {
+        jQuery(item).parents('.selected-field').removeClass('active');
+      }
+    });
+  }
+
+
+  /* On click champs */
+
+
+  function initUIAndListeners(){
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .tree-toggle span.glyphicon', function (e) {
+      jQuery(jQuery(this).parents('li').get(0)).children('ul.tree').toggle(200);
+      jQuery(this).parent().toggleClass('active');
+      return false;
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .field', function (e) {
+      jQuery(this).toggleClass('selected');
+      var current_field = jQuery(this).data('fieldname');
+      if (!e.ctrlKey) {
+        jQuery('#preexportbrowse<%$uniqid%> .field, #preexportbrowse<%$uniqid%> .fieldgroup').each(function(index, item) {
+          if (jQuery(item).data('fieldname') != current_field) {
+            jQuery(item).removeClass('selected');
+          }
+        });
+      }
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .fieldgroup', function (e) {
+      jQuery(this).toggleClass('selected');
+      var is_selected = jQuery(this).hasClass('selected');
+      var current_group = jQuery(this).data('groupname');
+      if (!e.ctrlKey) {
+        jQuery('#preexportbrowse<%$uniqid%> .field, #preexportbrowse<%$uniqid%> .fieldgroup').each(function(index, item) {
+          if (jQuery(item).data('groupname') != current_group) {
+            jQuery(item).removeClass('selected');
+          }
+        });
+      }
+      jQuery(this).parent().find('> .tree > .field, > .tree > li > .field').each(function(index, item) {
+        if(is_selected) {
+          jQuery(this).addClass('selected');
+        }
+        else {
+          jQuery(this).removeClass('selected');
+        }
+      });
+    });
+
+    jQuery(document).on('dblclick', '#preexportbrowse<%$uniqid%> div.export-fields .field', function (evt) {
+      jQuery(this).addClass('selected');
+      exportAddFields('<%$uniqid%>');
+      return false;
+    });
+
+    jQuery(document).on('dblclick', '#preexportbrowse<%$uniqid%> div.export-fields .fieldgroup', function (evt) {
+      jQuery(this).click();
+      exportAddFields('<%$uniqid%>');
+      return false;
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> div.selected-field .field',function(evt){
+      exportSelectedFieldsSelect.call(this);
+    });
+
+    jQuery(document).on('dblclick', '#preexportbrowse<%$uniqid%> div.selected-field .field', function (evt) {
+      jQuery(this).parent().toggleClass('active');
+      exportRemoveField('<%$uniqid%>');
+      return false;
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .pictureSizeOption', function (e) {
+      var fn = jQuery('#export-fields-selected<%$uniqid%> .selected-field.active .field').data('fieldname').replace(/(\|)/g, '\\$1');
+
+      if (jQuery('#preexportbrowse<%$uniqid%> .pictureSizeOption:checked').val() === 'custom'){
+        jQuery('.export-types .img-value').show(200);
+        jQuery(this).addClass('active');
+
+        var width = parseInt(jQuery('.export-field-options .img-value .width').val());
+        var height = parseInt(jQuery('.export-field-options .img-value .height').val());
+
+        if (isNaN(width) || isNaN(height)) {
+          var size = 'origin';
+        } else {
+          var size = width+'x'+height;
+        }
+
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[size\\]]').val(size);
+      } else {
+        jQuery('.export-types .img-value').hide(200);
+        jQuery(this).removeClass('active');
+
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[size\\]]').val('origin');
+      }
+
+    });
+
+    jQuery(document).on('focusout', '#preexportbrowse<%$uniqid%> .img-value .filecomplement', function(){
+      var fn = jQuery('#export-fields-selected<%$uniqid%> .selected-field.active .field').data('fieldname').replace(/(\|)/g, '\\$1');
+      var width = parseInt(jQuery('.export-field-options .img-value .width').val());
+      var height = parseInt(jQuery('.export-field-options .img-value .height').val());
+      var jcrop =   jQuery('.export-field-options .img-value .crop');
+      var jextent =   jQuery('.export-field-options .img-value .extent');
+      if (isNaN(width) || isNaN(height)) {
+        var size = '';
+      } else {
+        var size = width+'x'+height;
+      }
+      if (size=='') {
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[size\\]]').val('origin');
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[crop\\]]').val(0);
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[extent\\]]').val(0);
+      } else {
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[size\\]]').val(size);
+        if (jcrop.prop('checked')){
+          jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[crop\\]]').val('1');
+        } else {
+          jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[crop\\]]').val('0');
+        }
+        if (jextent.prop('checked')){
+          jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[extent\\]]').val('1');
+        } else {
+          jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[extent\\]]').val('0');
+        }
+      }
+    });
+
+    jQuery(document).on('focusout', '#preexportbrowse<%$uniqid%> .naming_convention', function(){
+      var fn = jQuery('#export-fields-selected<%$uniqid%> .selected-field.active .field').data('fieldname').replace(/(\|)/g, '\\$1');
+      jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[naming_convention\\]]').val(jQuery(this).val());
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .export-image-field input.format', function(){
+      var fn = jQuery('#export-fields-selected<%$uniqid%> .selected-field.active .field').data('fieldname').replace(/(\|)/g, '\\$1');
+      jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[format\\]]').val(jQuery(this).val());
+    });
+
+    jQuery(document).on('click', '#preexportbrowse<%$uniqid%> .export-types .checkbox input.exportfileurl ', function(){
+      var fn = jQuery('#export-fields-selected<%$uniqid%> .selected-field.active .field').data('fieldname').replace(/(\|)/g, '\\$1');
+      if (jQuery(this).prop('checked')){
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[exportfileurl\\]]').val('1');
+      } else {
+        jQuery('#export-fields-selected<%$uniqid%> .selected-field.active input[name=optionsfields\\['+fn+'\\]\\[exportfileurl\\]]').val('0');
+      }
+    });
+
+    jQuery('#preexportbrowse<%$uniqid%> .export-fields-selected').sortable({
+      placeholder: "export-field-highlight"
+    }).disableSelection();
+  }
+
+
+  function exportAddAllFields(uniqid){
+    jQuery('#export-fields'+uniqid+' .field:not([data-parentfield])').addClass('selected');
+    exportAddFields(uniqid);
+    jQuery('#export-fields'+uniqid+' .selected').removeClass('selected');
+  }
+
+  function exportAddFields(uniqid){
+    jQuery('#export-fields'+uniqid+' .field.selected').each(function(index, item){
+      var fn = jQuery(item).data('fieldname');
+      var target = jQuery(item).data('target');
+      var parentfn = jQuery(item).data('parentfield');
+      var exists = false;
+      jQuery('#export-fields-selected'+uniqid+' .field').each(function(index, item2) {
+        if ((parentfn && jQuery(item2).data('fieldname') === parentfn+'#'+fn) || (!parentfn && jQuery(item2).data('fieldname') === fn)) {
+          exists = true;
+          return false;
+        }
+      });
+      if (exists) {
+        return;
+      }
+      var html = '<div class="selected-field"><span class="glyphicon csico-move" aria-hidden="true"></span>';
+      var fieldlabel = jQuery(item).text();
+      if (parentfn) {
+        html += '<span title="%_'+parentfn+'.'+fn+'" class="field" data-fieldname="'+parentfn+'#'+fn+'">';
+        html += jQuery(item).data('parentlabel')+' > '+fieldlabel+'</span>';
+        html += '<input type="hidden" name="selectedfields[]" value="'+parentfn+'#'+fn+'">';
+      } else {
+        html += '<span title="%_'+fn+'" class="field" data-fieldname="'+fn+'" data-target="'+target+'">';
+        html += fieldlabel+'</span>';
+        html += '<input type="hidden" name="selectedfields[]" value="'+jQuery(item).data('fieldname')+'">';
+      }
+      html += '</div>';
+      jQuery('#export-fields-selected'+uniqid).append(html);
+      jQuery(item).removeClass('active');
+    });
+  }
+
+  function exportRemoveField(uniqid){
+    hideFieldsOptions(uniqid);
+  }
+
+  function hideFieldsOptions(uniqid){
+    jQuery('#export-fields-selected'+uniqid+' .selected-field.active').remove();
+    jQuery('#preexportbrowse'+uniqid+' div.export-field-options').hide(200);
+    jQuery('#preexportbrowse'+uniqid+' div.export-field-options div.export-types').hide();
+    jQuery('#preexportbrowse'+uniqid+' .export-image-field').hide(200);
+  }
+
+  function clearAllFields(uniqid){
+    jQuery('#export-fields-selected'+uniqid).html('');
+  }
+
+  /* Init */
+
+  jQuery(document).ready(function () {
+    changeTarget();
+    initUIAndListeners();
+    <%if !empty($br__storedprocedure.oid)%>
+      pparam = JSON.parse("<%$br__storedprocedure.pparam|addslashes%>");
+      initStoredProc();
+    <%/if%>
+  });
+</script>
+

@@ -1,0 +1,12 @@
+<!--<%$smarty.template%>-->
+<%assign var="id" value=""|uniqid%>
+<div id="cv3-infosite" class="cv3-block">
+  <a class="link_toggle" data-toggle="collapse" data-parent="#cv3-infosite" href="#infosite<%$id%>"><%$labels.infosite_title%></a>
+  <h4><%$labels.infosite_title%></h4>
+  <div id="infosite<%$id%>" class="collapse">
+    <div class="middle">
+      <%$charte_oadresse->html%>
+    </div>
+    <div class="link"><a href="/mentions_legales.html"><%$labels.infosite_linkMore%></a></div>
+  </div><!-- fin infosite -->
+</div><!-- fin cv3-infosite -->

@@ -1,0 +1,58 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+<%assign var=section value=$it_olines[it]%>
+<%assign var=sectiondivid value="cv8d-browseabstract-`$it_itoid[it]`"%>
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  <%* chargement initial *%>
+  browseabstractinitpage("<%$sectiondivid%>");
+});
+<%* chargement initial et par load (pages, formulaire) *%>
+function browseabstractinitpage(sectiondivid){
+  jQuery('#'+sectiondivid+' div.cv8d-object>h2>a').click(function() {
+   if(jQuery(this).parents('div.cv8d-browseabstract-encours:first').length) return false;
+   jQuery("#"+sectiondivid+" div.cv8d-browseabstract-encours:first").removeClass("cv8d-browseabstract-encours").find('>div:first').hide('fast');
+   jQuery(this.parentNode.parentNode).addClass("cv8d-browseabstract-encours");
+   var quelp=jQuery(this).attr("href");
+   jQuery(quelp).show('low');
+   return false;
+  }).first().click();
+}
+</script>
+<%if !isset($smarty.request.contentonly)%>
+<div id="<%$sectiondivid%>" class="cv8d-browseabstract cv8d-browseabstract-<%$it_olines[it]._functionparams.moid%>">
+<%assign var=end value="</div>"%>
+<%else%>
+<%assign var=end value=""%>
+<%/if%>
+ <%if $it_olines[it]._functionparams.params.__viewpagination==1 && !empty($it_olines[it].pages)%>
+<%capture assign=pager%>
+   <%section name=p loop=$it_olines[it].pages%>
+    <a<%if $it_olines[it].first==$it_olines[it].pages[p]%> class="active-page" <%/if%> href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$it_olines[it].pages[p]%>&sectionopts[<%$it_itoid[it]%>][order]=<%$it_olines[it].order|escape:"url"%>" onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$it_olines[it].pages[p]%>&sectionopts[<%$it_itoid[it]%>][order]=<%$it_olines[it].order|escape:"url"%>'}); return false;"><%$smarty.section.p.index+1%></a>
+   <%/section%>
+<%/capture%>
+<div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div>
+ <%/if%>
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html" browsetype="abstract" sectiondivid="`$sectiondivid`"%>
+
+ <%section name=lines loop=$it_olines[it].lines_oid %>
+  <div class="cv8d-object">
+   <h2>
+     <a href="#cv8d-lines-<%$it_olines[it].lines_oid[lines]|replace:":":"_"%>">
+       <%$it_olines[it]["lines_o<%$it_olines[it].header_fields[0]->field%>"][lines]->html%>
+     </a>
+   </h2>
+   <div id="cv8d-lines-<%$it_olines[it].lines_oid[lines]|replace:":":"_"%>">
+    <%section name=header loop=$it_olines[it].header_fields start=1%>
+     <div class="cv8d-fieldvalue cv8d-field-<%$it_olines[it].header_fields[header]->field%>">
+       <%$it_olines[it]["lines_o<%$it_olines[it].header_fields[header]->field%>"][lines]->html%>
+     </div>
+    <%/section%>
+   </div>
+  </div>
+ <%/section%>
+ <%if $it_olines[it]._functionparams.params.__viewpagination==1 && !empty($it_olines[it].pages)%>
+  <div class="cv8d-pagelist cv8d-pagelist-bottom"><%$pager%></div>
+ <%/if%>
+<%$end%>

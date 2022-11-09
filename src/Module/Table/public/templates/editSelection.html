@@ -1,0 +1,97 @@
+<%if !$fieldsonly%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Table_Table.editselection_text%>
+<div class="cv8-contenu-center clearfix">
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);" novalidate>
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="procEditSelection">
+ <%if $back%>
+ <input type="hidden" name="_next" value="<%$back%>">
+ <%elseif $next%>
+ <%* template var *%> <input type="hidden" name="_next" value="<%$next%>">
+ <%else%>
+ <input type="hidden" name="_next" value="<%$self%>&moid=<%$_moid%>&function=procQuery&template=Module/Table.browse.html&tplentry=br">
+ <%/if%>
+ <input type="hidden" name="reeditone" value="0">
+ <input type="hidden" name="skip" value="1">
+ <%section name=i loop=$br_oids%>
+  <input type="hidden" name="oid[]" value="<%$br_oids[i]%>">
+<%/section%>
+<%/if%>
+  <%function name="dispfield"%>
+  <th>
+    <input type="checkbox" class="parcb" value="<%$field->field%>" onclick="v<%$uniqid%>.changePar('<%$field->varid%>',this);" id="id<%$field->varid%>">
+    <label for="id<%$field->varid%>"><%$field->fielddef->label|wordwrap:"50"%></label>
+    <%if !empty($field->fielddef->acomment)%>
+    <label class="fieldHelp" 
+	   tabindex="0"
+	   role="button"
+	   data-html="true"
+	   data-toggle="popover"
+	   data-trigger=""
+	   data-content="<p><%$field->fielddef->acomment|escape:'html'%></p>" title="<%$field->fielddef->label|escape:'html'%>">
+      <span class="glyphicon csico-infos" aria-hidden="true"></span>
+    </label>
+    <%/if%>
+  </th>
+  <td><%$field->html%></td>
+<%/function%>
+  
+  <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.selection_text%></legend>
+    <%$br_oids|@count%> <%$syslabels.Seolan_Core_General.selectedobjects%>
+  </fieldset>
+  
+  <%foreach key=group item=fields from=$br__groups %>
+  <%if $group != '_systemproperties'%>
+  <fieldset>
+    <legend><%$group%></legend>
+    <div class="table-responsive">
+      <table class="table table-auto table-striped" >
+	<%section name=f loop=$fields %>
+	<tr>
+	  <%call dispfield field=$fields[f]%>
+	</tr>
+	<%/section%>
+      </table>
+    </div>
+  </fieldset>
+  <%/if%>
+  <%/foreach%>
+  <%if count($br__groups['_systemproperties'])>0%>
+  <%$fields=$br__groups['_systemproperties']%>
+  <fieldset>
+    <legend><%$syslabels.Seolan_Core_General.properties_text%></legend>
+    <div class="table-responsive">
+      <table class="table table-auto table-striped">
+	<%section name=fs loop=$fields%>
+  	<%if $fields[fs]->field != 'PUBLISH' || isset($modsec_mods[$_moid].rwv)%>
+	<%call dispfield field=$fields[fs]%>
+	<%/if%>
+	<%/section%>
+      </table>
+    </div>
+  </fieldset>
+  <%/if%>
+
+  <%if !$fieldsonly%>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.save_and_editone_text%>" onclick="this.form.reeditone.value=1;">
+  </div>
+</form>
+<%/if%>
+</div>
+
+<script type="text/javascript">
+ v<%$uniqid%>.changePar=function(varid,o){
+   if(o.checked) var css="";
+   else var css="none";
+   jQuery("~td",o.parentNode).css('display',css);
+   if(varid) TZR.changeValidatorsState(varid,o.checked);
+   jQuery(o).siblings('input[name="editfields[]"]').remove();
+   if(o.checked) jQuery(o).parent().append('<input type="hidden" name="editfields[]" value="'+o.value+'">');
+ }
+ jQuery('input.parcb',v<%$uniqid%>.modulecontainer).each(function(){
+   this.onclick();
+ });
+</script>

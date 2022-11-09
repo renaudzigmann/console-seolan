@@ -1,0 +1,111 @@
+<%assign var="formname" value="formname"|cat:$uniqid%>
+<script type="text/javascript">
+ var act=false;
+ TZR.Table.ExportView = {
+   act:null
+ };
+ TZR.Table.ExportView.changeFmt = function(form, uniqid){
+   if(this.act != null)
+     this.act.style.display="none";
+   var v=form.elements['fmt'].value;
+   this.act = document.getElementById(uniqid+'fieldset'+v);
+   if (this.act != null)
+     this.act.style.display="block";
+ };
+ TZR.Table.ExportView.export = function (form, uniqid){
+   var fmt =  form.elements['fmt'].value;
+   if (fmt == 'pdf'){
+     form.submit();
+     TZR.Dialog.closeDialog();
+   } else {
+     form.submit();
+     TZR.Dialog.closeDialog();
+   }
+ };
+ jQuery(document).ready(function(){
+   TZR.Table.ExportView.changeFmt.call(TZR.Table.ExportView, document.forms['<%$formname%>'], '<%$uniqid%>');
+ });
+</script>
+<div class="title"><%$syslabels.Seolan_Core_General.print_text%> - <%$br_tlink%></div>
+  <div class="cv8-contenu-center">
+    <form  name="<%$formname%>" action="<%$self%>" method="post">
+      <input type="hidden" name="function" value="printDisplay"/>
+      <input type="hidden" name="_skip" value="1"/>
+    <input type="hidden" name="moid" value="<%$_moid%>"/>
+    <input type="hidden" name="tplentry" value="br"/>
+    <input type="hidden" name="oid" value="<%$smarty.request.oid%>"/>
+    <input type="hidden" name="template" value="Module/Table.printdisplay.html"/>
+    <%if isset($smarty.request._archive)%>
+    <input type="hidden" name="_archive" value="<%$smarty.request._archive|escape:'htmlall'%>"/>
+    <%/if%>	
+    <fieldset>
+      <legend><%$syslabels.Seolan_Core_General.options_text%></legend>
+      <div class="table-responsive">
+      <table class="table table-condensed">
+      <tr>
+        <th><label><%$syslabels.Seolan_Core_General.title%></label></th>
+        <td><input type="text" value="<%$imod_props.modulename|escape:"html"%> - <%$br_tlink|escape:'html'%> - <%$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"%>" name="title" size="50"></td>
+      </tr>
+      <tr>
+        <th><label>Format</label></th>
+        <td>
+        <select name="fmt" onchange="TZR.Table.ExportView.changeFmt.call(TZR.Table.ExportView, this.form, '<%$uniqid%>');">
+          <%section name=pr loop=$brt_lines_oid%>
+          <option value="<%$brt_lines_oid[pr]%>"><%$brt_lines_otitle[pr]->raw%></option>
+          <%/section%>
+          <option value="html">HTML</option>
+          <option value="pdf">PDF</option>
+        </select>
+        </td>
+      </tr>
+      <tr><th><label><%$syslabels.Seolan_Core_General.recipient_text%></label></th><td><input name="dest" type="text" size="30"/></td></tr>
+      </table>
+      </div>
+    </fieldset>
+    <%if !empty($br___ssmod)%>
+    <fieldset>
+      <legend>Sous modules</legend>
+      <div class="table-responsive">
+      <table class="table table-condensed">
+        <%section loop=$br___ssmod name="ssmod"%>
+        <%if !empty($br___ssmod[ssmod].lines_oid)%>
+          <tr>
+          <th><label>Champs du module "<%$br___ssprops[ssmod].modulename%>"</label></th>
+          <td>
+            <label><%$syslabels.Seolan_Module_Table_Table.fieldstoexport%></label><br>
+            <select name="options[<%$br___ssprops[ssmod]._moid%>][selectedfields][]" multiple size="10">
+            <%section name="f" loop=$br___ssmod[ssmod].header_fields%>
+              <option value="<%$br___ssmod[ssmod].header_fields[f]->field%>" <%if $br___ssmod[ssmod].header_fields[f]->browsable%>selected<%/if%>><%$br___ssmod[ssmod].header_fields[f]->label%></option>
+            <%/section%>
+            </select>
+            <br><br>
+            <label><%$syslabels.Seolan_Core_General.order%></label><br>
+            <select name="_order[<%$br___ssprops[ssmod]._moid%>]" size="1">
+            <%section name="f" loop=$br___ssmod[ssmod].header_fields%>
+              <option value="<%$br___ssmod[ssmod].header_fields[f]->field%>"><%$br___ssmod[ssmod].header_fields[f]->label%></option>
+            <%/section%>
+            </select>
+            <br><br>
+          </td>
+          </tr>
+        <%/if%>
+        <%/section%>
+      </table>
+      </div>
+      </fieldset>
+     <%/if%>
+     <fieldset id="<%$uniqid%>fieldsetpdf" style="display:none">
+      <legend>PDF</legend>
+      <table class="list2">
+       <tr>
+	<th><label><%$syslabels.xmodtable.filename%></label></th>
+	<td><input type="text" value="<%$br_tlink|rewriteToFilename|escape:'html'%>" name="pdfname" size="50"></td>
+       </tr>
+      </table>
+     </fieldset>
+    </form>
+  </div>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+    <button class="btn btn-primary" type="button" onclick="TZR.Table.ExportView.export.call(TZR.Table.ExportView, document.forms['<%$formname%>'], '<%$uniqid%>'); return false;" ><%$syslabels.Seolan_Core_General.print_text%></button>
+    <button class="btn btn-primary" type="button" onclick="TZR.Dialog.closeDialog();" ><%$syslabels.Seolan_Core_General.close_text%></button>
+  </div>

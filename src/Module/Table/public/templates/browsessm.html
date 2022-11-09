@@ -1,0 +1,8 @@
+<%if empty($br___ssmod_in_template)%>
+ <!-- Liste des sous modules -->
+ <%section name=ssmod loop=$br___ssmod%>
+  <div id="sc<%$smarty.section.ssmod.index+2%>-<%$uniqid%>">
+   <%include file="Module/Table.browsessmajax.html" ssmodi=$smarty.section.ssmod.index%>
+  </div>
+ <%/section%>
+<%/if%>

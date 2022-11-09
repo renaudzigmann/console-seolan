@@ -1,0 +1,48 @@
+<%if $ip_lines_oid[0]%>
+<div id="cv3-news"><div id="cv3-news-top"></div>
+<div id="cv3-news-middle"><%section name=ip loop=$ip_lines_oid%><div class="cv3-news-item">
+<%if $ip_lines_oflaok[ip]->raw eq "1"%>
+<%assign var="imgwidth" value=`$ip_lines_oF0003[ip]->width`%>
+<%assign var="imgheight" value=`$ip_lines_oF0003[ip]->height`%>
+<%math equation="166*y/x" x=`$imgwidth` y=`$imgheight` assign="flaheight" format="%d"%>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="166" height="<%$flaheight%>" id="vignette" align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="movie" value="/templates/vignette.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="<%$ip_lines_oflabg[ip]->html%>" />
+<param name="flashvars" value="texte=<%$ip_lines_oF0001[ip]->toText()%>&image=<%$ip_lines_oF0003[ip]->url%>&color=<%$ip_lines_oflapol[ip]->html%>&align=center" />
+<embed src="/templates/vignette.swf" quality="high" bgcolor="<%$ip_lines_oflabg[ip]->html%>" width="166" height="<%$flaheight%>" name="vignette" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"  flashvars="texte=<%$ip_lines_oF0001[ip]->toText()%>&image=<%$ip_lines_oF0003[ip]->url%>&color=<%$ip_lines_oflapol[ip]->html%>&align=center"/>
+</object>
+<br><br>
+<%else%>
+<%if $ip_lines_oF0001[ip]->html%><p class="cv3-news-title"><%$ip_lines_oF0001[ip]->html%></p><%/if%>
+<%if $ip_lines_oF0003[ip]->html && $ip_lines_olink[ip]->url%>
+<p><a href="<%$ip_lines_olink[ip]->url%>" target="<%$ip_lines_olink[ip]->target%>" title="<%$ip_lines_olink[ip]->toText()|escape:"html"%>"><img class="vignette-info" src="<%$ip_lines_oF0003[ip]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$ip_lines_oF0003[ip]->title|escape:"html"%>"></a></p>
+<%elseif $ip_lines_oF0003[ip]->html%>
+<p><img class="vignette-info" src="<%$ip_lines_oF0003[ip]->resizer%>&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>" alt="<%$ip_lines_oF0003[ip]->title|escape:"html"%>"></p>
+<%/if%>
+<%if $ip_lines_oF0002[ip]->html%><p><%$ip_lines_oF0002[ip]->html%></p><%/if%>
+<%/if%>
+</div>
+<%if !$smarty.section.ip.last || !empty($iph_lines_oid)%><div class="cv3-news-separator"></div><%/if%>
+<%/section%>
+<%if !empty($iph_lines_oid)%>
+ <div class="cv3-news-item">
+  <p class="cv3-news-title"><%$labels.random_photo%></p>
+  <p><a href="" id="photonewsa"><img class="vignette-info" src="" id="photonewsimg" border="0"></a></p>
+ </div>
+ <script type="text/javascript">
+  var photonews=new Array();
+  <%section name="iph" loop=$iph_lines_oid%>
+   photonews[photonews.length]=["<%$iph_lines_oid[iph]%>","<%$iph_lines_opic[iph]->resizer%>","<%$iph_lines_opic[iph]->title%>"];
+  <%/section%>
+  i=Math.floor(Math.random()*9);
+  document.getElementById("photonewsimg").src=photonews[i][1]+"&geometry=<%if $charte_oipgeo->raw%><%$charte_oipgeo->raw%><%elseif $tzr.ipgeo%><%$tzr.ipgeo%><%else%>166x%3E<%/if%>";
+  document.getElementById("photonewsimg").alt=document.getElementById("photonewsimg").title=photonews[i][2];
+  document.getElementById("photonewsa").href="<%$self%>alias=<%$it_cat_mit.oalias->html%>&function=displayPhoto&insidefile=displayPhoto.html&oid="+photonews[i][0];
+  </script>
+<%/if%>
+</div>
+<div id="cv3-news-bottom"></div>
+</div>
+<%/if%>

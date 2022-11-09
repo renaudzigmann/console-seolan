@@ -1,0 +1,69 @@
+<html>
+ <head>
+  <%$header%>
+  <base href="<%$tzr.societe_url%>">
+  <style>
+   body {
+    font-size: 11px;
+    font-family:  Verdana, Arial, sans-serif, Times New Roman,Helvetica;
+    background: white;
+   }
+   li {
+    color : #444444;
+    font-style: normal;
+   }
+   table.list2{
+    border:0px solid gray;
+    text-align:left;
+   }
+   table.list2 td,th {
+    color : #444444;
+    font-style: normal;
+    vertical-align:top;
+    padding:3px 5px 3px 5px;
+   }
+   table.list2 th{
+    background-color:#E3E1F6;
+    text-align:right;
+   }
+  </style>
+ </head>
+ <body>
+  <table>
+   <tr><td valign="top">
+    <p>Hi<p>
+     <p>This message was automatically generated because we received a subscription on the mailing list of <%$website%>.<p>
+     <p>In order to be completed, your subscription must be confirmed by clicking on the following link:
+      <pre>
+       <a href="<%$website%>tzr/scripts/admin.php?moid=<%$br_moid%>&function=confirm&oid=<%$br_oid%>&email=<%$br_email%>&template=Core.message.html">Confirm</a>
+      </pre>
+     </p>
+     <p>You may also remove this query by clicking on:
+      <pre>
+       <a href="<%$website%>tzr/scripts/admin.php?moid=<%$br_moid%>&function=unsubscribe&oid=<%$br_oid%>&email=<%$br_email%>&template=Core.message.html">Unsubscribe</a>
+      </pre>
+     </p>
+     Cordially yours,
+    </td>
+    <td valign="top">
+     <p>Bonjour,</p>
+     <p>Ce message est généré par le robot de gestion de mailing list du site <%$website%>. 
+      Pour être prise en compte, votre inscription sur notre liste doit être validée. Vous pouvez 
+      simplement valider votre inscription en suivant ce lien. 
+      <pre>
+       <a href="<%$website%>tzr/scripts/admin.php?moid=<%$br_moid%>&function=confirm&oid=<%$br_oid%>&email=<%$br_email%>&template=Core.message.html">Confirmer</a>
+      </pre>
+     </p>
+     <p>Si par contre, vous ne souhaitez pas être inscrit sur la liste, vous pouvez simplement 
+      ne pas répondre à ce mail, ou encore mieux vous désinscrire définitivement en cliquant sur:
+      <pre>
+       <a href="<%$website%>tzr/scripts/admin.php?moid=<%$br_moid%>&function=unsubscribe&oid=<%$br_oid%>&email=<%$br_email%>&template=Core.message.html">Désinscription</a>
+      </pre>
+     </p>
+     <p>Cordialement</p>
+    </td>
+   </tr>
+   <tr><td colspan="2"><%$tzr.OEM4%>&nbsp;<%$tzr.OEM1%>&nbsp;<%$tzr.OEM2%>&nbsp;/&nbsp;<%$tzr.OEM3%></td></tr>
+  </table>
+ </body>
+</html>

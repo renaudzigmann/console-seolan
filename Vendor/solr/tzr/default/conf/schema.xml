@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<schema name="schema" version="1.1">
+  <types>
+   <fieldtype name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+   <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="int" class="solr.TrieIntField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+  </types>
+
+ <fields>
+   <field name="id" type="string" indexed="true" stored="true" required="true"/>
+   <field name="moid" type="int" indexed="true" stored="true" required="true"/>
+   <field name="title" type="text" indexed="true" stored="true" required="false"/>
+   <field name="notice" type="text" indexed="true" stored="true" required="false"/>
+   <field name="contents" type="text" indexed="true" stored="true" required="false"/>
+   <field name="tags" type="text" indexed="true" stored="true" required="false"/>
+   <field name="usertags" type="text" indexed="true" stored="true" required="false"/>
+   <field name="all" type="text" indexed="true" stored="false" multiValued="true"/>
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+ </fields>
+ <uniqueKey>id</uniqueKey>
+ <defaultSearchField>all</defaultSearchField>
+ <solrQueryParser defaultOperator="AND"/>
+ <copyField source="title" dest="all"/>
+ <copyField source="notice" dest="all"/>
+ <copyField source="contents" dest="all"/>
+ <copyField source="tags" dest="all"/>
+ <copyField source="usertags" dest="all"/>
+</schema>

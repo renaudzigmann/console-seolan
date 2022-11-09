@@ -1,0 +1,205 @@
+<script type="text/javascript">
+ v<%$uniqid%>.g_pagesize=<%$br_pagesize%>;
+ v<%$uniqid%>.g_first='<%$br_first%>';
+ v<%$uniqid%>.g_last='<%$br_last%>';
+ v<%$uniqid%>.g_firstlastpage='<%$br_firstlastpage%>';
+ v<%$uniqid%>.g_firstprev='<%$br_firstprev%>';
+ v<%$uniqid%>.g_firstnext='<%$br_firstnext%>';
+ v<%$uniqid%>.g_moid="<%$_moid%>";
+ jQuery(function(){
+   var vuniqid = v<%$uniqid%>;
+   var cb = vuniqid[vuniqid.callback];
+   jQuery('div.removelink a').each(function(){
+     var that=jQuery(this);
+     if(that.hasClass('tzr-file')){ // le lien du fichier
+       that.click(function(e){
+	 var jthis = jQuery(this); 
+	 cb.call(vuniqid, jthis.closest('.linker').data('filename'),this,null,jthis.attr('href'));
+	 return false;
+       });
+     }else if(!that.hasClass('cv8-mediahottip')){
+       that.replaceWith(that.html());
+     }
+   });
+   jQuery('img.tzr-image').click(function(e){
+     var jthis = jQuery(this); 
+     if(jthis.closest('.linker').data('filename')){
+       cb.call(vuniqid, jthis.closest('.linker').data('filename'),this,null,jthis.attr('src').replace(/&geometry=[^&]+/,''));
+     }else{
+       cb.call(vuniqid,jthis.attr('src').replace(/&geometry=[^&]+/,''),this,null,jthis.attr('src').replace(/&geometry=[^&]+/,''));
+     }
+     return false;
+   });
+   jQuery('img.tzr-externalfile').click(function(e){
+     cb(null ,this, jQuery(this).attr('rel'),jQuery(this).attr('href'));
+     return false;
+   });
+   TZR.applyAlternate();
+ });
+</script>
+<%capture name="pager"%>
+<%if !empty($br_pages)%>
+<%if !isset($gopage)%>
+<%$gopage="v<%$uniqid%>.go_browse"%>
+<%/if%>
+<nav id="<%$pagerId%>" class="clearfix">
+  <ul class="pagination">
+    <li <%if $br_first eq "0"%>class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" title="<%$syslabels.Seolan_Module_Table_Table.prev_page%>" onclick="<%if $br_first neq "0"%><%$gopage%>('prev',0);<%/if%> return false;">&laquo;</a></li>
+    <%math equation="max( 0,floor( x / y ) - 5 )" x=$br_first y=$br_pagesize assign="actpage"%>
+    <%math equation="max( 0,floor( x / y ))" x=$br_first y=$br_pagesize assign="actpage1"%>
+    <%math equation=" x * y " x=$actpage1 y=$br_pagesize assign="newfirst"%>
+    <%section name=p loop=$br_pages start=$actpage max=11%>
+    <%if $newfirst==$br_pages[p]%>
+    <li class="active"><a href="#" onclick="<%$gopage%>('seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+    <%else%>
+    <li><a href="#" onclick="<%$gopage%>('seek',<%$br_pages[p]%>);return false;"><%$smarty.section.p.index+1%></a></li>
+    <%/if%>
+    <%/section%>
+    </li>
+    <li<%if ($br_last<($br_pagesize+$br_first))%> class="disabled"<%/if%>><a href="#" alt="<%$syslabels.Seolan_Module_Table_Table.next_page%>" title="<%$syslabels.Seolan_Module_Table_Table.next_page%>" onclick="<%if ($br_last>($br_pagesize+$br_first))%><%$gopage%>('next',0);<%/if%> return false;" >&raquo;</a></li>
+  </ul>
+</nav>
+<%/if%>
+<%/capture%>
+
+<%$smarty.capture.pager%>
+
+<%if $br__qq.fields_ftable%>
+
+<ul class="nav nav-pills module-tool" role="tablist">
+  <li>
+    <span><%$br_last%></span>&nbsp;<%if $br_last<=1%><%$syslabels.Seolan_Module_Table_Table.record%><%else%><%$syslabels.Seolan_Module_Table_Table.records%><%/if%>
+  </li>
+  <li>
+    <%if $imod_mod->quickquery%><a href="#selection-tool-form-<%$uniqid%>" data-toggle="collapse"><%$syslabels.Seolan_Module_Table_Table.quickquery%></a><%/if%>
+  </li>
+</ul>
+<div id="selection-tool-form-<%$uniqid%>" class="collapse" aria-expanded="false">
+  <div class="quick-query-form">
+    <form action="<%$self%>"
+	  method="post"
+	  name="quicksearch<%$uniqid%>"
+	  onsubmit="return v<%$uniqid%>.go_procquery.call(v<%$uniqid%>, this);">
+      <input type="hidden" name="_function" value="procQueryFiles">
+      <input type="hidden" name="pagesize" value="<%$br_pagesize%>">
+      <input type="hidden" name="moid" value="<%$_moid%>">
+      <input type="hidden" name="order" value="<%$br_order%>">
+      <input type="hidden" name="template" value="Core.source-file-ajax.html">
+      <input type="hidden" name="tplentry" value="br">
+      <input type="hidden" name="first" value="0">
+      <input type="hidden" name="recipientid" value="<%$smarty.request.recipientid%>">
+      <input type="hidden" name="skip" value="1">
+      <%* pour rester dans le contexte de l'ouverture initiale sur la sélection d'un module *%>
+      <input type="hidden" name="_uniqid" value="<%$uniqid%>">
+      <%if $smarty.request.selectedfields%>
+      <%section name=sf loop=$smarty.request.selectedfields%>
+      <input type="hidden" name="selectedfields[]" value="<%$smarty.request.selectedfields[sf]%>">
+      <%/section%>
+      <%/if%>
+      <%if $smarty.request.selectedtypes%>
+      <%section name=sf loop=$smarty.request.selectedtypes%>
+      <input type="hidden" name="selectedtypes[]" value="<%$smarty.request.selectedtypes[sf]%>">
+      <%/section%>
+      <%/if%>
+      <%if $smarty.request.selectedprops%>
+      <%foreach from=$smarty.request.selectedprops key=prop item=val%>
+      <input type="hidden" name="selectedprops[<%$prop%>]" value="<%$val%>">
+      <%/foreach%>
+      <%/if%>
+      <input type="hidden" name="selectedop" value="<%$smarty.request.selectedop%>">
+      <input type="hidden" name="clearrequest" value="1">
+      <input type="hidden" name="callback" value="<%$smarty.request.callback%>">
+      <input type="hidden" name="_next">
+      
+      <div class="searchfield cv8_inlineblock">
+	<%section name=i loop=$br_header_fields%>
+	<%assign var="t0" value="o`$br_header_fields[i]->field`"%>
+	
+	<%if $br__qq.fields_ftable.$t0->html%>
+	
+	<div class="form-group">
+	  <label class="title"><%$br__qq.fields_ftable.$t0->fielddef->label%></label>
+          <%$br__qq.fields_ftable.$t0->html%>
+	</div>
+	<%/if%>
+	<%/section%>
+      </div>
+      <div class="cv8_action clearfix">
+	<input type="submit" name="go" value="<%$syslabels.Seolan_Module_Table_Table.newquery%>">
+	<%if preg_match('/^procQuery/', $br_function)%>
+	<input type="button" onclick="this.form.clearrequest.value=2;v<%$uniqid%>.go_procquery.call(v<%$uniqid%>,this.form);" value="<%$syslabels.Seolan_Module_Table_Table.refinequery%>">
+	<input type="button" name="clear" value="<%$syslabels.Seolan_Module_Table_Table.clearrequest_text%>" onclick="this.form.clearrequest.value==1;v<%$uniqid%>.go_browse.call(v<%$uniqid%>,'clear');">
+	<%/if%>
+      </div>
+    </form>
+  </div>
+</div>
+<%/if%>
+
+<%if $imod_props.toid == 8001 %> <%* affichage médiathèque *%>
+<div class="cv8-contenu-center removelink">
+  <div class="cv8-phototeque_result">
+    <ul class="imagelist" id="imagelist<%$uniqid%>">
+      <%section name=i loop=$br_lines_oid %>
+      <li class="imagelist-item">
+	<span class="imagelist_img linker"
+	      data-filename="<%if in_array('mediahd',$br_header_fields) &&  $br_lines_omediahd[i]->filename %><%$br_lines_omediahd[i]->filename%>;<%$br_lines_omediahd[i]->mime%>;<%$br_lines_omediahd[i]->originalname%><%else%><%$br_lines_omedia[i]->filename%>;<%$br_lines_omedia[i]->mime%>;<%$br_lines_omedia[i]->originalname%><%/if%>">
+	  <span></span>
+	  <a class="cv8-mediahottip" title="<%$br_lines_otitle[i]->raw%>"><%$br_lines_omedia[i]->html%></a>
+	  <span></span>
+	</span>
+	<span class="imagelist_text">
+	  <div class="imagelist_leg">
+            <span class="imagelist_title">
+              <%section name=h loop=$br_header_fields%>
+              <%if !in_array($br_header_fields[h]->field,array('media','mediahd')) && $br_header_fields[h]->published%>
+              <%$br_lines_o<%$br_header_fields[h]->field%>[i]->html|strip_tags:false%>
+              <%/if%>
+              <%/section%>
+            </span>
+	  </div>
+	</span>
+      </li>
+      <%/section%>
+    </ul>
+  </div>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  // trigger bt on hover
+  jQuery('a.cv8-mediahottip').mouseenter(function(){
+    var a=this;
+    this._timer=setTimeout(function(){jQuery(a).btOn();},700);
+  }).mouseleave(function(){
+    if(this._timer) clearTimeout(this._timer);
+  });
+ });
+</script>
+<%else%>
+<div class="removelink">
+  <div class="table-responsive">
+    <table class="table table-striped table-condensed cv8_tablelist">
+      <thead>
+	<tr>
+	  <%section name=header loop=$br_header_fields %>
+	  <th><%$br_header_fields[header]->get_label()%></th>
+	  <%/section%>
+	</tr>
+      </thead>
+      <tbody>
+	<%section name=lines loop=$br_lines_oid %>
+	<tr>
+	  <%section name=header loop=$br_header_fields %>
+	  <%assign var="field" value=$br_lines_o<%$br_header_fields[header]->field%>[lines]%>
+	  <td class="linker" <%if $field->filename%>data-filename="<%$field->filename%>;<%$field->mime%>;<%$field->originalname%>"<%/if%>><%$field->html%></td>
+	  <%/section%>
+	</tr>
+	<%/section%>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%/if%>
+<%$smarty.capture.pager%>
+

@@ -1,0 +1,448 @@
+<%if $function!='browse' && empty($title)%><%assign var="title" value="`$syslabels.general.result_text`"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`headerajax8.html"%>
+<script language="javascript" type="text/javascript">
+ v<%$uniqid%>.g_pagesize=<%if $br_pagesize%><%$br_pagesize%><%else%>0<%/if%>;
+ v<%$uniqid%>.selectedfields=new Array();
+ v<%$uniqid%>.nb_selectedfields=0;
+ <%section name=h loop=$br_header_fields%>
+ v<%$uniqid%>.selectedfields[<%$smarty.section.h.index%>]='<%$br_header_fields[h]->field%>';
+ v<%$uniqid%>.nb_selectedfields++;
+ <%/section%>
+ // Supression des fiches selectionnées
+ v<%$uniqid%>.deleteselected=function() {
+ <%if $br_translation_mode%>
+ v<%$uniqid%>.applyfunction('del','<%$syslabels.general.confirm_delete_object_alllang|escape:"quotes"%>',{"LANG_TRAD":"","LANG_DATA":"<%$lang_def%>"},true);
+ <%else%>
+ v<%$uniqid%>.applyfunction('del','<%$syslabels.general.confirm_delete_object|escape:"quotes"%>',"",true);
+ <%/if%>
+ }
+ // Applique une fonction au formulaire  
+ v<%$uniqid%>.applyfunction=function(f,conf,data,selectonly,nonext,popup) {
+   var form=document.forms['browse<%$uniqid%>'];
+   if(!data) data={};
+   data._function=f;
+   if(!nonext) data._next=v<%$uniqid%>.go_browse('urlonly',0);
+   else data._next='';
+   TZR.applyFunction(form,data,selectonly,conf,popup);
+ }
+ // Ajout à la selection
+ v<%$uniqid%>.addToSelection=function(){
+   var form=document.forms['browse<%$uniqid%>'];
+   form._function.value='addToUserSelection';
+   form._next.value=TZR.SELECTION.update('<%$_moid%>',true);
+   TZR.ajaxSubmitForm(form,'#cv8-panier');
+ }
+ // Traitement sur le formulaire
+ v<%$uniqid%>.go_browse=function(command,pagesizediff,urlonly) {
+   f='<%$br_function%>';
+   url="<%$self%>moid=<%$_moid%>&tplentry=br";
+   order='<%$br_order%>';
+   pagesize=this.g_pagesize;
+   first='<%$br_first%>';
+   last='<%$br_last%>';
+   urlonly=false;
+   editfield='';
+   if(command=='start') {
+     first='0';
+     last='<%$br_last%>';
+     if(typeof(pagesizediff)=='number') pagesize=pagesize+pagesizediff;
+     else pagesize=eval(pagesize+pagesizediff);
+     pagesize=parseInt(pagesize);
+   }
+   if(command=='clear') {
+     f='browse';
+   }
+   if(command=='urlonly') {
+     urlonly=true;
+   }
+   if(command=='end') {
+     first='<%$br_firstlastpage%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='prev') {
+     first='<%$br_firstprev%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='next') {
+     first='<%$br_firstnext%>';
+     last='<%$br_last%>';
+     pagesize=pagesize+pagesizediff;
+   }
+   if(command=='seek') {
+     first=pagesizediff;
+     last='<%$br_last%>';
+   }
+   if(command=='edit') {
+     editfield=pagesizediff;
+   }
+   if(command=='order') {
+     first= 0;
+     last='<%$br_last%>';
+     order=pagesizediff;
+   }
+   if(pagesize<=0) pagesize=0;
+   url=url+'&function='+f;
+   url=url+'&first='+first;
+   if(command!='clear') {
+     url=url+'&last='+last;
+   }
+   url=url+'&order='+escape(order);
+   url=url+'&pagesize='+pagesize;
+   url=url+'&template=<%$template%>';
+   if(editfield!='') {
+     if(editfield=='all') {
+       url=url+'&editfields=all';
+     } else {
+       url=url+'&editfields[]='+editfield;
+     }
+   }
+   for(i=0;i<this.nb_selectedfields;i++)
+     url=url+'&selectedfields['+i+']='+this.selectedfields[i];
+   if(urlonly) return url;
+   else TZR.jQueryLoad({target:this.modulecontainer,url:url});
+ }
+ v<%$uniqid%>.field_in_list=function(f){
+   for(i=0;i<this.nb_selectedfields;i++)
+     if(this.selectedfields[i]==f) return true;
+   return false;
+ }
+ v<%$uniqid%>.add_field=function(f) {
+   if(this.field_in_list(f)) {
+     found=false;
+     i=0;
+     while(!found && (i<this.nb_selectedfields)) {
+       if(this.selectedfields[i]==f) found=true;
+       else i++;
+     }
+     i++;
+     while(i<this.nb_selectedfields) {
+       this.selectedfields[i-1]=this.selectedfields[i];
+       i++;
+     }
+     this.nb_selectedfields--;
+   } else {
+     this.selectedfields[this.nb_selectedfields]=f;
+     this.nb_selectedfields++;
+   }
+ }
+ v<%$uniqid%>.printselected=function() {
+   TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'',_function:'prePrintBrowse',fromfunction:'<%$function%>',template:'xmodtable/preprintbrowse.html',selectedfields:''},false,false,true);
+ }
+ v<%$uniqid%>.exportselected=function() {
+   TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'',_function:'preExportBrowse',fromfunction:'<%$function%>',template:'xmodtable/preexportbrowse.html',selectedfields:''},false,false,true);
+ }
+ v<%$uniqid%>.sendSelected=function(){
+  var form=document.forms['browse<%$uniqid%>'];
+  if(TZR.checkBoxesIsChecked(form)){
+   TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'',_function:'genSend',fromfunction:'<%$function%>',template:'xmodmaillist/xmodmaillist.html',selectedfields:'','skip':'1'});
+  }else{
+   TZR.jQueryLoad({target:this.modulecontainer,url:"<%$self%>moid=<%$_moid%>&_function=genSendPre&template=xmodmaillist/xmodmaillistpre.html&tplentry=br"});
+  }
+ }
+ v<%$uniqid%>.sendSelectedSMS=function(){
+  var form=document.forms['browse<%$uniqid%>'];
+  if(TZR.checkBoxesIsChecked(form)){
+   TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'',_function:'genSend',fromfunction:'<%$function%>',template:'xmodmaillist/sendsms.html',selectedfields:'',sms:'1'});
+  }else{
+   TZR.jQueryLoad({target:this.modulecontainer,url:"<%$self%>moid=<%$_moid%>&_function=genSendPre&template=xmodmaillist/xmodmaillistpre.html&tplentry=br&sms=1"});
+  }
+ }
+ v<%$uniqid%>.sendSelectedPush=function(){
+   var form=document.forms['browse<%$uniqid%>'];
+   if(TZR.checkBoxesIsChecked(form)){
+     TZR.applyFunction(document.forms['browse<%$uniqid%>'],{_next:'',_function:'genSend',fromfunction:'<%$function%>',template:'xmodmaillist/sendpush.html',selectedfields:'',push:'1'});
+   }else{
+     TZR.jQueryLoad({target:this.modulecontainer,url:"<%$self%>moid=<%$_moid%>&_function=genSendPre&template=xmodmaillist/xmodmaillistpre.html&tplentry=br&push=1"});
+   }
+ }
+ v<%$uniqid%>.go_procQuery=function(form,fct){
+  if(fct) form._function.value=fct;
+  TZR.ajaxSubmitForm(form);
+ }
+ // Permet de choisir les champs à afficher avec une liste de checkbox
+ jQuery(function($){
+   $('.cv8_tablelist th .selectedfields .submitSelectedFields').click(function(){
+     v<%$uniqid%>.selectedfields = [];
+     $('.cv8_tablelist th .selectedfields input.selectedfield:checked').each(function(i,e){
+       v<%$uniqid%>.selectedfields.push($(e).val());
+     });
+     v<%$uniqid%>.nb_selectedfields = v<%$uniqid%>.selectedfields.length;
+     v<%$uniqid%>.go_browse();
+   });
+ });
+</script>
+
+<div class="cv8-quicksearch">
+ <div class="outils">
+  <!-- Recherche rapide -->
+  <%foreach name=i from=$br_queryfields item=field%>
+   <%$field->fielddef->label%> : <%$field->getQueryText()%><br>
+  <%/foreach%>
+  <%if $br__qq.fields_ftable%>
+   <div class="ligne">
+    <form action="<%$self%>" method="post" name="quicksearch<%$uniqid%>" onsubmit="v<%$uniqid%>.go_procQuery(this); return false;">
+     <input type="hidden" name="pagesize" value="<%$br_pagesize%>">
+     <input type="hidden" name="_function" value="procQuery">
+     <input type="hidden" name="moid" value="<%$_moid%>">
+     <input type="hidden" name="order" value="<%$br_order%>">
+     <input type="hidden" name="template" value="xmodtable/browse.html">
+     <input type="hidden" name="tplentry" value="br">
+     <input type="hidden" name="first" value="0">
+     <input type="hidden" name="clearrequest" value="1">
+     
+     <%if $br_translation_mode%>
+     <div class="searchfield cv8_inlineblock">
+       <span class="searchfieldlabel"><label><%$syslabels.xmodtable.translation_status%></label></span><br>
+       <span class="searchfieldhtml">
+	 <%section name="lscode" loop=3%>
+	 <%assign var=code value=$smarty.section.lscode.index%>
+	 <%assign var=vcode value="v`$code`"%>
+	 <%assign var=labname value="translation_status_`$code`"%>
+	 <label for="_langstatus<%$uniqid%><%$code%>"><span class="cv8-langstatus code-<%$code%>" title="<%$syslabels.xmodtable.$labname%>"></span></label>&nbsp;<input id="_langstatus<%$uniqid%><%$code%>" <%if !isset($br__qq._langstatus) || $br__qq._langstatus.$vcode%>checked<%/if%> type="checkbox" value="1" name="_langstatus[v<%$code%>]">&nbsp;
+	 <%/section%>
+       </span>
+     </div>
+     <%/if%>
+
+     <%foreach from=$br__qq.fields_ftable item=ofield%>
+       <div class="searchfield cv8_inlineblock">
+         <span class="searchfieldlabel"><label><%$ofield->fielddef->label%></label></span><br>
+         <span class="searchfieldhtml"><%$ofield->html%></span>
+       </div>
+     <%/foreach%>
+
+      <%* recherche sous module *%>
+      <%if $imod_props.submodsearch%>
+        <div class="searchfield cv8_inlineblock">
+          <span class="searchfieldlabel">
+            <label><%$syslabels.xmodtable.submod%></label>
+          </span><br>
+          <span class="searchfieldhtml">
+            <select name="ssmods_search[]" multiple="multiple" size="6">
+              <option value="">---</option>
+              <%foreach key=ssmod_id item=ssmodtitle from=$br__qq.submodules %>
+                <option value="<%$ssmod_id%>"<%if  $br__qq.submodules_searchselected.$ssmod_id%> selected="selected"<%/if%>><%$syslabels.xmodtable.with%> <%$ssmodtitle%></option>
+                <%assign var=not value="`$ssmod_id`:not"%>
+                <option value="<%$not%>"<%if $br__qq.submodules_searchselected.$not%> selected="selected"<%/if%>><%$syslabels.xmodtable.without%> <%$ssmodtitle%></option>
+              <%/foreach%>
+            </select>
+          </span>
+        </div>
+      <%/if%>
+      
+     <div class="fin_float"></div>
+     <input class="submit" type="submit" name="go" value="<%$syslabels.xmodtable.newquery%>">
+     <%if $br_function=='procQuery' && !$smarty.request._persistent%>
+      <input class="submit" type="button" onclick="this.form.clearrequest.value=2;v<%$uniqid%>.go_procQuery(this.form);" value="<%$syslabels.xmodtable.refinequery%>">
+      <input class="submit" type="button" name="clear" value="<%$syslabels.xmodtable.clearrequest_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>function=browse&moid=<%$_moid%>&tplentry=br&template=xmodtable/browse.html');">
+     <%/if%>
+     <%if $imod_props.stored_query && $imod_mod->isThereAQueryActive()%>
+       <input class="submit" type="button" name="save" value="<%$syslabels.xmodtable.savequery_text%>" onclick="this.form._function.value='saveQuery';v<%$uniqid%>.go_procQuery(this.form);">
+     <%/if%>
+    </form>
+   </div>
+  <%/if%>
+  <div class="ligne_page" id="topbar<%$uniqid%>">
+   <%include file="`$smarty.const.TZR_SHARE_DIR`xmodtable/topbar.html"%>
+   <div class="fin_float"></div>
+  </div>
+ </div>
+</div>
+<div class="cv8-contenu-center">
+ <form name="browse<%$uniqid%>" action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="_function" value="">
+  <input type="hidden" name="fromfunction" value="">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="selectedfields" value="all">
+  <input type="hidden" name="template" value="proc.html">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="message" value="">
+  <input type="hidden" name="_selectedok" value="ok">
+  <input type="hidden" name="value" value="1">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <%section name=s loop=$br_editfields%>
+   <input type="hidden" name="editfields[]" value="<%$br_editfields[s]%>">
+  <%/section%>
+  <%if $brt_odisp->filename%>
+   <%include file=$brt_odisp->filename%>
+  <%else%>
+   <%if $br_translation_mode%>
+   <%$syslabels.xmodtable.browse_translation_mode_message|sprintf:$lang_trad%>
+   <%/if%>
+   <table class="cv8_tablelist">
+    <thead>
+     <tr>
+      <th width="5" class="selectedfields">
+        <img src="<%$TZR.share%>ico/general/prop.png" width="12" height="12" alt="<%$syslabels.general.fieldselector|escape:'quotes'%>" title="<%$syslabels.general.fieldselector|escape:'quotes'%>" />
+        <div class="selectedfields">
+          <div class="filter">
+            <input type="search" class="selectedfields-filter" value="" placeholder="Nom ou libellé du champ..." />
+            <label class="checkall"><input type="checkbox" name="browse_selectedfields_checkall" />
+              <span class="toggle"><%$syslabels.general.select_all%></span><span class="toggle" style="display:none;"><%$syslabels.general.unselect_all%></span></label>
+          </div>
+          <div class="fields">
+            <%foreach key=groupname item=fields from=$br_fieldlist%>
+            <div class="group group-<%$groupname|asciify%>">
+              <%if $groupname%><div class="group-title"><%$groupname%></div><%/if%>
+              <%foreach key=fieldname item=field from=$fields%>
+              <div class="field field-<%$fieldname%>">
+                <label title="<%$fieldname%>">
+                  <input type="checkbox" class="selectedfield" name="browse_selectedfields[]" value="<%$fieldname%>" <%if $field.selected%>checked="checked"<%/if%> />
+                  <%$field.label%>
+                </label>
+              </div>
+              <%/foreach%>
+            </div>
+            <%/foreach%>
+          </div>
+          <div class="tzr-action">
+            <input type="button" class="submit submitSelectedFields" value="OK" />
+          </div>
+        </div>
+      </th>
+      <%if $br_translation_mode%>
+      <th width="5"></th>
+      <th align="center"><%$syslabels.xmodtable.details_text%></th>
+      <%/if%>
+      <th align="center"><%$syslabels.xmodtable.details_text%></th>
+      <%section name=header loop=$br_header_fields %>
+       <th><%$br_header_fields[header]->get_label()%></th>
+      <%/section%>
+     </tr>
+     <tr>
+      <td width="5">
+       <input type="checkbox" onclick="TZR.toggleCheckBoxes(this.form);" name="selectall" class="checkbox">
+       <input type="hidden" name="marker" value="selectstart">
+      </td>
+      <%if $br_translation_mode%>
+      <td width="5"></td>
+      <td align="center"colspan="1"><%$TZR.lang_trad.long%></td>
+      <%/if%>
+      <td align="center"colspan="1"><%if $br_translation_mode%><%$TZR.lang_data.long%><%/if%></td>
+      <%section name=header loop=$br_header_fields%>
+       <td nowrap>
+        <%assign var=fieldname value=$br_header_fields[header]->field%>
+	<%if ($modsec_mods[$_moid].rw && $br_header_fields[header]->field!='PUBLISH' || $modsec_mods[$_moid].rwv) && $imod_props.multipleedit && (($br_header_fields[header]->translatable && !$br_translation_mode) || $lang_def==$lang_data) && ($root || !$br_header_fields[header]->readonly) && (!$br__fieldssec[$fieldname] || $br__fieldssec[$fieldname] == 'rw')%>
+	 <a href="#" onclick="v<%$uniqid%>.go_browse('edit','<%$br_header_fields[header]->field%>'); return false;" title="<%$syslabels.xmodtable.small_edit_text%>"><%$syslabels.xmodtable.small_edit%></a>
+	<%/if%>
+	<a title="<%$syslabels.xmodtable.arrow_up_text%>" href="#" onclick="v<%$uniqid%>.go_browse('order','<%$br_header_fields[header]->field%>+ASC');return false;"><%$syslabels.xmodtable.arrow_up%></a>
+	<a title="<%$syslabels.xmodtable.arrow_down_text%>" href="#" onclick="v<%$uniqid%>.go_browse('order','<%$br_header_fields[header]->field%>+DESC');return false;"><%$syslabels.xmodtable.arrow_down%></a>
+       </td>
+      <%/section%>
+     </tr>
+    </thead>
+    <tbody>
+     <%section name=lines loop=$br_lines_oid%>
+      <%* debut de ligne *%>
+      <tr class="<%if $br_lines_published && $br_lines_published[lines]!=1%>napp<%/if%> <%if $br_lines_trclass[lines]%><%$br_lines_trclass[lines]%><%/if%>">
+       <td width="5">
+	<input type="hidden" name="oid[]" value="<%$br_lines_oid[lines]%>">
+	<input name="_selected[<%$br_lines_oid[lines]%>]" type="checkbox" class="checkbox" <%if $br_lines_selected[lines]%>checked<%/if%>>
+       </td>
+       <%if $br_translation_mode%>
+       <td><%$br_lines_translation_status[lines].$lang_data.html%></td>
+       <td><%* table des actions 2 lang trad *%>
+	 <table class="tzr-compact">
+	   <tr>
+	     <%foreach name=linesactions2 from=$br_actions2[lines] key=actiontype item=myaction2%>
+	     <td align="center"><%if $myaction2%><%$myaction2%><%/if%></td>
+	     <%/foreach%>
+	   </tr>
+	 </table>
+       </td>
+       <%* fin de table des actions 2 lang trad *%>
+       <%/if%>
+       <td><%* table des actions standard (langue de base)*%>
+	 <table class="tzr-compact">
+	   <tr>
+	     <%* voir browseActionsForLine, voir xdatasource 2me display *%>
+	     <%* pas de raison ? à voir *%>
+	     <%if false && $TZR.lang_trad && !$br_lines_translation_ok[lines]%>
+	     <td align="center"><%if $br_actions[lines].edit%><%$br_actions[lines].edit%><%/if%></td>
+	     <%else%>
+	     <%foreach name=lineactions from=$br_actions[lines] item=myaction%>
+	     <td align="center"><%if $myaction%><%$myaction%><%/if%></td>
+	     <%/foreach%>
+	     <%/if%>
+	   </tr>
+	 </table>
+       </td>
+       <%* fin de table des actions *%>
+
+       <%section name=header loop=$br_header_fields%>
+	<td><%getvar var="br_lines_o`$br_header_fields[header]->field`[`$smarty.section.lines.index`]->html"%></td>
+       <%/section%>
+
+      </tr>
+     <%/section%>
+    </tbody>
+    <%* ajout de lignes de total *%>
+    <%if $br_sums%>
+      <%if $br_translation_mode%><%assign var=scolspan value=4%><%else%><%assign var=scolspan value=2%><%/if%>
+     <tbody class="sumlist">
+      <tr class="sumlistsep"><td colspan="99"></td></tr>
+      <%if $br_sums.line_page%>
+       <tr class="sumlisttot1">
+	<td colspan="<%$scolspan%>"><%$syslabels.xmodtable.browse_subtotal%></td>
+	<%$br_sums.line_page%>
+       </tr>
+      <%/if%>
+      <%if $br_sums.line_tot%>
+       <tr class="sumlisttot2">
+	<td colspan="<%$scolspan%>"><%$syslabels.xmodtable.browse_total%></td>
+	<%$br_sums.line_tot%>
+       </tr>
+      <%/if%>
+     </tbody>
+    <%/if%>
+   </table>
+
+
+  <%/if%>
+  <%if $br_editfields%>
+   <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="button" name="Save" value="<%$syslabels.general.save_text%>" onclick="document.forms['browse<%$uniqid%>'].enctype='multipart/form-data'; v<%$uniqid%>.applyfunction('procEdit');"></div>
+  <%/if%>
+ </form>
+</div>
+<div class="cv8-quicksearch cv8-quicksearch-bottom" style="display:none;" id="cv8-quicksearch-bottom-<%$uniqid%>">
+ <div class="outils">
+  <div class="ligne_page" id="bottombar<%$uniqid%>"></div>
+ </div>
+</div>
+<script type="text/javascript" language="javascript">
+ jQuery(v<%$uniqid%>.modulecontainer).find('a.cv8-delaction').click(function(event){
+ var data = jQuery.extend({confirmDelMessage:null}, jQuery(this).data('action')), message='';
+ if (data.confirmDelMessage != null){
+ message = data.confirmDelMessage;
+ } else {
+ message = '<%$syslabels.general.confirm_delete_object|escape:"quotes"%>';
+ }
+  if(confirm(message)) {
+   if(!TZR.checkLinkConfirm(this)) return false;
+   TZR.jQueryLoad({target:v<%$uniqid%>.modulecontainer,url:this.href,data:{_next:v<%$uniqid%>.go_browse('urlonly',0)+'&_raw=1'}});
+  }
+  return false;
+ });
+ <%if ($br_last>$br_firstnext && $br_pagesize>15) || ($br_last<=$br_firstnext && $br_last-$br_first>15)%>
+  jQuery('#bottombar<%$uniqid%>').html(jQuery('#topbar<%$uniqid%>').html());
+  jQuery('#cv8-quicksearch-bottom-<%$uniqid%>').show();
+  <%/if%>
+  // Filtre les champs sélectionnables pour le prochain browse/procQuery
+  jQuery('.selectedfields-filter', v<%$uniqid%>.modulecontainer).on('keyup change', function(){
+    var filterText = this.value.toLowerCase();
+    jQuery('.selectedfields .fields label', v<%$uniqid%>.modulecontainer).hide().filter(function(){
+      return jQuery(this).text().toLowerCase().match(new RegExp(filterText,'i')) ||
+             jQuery('input', this).val().toLowerCase().match(new RegExp(filterText,'i'));
+    }).show();
+    jQuery('.selectedfields .fields > div', v<%$uniqid%>.modulecontainer).show().filter(function(){
+      return jQuery('label:visible',this).length == 0;
+    }).hide();
+  });
+  // Permet la sélection/désélection des champs sélectionnables pour le prochain browse/procQuery
+  jQuery('.selectedfields .checkall input', v<%$uniqid%>.modulecontainer).on('click', function() {
+    jQuery('.selectedfields .fields input', v<%$uniqid%>.modulecontainer).prop('checked', jQuery(this).prop('checked'));
+    jQuery('.selectedfields .filter .checkall span', v<%$uniqid%>.modulecontainer).toggle();
+  });
+</script>

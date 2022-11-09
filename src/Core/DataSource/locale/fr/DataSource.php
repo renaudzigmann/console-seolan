@@ -1,0 +1,56 @@
+<?php
+if(\Seolan\Core\Shell::admini_mode()) {
+\Seolan\Core\Labels::$LABELS['Seolan_Core_DataSource_DataSource']
+= array(
+'aliasmodule'=>'Module pour alias',
+'automatic_translation'=>'Traduction automatique',
+'browsable'=>'Liste',
+'cannot_delete'=>'Vous ne pouvez pas supprimer cet objet',
+'compulsory'=>'Obligatoire',
+'content_propagated'=>'Dans ce module, les données dans les langues suivantes seront aussi mises à jour : ',
+'content_propagate'=>'Dans ce module, les données en langue "%s" et en langue "%s" sont équivalentes. Les données "%s" ne peuvent être modifiées qu\'à partir des contenus en "%s".',
+'data_dictionary'=>'Dictionnaire des données',
+'delete_table'=>'Supprimer la table',
+'duplicatedata'=>'Dupliquer les données',
+'empty_data'=>'Vider la table',
+'field'=>'Nom du champ',
+'field_label'=>'Libellé',
+'field_order'=>'Ordre',
+'freelang'=>'Libre',
+'gen_parameters'=>'Paramètres de génération',
+'gen_template'=>'Génération de gabarits',
+'label'=>'Libellé',
+'lang_propagated'=>'identique à',
+'multivalued'=>'Valeurs multiples',
+'new_field'=>'Nouveau champ',
+'new_label'=>'Nouveau libellé',
+'new_table'=>'Nouvelle table',
+'oid'=>'Identifiant',
+'order'=>'Ordre',
+'prefix'=>'Préfixe',
+'published'=>'Publié',
+'queryable'=>'Recherche',
+'random'=>'Aléatoire',
+'readonly'=>'Lecture seulement',
+'repair_translations'=>'Créer les traductions manquantes',
+'size'=>'Taille',
+'table_code'=>'Nom SQL de la table',
+'table_in_use'=>'La table est utilisée dans des modules',
+'table_name'=>'Nom de la table',
+'target'=>'Destination',
+'templates_table'=>'Table des gabarits',
+'translatable'=>'Traduire',
+'type'=>'Type du champ',
+'update_ok'=>'Mise à jour réussie',
+'insert_ok'=>'Insertion réussie',
+'usage'=>'Utilisation',
+'user_field'=>'Champ utilisateur',
+'tolog'=>'Conserver les logs',
+'\seolan\module\infotree\infotree'=>'Gestionnaire de rubriques',
+'\seolan\module\table\table'=>'Ensemble de fiches',
+'invalid_characters'=>'Le champ contient des caractères non valides'
+);
+} else {
+\Seolan\Core\Labels::$LABELS['Seolan_Core_DataSource_DataSource']=array();
+}
+?>

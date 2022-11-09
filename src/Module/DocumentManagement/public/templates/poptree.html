@@ -1,0 +1,148 @@
+<html>
+ <head>
+  <script language="javascript" type="text/javascript">
+   function go_action(ul,title) {
+    <%if $smarty.request.action=="selectDoc"%>
+     jQuery('#id_<%$smarty.request.target%>').val(ul).change();
+     var t=jQuery('#id_INPUT<%$smarty.request.target%>');
+     if(t.is('input')) t.val(title);
+     else t.html(title);
+     jQuery('#id_TOSHOW<%$smarty.request.target%>').show();
+    <%else%>
+    var f=document.forms['<%$smarty.request.formname%>'];
+     var next='<%$self%>&function=index&moid=<%$smarty.request.moid%>&template=Module/DocumentManagement.index2.html&tplentry=br&oid='+ul+'&clear=1';
+    if(typeof(f)!="undefined"){
+       f._function.value='linkTo';
+       f.targetoid.value=ul;
+       f._next.value=next;
+       if(jQuery('#copyrights').is(':checked')) {
+         jQuery(f).append("<input type='hidden' name='_copyrights' value='1'>");
+       }
+       f._move.value="<%$smarty.request._move%>";
+       f._copy.value="<%$smarty.request._copy%>";
+       if(!f.onsubmit || f.onsubmit()) f.submit();
+     }else{
+    TZR.Dialog.openURL('<%$self%>function=linkTo&moid=<%$smarty.request.moid%>&oid=<%$smarty.request.oid%>&_move=<%$smarty.request._move%>&_copy=<%$smarty.request._copy%>&_parentoid=<%$smarty.request._parentoid%>&targetoid='+ul+'&_next='+escape(next));
+     }
+    <%/if%>
+    TZR.Dialog.closeDialog();
+   }
+
+   function showdirfolders(response){
+     var html;
+     var dir;
+     for(var i=0;i<response.directories.length;i++){
+       dir=response.directories[i];
+       html='<li id="node_'+dir.oid+'" tree-icon="'+dir.smalliconurl+'"><span>';
+       if(dir.noLinkTo==0){
+	 html+='<a href="#" onclick="go_action(\''+dir.oid+'\',\''+addslashes(dir.title)+'\'); return false;">&nbsp;'+dir.title;
+       }else{
+	 html+=dir.title;
+       }
+       if(dir.countdirs>0){
+	 html+=' #'+dir.countdirs;
+       }
+       if(dir.noLinkTo==0){
+	 html+='</a>';
+       }
+       html+='</span>';
+       if(dir.countdirs>0<%if $smarty.request.showfiles == 1%> || dir.countdocs>0<%/if%>){
+	 html+='<ul class="ajax"><li>{url:"<%$self%>function=ajaxLoadDirTree&moid=<%$imod_props._moid%>&showfiles=<%$smarty.request.showfiles%>&oid='+dir.oid+'&_raw=1&_silent=1",dataType:"json",callback:"showdirfolders"}</li></ul>';
+       }
+       html+='</li>';
+       jQuery(this).append(html);
+     }
+
+     for(var i=0;i<response.documents.length;i++){
+       dir=response.documents[i];
+       html='<li id="node_'+dir.oid+'" tree-icon="'+dir.smalliconurl+'"><span>';
+       html+='<a href="#" onclick="go_action(\''+dir.oid+'\',\''+addslashes(dir.title)+'\'); return false;">&nbsp;'+dir.title+'</a></span>';
+       html+='</li>';
+       jQuery(this).append(html);
+     }
+   }
+
+   function addslashes(str) {
+     str=str.replace(/\\/g,'\\\\');
+     str=str.replace(/\'/g,'\\\'');
+     str=str.replace(/\"/g,'\\"');
+     str=str.replace(/\0/g,'\\0');
+     str=str.replace(/\n/g,'\\n');
+     str=str.replace(/\r/g,'\\r');
+     return str;
+   }
+	
+   var simpleTreeCollection;
+   jQuery(function(){
+     simpleTreeCollection=jQuery(".simpleTree").simpleTree({drag:false,animate:true});
+     <%if $br_oidcurrent%>
+       simpleTreeCollection[0].openNode(document.getElementById('node_<%$br_oidcurrent%>'),true)
+     <%/if%>
+   });
+  </script>
+ </head>
+ <body class="tzr-raw-body">
+  <%if $smarty.request._selected%>
+   <%assign var=stopoid value="0"%>
+  <%else%>
+   <%if $smarty.request._move || (!$smarty.request._move && !$smarty.request._copy)%>
+    <%assign var=stopoid value="$smarty.request.oid"%>
+   <%else%>
+    <%assign var=stopoid value="0"%>
+   <%/if%>
+  <%/if%>
+  <h2><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.selectdst%></h2>
+  <form name="edit">
+  <%if $smarty.request._copy && $imod_mod->secure($smarty.request.oid,'secEdit')%>
+   <div class="checkbox"><label for="copyrights"><input type="checkbox" id="copyrights">&nbsp;<%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.copyrights_text%></label></div>
+  <%else%>
+   <input type="hidden" class="checkbox" id="copyrights" value="0">
+  <%/if%>
+  <ul class="simpleTree docsTree">
+   <li class="root">
+    <span><a href="#" onclick="go_action('<%$br_path[0][0]->oid%>','<%$br_path[0][0]->title|escape:"html"|escape:"javascript"|replace:"&#039;":"\\'"%>'); return false;"><%$imod_props.modulename%></a></span>
+    <ul>
+     <%section name="i" loop=$br_ors%>
+      <%if $stopoid eq $br_docs[i]->oid%>
+       <%assign var=actionok value="0"%>
+      <%else%>
+       <%assign var=actionok value="1"%>
+      <%/if%>
+      <%assign var=docicon value="$br_docs[i]->smalliconurl"%>
+      <li id="node_<%$br_docs[i]->oid%>" tree-icon="<%$docicon%>">
+       <span>
+	<%if empty($br_ors[i].noLinkTo) && $actionok%>
+	 <a href="#" onclick="go_action('<%$br_docs[i]->oid%>','<%$br_docs[i]->title|escape:"html"|escape:"javascript"|replace:"&#039;":"\\'"%>');
+return false;">&nbsp;<%$br_docs[i]->title%><%if $br_docs[i]->countdocs%>#<%$br_docs[i]->countdocs%><%/if%></a>
+	<%else%>
+	 &nbsp;<%$br_docs[i]->title%><%if $br_docs[i]->countdocs%>#<%$br_docs[i]->countdocs%><%/if%>
+	<%/if%>
+       </span>
+       <%if ($br_docs[i]->countdirs>0 || ($smarty.request.showfiles==1 && $br_docs[i]->countdocs>0)) && $br_ors[i].level>=$br_ors[$smarty.section.i.index_next].level && $actionok%>
+	<ul class="ajax">
+	 <li>{url:"<%$self%>function=ajaxLoadDirTree&moid=<%$imod_props._moid%>&oid=<%$br_docs[i]->oid%>&showfiles=<%$smarty.request.showfiles%>&_raw=1&_silent=1",dataType:"json",callback:"showdirfolders"}</li>
+	</ul>
+       <%/if%>
+       <%if $br_ors[i].level<$br_ors[$smarty.section.i.index_next].level%><ul><%/if%>
+       <%if $br_ors[$smarty.section.i.index_next].level%>
+	<%assign var="levelNext" value=$br_ors[$smarty.section.i.index_next].level%>
+       <%else%>
+	<%assign var="levelNext" value="1"%>
+       <%/if%>
+       <%math equation="x-y" x=$br_ors[i].level y=$levelNext assign="jump"%>
+       <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+       <%if $jump>=0%></li><%/if%>
+       <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+       <%if $jump>0%>
+	<%section name=foo loop=$jump%>
+	  </ul>
+	 </li>
+	<%/section%>
+       <%/if%>
+     <%/section%>
+    </ul>
+   </li>
+  </ul>
+  </form>
+ </body>
+</html>

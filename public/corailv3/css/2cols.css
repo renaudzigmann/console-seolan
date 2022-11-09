@@ -1,0 +1,107 @@
+body {background-color: #FFFFFF;}
+body, table, font, p, td, th , font , span {font-family:arial, helvetica, sans-serif; font-size:12px;}
+
+#cv3-page-contenu { font-size: 1em; text-align:left;width:996px; clear: both; margin:0px auto 10px auto; padding: 0px; }
+
+.top-image {width:996px; height:192px; background:transparent url(/images/top02.jpg) no-repeat; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.cv3-sur-top {background:transparent url(/images/top-top.jpg); height:35px; width:996px}
+.cv3-main { background:transparent url(/images/fd-contenu2.jpg) no-repeat top right; width:996px;}
+.cv3-main2 { background:transparent url(/images/fd-page-2.jpg); width:996px; }
+
+/* navigation horizontale */
+.top-bottom { height:25px; margin:0; padding:0; width:996px; }
+.top { margin:0; padding:0 }
+.top .cv3-chemin { background:transparent url(/images/fd-chemin.jpg); text-align: left; width:996px; height: 30px; clear: both; margin:0; padding:0; }
+.cv3-hnav { background:transparent url(/images/fd-nav.jpg); height:25px; padding:0; margin:0; width:996px}
+.cv3-hnav ul li a { color:#EAE8D8; font-weight:bold; padding: 5px 10px 6px 10px; border-left: 1px solid #EAE8D8; border-right: 0px; margin:0; line-height:24px; }
+.cv3-hnav ul li a:hover,.cv3-hnav ul li a.path,.cv3-hnav ul li a.active { background-color: #AC3726; color: #EAE8D8; font-weight:bold; margin:0; line-height:24px}
+
+/* navigation top nav1 */
+.nav1  {display:none}
+.cv3-nav0  {padding:4px; margin:4px;}
+
+/* colonne de gauche */
+.cv3-col-gauche { clear:both; background:transparent url(/images/fd-bandeau01.jpg) no-repeat top left; width:262px; min-height:669px}
+.cv3-col-gauche h1 { color:white; font-size: 150%; Font-family: Arial, Helvetica, sans-serif;  }
+.cv3-col-gauche .spacerh1{height:50px;}
+.cv3-main-gauche {  width: 262px; padding:0px; }
+
+#cv3-news {  clear:both; background:url(/images/titrage-actu.gif) no-repeat;  width:230px; padding-top: 91px; color:white;}
+#cv3-news .cv3-news-title { color: #720000; font-size: 18px; font-weight:bold; margin-top: 10px; margin-bottom: 2px; }
+#cv3-news p { color:#FFFFFF; font-weight:bold }
+
+#cv3-newsletter { display:block; background:url(/images/titrage-newsletter.gif) no-repeat;  clear:both; width:230px; padding-top: 91px; margin:0; }
+.newsletterform input[type="text"]{ /*width of text boxes. IE6 does not understand this attribute*/
+color:#a98d77; width: 220px; padding:3px 6px 3px 6px; border: solid 1px #b63e1c;  background-color: #D0c3bb; margin:0; }
+.newsletterform input { color:#a98d77; width: 220px; padding:3px 6px 3px 6px; border: solid 1px #b63e1c;  background-color: #d0c3bb; margin:0; }
+.newsletterform p { width:220px } 
+#cv3-newsletter .btnewsletter a  { color: #ffffff; font-weight:normal; text-decoration: none; background-color: #730a04; text-align: center; margin:0; padding: 2px 18px 2px 17px; border: solid 1px #b63e1c; }
+#cv3-newsletter .btnewsletter a:hover { color: #000000; background-color: #D0c3bb;}
+
+/* barre du chemin */
+.cv3-chemin  { background-image: none; background-color: #ffffff; height:20px; padding:0px;}
+.cv3-chemin UL {  }
+.rechercheform { display:none; }
+
+
+/* bas de page */
+.cv3-basdepage {background:transparent url(/images/fd-bas.jpg) no-repeat top left; width:996px; }
+.cv3-basdepage p {text-align:right; padding-right:10px;}
+.cv3-basdepage A {color: #000000; font-weight:bold;}
+.cv3-basdepage A:hover {color: #720000; font-weight:bold; text-decoration:underline}
+.cv3-basdepagesup { background-position: right bottom; clear:both; width:996px; height: 50px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; padding: 9px 0 5px; }
+
+
+
+
+/* menu gauche */
+#cv3-navigation * { margin:0; padding:0; border:0}
+#cv3-navigation  { display: inline; margin:0; padding:0; width: 222px; border:0; float: left; }
+#cv3-navigation ul { font-size: 12px; Font-family: Arial, Helvetica, sans-serif; font-weight: bold; list-style-type: none; margin:0; padding:0; }
+#cv3-navigation li { display:inline; }
+/* fond menu nvx 1 */
+#cv3-navigation a { color: #fff; background: #720000 url(/css/images/puce-nav-niveau2.gif) no-repeat 2px 50%; text-decoration: none; display: block; padding:3px 2px 3px 18px; margin-bottom:4px; border:0 }
+#cv3-navigation a:hover { background-color: #ac3726; color: #fff; background-image: url(/css/images/puce-nav-niveau2.gif); text-decoration: none; }
+/* menu gauche nvx 2 */
+#cv3-navigation ul ul li { font-size:12px; margin:0; }
+#cv3-navigation ul ul a{ display: block; padding: 1px 1px 1px 23px; color: #000; background: #e1ceae url(/css/images/puce-nav-niveau3.gif) no-repeat 12px 50%; text-decoration: none; margin-bottom:4px; border:0 }
+#cv3-navigation ul ul a:hover{ color: #000; background-color: #ac3726; background-image: url(/css/images/puce-nav-niveau3.gif); text-decoration: none; }
+
+
+/* zone de contenu */
+#tzr-page-content ul {
+	list-style-image: url(/css/images/puce.gif);
+	list-style-position: inside;
+	list-style-type: circle;
+	text-indent:0px;
+	margin:0px 0px 0px 0px ;
+	padding:0px 0px 0px 0px ;
+}
+
+
+#tzr-page-content ul ul{
+
+	list-style-image: url(/css/images/puce02.gif);
+	list-style-type: circle;
+	list-style-position: inside;
+
+	text-indent:20px;
+        margin:0px 0px 0px 0px;
+        padding:0px 0px 0px 0px;
+}
+#tzr-page-content li{
+
+}
+#tzr-page-content h1 {color:#260F00; letter-spacing:2px; font-weight:normal; font-family:verdana,arial,helvetica,sans-serif; line-height:1.1em; padding:10px 0px 5px 0px;margin:0px;}
+#tzr-page-content h2 {color:#a64f08; line-height:1.5em; font-size:18px; margin:0px; padding:0px;}
+#tzr-page-content h3 {color:#727162; line-height:1.5em; font-size:12px; letter-spacing:2px; font-family:verdana, arial, helvetica, sans-serif; font-weight:normal; padding:0px 0px 48px 0px; margin:0px;}
+
+.cv3-main-contenu { width: 726px; margin:0; padding:0;}
+.cv3-col-gauche { padding: 5px 15px 2px 17px; }
+.cv3-col-contenu { padding: 0px 30px 2px 50px; }
+.cv3-contact input , .cv3-contact textarea {border:1px solid #720000; background-color:#e4e0df; }
+.cv3-contact .CHECKBOX {width:auto; border:0px solid #720000; background-color:#ffffff;}
+
+.bt a,  .bt a:active, .bt a:visited  { color:#ffffff;  background-color:#720000; text-align:center; padding:3px 15px 2px 15px; border:1px solid #ac3726;}
+.bt a:hover { color:#FFFFFF; background-color: #ac3726; border: solid 1px #720000;}
+

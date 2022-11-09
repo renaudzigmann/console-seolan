@@ -1,0 +1,22 @@
+
+
+/* . pour IE7
+color : green\9 ; IE8 et inférieurs */
+
+.cv3-col-gauche .collapse {
+	display: block\9;
+	visibility: visible\9;
+}
+
+.cv3-col-gauche .link_toggle {
+	display: none\9;
+}
+
+.surtop .cv3-block {
+	float: left\9;
+	width: 25%\9;
+}
+
+.surtop h4 {
+	display: none\9;
+}

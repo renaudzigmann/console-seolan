@@ -1,0 +1,42 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_Module_Module.unread_text%>
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="markAsRead">
+ <input type="hidden" name="_selectedok" value="ok">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$here%>">
+ <div class="table-responsive">
+ <table class="table table-striped">
+  <thead>
+   <tr>
+    <th>
+     <input type="checkbox" onclick="TZR.toggleCheckBoxes(this.form);" name="selectall">
+     <input type="hidden" name="marker" value="selectstart">
+    </th>
+    <th><%$syslabels.Seolan_Module_Table_Table.details_text%></th>
+    <th><%$syslabels.Seolan_Module_DocumentManagement_DocumentManagement.defaultsdoc_text%></th>
+    <th><%$syslabels.Seolan_Core_General.last_update%></th>
+   </tr>
+  </thead>
+  <tbody>
+   <%foreach from=$br_docs item=it key=i%>
+    <tr>
+     <td>
+      <input type="checkbox" name="_selected[<%$it->oid%>]" value="1">
+     </td>
+     <td>
+      <a class="cv8-ajaxlink" href="<%$self%>moid=<%$smarty.request.moid%>&function=display&template=Module/DocumentManagement.display.html&oid=<%$it->oid%>&tplentry=br"><%$syslabels.Seolan_Core_General.view%></a>
+     </td>
+     <td>
+      <span class="tzr-hottip-c" bt-xTitle="Type: <%$it->tpl.otitle->html|escape:'html'%><br><%$it->fields.oUPD->html%><br><%if isset($it->fields.oOWN)%><%$it->fields.oOWN->toText()|escape:'html'%><%/if%>"><%$it->short%></span> <%$it->docs%>
+     </td>
+     <td><%$it->fields.oUPD->html%></td>
+    </tr>
+   <%/foreach%>
+  </tbody>
+ </table>
+ </div>
+ <div class="tzr-action">
+  <button class="btn btn-primary" type="submit"><%$syslabels.Seolan_Core_Module_Module.markread%></button>
+ </div>
+</form>

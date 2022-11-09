@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <base href="<%$website%>"/>
+  <style type="text/css">
+   @page {
+   size: A4 portrait;
+   margin: 21mm;
+   padding: 8mm 0 5mm;
+   border-bottom: thin solid black;
+
+  @bottom-center {
+    content: counter(page);
+    vertical-align: top;
+    margin: 0.3em 0;
+  }
+
+  @footnotes {
+    border-top: thin solid black;
+    padding-top: 0.3em;
+    margin-top: 0.6em;
+  }
+  @top {
+  content: flow(header)
+  }
+}
+div.header {
+  flow: static(header);
+  font-size: 12px;
+  text-align: center;
+  font-weight: normal;
+  margin: 0;
+}
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core/public/css/print.css"%>
+body {
+counter-reset: issue;
+}
+td {
+padding-left:0.5em;
+}
+tr.fieldsgroups>th, tr.fieldsgroups.td {
+height:2em;
+border-bottom:1px solid;
+text-transform:uppercase;
+}
+tr.fieldsgroups>th {
+}
+table.bordered {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+table.bordered th { text-align:center;border: solid 1px black; padding:2px; vertical-align:top;}
+table.bordered td { border: solid 1px black; padding:2px; vertical-align:top;}
+
+  </style>
+ </head>
+ <body>
+   <div class="header"><h3><%$param_title%></h3></div>
+   <%include file="Module/Table.print-view-core.xml"%>
+ </body>
+</html>

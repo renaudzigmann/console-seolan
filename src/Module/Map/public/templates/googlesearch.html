@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<LINK HREF="<%$smarty.const.TZR_DEFAULT_CSS%>" REL="stylesheet" TYPE="text/css" />
+<%if defined('TZR_USER_CSS') %>
+<LINK HREF="<%$smarty.const.TZR_USER_CSS%>" REL="stylesheet" TYPE="text/css" />
+<%/if%>
+ <%include file="Core.header/layout.html"%>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<%$br_google.key%>" language="javascript" type="text/javascript"></script>
+<script type="text/javascript" language="javascript">
+<%* initialisation de la carte *%>
+var map;
+function load() {
+  if (GBrowserIsCompatible()) {
+    map = new GMap2(document.getElementById("searchmap"), {draggableCursor: 'crosshair', draggingCursor: 'crosshair'});
+    GEvent.addListener(map, "load", function(){
+      map.addMapType(G_NORMAL_MAP);
+      map.setMapType(G_NORMAL_MAP);
+      map.addControl(new GLargeMapControl());
+      map.addControl(new GScaleControl());
+      GEvent.bindDom(document.getElementById('bNormalView'), 'click', mgt, mgt.setNormalView);
+      GEvent.bindDom(document.getElementById('bHybridView'), 'click', mgt, mgt.setHybridView);
+      GEvent.bindDom(document.getElementById('bSatelliteView'), 'click', mgt, mgt.setSatelliteView);
+      GEvent.bindDom(document.getElementById('bPhysicalView'), 'click', mgt, mgt.setPhysicalView);
+      GEvent.bindDom(document.getElementById('bCenterMap'), 'click', mgt, mgt.centerPoint);
+      GEvent.bindDom(document.getElementById('bQuit'), 'click', mgt, mgt.quit);
+
+      map.enableScrollWheelZoom();
+      map.disableDoubleClickZoom();
+      map.enableContinuousZoom();
+
+      mgt.init({readonly:<%if $br_map.readonly=='readonly'%>true<%else%>false<%/if%>, zoom:<%$br_map.zoom%>, latlng:new GLatLng(<%$br_map.lat%>, <%$br_map.lng%>)}, {fname:'<%$br_point.fname%>', fid:'<%$br_point.fid%>', ftable:'<%$br_point.ftable%>', newpoint:'<%$br_point.newpoint%>', latlng:new GLatLng(<%$br_point.lat%>, <%$br_point.lng%>), foptions:{srs:'<%$br_point.foptions.srs%>'}});
+    });
+    /* valeurs initiales */
+    map.setCenter(new GLatLng(<%$br_map.lng%>, <%$br_map.lat%>), <%$br_map.zoom%>);
+  }
+/* ... from winZoom */
+/*
+var cp2 = document.getElementById('content');
+window.resizeTo(cp2.offsetWidth+10, cp2.offsetHeight+20);
+var cp = document.createElement("div");
+cp.style.position = "absolute";
+cp.style.width = "0px";
+cp.style.height = "0px";
+cp.style.right = "0px";
+cp.style.bottom = "0px";
+cp.style.margin="0px 0px 0px 0px";
+cp.style.padding="0px 0px 0px 0px";
+
+document.body.appendChild(cp);
+var current_width = cp.offsetLeft;
+var current_height = cp.offsetTop;
+var dw = cp2.offsetWidth + document.body.clientWidth - current_width;
+var dh = cp2.offsetHeight + document.body.clientHeight - current_height;
+window.resizeTo(dw+10, dh+60);
+*/
+}
+<%* centre par defaut *%>
+<%* labels dynamiques / langues *%>
+var maplabels = {
+  notfound:'<%$br_maplabels.notfound%>'
+};
+<%* scripts communs à mettre en fichier externe *%>
+function setPoint(point){
+   mgt.init(
+   {readonly:map.defaults.readonly, 
+			zoom:map.defaults.zoom, 
+			latlng:map.defaults.latlng},
+   {fname:point.name,
+    fid:point.id, 
+    ftable:point.table, 
+    newpoint:point.newpoint, 
+    latlng:new GLatLng(point.lat, point.lng),
+    foptions:point.foptions
+   }
+   );
+}
+<%* gestionnaire *%>
+mgt = {
+  marker:null,
+  point:null,
+  defaults:null,
+  clientgeocoder:null,
+  clickListener:null,
+  validateListener:null,
+  setNormalView:function(){map.setMapType(G_NORMAL_MAP);},
+  setSatelliteView:function(){map.setMapType(G_SATELLITE_MAP);},
+  setPhysicalView:function(){map.setMapType(G_PHYSICAL_MAP);},
+  setHybridView:function(){map.setMapType(G_HYBRID_MAP);},
+  createPointMarker:function(latlng){
+    this.marker = new GMarker(latlng, {draggable:true, title:'point'});
+    GEvent.addListener(this.marker, "dragstart", function() {});
+    GEvent.addListener(this.marker, "dragend", function() {mgt.setPointCoordinates();});
+    map.addOverlay(this.marker);
+  },
+  dd2dms:function(dd, l1, l2){
+    var ll='';
+    if (dd < 0){
+      dd = dd*-1;
+      ll = l2;
+    } else {
+      ll = l1;
+    }
+    d = parseInt(dd);
+    m = parseInt((dd - d) * 60);
+    s1 = (((dd - d) * 60) - m) * 60;
+    s2 = parseInt(Math.round(s1*100))/100;
+    return d+"° "+m+"' "+s2+"'' "+ll;
+  },
+    transform:function(latlng, srs){
+	var res = null;
+	var url = "<%$self%>&_raw=1&_ajax=1&function=convertCoords&moid=<%$_moid%>&template=empty.txt";
+	jQuery.ajax({async:false,
+		     url:url,
+		     cache:false,
+		     dataType:'json',
+		     data:{coords:latlng.lng()+" "+latlng.lat(), tosrs:srs},
+		     success:function(resp){res=resp;}
+		    }
+		   );
+	return res[0];
+  },
+  initPointCoordinates:function(){
+      var latlng = this.marker.getLatLng();
+      document.getElementById('sCoordsDMS').innerHTML = this.dd2dms(latlng.lat(), 'N', 'S')+" "+this.dd2dms(latlng.lng(), 'E', 'W');
+      if (this.point.foptions.srs != '' && this.point.foptions.srs != 'MAPSRS:EPSG4326'){
+	  var res = this.transform(latlng, this.point.foptions.srs);
+	  document.getElementById('sCoordsSRS').innerHTML = '<br>'+res;
+      }
+      if (this.point.newpoint){
+	  this.point.newpoint = false;
+      }
+  },  
+  setPointCoordinates:function(){
+    var latlng = this.marker.getLatLng();
+    document.getElementById('sCoordsDMS').innerHTML = this.dd2dms(latlng.lat(), 'N', 'S')+" "+this.dd2dms(latlng.lng(), 'E', 'W');
+    if (this.point.newpoint){
+      this.point.newpoint = false;
+    }
+    document.getElementById('bValidate').disabled="";
+  },
+  quit:function(){
+    try{window.close(); window.opener.focus();}catch(e){}
+  },
+  centerPoint:function(){
+    if (this.marker != null){
+      map.setCenter(this.marker.getLatLng());
+    }
+  },
+  mapClick:function(overlay, latlngclick){
+    if (overlay){
+      return;
+    }
+    if (this.marker == null){
+      this.createPointMarker(latlngclick);
+    } else {
+      this.marker.setLatLng(latlngclick);
+    }
+    this.setPointCoordinates();
+  },
+  init:function(defaults, point){
+    this.defaults = defaults;
+    this.point = point;
+    if (this.marker == null){
+      if (this.defaults.readonly){
+	this.marker = new GMarker(this.point.latlng, {draggable: false});
+	map.addOverlay(this.marker);
+	this.centerPoint();
+	document.getElementById('bValidate').style.display='none';
+	document.getElementById('dCoords').style.display='block';
+	this.initPointCoordinates(); 
+	if (this.clickListener != null){
+	  GEvent.removeListener(this.clickListener);
+	  GEvent.removeListener(this.validateListener);
+	  this.clickListener = null;
+	  this.validateListener = null;
+	}
+      }else{
+	if (this.clickListener == null){
+	  this.validateListner = GEvent.bindDom(document.getElementById('bValidate'), 'click', mgt, mgt.validate);
+	  this.clickListener = GEvent.bind(map, 'click', mgt, mgt.mapClick);
+	}
+	document.getElementById('bValidate').style.display='inline';
+	document.getElementById('dCoords').style.display='block';
+	if (this.point.newpoint){
+	  // marker cree au premier click
+	} else {
+	  this.createPointMarker(this.point.latlng);
+	  this.initPointCoordinates(); 
+	  this.centerPoint();
+	}
+      }
+    } else {
+      this.maker.setLatLng(this.point.latlng);
+      this.centerPoint();
+      this.initPointCoordinates(); 
+    }
+  },
+  searchAddress:function(){
+    var address = document.getElementById('tSearchAddress').value.replace(/^\s+|\s+$/g,"");
+    if (address == ""){
+      return;
+    }
+    if (this.clientgeocoder == null){
+      this.geocoder = new GClientGeocoder();
+    }
+    this.geocoder.getLocations(address, function(response){
+      if (typeof(response) == 'undefined' || response == null || response.Status.code != 200){
+	alert(address + ' ' + maplabels.notfound);
+      } else {
+	var pl = response.Placemark[0];
+	map.setZoom(mgt.getAccuracyZoomLevel(pl.AddressDetails.Accuracy));
+	map.panTo(new GLatLng(pl.Point.coordinates[1], pl.Point.coordinates[0]));
+      }
+    });
+  },
+  getAccuracyZoomLevel:function(accuracy){
+    switch(accuracy){
+      case 8:
+      return 16;
+      break;
+      case 7:
+      case 6:
+      case 5:
+      case 4:
+      return 13;
+      break;
+      case 3:
+      return 12;
+      break;
+      case 2:
+      return 6;
+      break;
+      case 1:
+      return 5;
+      break;
+      case 0:
+      default:
+      return map.getZoom();
+      break;
+    }
+  },
+  validate:function(){
+    if (this.marker == null){
+      return;
+    }
+    if (this.point.newpoint){
+      return;
+    }
+    try{
+      var ll = this.marker.getLatLng();
+      var dmsvalue = this.dd2dms(ll.lat(), 'N', 'S')+" "+this.dd2dms(ll.lng(), 'E', 'W');;
+      var rvalue = ll.lat()+';'+ll.lng();
+      window.opener.TZR.geodesic.setPointCoordinates(this.point, rvalue, dmsvalue);
+      if (window.opener.focus){
+	window.opener.focus();
+      }else{
+	window.close();
+      }
+      
+    }catch(e){
+    //  alert('');
+    }
+    
+  },
+  layer:null, 
+  showLayer:function(kmlurl){
+    if (this.layer == null){
+      this.layer = new GGeoXml(kmlurl, function() {
+	if (mgt.layer.loadedCorrectly()) {
+	  map.addOverlay(mgt.layer);
+	  mgt.layer.gotoDefaultViewport(map);
+	} else {
+	  this.layer = null;
+	}
+      });
+    } else {
+      if (this.layer.isHidden()){
+	this.layer.show();
+      } else {
+	this.layer.hide();
+      }
+    }
+  }
+};
+</script>
+<style type="text/css">
+v\:* {
+behavior:url(#default#VML);
+}
+html, body {width: 100%; height: 100%;text-align:center}
+body {margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 0px}
+div#searchmap{
+ margin:0 0 0 0;
+ padding:0 0 0 0;
+ width:680px;
+ height:400px;
+}
+table#main{
+ margin:0 10px 0 10px;
+ padding:0 0 0 0;
+ width:680px;
+}
+</style>
+</head>
+<body class="tzr-raw-body" onload="load()" onunload="GUnload()">
+<div id="content">
+<table id="main">
+<tr>
+<td style="text-align:left">
+<input id="bNormalView" type="button" value="<%$br_maplabels.normalview%>"/>
+<input id="bPhysicalView" type="button" value="<%$br_maplabels.physicalview%>"/>
+<input id="bSatelliteView" type="button" value="<%$br_maplabels.satelliteview%>"/>
+<input id="bHybridView" type="button" value="<%$br_maplabels.hybridview%>"/>
+<input type="button" value="<%$br_maplabels.centerview%>" name="bCenterMap" id="bCenterMap" onclick=""/>
+</td>
+<td style="text-align:right">
+<div id="dCoords" style="text-align:right"><span id="sCoordsDMS"></span><span id="sCoordsSRS"></span></div>
+</td>
+</tr>
+<tr><td colspan="2"><div id="searchmap" style=""></div></td></tr>
+<tr><td style="text-align:left" >
+<form name="search" onsubmit="mgt.searchAddress.call(mgt); return false">
+<input type="text" size="44" value="" name="tSearchAddress" id="tSearchAddress"/>
+<input type="submit" value="<%$br_maplabels.search%>" name="hSearchAddress" id="bSearchAddress"/>
+</form>
+</td>
+<td style="text-align:right">
+<input type="button" id="bValidate" disabled="disabled" value="<%$br_maplabels.validate%>"/>&nbsp;<input type="button" name="bQuit" id="bQuit" value="<%$br_maplabels.quit%>"/>
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>

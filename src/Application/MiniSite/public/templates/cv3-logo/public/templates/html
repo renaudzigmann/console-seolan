@@ -1,0 +1,10 @@
+<%if $charte_ologlg->html%>
+<div class="navbar-brand" role="banner">
+  <a href="<%$self%>alias=<%$charte_oRUB_HOME->link.oalias->raw%>">
+  <span class="logo visible-xs"><%$charte_ologxs->html%></span>
+  <span class="logo visible-sm"><%$charte_ologsm->html%></span>
+  <span class="logo visible-md"><%$charte_ologmd->html%></span>
+  <span class="logo visible-lg"><%$charte_ologlg->html%></span>
+</div>
+<%/if%>
+

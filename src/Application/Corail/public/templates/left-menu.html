@@ -1,0 +1,40 @@
+<!--<%$smarty.template%>-->
+<div id="cv3-navigation"><div id="cv3-navigation-top"></div>
+
+<div id="cv3-navigation-middle">
+
+<%assign var="jumpt" value="-1"%>
+<%section name=itm loop=$tm_lines_oid%>
+ <%* Si le saut est negatif :  debut d une liste *%>
+ <%if ($jumpt<0)%>
+  <%if $smarty.section.itm.first%><div><ul class="menu"><%else%><div class="slide"<%if $it_cat_mit.oid neq $tm_lines_oid[itm]%> style="display:none"<%/if%>><ul><%/if%>
+ <%/if%>
+ <%* debut element de la liste *%><!-- <%$tm_lines_level[itm]%> -->
+ <li>
+ <%if $tm_lines_oid[itm]|in_array:$path_oidup %>
+  <a class="path <%if $it_cat_mit.oid eq $tm_lines_oid[itm]%>current<%/if%>" href="<%$self%><%$tm_lines_selfurl[itm]%><%$tm_lines_ocurl[itm]->html%>"><%$tm_lines_otitle[itm]->html%></a>
+ <%else%>
+  <a href="<%$self%><%$tm_lines_selfurl[itm]%><%$tm_lines_ocurl[itm]->html%>"><%$tm_lines_otitle[itm]->html%></a>
+ <%/if%>
+ <%*calcule du saut: difference avec le niveau suivant *%>
+ <%if $tm_lines_level[itm.index_next]%>
+  <%assign var="levelNext" value=$tm_lines_level[itm.index_next]%>
+ <%else%>
+  <%assign var="levelNext" value="0" %>
+ <%/if%>
+ <%math equation="x-y" x=$tm_lines_level[itm] y=$levelNext assign="jumpt"%>
+ <%* si le nvx suivant n'est pas plus grand on ferme listItem *%>
+ <%if !($jumpt<0) %></li><%/if%>
+ <%* pour chaque nvx de saut negatif on referme la liste, et le listItem si ce n'est pas le tout dernier(non ouvert au debut) *%>
+ <%if $jumpt > 0%>
+  <%section name=foo loop=$jumpt%>
+   </ul></div>
+   <%if !$smarty.section.foo.last and !$smart.section.itm.last%></li><%/if%>
+  <%/section%>
+ <%/if%>
+<%/section%>
+
+</div>
+<div id="cv3-navigation-bottom"></div>
+</div>
+<!-- fin navigation -->

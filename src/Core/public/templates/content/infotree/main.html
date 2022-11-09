@@ -1,0 +1,62 @@
+<%* partie centrale du back office *%><!-- <%$smarty.template%>-->
+<%if $ssrubs_lines_oid && (!$it_cat_mit.osubmenu || $it_cat_mit.osubmenu->raw!=1)%>
+  <%include file="Core.content/infotree/submenu.html"%>
+  <%else%>
+  <%include file="Core.content/infotree/submenu-images.html"%>
+  <%/if%>
+<%assign var=infotext value=$it_cat_mit.odescr->html%>
+<%assign var=history value=$smarty.const.HISTORY_SESSION_VAR%>
+<%* affichage des sections *%>
+<%section name=it loop=$it_olines%>
+ <%assign var="filename" value=$it_tlines[it].odisp->filename%>
+ <%if file_exists($filename)%>
+  <div class="cv8-module" id="cv8-module-<%$smarty.section.it.index%>"> 
+   <div class="cv8-module-bg">
+     <%if ($it_olines[it].ocomment->text|count_words >= 20) || ($it_olines[it].ocomment->text|substr_count:"\n" > 1)%><%assign var="text_long" value=" text-long"%><%else%><%assign var="text_long" value=""%><%/if%>
+    <%if !empty($it_olines[it].ofct->raw) %>
+    <div class="cv8-module-comment<%$text_long%>">
+     <h2><%$it_olines[it].otitle->html%></h2>
+     <span><%$it_olines[it].ocomment->html%></span>
+    </div>
+    <%/if%>
+    <div class="cv8-module-container" id="cv8-module-container-<%$smarty.section.it.index%>">
+     <%if $smarty.request.gohistory && !empty($smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index])%>
+      <script type="text/javascript">
+       if(TZR.historymode=='loadnav'){
+        TZR.jQueryLoad({url:"<%$smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index]%>&_nohistory=1",target:"#cv8-module-container-<%$smarty.section.it.index%>"});
+       }else{
+        TZR.jQueryLoad({url:"<%$smarty.session.$history[$smarty.request.gohistory].container[$smarty.section.it.index]%>&_bdxnewstack=1&_nohistory=1",target:"#cv8-module-container-<%$smarty.section.it.index%>"});
+       }
+      </script>
+     <%else%>
+      <%include file="$filename" moduleid="cv8-module-container-`$smarty.section.it.index`"%>
+     <%/if%>
+    </div>
+   </div>
+  </div>
+ <%/if%>
+<%/section%>
+<script type="text/javascript">
+ // Specifie le contexte principal
+ TZR.maintitle='<%$it_cat_mit.otitle->html|escape:"javascript"%>';
+ TZR.mainurl='<%$smarty.server.REQUEST_URI%>';
+ // Titre de la page
+ if(TZR.historymode!='loadnav') TZR.setDocumentTitle(TZR.maintitle);
+ else TZR.setDocumentTitle("<%$smarty.session.$history[$smarty.request.gohistory].title|escape:"javascript"%>");
+ // Commentaire
+ TZR.setInfoText('<%$infotext|escape:"javascript"%>');
+ // Chemin
+ TZR.clearNav();
+ <%section name=i loop=$it_path.stack start=1%>
+  TZR.addNav('<%$it_path.stack[i].otitle->raw|escape:"javascript"%>','<%$self%>&_bdxnewstack=1&moid=<%$sysmods.xmodbackofficeinfotree%>&function=viewpage&tplentry=it&template=Core.content/infotree/main.html&skip=1&_nav=0&_path=1&oidit=<%$it_path.stack[i].oid%>');
+ <%/section%>
+ // Ajout d'un historique
+ if(TZR.historymode!='loadnav'){
+  <%if !isset($smarty.request._nohistory) || !$smarty.request._nohistory%>
+  if (typeof(TZR.addNavHistory) != "undefined")
+   TZR.addNavHistory(TZR.maintitle);
+  <%elseif !empty($smarty.request.gohistory)%>
+   TZR.addNavHistory("<%$smarty.session.$history[$smarty.request.gohistory].title|escape:"javascript"%>");
+  <%/if%>
+ }
+</script>

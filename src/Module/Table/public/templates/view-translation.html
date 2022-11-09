@@ -1,0 +1,45 @@
+<%assign var=viewuniqid value="view$uniqid"%>
+<%*
+   simule l objet uniqid et on ne se sert pas de headerajax <- niveau module module
+*%>
+<script type="text/javascript">
+  var v<%$viewuniqid%>={moid:"<%$_moid%>",
+                    uniqid:'<%$viewuniqid%>',
+		    div:document.getElementById("cv8-uniqdiv-<%$viewuniqid%>"),
+		    module:jQuery('#cv8-uniqdiv-<%$viewuniqid%>').parents('div.cv8-module:first')[0],
+		   };
+</script>
+<%* pour avoir les onglets, les fieldsets *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.view-jsscripts.html" uniqid=$viewuniqid%>
+  <script type="text/javascript">
+  jQuery(document).ready(function(){
+    var vedituniqid = v<%$br__edituniqid%>;
+    vedituniqid.currentLangCode = "<%$br__langdisplay.code%>";
+    TZR.EDITTRANSLATION.setSelectedLang(vedituniqid.viewcontainer, "<%$br__langdisplay.code%>", vedituniqid);
+    
+    TZR.EDITTRANSLATION.formatContents(vedituniqid);
+    
+    vedituniqid.rawLeftData = [];
+    
+      <%if isset($br_oPUBLISH)%>
+      TZR.EDITTRANSLATION.setPublishStatus("<%$br_oPUBLISH->raw%>", vedituniqid.viewcontainer);
+      <%/if%>
+      <%section name=fields loop=$br_fields_object%>
+      vedituniqid.rawLeftData.push({
+	field:"<%$br_fields_object[fields]->field%>",
+	raw:"<%$br_fields_object[fields]->raw|escape:'javascript'%>",
+	fielddef:{
+	  ftype:"<%$br_fields_object[fields]->fielddef->ftype|escape:"javascript"%>",
+	  sys:"<%$br_fields_object[fields]->fielddef->sys%>",
+	  translatable:"<%$br_fields_object[fields]->fielddef->translatable%>"
+	}
+      });
+      <%/section%>
+      TZR.EDITTRANSLATION.initFieldsCopy(vedituniqid);
+  });
+  <%* données "brutes" pour la copie vers la gauche *%>
+  </script>
+  <%include file="Module/Table.functions.html"%>
+  <%include file="Module/Table.view-core.html" noheader=1 uniqid=$viewuniqid%>
+  <%include file="Module/Table.sysfields.html" inline%>
+

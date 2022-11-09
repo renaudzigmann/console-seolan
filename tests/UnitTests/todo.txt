@@ -1,0 +1,35 @@
+  -testdate:
+  la date étant afficher au format fr mais étant stocker au format US:
+  on modifie une date.
+et on regarde comment elle est enregister en base.
+
+
+  -langue/label
+  -password
+  -testDeleteLines
+  -grouper les tests
+  -les liste de test  
+  -les autre type de champs lien (country, datasources)
+    -A_testMultivaluable 
+
+    En fait selon le type de champ le procEdit de DataSource (en association avec le post_edit du champ) traite les valeurs en entrée (issues de $_REQUEST) pour les transformer en valeurs que l'on stocke en base, qui sont pas toujours au même format.
+
+Richard REYNAUD:
+
+En fait selon le type de champ le procEdit de DataSource (en association avec le post_edit du champ) traite les valeurs en entrée (issues de $_REQUEST) pour les transformer en valeurs que l'on stocke en base, qui sont pas toujours au même format.
+Le processus inverse est fait dans le my_display et my_edit des champs : transformer une valeur en base en valeur présentée à l'utilisateur.
+
+Pour les champs texte et texte court : saisie et en base = même chose. Faudra vérifier le nettoyage des balises (tu vérifiera dans le post_edit)
+
+Pour les champs date, non : en base toujours format ssaa-mm-jj => ça permet de les trier ce que ne permet pas le format français par exemple.
+
+Mais on peut saisir en français, en anglais une valeur ssaamm-jj-aa doit passer aussi (comme tu l'as fait).
+
+Pour les champs liens, en edition on fait toute une sauce (les selects, l'auto complétion, etc ) mais on se débrouille pour avoir des oid dans la requête et donc à part le cas multivalué (1 tableau => une chaine concaténe) c'est facile
+
+Pour les boolean, c'est mois facile : en base vrai c'est 1 et faux c'est 2 ... (c'est historique mais c'est comme cela) donc faudra regarder comment ça marche.
+
+Pour les champs ensembles de chaînes c'est un peu comme pour les liens.
+
+Pour les autres, on verra.
+

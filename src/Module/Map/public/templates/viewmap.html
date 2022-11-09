@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<%$map_js%>
+<script type="text/javascript" language="javascript">
+mapmngt.ocreateMarker = mapmngt.createMarker;
+mapmngt.createMarker = function(point, type, tzroptions) {
+  var marker = this.ocreateMarker(point, type, tzroptions);
+  GEvent.clearListeners(marker, 'click')
+  return marker;
+};
+</script>
+<style type="text/css">
+div#gmap{
+ position:absolute;
+ top:0px;
+ left:0px;
+ margin:0 0px 0 0px;
+ padding:0 0 0 0;
+ width:400px;
+ height:400px;
+}
+</style>
+</head>
+<body><!-- onload="" onunload="<%$map_onunload%>">-->
+<script type="text/javascript" language="javascript">initMap();</script>
+<div id="gmap" style=""></div>
+<div id="gwait" style="position:absolute;background-image:url(/tzr/templates/images/bg-invalid.gif);display:none"><div style="margin:50px 40px 40px 90px;" id="waitmess"><img src="../images/loading_animated.gif"/></div></div>
+</body>
+</html>

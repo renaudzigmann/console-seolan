@@ -1,0 +1,87 @@
+<%** variable générale : $brg_lines_...=>browse des groupes / $brl_lines_...=>browse d'un module de remplacement **%>
+<%** variables obl à passer à l'include : inputname=>nom de l'input dans le formulaire **%>
+<%** variables opt à passer à l'include : htmlonly=>n'ajoute que le html / jsonly=>n'ajoute que le js **%>
+<%assign var="sel" value=""%>
+<%foreach item=ioid from=$selected%>
+<%assign var="sel" value="<%$sel%>&selected[]=<%$ioid%>"%>
+<%/foreach%>
+
+<%if empty($jsonly)%>
+<%if $brg_lines_oid%>
+  <ul class="simpleTree">
+    <li class="root">
+      <span><%$syslabels.Seolan_Core_Module_Module.grouplist%></span>
+      <ul>
+	<%section name=groups loop=$brg_lines_oid%>
+	  <li id="<%$inputname%>-ajax-<%$brg_lines_oid[groups]%>" x-value="<%$brg_lines_oid[groups]%>" x-name="<%$inputname%>_groups[]" x-type="folder">
+	    <span><span class="unselected"><%$brg_lines_oGRP[groups]->raw%></span></span>
+	    <ul class="ajax">
+	      <li>{url:"<%$smarty.const.TZR_AJAX8%>?<%if directory_module%>directorymodule=<%$directory_module%>&<%/if%>function=xmodgroup_getGroupTree&class=_Seolan_Module_Group_Group&grp=<%$brg_lines_oid[groups]%>&name=<%$inputname%>[]&<%$sel%>&directory"}</li>
+	    </ul>
+	  </li>
+	<%/section%>
+      </ul>
+    </li>
+  </ul>
+<%else%>
+  <select name="<%$inputname%>[]" multiple size="5" >
+    <option value="">---</option>
+    <%section name=users loop=$brl_lines_oid%>
+      <option value="<%$brl_lines_oid[users]%>"><%$brl_lines_tlink[users]%></option>
+    <%/section%>
+  </select>
+<%/if%>
+<%/if%>
+
+<%if empty($htmlonly)%>
+<script type="text/javascript">
+  var simpleTreeCollection;
+  simpleTreeCollection = jQuery(".simpleTree").simpleTree({
+    autoclose:false,
+    drag:false,
+    animate:true,
+    afterClick:function(node){
+      var span=jQuery("span:first span:first",node);
+      if(span.hasClass("selected")){
+        jQuery("span.selected",node).removeClass("hselected selected").addClass("unselected").children("input[type='hidden']").remove();
+      }else{
+	jQuery("span.unselected,span.hselected",node).removeClass("hselected unselected").addClass("selected").each(function(i){
+	  var pli=jQuery(this).parents('li:first');
+	  jQuery(this).append('<input type="hidden" name="'+pli.attr("x-name")+'" value="'+pli.attr("x-value")+'">');
+	});
+      }
+      if(node.attr('x-type')=='doc'){
+	  var pul=node.parents("ul:first");
+	  var pli=node.parents("li:first");
+	  var spans=jQuery("span:first span:first",pli);
+	  if(jQuery("span.unselected",pul).length==0) {
+	      spans.removeClass("unselected hselected").addClass("selected"); 
+	  } else if(jQuery("span.selected",pul).length==0) {
+	      spans.removeClass("selected hselected").addClass("unselected");
+	  } else spans.removeClass("selected unselected").addClass("hselected");
+          spans.children("input[type='hidden']").remove();
+      }
+    },
+    afterDblClick:function(node){
+    },
+    afterMove:function(destination, source, pos){
+    },
+    afterAjax:function(node){
+	// Applique la selection aux users si le groupe est selectionné lors du depliage
+	if(jQuery("span:first span:first",node.parent()).hasClass('selected')){
+	    jQuery("span.unselected",node.parent()).removeClass("unselected").addClass("selected").each(function(i){
+		var pli=jQuery(this).parents('li:first');
+		jQuery(this).append('<input type="hidden" name="'+pli.attr("x-name")+'" value="'+pli.attr("x-value")+'">');
+	    });
+	}
+	// permet de mettre le chammp hidden sur les noeuds qui sont chargés déjà sélectionnés, seulement pour les docs
+	jQuery("span.selected",node.parent()).each(function(i) {
+	    var pli=jQuery(this).parents('li:first');
+	    var spans=jQuery("span:first span:first",pli);
+	    jQuery(this).append('<input type="hidden" name="'+pli.attr("x-name")+'" value="'+pli.attr("x-value")+'">');
+	    spans.removeClass("unselected").addClass("selected");
+	});
+    }
+  });
+</script>
+<%/if%>

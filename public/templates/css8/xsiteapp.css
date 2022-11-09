@@ -1,0 +1,7 @@
+.allowed-websites {
+    padding: 0 10px 10px 20px;
+}
+
+.allowed-websites select, .allowed-websites input {
+    width: 100%;
+}

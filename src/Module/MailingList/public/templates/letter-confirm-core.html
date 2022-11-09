@@ -1,0 +1,41 @@
+<%assign var="encodedemail" value=$br_email|urlencode%>
+<%if $br_next%><%assign var="next" value=$br_next%><%else%><%assign var="next" value=$website%><%/if%>
+<table>
+  <tr>
+    <%if $br_mlangs%>
+    <td valign="top">
+      <p>Hi<p>
+      <p>This message was automatically generated because we received a subscription on the mailing list of <%$website%>.<p>
+      <p>In order to be completed, your subscription must be confirmed by clicking on the following link:
+	<pre>
+	  <a href="<%$website%>csx/scripts/index.php?moid=<%$br_moid%>&function=confirm&oid=<%$br_oid%>&email=<%$encodedemail%>&template=Core.message.html&_next=<%$next%>">Confirm</a>
+	</pre>
+      </p>
+      <p>You may also remove this query by clicking on:
+	<pre>
+	  <a href="<%$website%>csx/scripts/index.php?moid=<%$br_moid%>&function=unsubscribe&oid=<%$br_oid%>&email=<%$encodedemail%>&template=Core.message.html&_next=<%$next%>">Unsubscribe</a>
+	</pre>
+      </p>
+      Cordially yours,
+    </td>
+    <%/if%>
+    <td valign="top">
+      <p>Bonjour,</p>
+      <p>Ce message est généré par le robot de gestion de mailing list du site <%$website%>. 
+	Pour être prise en compte, votre inscription sur notre liste doit être validée. Vous pouvez 
+	simplement valider votre inscription en suivant ce lien. 
+	<pre>
+	  <a href="<%$website%>csx/scripts/index.php?moid=<%$br_moid%>&function=confirm&oid=<%$br_oid%>&email=<%$encodedemail|urlencode%>&template=Core.message.html&_next=<%$next%>">Confirmer</a>
+	</pre>
+      </p>
+      <p>Si par contre, vous ne souhaitez pas être inscrit sur la liste, vous pouvez simplement 
+	ne pas répondre à ce mail, ou encore mieux vous désinscrire définitivement en cliquant sur:
+	<pre>
+	  <a href="<%$website%>csx/scripts/index.php?moid=<%$br_moid%>&function=unsubscribe&oid=<%$br_oid%>&email=<%$encodedemail%>&template=Core.message.html&_next=<%$next%>">Désinscription</a>
+	</pre>
+      </p>
+      <p>Cordialement</p>
+    </td>
+  </tr>
+</table>
+

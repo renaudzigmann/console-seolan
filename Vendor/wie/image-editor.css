@@ -1,0 +1,79 @@
+@import url("dependence/cropper.min.css");
+
+.nub {
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	cursor: move;
+	margin: -6px;
+	border-radius: 6px;
+    background: #3F9FFF;
+    background: -moz-linear-gradient(#7FBFFF, #007FFF);
+    background: -webkit-gradient(linear, left top, left bottom, from(#7FBFFF), to(#007FFF));
+    border: 2px solid white;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: move;
+}
+
+
+.modal-content {
+	-moz-user-select:none;
+	-webkit-user-select:none;
+        word-wrap: break-word;
+}
+
+.traitement-no-validate {
+	display: none;
+}
+
+#loading_circle {
+	max-height: 30px;
+	max-width: 30px
+}
+
+#cropper .group-option + .group-option{
+    margin-top: 5px;
+}
+
+.col-content-center{
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#border_zone_list button,
+#border_zone_list img.img-responsive{
+    max-width:100%;
+    max-height:100%;
+    width:100%;
+    height:100%;
+    text-align:center;
+    text-align:-moz-center;
+}
+
+#border_zone_list button{
+    max-height:100px;
+    margin-bottom:5px;
+}
+@media screen and (min-width: 768px){
+    #border_zone_list button{
+        max-height:175px;
+    }
+}
+/*@media screen and (min-width: 1200px){*/
+    /*#border_zone_list button{*/
+        /*max-height:200px;*/
+    /*}*/
+/*}*/
+
+#border_zone > div{
+    text-align:center;
+}
+
+#image_zone #image{
+    max-height: 50vh;
+}

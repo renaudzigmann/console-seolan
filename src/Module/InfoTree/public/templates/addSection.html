@@ -1,0 +1,208 @@
+<%if $it_cat_mit.zones%>
+ <%capture name="zone"%>
+  <tr<%if count($it_cat_mit.zones)==1%> class="none"<%/if%>>
+   <th>Zone</th>
+   <td>
+    <select name="zone" class="zone" onchange="v<%$smarty.request.parentuniqid%>.updatePos(this);">
+     <%foreach from=$it_cat_mit.zones item=z key=zk%>
+      <%if !$it_cat_mit.zones_not_editable[$z]%><option value="<%$z%>"><%$z%></option><%/if%>
+     <%/foreach%>
+    </select>
+   </td>
+  </tr>
+ <%/capture%>
+<%/if%>
+
+<%capture name="pos"%>
+ <tr>
+  <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.location_text%></label></th>
+  <td>
+   <%section name=it loop=$it_position%>
+    <input type="hidden" name="max_<%$it_position[it].ZONE%>" value="<%$it_position[it].POS%>">
+   <%/section%>
+   <select name="position"></select>
+  </td>
+ </tr>
+<%/capture%>
+
+<div class="tzr-tabcontent">
+ <%if count($it_page.lines_oid) > 0 %>
+  <!-- Section simple -->
+  <fieldset>
+   <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_a_page%></legend>
+   <form name="addpgs1<%$smarty.request.parentuniqid%>" method="post" action="<%$self%>">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="_function" value="newsection">
+    <input type="hidden" name="template" value="Module/InfoTree.newsection.html">
+    <input type="hidden" name="oidit" value="<%$it_oidit%>">
+    <input type="hidden" name="tplentry" value="it">
+    <input type="hidden" name="_next" value="<%$self%>function=editpage&template=Module/InfoTree.viewpage.html&oidit=<%$it_oidit%>&moid=<%$_moid%>&tplentry=it&advanced=true">
+    <input type="hidden" name="tabledst" value="">
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <%$smarty.capture.zone%>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout_text%><label></th>
+      <td>
+       <select name="oidtpl">
+        <%section name=tpl loop=$it_page.lines_oid%>
+         <option value="<%$it_page.lines_oid[tpl]%>"><%$it_page.lines_otitle[tpl]->html%></option>
+        <%/section%>
+       </select>
+      </td>
+     </tr>
+     <%$smarty.capture.pos%>
+    </table>
+    </div>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="button" value="<%$syslabels.Seolan_Core_General.add_text%>" onclick="v<%$smarty.request.parentuniqid%>.pgs_go(this.form,this.form.oidtpl.selectedIndex);"></div>
+   </form>
+  </fieldset>
+ <%/if%>
+ 
+ <%if $it_query.lines_oid AND count($it_query.lines_oid)>0 %>
+  <!-- Section dynamique -->
+  <fieldset>
+   <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_a_query_text%></legend>
+   <form name="addpgs2<%$smarty.request.parentuniqid%>" method="post" action="<%$self%>">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="_function" value="insertquery">
+    <input type="hidden" name="template" value="Module/InfoTree.newsection.html">
+    <input type="hidden" name="oidit" value="<%$it_oidit%>">
+    <input type="hidden" name="tplentry" value="it">
+    <input type="hidden" name="_next" value="<%$self%>function=editpage&template=Module/InfoTree.viewpage.html&oidit=<%$it_oidit%>&moid=<%$_moid%>&tplentry=it&advanced=true">
+    <input type="hidden" name="tabledst" value="">
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <%$smarty.capture.zone%>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout_text%></label></th>
+      <td>
+       <select name="oidtpl">
+	<%section name=tpl loop=$it_query.lines_oid%>
+	 <option value="<%$it_query.lines_oid[tpl]%>"><%$it_query.lines_otitle[tpl]->html%></option>
+	<%/section%>
+       </select>
+      </td>
+     </tr>
+     <%$smarty.capture.pos%>
+    </table>
+    </div>
+    <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="button" value="<%$syslabels.Seolan_Core_General.add_text%>" onclick="v<%$smarty.request.parentuniqid%>.pgs_go(this.form,this.form.oidtpl.selectedIndex);"></div>
+   </form>
+  </fieldset>
+ <%/if%>
+     
+ <!-- Nouvelle section fonction-->
+ <%if $imod_sec.rw%>
+  <script type="text/javascript">
+   v<%$smarty.request.parentuniqid%>.sf = {modules: Array(), tpl: Array()};
+   <%section name=mods loop=$it_modlist.lines_oid%>
+    v<%$smarty.request.parentuniqid%>.sf.modules[<%$it_modlist.lines_oid[mods]%>] = {functionList: <%$it_modlist.lines_functions[mods]|@json_encode|escape:quotes%>, classes:<%$it_modlist.lines_classes[mods]|@json_encode%>};
+   <%/section%>
+   <%section name=tpl loop=$it_function.lines_oid%>
+    v<%$smarty.request.parentuniqid%>.sf.tpl['<%$it_function.lines_oid[tpl]%>'] = '<%$it_function.lines_omodidd[tpl]->raw%>';
+   <%/section%>
+   jQuery(function($){
+     // Charge le module et la fonction correspondant à un gabarit sélectionné
+     $('select[name=sectionFunctionShortcut<%$smarty.request.parentuniqid%>]').change(function(){
+       if (!this.value) return;
+       var tplfunction = $(':selected',this).data('function').split(',').pop().replace(/^[^:]+::([^(]+)/g,'$1');
+       $('select[name="section[moid]"]').val($(':selected',this).data('modidd'));
+       $('select[name="section[moid]"]').change();
+       $('select[name="section[function]"]').val(tplfunction);
+       $('select[name="section[function]"]').change();
+       $('select[name="oidtpl"]').val(this.value);
+     });
+   });
+  </script>
+  <fieldset>
+   <legend><%$syslabels.Seolan_Module_InfoTree_InfoTree.add_a_function%></legend>
+   <form method="post" action="<%$self%>" onsubmit="if(this.elements['section[moid]'].value!='' && this.elements['section[function]'].value!='' && this.oidtpl.value!='') return TZR.ajaxSubmitForm(this); else return false;" name="functionform<%$smarty.request.parentuniqid%>">
+    <input type="hidden" name="template" value="Module/InfoTree.newfunction.html">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="function" value="newfunction">
+    <input type="hidden" name="oidit" value="<%$it_oidit%>">
+    <input type="hidden" name="tplentry" value="it">
+
+    <%* Raccourci de construction de section fonction pour les gabarits ayant déjà un module et une fonction définie *%>
+    <%capture name=shortcutsOptions%><%strip%>
+      <%section name=tpl loop=$it_function.lines_oid%>
+        <%if $it_function.lines_ofunctions[tpl]->raw and $it_function.lines_omodidd[tpl]->raw%>
+          <option data-function="<%$it_function.lines_ofunctions[tpl]->raw%>" data-modidd="<%$it_function.lines_omodidd[tpl]->raw%>" value="<%$it_function.lines_oid[tpl]%>"><%$it_function.lines_otitle[tpl]->html%></option>
+        <%/if%>
+      <%/section%>
+    <%/strip%><%/capture%>
+    <%if $smarty.capture.shortcutsOptions%>
+      <small class="sectionFunctionShortcut" style="float:right;">
+      <%$syslabels.Seolan_Module_InfoTree_InfoTree.shortcut%> :
+      <select name="sectionFunctionShortcut<%$smarty.request.parentuniqid%>">
+        <option value="">----</option>
+        <%$smarty.capture.shortcutsOptions%>
+      </select>
+      </small>
+    <%/if%>
+
+    <div class="table-responsive">
+    <table class="table table-striped list2">
+     <%$smarty.capture.zone%>
+     <tr>
+      <th><label><%$syslabels.Seolan_Core_General.module%></label></th>
+      <td>
+       <select name="section[moid]" onchange="v<%$smarty.request.parentuniqid%>.getFunctionList(this.value);">
+	<option value="">----</option>
+	<%section name=mods loop=$it_modlist.lines_oid%>
+        <%if $it_modlist.lines_group[mods] != $current_group %>
+         <%assign var=current_group value=$it_modlist.lines_group[mods] %>
+         <optgroup label="<%$it_modlist.lines_group[mods]%>">
+        <%/if%>
+	 <option value="<%$it_modlist.lines_oid[mods]%>"><%$it_modlist.lines_name[mods]%></option>
+	<%/section%>
+       </select>
+      </td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.function%></label></th>
+      <td>
+       <select name="section[function]" onchange="v<%$smarty.request.parentuniqid%>.getTemplatesList(this.value);"><option value="">----</option></select>
+       <img src="/tzr/templates/ico/general/indicator.gif" style="display:none;">
+      </td>
+     </tr>
+     <tr>
+      <th><label><%$syslabels.Seolan_Module_InfoTree_InfoTree.layout_text%></label></th>
+      <td>
+       <select name="oidtpl">
+	<option value="">----</option>
+	<%section name=tpl loop=$it_function.lines_oid%>
+	 <option style="display:none;" tzrxfunctions="<%$it_function.lines_ofunctions[tpl]->raw%>" value="<%$it_function.lines_oid[tpl]%>"><%$it_function.lines_otitle[tpl]->html%></option>
+	<%/section%>
+       </select>
+      </td>
+     </tr>
+     <%$smarty.capture.pos%>
+    </table>
+    </div>
+    
+    <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.add_text%>"></div>
+   </form>
+  </fieldset>
+ <%/if%>
+</div>
+<script type="text/javascript">
+ v<%$smarty.request.parentuniqid%>.updatePos=function(el){
+  var $el=jQuery(el);
+  var z=$el.val();
+  var max=jQuery(el.form['max_'+z]).val();
+  var $pos=jQuery(el.form.position);
+  var i=0;
+  $pos.empty();
+  $pos.append('<option value="0"><%$syslabels.Seolan_Module_InfoTree_InfoTree.first%></option>');
+  if(max){
+   for(i=1;i<max;i++){
+    $pos.append('<option value="'+i+'"><%$syslabels.Seolan_Module_InfoTree_InfoTree.after_section%> #'+i+'</option>');
+   }
+  }
+  $pos.append('<option value="'+i+'" selected><%$syslabels.Seolan_Module_InfoTree_InfoTree.at_the_end%></option>');
+  $pos.val(i);
+ }
+ jQuery(v<%$smarty.request.parentuniqid%>.modulecontainer).find('select.zone').change();
+</script>

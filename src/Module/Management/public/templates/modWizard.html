@@ -1,0 +1,30 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" nohistory=true%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center clearfix">
+<form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <fieldset>
+  <legend>Module Wizard</legend>
+  <div class="row-striped">
+   <%if $wd_message%>
+   <%call simplefieldline field="information" label=Information fieldhtml=$wd_message %>
+   <%/if%>
+   <%section name=i loop=$wd_options%>
+   <%call simplefieldline field="field<%$smarty.section.i.index%>" label=$wd_options[i].label fieldhtml=$wd_options[i].edit comment=$wd_options[i].comment%>
+   <%/section%>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" name="submit" value="<%$syslabels.Seolan_Core_General.next_text|escape:"quotes"%>"></div>
+ <%if $wd_isend%>
+  <input type="hidden" name="class" value="\Seolan\Module\Management\Management">
+  <input type="hidden" name="function" value="modulesList">
+  <input type="hidden" name="template" value="Module/Management.modList.html">
+  <input type="hidden" name="tplentry" value="modules">
+ <%else%>
+  <input type="hidden" name="moid" value="<%$sysmods.xmodadmin%>">
+  <input type="hidden" name="function" value="newModule">
+  <input type="hidden" name="class" value="<%$wd_classname%>">
+  <input type="hidden" name="template" value="Module/Management.modWizard.html">
+  <input type="hidden" name="tplentry" value="">
+ <%/if%>
+</form>
+</div>

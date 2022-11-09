@@ -1,0 +1,29 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+
+<%assign var=section value=$it_olines[it]%>
+<div class="cv8d-query cv8d-query-<%$section._functionparams.moid%>">
+  <%if $admini%>
+  <div id="formquery<%$uniqid%>" class="admini_formquery">
+    <br>
+    <%$bocplt="form-group"%>
+    <form>
+  <%else%>
+      <%$bocplt=""%>
+      <form id="formquery<%$uniqid%>"  action="<%$self%>" method="post" >
+	<input type="hidden" name="oidit" value="<%$section._functionparams.params.linkup%>">
+	<input type="hidden" name="initsearch" value="1">
+  <%/if%>
+	<%foreach key=field item=filterfield from=$section.filterfields%>
+	<div class="cv8_inlineblock cv8d-filter cv8-filter-item<%$field->fielddef->name%> <%$bocplt%>">
+	  <label><%$filterfield->fielddef->label%></label>
+	  <%$filterfield->html%>
+	</div>
+	<%/foreach%>
+	<input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>">
+	<%if $admini%>
+	</form>
+  </div>
+ <%else%>
+  </form>
+ <%/if%>
+</div>

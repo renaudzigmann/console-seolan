@@ -1,0 +1,32 @@
+<%assign var='browsethumbsize' value=$br__browsethumbsize%>
+<div class="cv8-phototeque_result">
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%if $br_currentcollection%>
+<h3><%$syslabels.Seolan_Module_Media_Media.collections%>&nbsp;:&nbsp;<%$br_currentcollection.otitle->html%></h3>
+<%/if%>
+<br/>
+  <ul class="imagelist imagelist-collection">
+    <%section name=i loop=$br_lines_oid%>
+      <%if $br_lines_omedia[i]%>
+        <%assign var=media value=$br_lines_omedia[i]%>
+        <li class="imagelist-item imagelist-card">
+          <a href="<%$self%><%$br_lines_url[i]%>" class="cv8-ajaxlink">
+            <div class="imagelist-img">
+              <%if $media->isPDF%>
+	      <%$media->completeHTML("geometry=<%$browsethumbsize%>")%>
+              <%elseif $media->isImage%>
+              <%$media->completeHTML("geometry=<%$browsethumbsize%>")%>	
+              <%else%>
+              <%$media->html_preview%>
+              <%/if%>
+            </div>
+            <div class="imagelist-text">
+              <%$br_lines_otitle[i]->html%>
+            </div>
+          </a>
+        </li>
+      <%/if%>
+    <%/section%>
+  </ul>
+</div>
+

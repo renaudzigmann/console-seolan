@@ -1,0 +1,85 @@
+<%* browse selection de base *%>
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><%$sel._modulename%> - <%$syslabels.Seolan_Core_General.selectedobjects%></h4>
+      </div>
+      
+      <div class="modal-body">
+
+	<%include file="Core/Module.selectionalerts.html"%>
+
+        <div id="selection-sc<%$sel._moid%>">
+
+	  <%include inline file="Core/Module.selectionmenu.html"%>
+           
+          <ul class="nav nav-pills" role="tablist">
+            <%foreach from=$sel._actions item=myaction key=name%>
+            <li><%$myaction%></li>
+            <%/foreach%>
+          </ul>
+
+            <div class="cv8-panier_content">
+
+                <form name="selectionform<%$sel._moid%>" method="post" action="<%$self%>">
+                <input type="hidden" name="moid" value="<%$sel._moid%>">
+                <input type="hidden" name="_function" value="">
+                <input type="hidden" name="fromfunction" value="browseSelection">
+                <input type="hidden" name="tplentry" value="">
+                <input type="hidden" name="selectedfields" value="">
+                <input type="hidden" name="template" value="">
+                <input type="hidden" name="_next" value="">
+                <input type="hidden" name="_selectedok" value="ok">
+                <input type="hidden" name="smarker" value="selectstart">
+                  
+                <div class="table-responsive modal-fixedheight">
+                
+                <table class="table table-condensed table-striped">
+                  <tbody>
+                  <%section name=i loop=$sel.lines%>
+                  
+                  <tr>
+                    <td>
+                      <input <%if $sel.lines_selected[i]%>checked<%/if%> class="checkbox" type="checkbox" name="_selected[<%$sel.lines[i].oid%>]" value="1" onchange="TZR.SELECTION.updateChecked('<%$sel._moid%>');">
+                    </td>
+                    <%foreach from=$sel.actions[i] item=myaction%>
+                      <td><%if $myaction%><%$myaction%><%/if%></td>
+                    <%/foreach%>
+                    <td><%$sel.lines[i].link%></td>
+                  </tr>
+                  
+                  <%/section%>
+                  </tbody>
+                </table>
+                
+                </div>
+                
+                <input type="hidden" name="emarker" value="selectend">
+                </form>
+              
+            </div>
+            
+        </div>
+
+      </div>
+      
+    <div class="modal-footer">
+      <button type="button" data-dismiss="modal" class="btn btn-default cvx-cancel"><%$syslabels.Seolan_Core_General.close_text%></button>
+    </div>
+    
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+jQuery('#cs-selection a.cv8-delaction').click(function(){
+  if(TZR.confirmDelete()){
+    if(!TZR.checkLinkConfirm(this)) return false;
+    jQuery.get(this.href);
+    jQuery(this.parentNode.parentNode).remove();
+  }
+  return false;
+});
+</script>

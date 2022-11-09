@@ -1,0 +1,6 @@
+<%foreach from=$br_tasks item=task%>
+<fieldset id="tzr-task-<%$task.mod->_moid%>"><legend><%$task.title%></legend>
+<%$task.tasklet%>
+</fieldset>
+<%/foreach%>
+

@@ -1,0 +1,1 @@
+*/10 * * * *     (cd ~/csx/scripts/cli;nice -n 19 /usr/bin/php-seolan10 scheduler.php -C ~/../tzr/local.php) > /dev/null 2>&1

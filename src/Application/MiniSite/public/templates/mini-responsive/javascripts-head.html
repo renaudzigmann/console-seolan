@@ -1,0 +1,24 @@
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<%onejs id="jquery" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/Application/MiniSite/public/templates/mini-responsive/" minify=$minify%>
+js/jquery.min.js
+#js/jquery.noconflict.js
+js/jquery-migrate-1.2.1.min.js
+js/nyroModal/js/jquery.nyroModal.custom.min.js
+js/jquery.form.js
+js/swfobject.js
+js/miniresp.js
+<%/onejs%>
+<%onejs id="tzr" type="text/javascript" base="`$smarty.const.TZR_WWW_CSX`src/Core/public/" minify=$minify%>
+generic.js
+<%/onejs%>
+<%*
+<script src="<%$smarty.const.TZR_SHARE_SCRIPTS%>onejs.php?files=<%$TZR.share%>generic.js:<%$TZR.share%>js/ufo.js:<%$TZR.share%>overlib/overlib.js" type="text/javascript"></script>
+<script type="text/javascript" src="<%$smarty.const.TZR_SHARE_SCRIPTS%>onejs.php?files=/templates/js/jquery.min.js:/templates/js/plugins/jquery-migrate-1.2.1.min.js:tzr/templates/js/jquery.noconflict.js:/templates/js/nyroModal/js/jquery.nyroModal.custom.min.js:/templates/js/jquery.form.js:/js/swfobject/swfobject.js" charset="utf-8"></script>
+<script type="text/javascript" src="/templates/js/miniresp.js"></script>
+*%>
+
+<%$TZR.packs.header%>

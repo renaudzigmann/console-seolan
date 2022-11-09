@@ -1,0 +1,17 @@
+<input type="hidden" name="function" value="procQuery">
+<input type="hidden" name="moid" value="<%$moid%>">
+<input type="hidden" name="template" value="Module/InfoTree.browse.html">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="clearrequest" value="1">
+<div class="table-responsive">
+<table class="table table-striped">
+ <%section name=i loop=$m.lines_oid%>
+  <tr><!-- <%$m.lines_score[i]%> -->
+   <td>
+    <input type="hidden" name="oids[<%$m.lines_oid[i]%>]" value="1">
+    <a class="cv8-ajaxlink" href="<%$self%>moid=<%$moid%>&function=goto1&skip=1&oid=<%$m.lines_oid[i]%>"<%if $m.lines_obj[i].path%><%$m.lines_obj[i].path%><%else%>><%$m.lines_title[i]%><%/if%>
+   </td>
+  </tr>
+ <%/section%>
+</table>
+</div>

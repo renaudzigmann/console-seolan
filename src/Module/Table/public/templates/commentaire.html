@@ -1,0 +1,89 @@
+<%if $br_navig%>
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<%/if%>
+<%assign var=user value=$br_user%>
+<%assign var=utilisateur value="Anonyme"%>
+<script type="text/javascript">
+ function refreshObjectComments(){
+   var tabid = "<%$smarty.request._tabid%>";
+   TZR.Tabs.load(jQuery("a[href='#"+tabid+"']"), {refresh:true});
+ }
+ function refreshTabTitle(tabid){
+   var row=jQuery("#"+tabid+" .users").length;
+   TZR.Tabs.refreshTitle(tabid, "<%$syslabels.Seolan_Core_General.comment_text|escape:'javascript'%> ("+row+")");
+ }
+ jQuery(document).ready(function(){
+   refreshTabTitle("<%$smarty.request._tabid%>");
+ });
+</script>
+<div class ="tzr-tabcontent" id="comments-<%$smarty.request._tabid%>">
+  <form action="<%$self%>skip=1&amp;_ajax=1&amp;_raw=2&amp;_silent=1" 
+	method="post" 
+	enctype="multipart/form-data" 
+	onsubmit="return TZR.ajaxSubmitForm(this, null, false, {cb:refreshObjectComments,cb_args:null});"
+  >
+    <input type="hidden" name="function" value="insertComment">
+    <input type="hidden" name="template" value="Module/Table.commentaire.html">
+    <input type="hidden" name="oid" value="<%$br__oid%>">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="users" value="">
+    
+    <input type="hidden" name="non_next" value="<%$self%>_tabid=<%$smarty.request._tabid%>&moid=<%$_moid%>&template=Module/Table.commentaire.html&tplentry=br&oid=<%$br_oid%>&function=getComments">
+    
+    <div id="<%$uniqid%>"  class="table-responsive">
+      <table id="tabid-<%$uniqid%>" class="table table-striped cv8_tablelist">
+        <thead>
+          <tr>
+            <th class="col-md-2"><%$syslabels.Seolan_Module_Table_Table.date%></th>
+            <th class="col-md-2" style="vertical-align: middle"><%$syslabels.Seolan_Module_Table_Table.user%></th>
+	    <th class="col-md-8" style="vertical-align: middle"><%$syslabels.Seolan_Module_Table_Table.comments%></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%section name=r loop=$br_lines_oid%>
+          <tr>
+            <td>
+              <%$br_lines_oCREAD[r]->html%> 
+            </td>
+            <td class="users">
+              <%if !empty($br_lines_oOWN[r]->html)%>
+              <%$br_lines_oOWN[r]->html%>
+              <%else%>
+              <%$utilisateur%>
+              <%/if%>
+            </td>
+            <td>
+              <%$br_lines_oCOMMENTAIRE[r]->html%>
+            </td>
+          </tr>
+	  
+          <%/section%>
+          <tr hidden="">
+            <td></td>
+            <td></td>
+            <td></td>
+                
+          </tr>
+        </tbody>
+      </table>
+
+      <textarea id="comc-<%$uniqid%>" rows="5" cols="70" class="form-control" name="data" placeholder='<%$br_input_placeholder|escape%>'></textarea>
+      <div class="tagpreview" id="TAG_preview"></div>
+      <script type="text/javascript">
+       jQuery("#comc-<%$uniqid%>").data("autocomplete",
+					{url:"/csx/scripts-admin/ajax8.php?class=_Seolan_Field_Tag_Tag&function=tag_autocomplete&add_prefix=1",
+					 url2:"/csx/scripts-admin/ajax8.php?class=_Seolan_Field_Text_Text&function=user_autocomplete&usertag_table=USERS&usertag_id_field=alias&usertag_name_field=fullnam&usertag_mail_field=email",
+					 callback:add_input_tag, params:{id:"comc-<%$uniqid%>", title:"Supprimer"}});TZR.addAutoCompleteTagInput("comc-<%$uniqid%>");
+       
+      </script>
+    </div>
+    <div class="tzr-action">
+      <input value="<%$syslabels.Seolan_Module_Table_Table.save_comments%>" type="submit">
+    </div>
+  </form>
+
+  <input id="TAG_text" autocomplete="off" type="hidden">
+  <input id="TAG_hidden" class="tag" name="TAG" value="" type="hidden">
+
+</div>

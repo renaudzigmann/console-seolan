@@ -1,0 +1,77 @@
+<%if empty($_ftype)%>
+<%if empty($fprefix)%><%assign var="fprefix" value="XDS"%><%/if%>
+<%if empty($tprefix)%><%assign var="tprefix" value="Module/DataSource."%><%/if%>
+<%if empty($title)%><%assign var="title" value="`$syslabels.Seolan_Core_Module_Module.newfield_text`"%><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+
+<script type="text/javascript">
+  onchange_v=function(o) {
+    var field = document.getElementById('field');
+    if (field.value=='' && o.id=='<%$smarty.const.TZR_DEFAULT_LANG%>') {
+      var text=o.value;
+
+      field.value=text.replace(/[^\w]/gi, '').toLowerCase();
+    }
+  }
+
+ oninput_v=function(o) {
+   if (o.validity.patternMismatch) o.setCustomValidity('<%$syslabels.Seolan_Core_DataSource_DataSource.invalid_characters_text%>');
+   else o.setCustomValidity("");
+  }
+</script>
+
+<form action="<%$self%>" method="post" name="newfield<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+ <input type="hidden" name="function" value="<%$fprefix%>NewField">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="boid" value="<%$_boid%>">
+ <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+ <input type="hidden" name="template" value="<%$tprefix%>newField.html">
+ <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_DataSource_DataSource.new_field_text%></legend>
+  <div class="table-responsive">
+  <table class="table table-striped list2">
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.field_label_text%></label></th>
+    <td>
+     <table class="table">
+      <%section name=langs loop=$lang_code%>
+       <tr>
+        <td><%$lang_long[langs]%></td>
+        <td><input id="<%$lang_code[langs]%>" name="label[<%$lang_code[langs]%>]" type="text" size="50" onchange="onchange_v(this)" maxlength="250"<%if $lang_code[langs] eq $smarty.const.TZR_DEFAULT_LANG%> required<%/if%>></td>
+       </tr>
+      <%/section%>
+     </table>
+    </td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.field_text%></label></th>
+    <td><input id="field" name="field" value="<%$_fnumber|default:$smarty.request.field%>" type="text" size="10" maxlength="40" pattern="[a-zA-Z0-9_]*" oninput="oninput_v(this)"></td>
+   </tr>
+   <tr>
+    <th><label><%$syslabels.Seolan_Core_DataSource_DataSource.type%></label></th>
+    <td>
+     <select name="ftype" onchange="v<%$uniqid%>.onchange_validate(this);" id="ftype<%$uniqid%>" >
+      <%section name=types loop=$_type%>
+       <option value="<%$_type[types]%>" <%if $_type[types] eq "\Seolan\Field\ShortText\ShortText"%>selected<%/if%>><%$_type_labels[types]%></option>
+      <%/section%>
+     </select>
+    </td>
+   </tr>
+  </table>
+  </div>
+ </fieldset>
+ <div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.s_next_text%>">
+  <input type="button" value="<%$syslabels.Seolan_Core_General.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+ </div>
+</form>
+<%else%>
+<%if $__xds%>
+<%assign var="fprefix" value="XDS"%>
+<%assign var="tprefix" value="Module/DataSource."%>
+<%/if%>
+<%assign var="myfunction" value="ProcNewField"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core/Module.admin/editField.html"%>
+<%/if%>

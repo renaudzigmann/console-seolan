@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+<url><loc><%$full_serverhome%></loc></url>
+<%section name=j loop=$menu_lines_oid%>
+<%if $menu_lines_ssrub[j] eq 0%>
+<url><loc><%$fullself%><%$menu_lines_selfurl[j]%></loc></url>
+<%/if%>
+<%/section%>
+<%section name=k loop=$menubot_lines_oid%>
+<%if $menubot_lines_ssrub[k] eq 0%>
+<url><loc><%$fullself%><%$menubot_lines_selfurl[k]%></loc></url>
+<%/if%>
+<%/section%>
+</urlset>

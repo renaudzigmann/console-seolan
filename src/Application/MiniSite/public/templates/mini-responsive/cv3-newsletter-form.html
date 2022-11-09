@@ -1,0 +1,53 @@
+<%if $tzr.CorailNewsLetter%>
+<!-- cv3-newsletter.html -->
+<%assign var="section" value=$it_olines[it]%>
+<div id="cv3-newsletter">
+  <div id="newsletter">
+    <div class="middle">
+      <div class="item">
+        <%capture name=form%>
+          <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-insert.html"%>
+        <%/capture%>
+        <%$smarty.capture.form|replace:" ?":"&nbsp;?"%>
+
+        <p style="clear:both;">
+          <em style="font-size:0.8em;">
+          <%assign var=form_donnees_collectees value=$labels.form_donnees_collectees|default:"Pour connaître et exercer vos droits, notamment de retrait de votre consentement à l'utilisation des données collectées par ce formulaire, %sveuillez consulter les mentions légales%s."%>
+          <%if $charte_oRUB_MENTIONS_LEGALES->raw%>
+            <%assign var=mentions_legales_url value='<a href="'|cat:"`$self`oidit=`$charte_oRUB_MENTIONS_LEGALES->raw`"|cat:'">'%>
+            <%$form_donnees_collectees|sprintf:$mentions_legales_url:'</a>'%>
+          <%else%>
+            <%$form_donnees_collectees|sprintf:'':''%>
+          <%/if%>
+          </em>
+        </p>
+
+        <%if $charte_oRUB_NEWSLETTER_OUT_OK->raw %>
+        <div id="newsletter-unscribe-form" style="margin-top:30px;border-top:1px solid #fefefe;padding:20px 0;">
+          <h2>Désabonnement</h2>
+          <form action="/tzr/scripts/admin.php?_bdx=0_1&amp;" method="post">
+            <input type="hidden" name="_function" value="unsubscribe">
+            <input type="hidden" name="moid" value="<%$it_olines[it]._functionparams.moid%>">
+            <input type="hidden" name="nocache" value="1">
+            <input type="hidden" name="_next" value="<%$self%>alias=desinscription-newsletter">
+
+              <p>Vous souhaitez ne plus recevoir notre lettre d'information, veuillez entrez votre email ci-dessous :</p>
+              <div class="row">
+                <div class="col-md-6 col-xs-12">
+                  <input name="email" type="email" class="tzr-input-compulsory" maxlength="255" size="30" placeholder="Votre email ..." value="" required="required">
+                </div>
+                <div class="col-md-2 col-xs-12">
+                  <div class="cv8d-action">
+                    <input type="submit" name="OK" value="OK" style="margin-top:5px;">
+                  </div>
+                </div>
+              </div>
+            </form>
+        </div>
+        <%/if%>
+    </div><!-- / .item -->
+    </div><!-- / .middle -->
+  </div><!-- / #newsletter -->
+</div><!-- / #cv3-newsletter -->
+<!-- fin cv3-newsletter.html -->
+<%/if%>

@@ -1,0 +1,40 @@
+<%strip%><%if $section._functionparams.params.__viewpagination==1 && !empty($section.pages)%>
+<nav>
+<ul class="pagination">
+<%if !$nbpageelement%><%assign value=5 var="nbpageelement" %><%/if%>
+<%math equation="floor(x/2)" x=$nbpageelement assign="halfnbpageelement" %>
+<%foreach name="pager" from=$section.pages key="pagekey" item="pageoffset" %>
+<%assign value=$section.currentpageindex var="currentkey" %>
+<%assign value=$smarty.foreach.pager.total var="nbpages" %>
+<%if $smarty.foreach.pager.first %>
+<li <%if !($section.first == $section.pagesize || $section.firstprev!=0 )%>class="disabled"<%/if%>>
+      <a  href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$section.firstprev%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>" onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$section.firstprev%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>'}); return false;" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+</li>
+<%/if%>
+<%if ($nbdisplayed < $nbpageelement) && (
+     ( ($currentkey>$halfnbpageelement) && (( ($nbpages-1)-$currentkey )>$halfnbpageelement) && abs($currentkey-$pagekey)<=$halfnbpageelement) ||
+(
+     (($currentkey<=$halfnbpageelement)&&$pagekey<$nbpageelement)  ||
+     (((($nbpages-1)-$currentkey )<=$halfnbpageelement)&& $pagekey>(($nbpages-1)-$nbpageelement) )
+)
+    )
+%>
+<%if !$nbdisplayed && !$smarty.foreach.pager.first%><li><a>...</a></li><%/if%>
+<%assign value=$nbdisplayed+1 var="nbdisplayed" %>
+<li <%if $section.first==$pageoffset%> class="disabled active" <%/if%>><a<%if $section.first==$pageoffset%> class="active-page" <%/if%> href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$pageoffset%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>" onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$pageoffset%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>'}); return false;"><%$pagekey+1%></a></li>
+<%if $nbdisplayed==$nbpageelement && !$smarty.foreach.pager.last%><li><a>...</a></li><%/if%>
+
+<%/if%>
+<%if $smarty.foreach.pager.last %>
+<li <%if $section.firstnext > $section.firstlastpage %>class="disabled"<%/if%>>
+      <a href="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&sectionopts[<%$it_itoid[it]%>][first]=<%$section.firstnext%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>" onclick="TZR.jQueryLoad({target:'#<%$sectiondivid%>',url:'<%$self%>contentonly=1&moid=<%$it_moid%>&function=viewsection&oidit=<%$it_oidit%>&oidsection=<%$it_itoid[it]%>&template=<%$ts%>&tplentry=it&sectionopts[<%$it_itoid[it]%>][first]=<%$section.firstnext%>&sectionopts[<%$it_itoid[it]%>][order]=<%$section.order|escape:"url"%>'}); return false;" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+</li><%/if%>
+
+<%/foreach%>
+</ul>
+</nav>
+<%/if%><%/strip%>

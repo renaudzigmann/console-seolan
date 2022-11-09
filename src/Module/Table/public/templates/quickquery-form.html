@@ -1,0 +1,90 @@
+<%if $br__qq.fields_ftable%>
+<div class="quick-query-form">
+  <form class="form-inline"
+	action="<%$self%>"
+	method="post"
+	name="quicksearch<%$uniqid%>"
+	onsubmit="TZR.Table.go_procQuery('<%$uniqid%>',this); return false;">
+    
+    <input type="hidden" name="pagesize" value="<%$br_pagesize%>">
+    <input type="hidden" name="_function" value="procQuery">
+    <input type="hidden" name="moid" value="<%$_moid%>">
+    <input type="hidden" name="order" value="<%$br_order%>">
+    <input type="hidden" name="template" value="<%$querytemplate|default:$br__querytemplate|default:'Module/Table.browse.html'%>">
+    <input type="hidden" name="tplentry" value="br">
+    <input type="hidden" name="first" value="0">
+    <input type="hidden" name="clearrequest" value="1">
+    
+    <%if $br_translation_mode%>
+    <%* ajout de la recherche par etat de tradcution *%>
+    <div class="searchfield cv8_inlineblock">
+      <span class="searchfieldlabel"><label><%$syslabels.Seolan_Module_Table_Table.translation_status%></label></span><br>
+      <span class="searchfieldhtml">
+        <%section name="lscode" loop=3%>
+        <%assign var=code value=$smarty.section.lscode.index%>
+        <%assign var=vcode value="v`$code`"%>
+        <%assign var=labname value="translation_status_`$code`"%>
+        <input id="_langstatus<%$uniqid%><%$code%>" <%if !isset($br__qq._langstatus) || $br__qq._langstatus.$vcode%>checked<%/if%> type="checkbox" value="1" name="_langstatus[v<%$code%>]">&nbsp;
+        <label for="_langstatus<%$uniqid%><%$code%>"><span class="langstatus code-<%$code%> circle-filled" title="<%$syslabels.Seolan_Module_Table_Table.$labname%>"></span></label>&nbsp;
+        <%/section%>
+      </span>
+    </div>
+    <%/if%>
+    
+    <%if !empty($br_query_comp_field)%>
+    <%$compfield = $br__qq.fields_ftable['o'|cat:$br_query_comp_field]%>
+    <div class="row compulsory-field">
+      <h5><%$syslabels.Seolan_Core_Field_Field.compulsory%><%$syslabels.Seolan_Core_General.i18ncolon%></h5>
+      <div class="form-group">
+        <label class="title"><%$compfield->fielddef->label%></label>
+        <%$compfield->html%>
+      </div>
+    </div>
+    
+    <%/if%>
+    <div class="row">
+      <%if !empty($br_query_comp_field)%><h5><%$syslabels.Seolan_Core_Field_Field.optional%> :</h5><%/if%>
+      <%foreach from=$br__qq.fields_ftable item=ofield%>
+      <%if $br_query_comp_field && $ofield->field === $br_query_comp_field && $ofield->field !== 'oids'%>
+      <%continue%>
+      <%/if%>
+      <div class="form-group">
+        <label class="title"><%$ofield->fielddef->label%></label>
+        <%$ofield->html%>
+      </div>
+      <%/foreach%>
+    </div>
+    <%* recherche sous module *%>
+    <%if $imod_props.submodsearch && ($br__qq._submodsearch)%>
+    <div class="form-group">
+      <label class="title"><%$syslabels.Seolan_Module_Table_Table.submod%></label>
+      
+      <select name="ssmods_search[]" multiple="multiple" size="6">
+        <option value="">---</option>
+        <%foreach key=ssmod_id item=ssmodtitle from=$br__qq.submodules %>
+        <option value="<%$ssmod_id%>"<%if  $br__qq.submodules_searchselected.$ssmod_id%> selected="selected"<%/if%>><%$syslabels.Seolan_Module_Table_Table.with%> <%$ssmodtitle%></option>
+        <%assign var="not" value="`$ssmod_id`:not"%>
+        <option value="<%$not%>"<%if $br__qq.submodules_searchselected.$not%> selected="selected"<%/if%>><%$syslabels.Seolan_Module_Table_Table.without%> <%$ssmodtitle%></option>
+        <%if in_array('r', $br___ssaccess[$ssmod_id]) %>
+        <%/if%>
+        <%/foreach%>
+      </select>
+    </div>
+    <%/if%>
+    <div class="row cv8_action clearfix">
+      <button type="submit" name="go" title="<%$syslabels.Seolan_Module_Table_Table.newquery%>" class="btn btn-primary"><%$syslabels.Seolan_Module_Table_Table.newquery%></button>
+      <%if !$smarty.request._modalMode%>
+      <%if ($br_function=='procQuery' && !$smarty.request._persistent)
+      || ($br__function=='procQuery' && !$smarty.request._persistent && !$br__persistent && !$smarty.request.modalModal)
+      %>
+      <button type="button" title="<%$syslabels.Seolan_Module_Table_Table.refinequery%>" class="btn btn-default" name="raffine" onclick="this.form.clearrequest.value=2;TZR.Table.go_procQuery('<%$uniqid%>',this.form);"><span class="glyphicon csico-plus" aria-hidden="true"></span></button>
+      <button type="button" title="<%$syslabels.Seolan_Module_Table_Table.clearrequest_text%>" class="btn btn-default" name="clear" onclick="v<%$uniqid%>.jQueryLoad('<%$self%>function=browse&moid=<%$_moid%>&tplentry=br&template=<%$querytemplate|default:$br__querytemplate|default:'Module/Table.browse.html'%>');"><span class="glyphicon csico-delete" aria-hidden="true"></span></button>
+      <%/if%>
+      <%/if%>
+      <%if $queryparameters || $br__queryparametersbutton%>
+      <button type="button" onclick="TZR.Table.submitSelectedFields('<%$uniqid%>'); return false;" class="btn btn-default" title="<%$syslabels.Seolan_Core_General.queryfieldselector%>"><%$syslabels.Seolan_Module_Table_Table.search_param%></button>
+      <%/if%>
+    </div>
+  </form>
+</div>
+<%/if%>

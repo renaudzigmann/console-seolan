@@ -1,0 +1,237 @@
+<%*
+édition, création de fiches
+défaut = édition
+surchargeable et paramétrable pour l'utilisation en new, basedoc
+les blocks suivants sont prévus et dans cet ordre :
+headers, configure, tabsactivation, otherGroups, tzrActions, tzrErrors, editFormConfiguration, bottom
+*%>
+<%block name=headers%>
+<%if empty($noheader) %>
+<%include file="Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<%include file="Module/Table.edit-jsscripts.html"%>
+<%/if%>
+<%include file="Module/Table.functions.html"%>
+<%/block%>
+<%block name=configure%>
+<%$withContainer=true%>
+<%$onsubmit="return TZR.ajaxSubmitForm(this);"%>
+<%* activation contextuelle, indépendante des règles des différents onglets *%>
+<%$tabs=['object_sec'=>true, 'langstatus'=>true, 'comments'=>true, 'ajaxtabs'=>true]%>
+<%/block%>
+<%block name=tabsactivation%>
+<%* règles par défaut (=edit) d'activation des onglets si le contexte le permet
+et pour ne pas faire les tests aux 2 endroits (tab et conteneur) *%>
+<%$tabIsActive = ['object_sec'=>false, 'langstatus'=>false, 'comments'=>false, 'ajaxtabs'=>false]%>
+<%if $tabs.ajaxtabs==true && !empty($br___ajaxtabs)%><%$tabIsActive['ajaxtabs']=true%><%/if%>
+<%if $tabs.object_sec==true && $imod_props.object_sec && $br_object_sec.admin%><%$tabIsActive['object_sec']=true%><%/if%>
+<%if $tabs.langstatus==true && isset($imod_mod->xset) && 1 == $imod_mod->xset->getTranslatable() && count($lang_code)>1 && false !== $br__langstatus%><%$tabIsActive['langstatus']=true%><%/if%>
+<%if $tabs.comments==true && isset($imod_props.allowcomments) && $imod_props.allowcomments && $imod_mod->secure($br_oid,'getComments')  && $function!='editDup'%>
+<%$tabIsActive['comments']=true%>
+<%$inlineCommentsMoid=$_moid%>
+<%/if%>
+<%/block%>
+<%block name="overloadconfiguration"%><%/block%>
+<%if empty($tabsuniqid)%><%$tabsuniqid=$uniqid%><%/if%>
+<div class="cv8-contenu-center">
+  <div id="tzr-tablist-<%$tabsuniqid%>">
+    <%counter name="nbtabs" assign="nbtabs" start=0%>
+    <%capture name="tabslist"%>
+    <%* onglets des sous modules *%>
+    <%if empty($br___ssmod_in_template) %>
+    <%section name=ssmod loop=$br___ssmod%>
+    <%assign var=browse value=$br___ssmod[ssmod]%>
+    <%if $browse.lines_oid || !empty($br___ssinsert[ssmod]) %>
+    <%counter name="nbtabs"%>
+    <li id="li-<%$br___ssprops[ssmod]._moid%>-<%$tabsuniqid%>" role="presentation"><a href="#sc-<%$br___ssprops[ssmod]._moid%>-<%$tabsuniqid%>" aria-controls="#sc-<%$br___ssprops[ssmod]._moid%>-<%$tabsuniqid%>" data-url="<%$self%>&function=display&moid=<%$imod_props._moid%>&tplentry=br&template=Module/Table.browsessmajax.html&oid=<%$br_oid%>&ssmoid=<%$br___ssprops[ssmod]._moid%><%$br_urlparms%>&_uniqid=<%$uniqid%>&skip=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><%$br___ssprops[ssmod].modulename|truncate:"30":"..."%> (<span><%$browse.last%></span>)</a></li>
+    <%/if%>
+    <%/section%>
+    <%/if%>
+    <%* onglets supplémentaires *%>
+    <%if $tabIsActive.ajaxtabs%>
+    <%section name=t loop=$br___ajaxtabs%>
+    <%counter name="nbtabs"%>
+    <li role="presentation"><a href="#sc<%$smarty.section.t.index+100%>-<%$tabsuniqid%>" aria-controls="#sc<%$smarty.section.t.index+100%>-<%$tabsuniqid%>" data-url="<%$br___ajaxtabs[t].url%>" data-overlay="none" data-toggle="tabajax" role="tab" aria-expanded="false"><span><%$br___ajaxtabs[t].title%></span></a></li>
+    <%/section%>
+    <%/if%>
+    
+    <%* onglet sécurité *%>
+    <%if $tabIsActive.object_sec%>
+    <%counter name="nbtabs"%>
+    <li role="presentation"><a  data-tabname="security" href="#sc<%$smarty.section.ssmod.total+3%>-<%$tabsuniqid%>"  aria-controls="#sc<%$smarty.section.ssmod.total+3%>-<%$tabsuniqid%>" data-url="<%$self%>function=secEdit&template=Core/Module.edit-sec-tabs.html&moid=<%$imod_props._moid%>&tplentry=br&oid=<%$br_oid%>&_raw=2&skip=1" data-overlay="none" data-toggle="tabajax" role="tab" aria-expanded="false"><%$syslabels.Seolan_Core_General.security_text%></a></li>
+    <%/if%>
+    <%if $tabIsActive.langstatus%>
+     <%counter name="nbtabs"%>
+    <li role="presentation"><a  data-tabname="langstatus" href="#sc<%$smarty.section.ssmod.total+4%>-<%$tabsuniqid%>" aria-controls="#sc<%$smarty.section.ssmod.total+5%>-<%$tabsuniqid%>" data-url="<%$self%>function=langStatus&amp;skip=1&amp;moid=<%$imod_props._moid%>&amp;template=Module/Table.langStatus.html&amp;tplentry=br&amp;oid=<%$br_oid%>&amp;_raw=2&amp;_ajax=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><%$syslabels.Seolan_Core_General.languages%></a></li>
+    <%/if%>
+    
+    <%* commentaires *%>
+    <%if $tabIsActive.comments%>
+    <%assign var="commentsTabsId" value="sc`$smarty.section.ssmod.total+6`-`$tabsuniqid`"%>
+    <%counter name="nbtabs"%>
+    <li role="presentation"><a data-tabname="comments" href="#<%$commentsTabsId%>" aria-controls="#<%$commentsTabsId%>" data-url="<%$self%>function=getComments&skip=1&moid=<%$imod_props._moid%>&_tabid=<%$commentsTabsId%>&template=Module/Table.commentaire.html&tplentry=br&oid=<%$br_oid%>&amp;skip=1&amp;_ajax=1&amp;_raw=2&amp;_silent=1" data-overlay="none" role="tab" data-toggle="tabajax" aria-expanded="false"><%$syslabels.Seolan_Core_General.comment_text%> (<%$br__comments.nb|default:'0'%>)</a></li>
+    <%/if%>
+    
+    <%/capture%>
+    
+    <%if $nbtabs >= 1%>
+    <ul class="nav nav-responsive nav-tabs" role="tablist">
+      <%* onglet general et autres onglets*%>
+      <li role="presentation" class="active"><a href="#sc1-<%$tabsuniqid%>" aria-controls="#sc1-<%$tabsuniqid%>" data-toggle="tab" role="tab" aria-expanded="true" ><%$syslabels.Seolan_Module_Table_Table.record%></a></li>
+    <%$smarty.capture.tabslist%>
+    </ul>
+    <%/if%>
+    
+    <%if $withContainer%>
+    <div id="tzr-tabcontentcontainer-<%$uniqid%>" class="tzr-tabcontentcontainer tab-content">
+      <%/if%>
+      <%* container general *%>
+      <div id="sc1-<%$tabsuniqid%>" class="tzr-tabcontent tab-pane active" role="tabpanel">
+
+      <form class="edit-form" data-debug="editform <%$uniqid%>" action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="<%$onsubmit%>">
+	<%if !empty($brt_oedit->filename) %>
+	<%include file=$brt_oedit->filename%>
+	<%elseif !empty($__editcore) %>
+	<%include file=$__editcore%>
+	<%block name=otherGroups%><%/block%>
+	<%else%>
+	<%include file="Module/Table.edit-core.html"%>
+	<%block name=otherGroups%><%/block%>
+	<%/if%>
+	<%* sous fiches *%>
+	<%if !empty($smarty.request._linkedfields) && !empty($smarty.request._parentoids) %><%* contexte sous module *%>
+        <%foreach key=i item="linkedfield" from=$smarty.request._linkedfields%>
+        <input type="hidden" name="<%$linkedfield%>" value="<%$smarty.request._parentoids[$i]%>"/>
+        <input type="hidden" name="_linkedfields[]" value="<%$linkedfield%>"/>
+        <input type="hidden" name="_parentoids[]" value="<%$smarty.request._parentoids[$i]%>"/>
+        <input type="hidden" name="_frommoids[]" value="<%$smarty.request._frommoids[$i]%>"/>
+        <%/foreach%>
+        <%*** backward compatibility ***%>
+        <input type="hidden" name="_linkedfield" value="<%$smarty.request._linkedfields[0]%>"/>
+        <input type="hidden" name="_parentoid" value="<%$smarty.request._parentoids[0]%>"/>
+	<%/if%>
+	<%* sous fiches fin *%>
+	<%block name=tzrActions%>
+	<%if empty($smarty.capture.action_handled)%>
+	<div id="tzr-action<%$uniqid%>" class="tzr-action">
+	  <%if isset($br__duplicate) || isset($smarty.request._duplicate)%>
+          <input type="hidden" name="_duplicate" value="1">
+          <input class="btn btn-primary" type="submit" onclick="this.form._function.value='procEditDup'" value="<%$syslabels.Seolan_Core_General.cloneconfirm_text%>">   
+          <%else%><%* not duplicate *%>
+	  <input  class="btn btn-primary" type="submit" onclick="this.form._function.value='<%$__function|default:'procEdit'%>';" value="<%$__save_text|default:$syslabels.Seolan_Core_General.save_text%>" >
+	  <%if !empty($smarty.request.usenav) && empty($br__islast)%>
+	  <input  class="btn btn-primary" type="submit" onclick="this.form._next.value='<%$self%>&moid=<%$_moid%>&function=edit&template=Module/Table.edit.html&tplentry=br&oid=<%$br_oid%>&navdir=next&usenav=1';" value="<%$syslabels.Seolan_Core_General.save_and_editnext_text%>">
+	  <%/if%>
+	  <%if $imod_props.sendacopyto%>
+	  <input  class="btn btn-primary" type="submit" onclick="this.form.elements['_function'].value='<%$__function|default:'procEdit'%>';this.form.elements['_sendacopyto[<%$_moid%>]'].value=1;" value="<%$syslabels.Seolan_Core_General.save_and_sendacopyto%>">
+	  <%/if%>
+	  <%if !empty($add_functions) %>
+          <%foreach key=add_function item=label from=$add_functions%>
+          <input  class="btn btn-default" type="submit" onclick="this.form._function.value='<%$add_function%>';" value="<%$label%>">
+          <%/foreach%>
+	  <%/if%>
+          <%if $imod_mod->secure($br_oid,'del')%>
+	  <input  class="btn btn-default" type="button" onclick='TZR.Record.delete("<%$uniqid%>","<%$imod_props._moid%>", "del", "<%$br_oid%>");' value="<%$syslabels.Seolan_Core_General.delete_text%>">
+          <%/if%>
+	  <%if $modsec_mods[$_moid].rw && $lang_data==$lang_def && $br_translatable%>
+	  <%* selection des langues d'enregistrement *%>
+	  <%if $br_authorized_languages%>
+	    <input class="btn btn-primary select-langs" type="button" value="<%$syslabels.Seolan_Core_General.saveselectedlang%>" data-toggle="modal" data-target="#modal-langs-list-<%$uniqid%>">
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.modalSaveLangs.html" inline%>
+	  <%else%>
+          <input  class="btn btn-primary" type="submit" onclick="if(confirm('<%$syslabels.Seolan_Core_General.savealllangwarning%>')) jQuery(this.form).append('<input type=\'hidden\' name=\'procEditAllLang\' value=\'1\'>'); else return false;" value="<%$syslabels.Seolan_Core_General.savealllang%>">
+	  <%/if%>
+	  <%/if%>
+	  <%section name=a loop=$br__actions%>
+          <input type="submit" class="btn btn-default" value="<%$br__actions[a].label%>" onclick="<%$br__actions[a].action|escape:"html"%>" name="<%$br__actions[a].name%>">
+	  <%/section%>
+	  <%foreach from=$imod_props.actions item=action%>
+	  <%if !($action instanceof \Seolan\Core\Module\Action)%><%continue%><%/if%>
+	  <%if $action->actionable%>
+	  <input  class="btn btn-default" type="submit" onclick="this.form._next.value='<%$self%>&<%$action->xurl|escape:"javascript"%>';" value="<%$action->name|escape:"javascript"%>">
+	  <%/if%>
+	  <%/foreach%>
+	  <%/if%> <%* duplication versus std edit *%>
+	  <%if !empty($activateComments) %>
+	  <button type="button" class="btn btn-default" onclick="TZR.Tabs.load(jQuery('a[href=\'#<%$commentsTabsId%>\']'), null);return false;"><%$syslabels.Seolan_Core_General.new_comment_text%></button>
+	  <%/if%>
+	</div>
+	<%/if%>
+
+	<%/block%>
+	
+	<%block name=tzrErrors%>
+	<div style="display:none" class="alert alert-danger error tzr-message"></div>
+	<%/block%>
+
+
+	<%block name=editFormConfiguration%>
+
+	<input type="hidden" name="_function" value="<%$__function|default:'procEdit'%>">
+	<input type="hidden" name="template" value="Core.empty.html">
+	<input type="hidden" name="uniqid" value="<%$uniqid%>">
+	<input type="hidden" name="tplentry" value="br">
+	<input type="hidden" name="moid" value="<%$_moid%>">
+	<input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+	<input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+	<input type="hidden" name="oid" value="<%$br_oid%>">
+	<input type="hidden" name="skip" value="1">
+	<%if $imod_props.sendacopyto%><input type="hidden" name="_sendacopyto[<%$_moid%>]" value="0"><%/if%>
+	<%if !empty($smarty.request.usenav) && !empty($br__islast) or $smarty.request._nextmode eq 'edit'%>
+	<input type="hidden" name="_next" value="<%$self%>moid=<%$_moid%>&function=procQuery&template=Module/Table.browse.html&tplentry=br">
+	<%else%>
+	<input type="hidden" name="_next" value="<%$back|default:$here%><%if !empty($smarty.request._fromtabs)%>&_tabs=<%$smarty.request._fromtabs|escape:'url'%><%/if%>">
+	<%/if%>
+	
+	<%/block%>
+
+	
+      </form>
+    </div>
+
+    <%if empty($br___ssmod_in_template) %>
+    <%section name=ssmod loop=$br___ssmod%>
+    <%assign var=browse value=$br___ssmod[ssmod]%>
+    <%if  $browse.lines_oid || !empty($br___ssinsert[ssmod]) %>
+    <div id="sc-<%$br___ssprops[ssmod]._moid%>-<%$tabsuniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+    <%/if%>
+    <%/section%>
+    <%/if%>
+    <%if $tabIsActive.ajaxtabs%>
+    <%section name=t loop=$br___ajaxtabs%>
+    <div id="sc<%$smarty.section.t.index+100%>-<%$tabsuniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+    <%/section%>
+    <%/if%>
+    <%if $tabIsActive.object_sec%>
+    <div id="sc<%$smarty.section.ssmod.total+3%>-<%$tabsuniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel"></div>
+    <%/if%>
+    <%if $tabIsActive.langstatus%>
+    <div id="sc<%$smarty.section.ssmod.total+4%>-<%$tabsuniqid%>" class="tzr-tabcontent tab-pane" role="tabpanel">
+    </div>
+    <%/if%>
+    <%if $tabIsActive.comments%>
+    <div id="<%$commentsTabsId%>" class="tzr-tabcontent tab-pane" role="tabpanel">
+    </div>
+    <%/if%>
+    <%if $withContainer%>
+    </div>
+    <%/if%>
+ </div>
+</div>
+<%block name=bottom%>
+<script type="text/javascript">
+ TZR.activeDependency(document.editform<%$uniqid%>);
+ <%if isset($br__duplicate) || isset($smarty.request._duplicate)%>
+ TZR.addValidator([document.editform<%$uniqid%>,"<%$ajaxProcCtrl|default:'ajaxProcEditDupCtrl'%>",'module-container','<%$tzr.error_color%>','Form']);  
+ <%else%>
+ TZR.addValidator([document.editform<%$uniqid%>,"<%$ajaxProcCtrl|default:'ajaxProcEditCtrl'%>",'module-container','<%$tzr.error_color%>','Form']);
+ <%/if%>
+ <%if !empty($smarty.request._ssinsertmoid)%>
+ <%section name=ssmodi loop=$br___ssmod%>
+ <%if $br___ssprops[ssmodi]._moid==$smarty.request._ssinsertmoid%>
+ jQuery( "#<%"li-%s-%s"|sprintf:$smarty.request._ssinsertmoid:$tabsuniqid|escape:'html'%> > a").trigger(TZR.click_event);
+ <%/if%>
+ <%/section%>
+ <%/if%>
+ //# sourceURL=Module/Table.edit.js
+</script>
+<%/block%>

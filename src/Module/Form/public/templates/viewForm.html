@@ -1,0 +1,64 @@
+<%* voir aussi Module/InfoTree/public/templates/defaulttemplates/disp-formanswer.html *%>
+<fieldset class="cv8d-formanswer cv8d-formanswer-<%$_moid%>">
+ <legend><%$br_otitle->html%></legend>
+ <%if $br___error%>
+  <div class="tzr-message"><%$br___error%></div>
+ <%else%>
+  <form action="<%$self%>" method="post" onsubmit="<%if !$smarty.request.tabsmode%>return TZR.isFormValidWithFocus(this,true);<%else%>return false;<%/if%>"  enctype="multipart/form-data">
+   <input type="hidden" name="moid" value="<%$_moid%>">
+   <input type="hidden" name="function" value="procAnswer">
+   <input type="hidden" name="skip" value="1">
+   <input type="hidden" name="oid" value="<%$br_oid%>">
+   <input type="hidden" name="aoid" value="<%$br___table.oid%>">
+   <%if isset($smarty.request.uid)%>
+   <input type="hidden" name="uid" value="<%$smarty.request.uid%>">
+   <%else%>
+   <input type="hidden" name="email" value="<%$smarty.request.email%>">
+   <%/if%>
+   <input type="hidden" name="key" value="<%$smarty.request.key%>">
+   <input type="hidden" name="_next" value="<%$self%>&template=Core.layout/raw.html&insidefile=Core.message.html&_nonav=1&_nohistory=1">
+   <div class="cv8d-field cv8d-field-intro"><%$br_ointro->html%></div>
+    <%section name="fields" loop=$br___table.fields_object%>
+     <%if !$br___table.fields_object[fields]->fielddef->sys%>
+     <%if ($fgroup neq $br___table.fields_object[fields]->fielddef->fgroup)%>
+     <%assign var="fgroup" value=$br___table.fields_object[fields]->fielddef->fgroup%>
+     <h2><%$fgroup%></h2>
+     <%/if%>
+     <%if $br___table.fields_qproperties[fields].type != 'separator'%>
+      <div class="cv8d-field cv8d-field-<%$br___table.fields_object[fields]->fielddef->field%>">
+       <label><%$br___table.fields_object[fields]->fielddef->label%><%$br___table.fields_object[fields]->fielddef->indicator%></label>
+       <div class="cv8d-answer">
+	 <%if $br___table.fields_object[fields]->fielddef->comment%>
+	 <div class="cv8d-comment"><%$br___table.fields_object[fields]->fielddef->comment%></div>
+	 <%/if%>
+	 <%$br___table.fields_object[fields]->html%>
+       </div>
+      </div>
+      <%else%>
+      <div class="csx-text-separator">
+       <%$br___table.fields_object[fields]->fielddef->comment%>
+      </div>
+      <%/if%>
+     <%/if%>
+    <%/section%>
+   <%if $br___captcha%>
+    <div class="cv8d-field cv8d-field-captcha">
+     <label><%$br___captcha.label%> *</label>
+     <div class="cv8d-answer"><%$br___captcha.html%></div>
+    </div>
+   <%/if%>
+   <div class="cv8d-field cv8d-field-outro"><%$br_ooutro->html%></div>
+   <%if !$smarty.request.tabsmode%>
+    <div class="tzr-action">
+     <input type="submit" value="<%$br_osavelabel->toText()%>">
+     <%if $br_oreedit->raw==1%>
+     <input type="submit" value="<%$syslabels.Seolan_Module_Form_Form.saveandclose_text%>" onclick="this.form.close.value=1;">
+     <input type="hidden" name="close" value="2">
+     <%else%>
+     <input type="hidden" name="close" value="1">
+     <%/if%>
+    </div>
+   <%/if%>
+  </form>
+ <%/if%>
+</fieldset>

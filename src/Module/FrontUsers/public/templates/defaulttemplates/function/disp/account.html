@@ -1,0 +1,19 @@
+<%* Page d'accueil ou panel lié au compte front office *%>
+
+<%if $admini%>
+<em>Page de gestion du compte non visualisable en back-office</em>
+<%else%>
+<%assign var=section value=$it_olines[it]%>
+<%assign var=user value=$section.user%>
+<%assign var=form value=$section.form%>
+<%assign var=fparams value=$section._functionparams%>
+<%assign var=mod_users value=$fparams.module%>
+<%if $section.onerror%><%assign var="onerror" value=$section.onerror%><%/if%>
+<%capture assign=self_with_alias%><%$self%>alias=<%$smarty.request.alias%><%/capture%>
+
+<div class="account container">
+  <div class="panel panel-<%$section.panel%>">
+    <%include file="Module/FrontUsers.panel-`$section.panel`.html"%>
+  </div>
+</div>
+<%/if%>

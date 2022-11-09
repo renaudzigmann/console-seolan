@@ -1,0 +1,47 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$br_otitle->raw%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Core_General.general%></legend>
+  <div class="row-striped">
+    <%section name=fields loop=$br_fields_object %>
+    <%if !$br_fields_object[fields]->sys%>
+    <%assign var="field" value=$br_fields_object[fields]%>
+    <div id="cont-<%$field->fielddef->field%>" class="row view-field view-field-<%$field->fielddef->field%>">
+      <div class="row-striped-content">
+        <%call fieldlabel field=$field%>
+        <div class="col-xs-12 col-sm-9 col-lg-10"><%$field->html%></div>
+      </div>
+    </div>
+    <%/if%>
+    <%/section%>
+    <%section name=fields loop=$br_fields_object%>
+    <%if $br_fields_object[fields]->sys && ($br_fields_object[fields]->field=='PUBLISH' || $br_fields_object[fields]->field=='UPD')%>
+    <%assign var="field" value=$br_fields_object[fields]%>
+    <div id="cont-<%$field->fielddef->field%>" class="row view-field view-field-<%$field->fielddef->field%>">
+      <div class="row-striped-content">
+        <%call fieldlabel field=$field%>
+        <div class="col-xs-12 col-sm-9 col-lg-10"><%$field->html%></div>
+      </div>
+    </div>
+    <%/if%>
+    <%/section%>
+  </div>
+ </fieldset>
+ <fieldset id="legend<%$uniqid%>">
+  <legend><%$syslabels.Seolan_Module_Media_Media.legend%></legend>
+  <div class="row-striped">
+    <%section name=f loop=$br___fields%>
+    <%if $br___fields[f]->html%>
+    <%assign var="field" value=$br___fields[f]%>
+    <div id="cont-<%$field->fielddef->field%>" class="row view-field view-field-<%$field->fielddef->field%>">
+      <div class="row-striped-content">
+        <%call fieldlabel field=$field%>
+        <div class="col-xs-12 col-sm-9 col-lg-10"><%$field->html%></div>
+      </div>
+    </div>
+    <%/if%>
+    <%/section%>
+  </div>
+ </fieldset>
+</div>

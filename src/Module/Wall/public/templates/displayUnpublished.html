@@ -1,0 +1,30 @@
+<%assign var="title" value=$syslabels.Seolan_Module_Wall_Wall.module_name%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+
+<div class="wall">
+<div class="wall_title">
+<%$syslabels.Seolan_Module_Wall_Wall.my_unpublished_informations%>
+</div>
+<%section name=i loop=$br_lines_oid%>
+<div class="wall_info">
+<div class="wall_actions">
+<a class="cv8-ajaxlink" x-confirm="var ret=TZR.confirmDelete();" title="<%$syslabels.Seolan_Module_Wall_Wall.delete%>" href="<%$self%>&function=deleteInfo&moid=<%$_moid%>&oid=<%$br_lines_oid[i]%>&fromun=1"><%$syslabels.Seolan_Core_General.delete%></a>
+<a class="cv8-ajaxlink"  title="<%$syslabels.Seolan_Module_Wall_Wall.modify%>" href="<%$self%>&function=modify&moid=<%$_moid%>&oid=<%$br_lines_oid[i]%>&tplentry=br&template=Module/Wall.modify.html"><%$syslabels.Seolan_Core_General.edit%></a>
+<a class="cv8-ajaxlink" title="<%$syslabels.Seolan_Module_Wall_Wall.publish%>" href="<%$self%>&function=publishInfo&moid=<%$_moid%>&oid=<%$br_lines_oid[i]%>"><%$syslabels.Seolan_Module_Wall_Wall.publish%></a>
+</div>
+<div class="wall_publisher">
+<%$br_lines_oOWN[i]->html%>
+</div>
+<div class="wall_date">
+<%$br_lines_oUPD[i]->html%>
+</div>
+<div class="wall_content">
+<%$br_lines_ocontent[i]->html%>
+</div>
+<div class="wall_tags">
+<%$br_tags[i]%>
+</div>
+</div>
+<%/section%>
+
+</div>

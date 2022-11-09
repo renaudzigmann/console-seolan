@@ -1,0 +1,19 @@
+<fieldset>
+ <legend><%$syslabels.Seolan_Module_MailingList_MailingList.unsubscribe_text%></legend>
+ <%if $smarty.session._TZR.message%><div class="tzr-message"><%$smarty.session._TZR.message%></div><%/if%>
+ <form action="<%$self%>" method="post">
+  <input type="hidden" name="_function" value="unsubscribe">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="nocache" value="1">
+  <input type="hidden" name="_next" value="<%if $it_olines[it]._functionparams.params.nextalias%><%$self%>alias=<%$it_olines[it]._functionparams.params.nextalias%><%else%><%$self%>moid=<%$smarty.request.moid%>&function=genSubscribe&tplentry=sub&template=Core.layout/raw.html&insidefile=Module/MailingList.unsubscribe.html<%/if%>">
+  <table class="list2">
+   <tr>
+    <td>
+     <p>Pour vous d&eacute;sinscrire, entrez votre email.</p>
+     <p><em>To unsubscribe, enter your email</em></p>
+     <input type="text" name="<%$sub_mod.key%>" value="<%$smarty.request.email%>"> <input type="submit" name="OK" value="OK">
+    </td>
+   </tr>
+  </table>
+ </form>
+</fieldset>

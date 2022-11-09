@@ -1,0 +1,96 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_MailingList_MailingList.send_text%>
+<script type="text/javascript">
+  v<%$uniqid%>.selectDest=function(d,targetoid) {
+    TZR.Dialog.openURL('<%$self%>skip=1&function=home&template=Module/InfoTree.popaction.html&moid=<%$br_mod.newslettermodule%>&tplentry=mit&do=showtree&action=no&maxlevel=1&formname=sendform<%$uniqid%>&titlediv='+d+'&targetoid='+targetoid);
+    return false;
+  }
+  var nbres = 0;
+  <%if !$br__skiprecipientselection%>
+  nbres = <%$br_last%>;
+  <%/if%>
+  function v<%$uniqid%>ok(f){
+    /* au moins un dest et un texte dans le message */
+    if (nbres == 0){
+      var v = jQuery.trim(jQuery(f.elements['otherrecipients']).val());
+      if (v == ''){
+        return false;
+      }
+    }
+    var v2 = jQuery.trim(jQuery(f.elements['message']).val());
+    if (v2 == ''){
+      return false;
+    }
+    /* message renseigne => voir addValidator*/
+    return true;
+  }
+  v<%$uniqid%>.notSend=function(oid){
+    document.getElementById('tr_'+oid).style.display="none";
+    document.getElementById('not_send_'+oid).value=oid;
+  }
+</script>
+<form action="<%$self%>" method="post" name="sendform<%$uniqid%>"
+      enctype="multipart/form-data"
+      onsubmit="if(v<%$uniqid%>ok(this)){return TZR.ajaxSubmitForm(this, undefined, undefined,undefined,'<%$syslabels.Seolan_Module_MailingList_MailingList.confirm_send|escape:"quotes"%>');}else{return false;}">
+<input type="hidden" name="function" value="procSend">
+<input type="hidden" name="messagemode" value="text">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="template" value="Core.message.html">
+<input type="hidden" name="sendpush" value="1">
+<%if $br__skiprecipientselection%><input type="hidden" name="_skiprecipientselection" value="1"><%/if%>
+<%assign var="maxtodisp" value="100"%>
+<%if !$br__skiprecipientselection%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Core_General.result%> : <%$br_last%> <%$syslabels.Seolan_Module_MailingList_MailingList.answers%></legend>
+  <%if $br_last>$maxtodisp%><br><u><%$syslabels.Seolan_Module_MailingList_MailingList.firstdisp|replace:"xxx":$maxtodisp%></u><br><br><%/if%>
+  <div class="table-responsive">
+    <%include file="Module/MailingList.preselected.html"%>
+  </div>
+  <br>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="button" value="<%$syslabels.Seolan_Core_General.back_text%>" onclick="jQuery('a.cv8-back:first',v<%$uniqid%>.modulecontainer).click();"></div>
+</fieldset>
+<%/if%>
+<fieldset>
+  <legend><%$syslabels.Seolan_Module_MailingList_MailingList.notificationpush%></legend>
+  <table class="list2">
+    <tr>
+      <th>
+        <label><%$syslabels.Seolan_Module_MailingList_MailingList.pushtitle%></label>
+      </th>
+      <td>
+        <input type="text" name="subject" value="<%$_subject%>" />
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <label><%$syslabels.Seolan_Module_MailingList_MailingList.message%></label><br>
+        <%$syslabels.Seolan_Module_MailingList_MailingList.messagesmswarning%>
+      </th>
+      <td>
+        <textarea rows="10" id="messagebody" cols="60" name="message"><%$_message%></textarea>
+        <br>
+        <%$syslabels.Seolan_Module_MailingList_MailingList.message_length%>&nbsp;:<input readonly style="border:none" type="text" value="0" id="messagelength2"/>
+        <script type="text/javascript" language="javascript">
+          jQuery("#messagebody").on('keyup', function(e){
+            var v=jQuery(this).val().length;
+            if (v < 160){
+              jQuery('#messagelength2').val(v);
+            }else{
+              jQuery('#messagelength2').val('');
+            }
+          });
+          TZR.addValidator(['messagelength2',/(.+)/,'Message length','#FF0000','\Seolan\Field\ShortText\ShortText']);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <label><%$syslabels.Seolan_Module_MailingList_MailingList.pushdata%></label>
+      </th>
+      <td>
+        <textarea rows="10" cols="60" name="data"></textarea>
+      </td>
+    </tr>
+  </table>
+</fieldset>
+<div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.send_text%>"></div>
+</form>

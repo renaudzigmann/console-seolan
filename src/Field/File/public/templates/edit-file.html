@@ -1,0 +1,48 @@
+<div>
+<script language="javascript">
+function markdel<%$varid%>()
+{
+  if (jQuery('#<%$varid%>_del').val()==''){
+  jQuery('#<%$varid%>_del').val('1');
+<%if $field->url%>
+  jQuery('#ffdocrow<%$varid%>').addClass('napp-dataline');
+<%/if%>
+  jQuery('#newfile<%$varid%>').css('display','block');
+  } else {
+  jQuery('#<%$varid%>_del').val('');
+
+<%if $field->url%>
+  jQuery('#ffdocrow<%$varid%>').removeClass('napp-dataline');
+<%/if%>
+  jQuery('#newfile<%$varid%>').css('display','none');
+  }}
+</script>
+
+<%if $field->url%>
+<div id="ffdocrow<%$varid%>">
+<%$preview%>
+<%$mimelabel%>
+<%if $field->fielddef->usealt%>
+      <input type="text" name="<%$titlename%>" value="<%$field->title%>" placeholder="<%$syslabels.Seolan_Core_General.title_text%>"/>
+<%/if%>
+<a href="<%$field->url%>" data-toggle="tooltip" title="" data-original-title="<%$field->humansize%>"><%$field->originalname%></a>
+<input id="<%$varid%>_del" name="<%$fname%>_del" value="" type="hidden">
+<a onclick="markdel<%$varid%>()" title="<%$syslabels.Seolan_Core_General.delete_text%>" href="javascript:void(0)"><%$syslabels.Seolan_Core_General.delete%></span></a>
+<%if $editor%>
+<a id="<%$varid%>_edit" title="<%$syslabels.Seolan_Core_General.edit_text%>" href="javascript:void(0)"><%$syslabels.Seolan_Core_General.edit%></span></a>
+<input type="hidden" value="" id="<%$varid%>-updated" name="<%$fieldname%>_HID[editflag]">
+<%/if%>
+</div>
+<%/if%>
+
+<%if $field->url%>
+<div id="newfile<%$varid%>" style="display:none;">
+<%else%>
+<div id="newfile<%$varid%>" style="display:block;">
+<%/if%>
+<%if $field->fielddef->usealt%>
+      <input type="text" name="<%$titlename%>" value="" placeholder="<%$syslabels.Seolan_Core_General.title_text%>"/>
+<%/if%>
+<%$uploader%>
+</div>
+</div>

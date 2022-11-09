@@ -1,0 +1,10 @@
+<%assign var=order    value=$section.order%>
+<%assign var=customer value=$order->customer%>
+
+<h2><%"Récapitulatif de votre commande"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+<h3><%"Référence de votre commande"|__:'\Seolan\Module\Cart\CartV2'%>&nbsp;: <mark class="order-reference"><%$order->reference%></mark></h3>
+<a href="<%$order->print_url%>" class="btn btn-default" target="print"><%"Imprimer ma commande"|__:'\Seolan\Module\Cart\CartV2'%></a>
+<%include file="Module/CartV2.shop-order.html"%>
+
+<h2><%"Vos coordonnées"|__:'\Seolan\Module\Cart\CartV2'%></h2>
+<%include file="Module/CartV2.shop-customer.html"%>

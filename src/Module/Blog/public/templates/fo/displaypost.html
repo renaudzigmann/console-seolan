@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="<%$lang_data%>">
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=iso-8859-1">
+  <title><%$tzr.societe%>, <%$nav_labelup[0]%></title>
+<%assign var="description" value=$it_olines[0].otxt1->text%>
+<%if ($it_cat_mit.alias != 'home') && $description%>
+<meta name="description" content="<%$nav_labelup[0]%>, <%$description|truncate:"200":".."|strip:" "%>">
+<%else%>
+    <meta name="description" content="<%$charte_meta01%>">
+<%/if%>
+    <meta name="keywords" content="<%$charte_meta02%>">
+    <meta http-equiv="Content-Language" content="<%$labels.language%>">
+    <meta name="reply-to" content="info@xsalto.com">
+    <meta name="robots" content="index, follow">
+    <meta name="distribution" content="global">
+    <meta name="revisit-after" content="2 days">
+    <meta name="author" lang="<%$lang_data%>" content="XSALTO">
+    <meta name="copyright" content="XSALTO">
+    <meta name="identifier-url" content="<%$tzr.societe_url%>">
+    <meta name="expires" content="never">
+    <meta name="Date-Revision-yyyymmdd" content="<%$it_lastpageupdate->raw|date_format:"%Y%m%d"%>">
+    <meta http-equiv="Page-Enter" content="blendTrans(Duration=0.6)">
+    <%if $charte_icon%><link rel="SHORTCUT ICON" href="<%$charte_oicon->url%>"><%/if%>
+    <link rel="Stylesheet" href="/css/style.css" type="text/css">
+    <script language=javascript src="<%$TZR.share%>generic.js" type="text/javascript"></script>
+    <script  language=javascript  type="text/javascript">TZR.referer('<%$it_cat_mit.alias%>','<%$lang_data%>');</script>
+ </head>
+<body class="tzr-p-blog-body">
+<table align="center" id="tzr-p-blog">
+<tr><td colspan="2" id="tzr-p-blog-btitle"><%$brblog_otitle->html%></td></tr>
+<!--- espace misc a gauche --->
+<tr><td id="tzr-p-blog-misc"><img src="<%$brblog_oafile->resizer%>">
+<div class="tzr-p-blog-oposts">
+<%include file="blog/left.html"%></div>
+</div>
+</td>
+<td id="tzr-p-blog-posts">
+<div class="tzr-p-blog-post">
+<%if $smarty.request.message%>
+<b style="color:red">Votre message est attente de validation. Nous vous remercions pour votre participation.</b>
+<%/if%>
+<h1 class="tzr-p-blog-ptitle"><%$brpost_otitle->html%></h1>
+<span class="tzr-p-blog-pdate"><%$brpost_odatep->html%></span>
+<p class="tzr-p-blog-ptext"><%$brpost_otxt->html%></p>
+</div>
+<div class="tzr-p-blog-comments">
+<%section name=i loop=$brcomment_lines_oid%>
+<div class="tzr-p-blog-comment">
+<a name="<%$brcomment_lines_oid[i]%>"></a>
+<h2><%$brcomment_lines_otitle[i]->html%></h2>
+<b><%$brcomment_lines_owho[i]->html%>, <%$brcomment_lines_oUPD[i]->html%></b>
+</p>
+<%$brcomment_lines_otxt[i]->html%>
+</div>
+<%/section%>
+</div>
+<div class="tzr-p-blog-addcomment">
+<h2>Ajouter un commentaire</h2>
+<form action="<%$self%>" method=post ENCTYPE="multipart/form-data" name=editform  onsubmit="return TZR.isFormValidWithFocus(document.editform,true);">
+<p>Les commentaires sont mod&eacute;r&eacute;es. Ils n'apparaitront pas sur ce weblog tant que l'auteur ne les aura pas approuv&eacute;s.</p>
+<table>
+<tr><th><label><%$bradd_otitle->label%></label></th><td><%$bradd_otitle->html%></td></tr>
+<tr><th><label><%$bradd_otxt->label%></label></th><td><%$bradd_otxt->html%></td></tr>
+<tr><th><label>Nom</label></th><td><input type="text" name="who[label]" size="30"/></td></tr>
+<tr><th><label>Email</label></th><td><input type="text" name="who[url]" size="30"/></td></tr>
+</table>
+<div id="tzr-action"><input type=submit value="<%$syslabels.Seolan_Core_General.save_text%>"></div>
+<input type=hidden name="_function" value="procAddComment">
+<input type=hidden name="class" value="\Seolan\Module\Blog\Blog">
+<input type=hidden name="moid" value="<%$smarty.request.moid%>">
+<input type=hidden name="oid" value="<%$smarty.request.oid%>">
+<input type=hidden name="post" value="<%$smarty.request.post%>">
+<input type=hidden name="template" value="blog/message.html">
+<input type=hidden name="_next" value="<%$self%>&class=\Seolan\Module\Blog\Blog&function=displayPost&oid=<%$smarty.request.oid%>&tplentry=br&template=blog/displaypost.html&moid=<%$smarty.request.moid%>&post=<%$smarty.request.post%>&message=enattente"/>
+<input type=hidden name="skip" value=1>
+</form>
+</div>
+</td></tr>
+</table>
+</body>
+</html>

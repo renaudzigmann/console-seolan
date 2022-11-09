@@ -1,0 +1,51 @@
+<%include file="Core.header/ajax.html" title=$syslabels.Seolan_Module_Calendar_Calendar.displaymonth_text%>
+<div><%include file="Module/Calendar.top.html"%></div>
+<div class="calendars-action"><%include file="Module/Calendar.bottom.html"%></div>
+<div class="calendars">
+<script type="text/javascript">
+ var ag<%$uniqid%>={moid:"<%$_moid%>",oid:"<%$br_diary.KOID%>",rw:"<%$br_diariesprop[$br_diary.KOID].rwsecure%>",actEvent:"",actTarget:"",
+		    color:"<%$br_diariesprop[$br_diary.KOID].color%>",vuniqid:v<%$uniqid%>,display:"<%$function%>"};
+// Ecouteur pour supression
+if(ag<%$uniqid%>.rw){
+  jQuery(document).unbind('keydown',TZR.Calendar.keyListener);
+  jQuery(document).bind('keydown',{monthly:true,uniqid:"<%$uniqid%>",obj:ag<%$uniqid%>},TZR.Calendar.keyListener);
+ }
+</script>
+<div class="cv8-agenda" id="agenda<%$uniqid%>">
+<div class="table-responsive">
+<h4><%$br_header%></h4>
+ <table class="table tzr-cal-display">
+  <thead>
+  <tr class="tzr-cal-display-week-day">
+   <%foreach from=$syslabels.Seolan_Module_Calendar_Calendar.daymax item=text%>
+    <td><%$text%></td>
+   <%/foreach%>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+   <%foreach from=$br_body item=day%>
+    <td class="tzr-cal-display-<%$day.day_display_type%>" id="ag<%$day.year%>-<%$day.month|str_pad:2:"0":0%>-<%$day.day|str_pad:2:"0":0%>-<%$uniqid%>">
+     <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayDay&tplentry=br&template=Module/Calendar.displayDay.html&day=<%$day.day%>&month=<%$day.month%>&year=<%$day.year%>"><%$day.day%></a>
+     <%foreach from=$day.notes item=n%>
+      <script type="text/javascript">
+       TZR.Calendar.monthCreateDiv("<%$uniqid%>",ag<%$uniqid%>,{_obd:"<%$n._cbegindate%>",_oed:"<%$n._cenddate%>",_bd:"<%$n._begindate%>",_ed:"<%$n._enddate%>",_bh:"<%$n._beginhour%>",_eh:"<%$n._endhour%>",<%if in_array($n.DKOID,$br_privatediaries) || $n.visib=="PU"%>text:"<%$n.otext->html|escape:"javascript"%>",descr:"<%$n.odescr->html|escape:"javascript"%>",place:"<%$n.oplace->html|escape:"javascript"%>"<%else%>text:"<%$syslabels.Seolan_Module_Calendar_Calendar.occupy%>",place:"",descr:""<%/if%>,_isod:"<%$n.begin|substr:0:10%>",color:"<%$br_diariesprop[$n.DKOID].color%>",rw:"<%$br_diariesprop[$n.DKOID].rwsecure%>",cat:"<%$br_categories[$n.cat].color%>",url:"<%$n._url%>",oid:"<%$n.oid%>",allday:1,dname:"<%$n.DNAME%>",id:"no-<%$n.oid%>-<%$n.begin|substr:0:10%>"});
+      </script>
+     <%/foreach%>
+     <%foreach from=$day.events item=e%>
+      <script type="text/javascript">
+       TZR.Calendar.monthCreateDiv("<%$uniqid%>",ag<%$uniqid%>,{_obd:"<%$e._cbegindate%>",_oed:"<%$e._cenddate%>",_bd:"<%$e._begindate%>",_ed:"<%$e._enddate%>",_bh:"<%$e._beginhour%>",_eh:"<%$e._endhour%>",<%if in_array($e.DKOID,$br_privatediaries) || $e.visib=="PU"%>text:"<%$e.otext->html|escape:"javascript"%>",descr:"<%$e.odescr->html|escape:"javascript"%>",place:"<%$e.oplace->html|escape:"javascript"%>"<%else%>text:"<%$syslabels.Seolan_Module_Calendar_Calendar.occupy%>",place:"",descr:""<%/if%>,_isod:"<%$e.begin|substr:0:10%>",color:"<%$br_diariesprop[$e.DKOID].color%>",rw:"<%$br_diariesprop[$e.DKOID].rwsecure%>",cat:"<%$br_categories[$e.cat].color%>",url:"<%$e._url%>",oid:"<%$e.oid%>",allday:0,dname:"<%$e.DNAME%>",id:"ev-<%$e.oid%>-<%$e.begin|substr:0:10%>"});
+      </script>
+     <%/foreach%>
+    </td>
+    <%cycle values=",,,,,,</tr><tr>"%>
+   <%/foreach%>
+  </tr>
+  </tbody>
+ </table>
+ </div>
+</div>
+<br>
+
+<%include file="Module/Calendar.quickinput.html"%>
+

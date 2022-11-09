@@ -1,0 +1,51 @@
+<%* liste des modules indexés *%>
+<%include file="Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+
+<%function name="f_actions"%>
+<button type="submit" class="btn btn-primary">Réindexer</button>
+à partir du : <input type="date" name="newindexdate[<%$moid%>]">
+<%/function%>
+
+<form onsubmit="return TZR.ajaxSubmitForm(this);" name="<%$uniqid%>" action="<%$fullself%>" method="post">
+
+<div class="table-responsive">
+
+  <table class="table table-striped">
+
+    <thead>
+      <tr>
+	<th>Module</th>
+	<th><%$syslabels.Seolan_Core_General.last_update%></th>
+	<th>Document(s)</th>
+<%if $br_on%>	<th></th> <%/if%>
+      </tr>
+    </thead>
+
+    <%foreach from=$br_list item="mod" key="moid"%>
+    <tr>
+      <td><%$mod.name%></td>
+      <td>
+	<%$mod.lastindexation%>
+	<%if !empty($mod.lastapp)%>
+	<br><emp>
+  <%","|implode:$mod.lastapp%>
+	<input type="hidden" name="withapp[<%$moid%>]" value="<%implode(',',array_keys($mod.lastapp))%>">
+  </emp>
+	<%/if%>
+      </td>
+      <td><%$mod.numofdocs%></td>
+      <%if $br_on%>
+      <td>
+	<%f_actions moid=$moid%>
+      </td>
+      <%/if%>
+    </tr>
+    <%/foreach%>
+
+  </table>
+
+</div>
+<input name="moid" type="hidden" value="<%$_moid%>">
+<input name="function" type="hidden" value="forceIndexation">
+<input name="template" type="hidden" value="Core.empty.html">
+</form>

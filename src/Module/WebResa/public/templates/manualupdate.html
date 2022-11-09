@@ -1,0 +1,31 @@
+<%* mise a jour manuelle *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text%>
+<form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="function" value="procManualImportTrek">
+ <input type="hidden" name="template" value="Core.empty.html">
+ <input type="hidden" name="tplentry" value="raw">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="oid" value="<%$raw_oid%>">
+<input type="hidden" name="force" value="">
+ <input type="hidden" name="skip" value="1">
+<fieldset><legend>Trek : <%$raw_dtrek.otrek_id->raw%> <%$raw_dtrek.link%> </legend>
+<%$raw_dtrek.oUPD->fielddef->label%> : <%$raw_dtrek.oUPD->html%><br>
+<%$raw_dtrek.onomaj->fielddef->label%> : <%$raw_dtrek.onomaj->html%>
+</fieldset>
+<fieldset><legend>Flux Général du : <%$raw_general_date%></legend>
+Url : <%$raw_general_url%><br>
+<textarea <%if !$root%>readonly<%/if%> name="mainflux" cols="70" rows="15"><%$raw_general|escape:'html'%></textarea>
+</fieldset>
+<%if $raw_tarifs_url%>
+<fieldset><legend>Départs & options du : <%$raw_tarifs_date%></legend>
+Url : <%$raw_tarifs_url%><br>
+<textarea <%if !$root%>readonly<%/if%> name="optionsflux" cols="70" rows="15" ><%$raw_tarifs|escape:'html'%></textarea>
+</legend>
+<%/if%>
+<div id="tzr-action<%$uniqid%>" class="tzr-action">
+ <input type="submit" value="<%$syslabels.Seolan_Core_General.import%>" >
+ <input type="button" value="Rafraîchir" onclick="var form = document.forms['editform<%$uniqid%>']; form.elements['force'].value='1'; form.elements['template'].value = 'Module/WebResa.manualupdate.html'; form.elements['function'].value='preManualImportTrek'; TZR.ajaxSubmitForm(form); ">
+</div>
+
+</form>
+

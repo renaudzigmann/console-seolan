@@ -1,0 +1,37 @@
+{
+  "authentication":{ 
+    "blockUnknown": true, 
+    "class":"solr.BasicAuthPlugin",
+    "credentials":
+    {
+      "solradmin":"sAsFME1cq2g0zJSp7/jYAF3QwHdrYIEzRH8dc1z8kdg= NgpsHuEQHhAsQTMLyYyDYDWpFnwGud+QFhOiHLIh1Ek=",
+      "user-console-sample":"YJNVXwjmI6LXX6rCQwOkDvUnDz3oXgJhejvr4hwG1kE= Bs1YZm+kgNse+yL+wMV+dmNR9oXpyv/cltnjSxi4wJE="
+    },
+    "realm":"CSX Solr Users", 
+    "forwardCredentials": false 
+  },
+  "authorization":{
+
+    "class":"solr.RuleBasedAuthorizationPlugin",
+
+    "permissions":[
+      
+      {"name":"security-edit","role":"admin-user"},
+      {"name":"security-read","role":"admin-user"},
+      {"name":"core-admin-write","role":["admin-user"]},
+      {"name":"core-admin-read","role":["admin-user"]},
+      
+      {"name":"csx-update","role":"csx-user","path":"/update"},
+      {"name":"csx-select","role":"csx-user","path":"/select"},
+      {"name":"csx-query","role":"csx-user","path":"/query"},
+      {"name":"csx-delete","role":"csx-user","path":"/delete"},
+     
+      {"name":"all","role":"admin-user"}
+      
+    ], 
+    "user-role":{
+	"solradmin":["admin-user","csx-user"],
+      "user-console-sample":["csx-user"]
+    } 
+  }
+}

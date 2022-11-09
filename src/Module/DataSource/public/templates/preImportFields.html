@@ -1,0 +1,18 @@
+<%assign var="title" value="`$syslabels.Seolan_Module_DataSource_DataSource.preimportfields`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+<fieldset>
+ <legend>Fichier CSV/XLS05/XLSX</legend>
+ <form action="<%$self%>" method="post" enctype="multipart/form-data" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <input type="hidden" name="moid" value="<%$smarty.request.moid%>">
+  <input type="hidden" name="function" value="importFields">
+  <input type="hidden" name="template" value="Core.message.html">
+  <input type="file" name="file"><br>
+  <label>Prefix SQL des tables : </label><input type="text" name="prefixSQL"><br><br>  
+  <input type="checkbox" value="1" name="delallfields" id="daf"><label for="daf">Supprimer tous les champs des tables importées avant de faire l'import.</label><br>
+  <input type="checkbox" value="1" name="delotherfields" id="dof"><label for="dof">Supprimer tous les champs des tables importées non présent dans le fichier.</label><br><br>
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+   <input type="button" value="<%$syslabels.Seolan_Core_General.cancel%>" onclick="v<%$uniqid%>.jQueryLoad('<%$back%>');">
+  </div>
+ </form>
+</fiedset>

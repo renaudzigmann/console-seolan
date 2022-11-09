@@ -1,0 +1,154 @@
+<%assign var=edituniqid value="edit$uniqid"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.edit_text uniqid=$edituniqid noheader=0%>
+
+<script type="text/javascript" language="javascript">
+/*<%* liste de langues :  toutes, pour edition, pour consultation *%>*/
+v<%$edituniqid%>.alllangs = {};
+v<%$edituniqid%>.editlangs = {};
+v<%$edituniqid%>.viewlangs = {};
+  <%foreach from=$br__allowedlangs.edit item=lang%>
+  <%if !$lang.inactive%>
+  v<%$edituniqid%>.editlangs["<%$lang.code%>"] = v<%$edituniqid%>.alllangs["<%$lang.code%>"] = {text:"<%$lang.text|escape:'javascript'%>", 
+												code:"<%$lang.code%>", 
+												long:"<%$lang.long|escape:'javascript'%>",
+												translation_ok:<%if $lang.translation_ok%>true<%else%>false<%/if%>
+											       };
+  <%/if%>
+  <%/foreach%>
+  <%foreach from=$br__allowedlangs.view item=lang%>
+  v<%$edituniqid%>.viewlangs["<%$lang.code%>"] = v<%$edituniqid%>.alllangs["<%$lang.code%>"] = {text:"<%$lang.text|escape:'javascript'%>",
+										code:"<%$lang.code%>", 
+												long:"<%$lang.long|escape:'javascript'%>", 
+												translation_ok:<%if $lang.translation_ok%>true<%else%>false<%/if%>
+											       };
+<%/foreach%>
+
+jQuery(document).ready(function(){
+  var vuniqid = v<%$edituniqid%>;
+  vuniqid.editform = document.forms.editform<%$edituniqid%>;
+  vuniqid.displayurl = "<%$br__displayurl%>";
+  vuniqid.editurl = "<%$br__editurl%>";
+  vuniqid.viewcontainer = jQuery("#view<%$uniqid%>");
+  vuniqid.editcontainer = jQuery("#edit<%$uniqid%>");
+  vuniqid.translationoid = "<%$br_oid%>";
+  vuniqid.cks = null;
+  vuniqid.confirmMessage = null;
+  <%if $syslabels.Seolan_Core_General.confirmlangchange%>
+  vuniqid.confirmMessage = "<%$syslabels.Seolan_Core_General.confirmlangchange|escape:'javascript'%>"
+  <%/if%>
+  // ajouts des selects des langues
+  var sledit = TZR.EDITTRANSLATION.mkLangSelect(vuniqid.editlangs, null)
+<%if $smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY%>
+  if(Object.keys(vuniqid.editlangs).length <= 1){
+      document.getElementById("selectEditLang").style.display = "none";
+  }
+<%else%>
+  if(Object.keys(vuniqid.editlangs).length <= 1){
+      jQuery(".langselection", vuniqid.editcontainer).append(document.createTextNode("<%$TZR.lang_data.text%>"));
+  }
+<%/if%>
+  else {
+      sledit.appendTo(jQuery(".langselection", vuniqid.editcontainer));
+  }
+ 
+  var slview = TZR.EDITTRANSLATION.mkLangSelect(vuniqid.viewlangs, null);
+  if(Object.keys(vuniqid.viewlangs).length <= 2){
+      jQuery(".langselection", vuniqid.viewcontainer).append(document.createTextNode("<%$TZR.lang_trad.text%>"));
+  } else {
+      slview.appendTo(jQuery(".langselection", vuniqid.viewcontainer));
+  }
+  // gestionnaires choix des langues
+  
+  jQuery(sledit).on('change', function(evt){
+      TZR.EDITTRANSLATION.changeLangEdit(jQuery('option:selected', this), vuniqid);
+   });
+  jQuery(slview).on('change', function(evt){
+    var tzrlang = jQuery("option:selected", this).data('tzr-lang')
+    if (tzrlang.translation_ok != true){
+      alert("<%$syslabels.Seolan_Module_Table_Table.translation_missing_data|escape:'javascript'%>");
+      jQuery("option[value='"+v<%$edituniqid%>.currentLangCode+"']", this).attr('selected', true);
+      return false;
+    }
+    TZR.EDITTRANSLATION.loadView(tzrlang.code, vuniqid);
+  });
+  
+  // langue chargée en edition
+  TZR.EDITTRANSLATION.setSelectedLang(vuniqid.editcontainer, "<%$br__langedit.code%>");
+  
+  // chargement du display
+  TZR.EDITTRANSLATION.loadView(null, vuniqid);
+
+  // mise en évidence de la validité
+  <%if isset($br_oPUBLISH)%>
+    TZR.EDITTRANSLATION.setPublishStatus("<%$br_oPUBLISH->raw%>", vuniqid.editcontainer);
+  <%/if%>
+  
+  // copie des données
+  jQuery("#<%$edituniqid%>copytoright").on('click', function(){
+    TZR.EDITTRANSLATION.copyValuesToLeft(vuniqid);
+  });
+  // traduction des données
+  jQuery("#<%$edituniqid%>TradSelected").on('click', function(){
+      tradSelection({"target":"<%$TZR.lang_data.iso%>","src":"<%$TZR.lang_trad.iso%>"});
+  });
+  TZR.EDITTRANSLATION.initSplitter(vuniqid);
+});
+//# sourceURL=Module/Table.public.template/edit-translation.html
+</script>
+<%if $smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY%><script src="<%$smarty.const.TZR_WWW_CSX%>src/Core/public/deepl.js"></script><%/if%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.edit-jsscripts.html"  uniqid=$edituniqid%>
+<div id="translation-<%$uniqid%>" class="cv8-contenu-center clearfix">
+  <div class="edit-translations clearfix">
+    <div id="edit<%$uniqid%>" class="leftpanel">
+      <div class="header">
+	<%if $smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY%>
+	<button id="select_all" class="btn btn-default"><%$syslabels.Seolan_Core_General.select_all_label%></button>
+	<button id="<%$edituniqid%>TradSelected" class="btn btn-default"><%$syslabels.Seolan_Core_General.translate_selected_fields_label|@sprintf:"<%$TZR.lang_data.text%>"%></button>
+	<div id="selectEditLang">
+	<%/if%>
+	  <label><%$syslabels.Seolan_Core_General.lang_trad%></label><span class="langselection"></span><%if $smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY%></div><%/if%>
+      </div>
+      <div class="details">
+	<%capture name=action_handled%>1<%/capture%><%* les action dans ce mode ne sont pas identiques *%>
+	<%include file="`$smarty.const.TZR_SHARE_DIR`Module/Table.edit.html" noheader=1 uniqid=$edituniqid%>
+      </div>
+    </div>
+    <div id="view<%$uniqid%>" class="rightpanel">
+      <div class="header">
+	<button id="<%$edituniqid%>copytoright" class="btn btn-default copylangdata"><span class="glyphicon csico-menu-left" aria-hidden="true"></span><%$syslabels.Seolan_Core_General.copyfrombase%></button>
+	<%if empty($smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY)%><label><%$syslabels.Seolan_Core_General.languages%></label><%/if%><span class="langselection"></span>
+      </div>
+      <div class="details"></div>
+    </div>
+  </div>
+  <%* bloc statuts de traduction *%>
+  <div class="bottom">
+  <div id="tzr-langstatus">
+    <a data-toggle="collapse" 
+       onclick='var target=jQuery("#translation-lang-status-form-<%$uniqid%>"); if (!jQuery(target).is(":visible")){TZR.jQueryLoad({url:"<%$self%>function=langStatus&amp;skip=1&amp;moid=<%$imod_props._moid%>&amp;template=Module/Table.langStatus.html&amp;tplentry=br&amp;oid=<%$br_oid%>&amp;_raw=2&amp;_ajax=1", target:target});}'  
+       href="#translation-lang-status-form-<%$uniqid%>">
+    </a>
+    <div id="translation-lang-status-form-<%$uniqid%>" class="collapse"></div>
+  </div>
+  <div id="tzr-action<%$edituniqid%>" class="tzr-action">
+      <input type="button" data-toggle="collapse"
+       onclick='var target=jQuery("#translation-lang-status-form-<%$uniqid%>"); if (!jQuery(target).is(":visible")){TZR.jQueryLoad({url:"<%$self%>function=langStatus&amp;skip=1&amp;moid=<%$imod_props._moid%>&amp;template=Module/Table.langStatus.html&amp;tplentry=br&amp;oid=<%$br_oid%>&amp;_raw=2&amp;_ajax=1", target:target});}' href="#translation-lang-status-form-<%$uniqid%>" value="<%$syslabels.Seolan_Core_General.languages%>">
+      <input type="submit" onclick="v<%$edituniqid%>.editform._function.value='procEditTranslation';return TZR.ajaxSubmitForm(v<%$edituniqid%>.editform);" value="<%$syslabels.Seolan_Core_General.save_text%>" >
+
+      <input type="submit" onclick="v<%$edituniqid%>.editform._next.value='nextitem';v<%$edituniqid%>.editform._function.value='procEditTranslation';return TZR.ajaxSubmitForm(v<%$edituniqid%>.editform);" value="<%$syslabels.Seolan_Module_Table_Table.savenext_nextitem%>" >
+
+      <%*todo : langue suivante *%>
+   
+      <%if $smarty.request.usenav && !$br__islast%> <%* a voir : edition par lot *%>
+      <input type="submit" onclick="v<%$edituniqid%>.editform._next.value='<%$self%>&moid=<%$_moid%>&function=edit&template=Module/Table.edit.html&tplentry=br&oid=<%$br_oid%>&navdir=next&usenav=1';" value="<%$syslabels.Seolan_Core_General.save_and_editnext_text%>">
+      <%/if%>
+
+      <%if $br_translation_ok && $imod_mod->secure('','del')%>
+       <input type="button" onclick='TZR.Record.delete("<%$edituniqid%>","<%$imod_props._moid%>", "del", "<%$br_oid%>", {message:"<%$syslabels.Seolan_Core_General.confirm_delete_object_lang|escape:"quotes"%>"});' value="<%$syslabels.Seolan_Core_General.delete_text%>">
+      <%/if%>
+      <%* a voir et completer ? voir edit simple ? *%>
+      <%if $modsec_mods[$_moid].rwv && $lang_data==$lang_def && count($lang_code)>1 && $br_translatable%>
+  <input type="submit" onclick="if(confirm('<%$syslabels.Seolan_Core_General.savealllangwarning%>')) jQuery(editform).append('<input type=\'hidden\' name=\'procEditAllLang\' value=\'1\'>'); else return false;" value="<%$syslabels.Seolan_Core_General.savealllang%>">
+  <%/if%>
+  </div>
+</div>

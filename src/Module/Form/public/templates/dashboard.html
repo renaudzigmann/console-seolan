@@ -1,0 +1,47 @@
+<script type="text/javascript">
+ v<%$uniqid%>.oid = "<%$br_oid%>";
+ v<%$uniqid%>.delanswerstitle  = "<%$syslabels.Seolan_Module_Form_Form.dashboard_text|escape:"javascript"%>";
+ v<%$uniqid%>.delanswersmess  = "<%$syslabels.Seolan_Module_Form_Form.delanswersconf|escape:"javascript"%>";
+ v<%$uniqid%>.delAnswers=function(){
+   TZR.Form.delAnswers(v<%$uniqid%>);
+ }
+</script>
+<div class="table-responsive">
+  <table class="table table-condensed table-stripped width-auto">
+    <%if $br_oisopen->raw != 1%>
+    <tr><th><%$syslabels.Seolan_Core_General.recipients_text%></th><td><%$br___nbdest%></td></tr>
+    <%/if%>
+    <tr><th><%$syslabels.Seolan_Module_Form_Form.nbanswers%></th><td><%$br___total%></td></tr>
+    <%if $br_oinvitok-raw == 1%>
+    <tr>
+      <th><%$br_odtsend->fielddef->label%></th><td><%if $br_oinvitok->raw == 1%><%$br_odtsend->html%><%else%><%$syslabels.Seolan_Module_Form_Form.invitko%><%/if%></td>
+    </tr>
+    <%/if%>
+    <%if $br_oreedit->raw==1%>
+    <tr>
+      <th><%$br_oreedit->fielddef->label%></th> <td><%$br_oreedit->html%></td>
+    </tr>
+    <tr><th><%$syslabels.Seolan_Module_Form_Form.nbopenanswers%></th><td><%$br___ototal%></td></tr>
+    <tr><th><%$syslabels.Seolan_Module_Form_Form.nbcloseanswers%></th><td><%$br___ctotal%></td></tr>
+    <%/if%>
+  </table>
+</div>
+<div class="clearfix"></div>
+<div class="tzr-action">
+  <%* actions de base : export, effacer *%>
+  <%if $br___total > 0%>
+  <input class="btn btn-default" type="button" value="<%$syslabels.Seolan_Core_General.export_text%>" onclick="location.href='<%$self%>moid=<%$_moid%>&function=exportAnswers&oid=<%$br_oid%>';">
+  <%/if%>
+  <%if $br_oinvitok->raw == 1 || $br___total%>
+  <input class="btn btn-default" type="button" value="<%$syslabels.Seolan_Module_Form_Form.delanswers%>" onclick="v<%$uniqid%>.delAnswers();">
+  <%/if%>
+  <%if $br_oispoen->raw != 1%> 
+  <%if !$br__closed%><%* invitations / relance *%>
+  <%if $br_oinvitok->raw != 1%>
+  <a class="cv8-ajaxlink btn btn-default" href="<%$self%>moid=<%$_moid%>&function=sendInvitations&tplentry=br&template=Module/Form.sendInvitations.html&oid=<%$br_oid%>"><%$syslabels.Seolan_Module_Form_Form.sendinvitations%></a>
+  <%else%>
+  <a class="cv8-ajaxlink btn btn-default" href="<%$self%>reminder=1&moid=<%$_moid%>&function=sendInvitations&tplentry=br&template=Module/Form.sendInvitations.html&oid=<%$br_oid%>&"><%$syslabels.Seolan_Module_Form_Form.sendreminder%></a>
+  <%/if%>
+  <%/if%>
+  <%/if%>
+</div>

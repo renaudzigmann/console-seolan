@@ -1,0 +1,57 @@
+<script>
+    prefSubmitForm_<%$uniqid%> = function(form, oid){
+        return TZR.ajaxSubmitForm(form,'#prefdiv'+oid,false, {cb: function(div){
+                if ($(form).find('input[name=_function]').val() !== 'procEditPrefs') {
+                    jQuery(div).parents('fieldset').remove();
+                }
+            }, cb_args: '#prefdiv'+oid});
+    };
+</script>
+<div id="accordion<%$uniqid%>" class="cv8-accordion">
+ <%section name=i loop=$br_lines_oid%>
+  <%if !empty($br_lines_prefs[i])%>
+   <%assign var="ok" value=true%>
+   <fieldset>
+    <legend><%$br_lines_name[i]%></legend>
+    <div id="prefdiv<%$br_lines_oid[i]%>">
+     <form action="<%$self%>" onsubmit="return prefSubmitForm_<%$uniqid%>(this, '<%$br_lines_oid[i]%>', <%$br_lines_prefs_btn[i].eraseButton%>);">
+      <input type="hidden" name="moid" value="<%$br_lines_oid[i]%>">
+      <input type="hidden" name="_function" value="">
+      <input type="hidden" name="template" value="Module/User.preferences.html">
+      <input type="hidden" name="tplentry" value="br">
+      <div class="row-striped">
+       <%section name=f loop=$br_lines_prefs[i].fields_object%>
+        <div id="cont-<%$br_lines_prefs[i].fields_object[f]->fielddef->field%>" class="row">
+         <div class="row-striped-content">
+          <div class="col-xs-12 col-sm-3 col-lg-2">
+           <%$tooltip=null%>
+           <%if !empty($br_lines_prefs[i].fields_object[f]->fielddef->acomment)%><%$tooltip=$br_lines_prefs[i].fields_object[f]->fielddef->acomment|escape:'html'%><%/if%>
+           <label class="fieldHelp" <%if $tooltip!=null%>role="button" data-html="true" tabindex="0" data-trigger="" data-toggle="popover" data-content="<p><%$br_lines_prefs[i].fields_object[f]->fielddef->acomment|escape:'html'%></p>" title="<%$br_lines_prefs[i].fields_object[f]->fielddef->label|escape:'html'%>"<%/if%>>
+            <%$br_lines_prefs[i].fields_object[f]->fielddef->label%>
+            <%if $tooltip!=null%> <span class="glyphicon csico-infos" aria-hidden="true"></span><%/if%>
+           </label>
+          </div>
+          <div class="col-xs-12 col-sm-9 col-lg-10">
+           <%$br_lines_prefs[i].fields_object[f]->html%>
+          </div>
+         </div>
+        </div>
+       <%/section%>
+      </div>
+      <div id="tzr-action<%$uniqid%>" class="tzr-action">
+        <%if $br_lines_prefs_btn[i].saveButton%>
+          <input type="submit" onclick="$(this).parents('form').find('input[name=_function]').val('procEditPrefs');" value="<%$syslabels.Seolan_Core_General.save_text%>">
+        <%/if%>
+        <%if $br_lines_prefs_btn[i].eraseButton%>
+          <input type="submit" onclick="$(this).parents('form').find('input[name=_function]').val('procErasePrefs');" value="<%$syslabels.Seolan_Core_General.reset_text%>">
+        <%/if%>
+      </div>
+     </form>
+    </div>
+   </fieldset>
+  <%/if%>
+ <%/section%>
+ <%if !$ok%>
+  <%$syslabels.Seolan_Module_User_User.noprefs%>
+ <%/if%>
+</div>

@@ -1,0 +1,20 @@
+<%if !$cart->items%>
+
+  <div class="alert alert-info">
+    <%"Votre panier est vide"|__:'\Seolan\Module\Cart\CartV2'%>
+  </div>
+  <div class="shop-actions">
+    <a href="<%$self%>alias=<%$shop->alias_shop%>" class="btn btn-default"><%"Retour à la boutique"|__:'\Seolan\Module\Cart\CartV2'%></a>
+  </div>
+  
+<%else%>
+
+  <%include file="Module/CartV2.shop-steps.html"%>
+  <%include file="Module/CartV2.shop-cart.html" mode='edit'%>
+
+  <div class="shop-actions">
+    <a href="<%$self%>alias=<%$shop->alias_shop%>" class="btn btn-default">&laquo; <%"Continuer vos achats"|__:'Seolan_Module_Cart_CartV2'%></a>
+    <a href="<%$shop->getStepUrl('address')%>" class="btn btn-warning"><%$shop->getStepLabel('address')%> &raquo;</a>
+  </div>
+  
+<%/if%>

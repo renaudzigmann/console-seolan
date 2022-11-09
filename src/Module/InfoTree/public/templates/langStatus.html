@@ -1,0 +1,92 @@
+<%* 
+status replication auto des langues et modification des choix actuels
+*%>
+<!-- Module/InfoTree.langstatus.html -->
+<script type="text/javascript" language="javascript">
+  var catlangs = {
+  authlist:[], list:{}, replist:{},
+    check:function(){
+      var autos = "";
+      var srcs = "";
+      var tparent = null;
+
+/*<%*
+si selectionnée, ne peut plus être alimentée auto => ligne disabled et vidée 
+si alimentée auto, ne peut pas alimenter => enlevée des select
+cas particulier : lang_def
+*%>*/
+      jQuery(".langstatusline").each(function(i, o){
+        if (tparent == null){
+          tparent = jQuery(this).parents('table').first();
+        }
+        var lang = jQuery(this).data('lang');
+        var langrepli = jQuery("select>option:selected", this).val();
+        if (langrepli != ''){
+          srcs += "."+langrepli+".";
+          autos += "."+lang+".";
+        }
+      });
+      jQuery(".langstatusline").each(function(i, o){
+        var lang = jQuery(this).data('lang');
+        var langrepli = jQuery("select>option:selected", this).val();
+        if (autos.indexOf(lang) != -1){
+          jQuery("option[value='"+lang+"']", tparent).attr('disabled', true);
+        } else {
+          jQuery("option[value='"+lang+"']", tparent).attr('disabled', false);
+        }
+        if (srcs.indexOf(lang) != -1){
+          jQuery("tr[data-lang='"+lang+"'] select option:first", tparent).attr('selected', true);
+          jQuery("tr[data-lang='"+lang+"'] select", tparent).attr('disabled', true);
+        } else {
+          jQuery("tr[data-lang='"+lang+"'] select", tparent).attr('disabled', false);
+        }
+      });
+    }
+  };
+  <%section name=l loop=$langrepli.authlist%>
+  catlangs.authlist.push("<%$langrepli.authlist[l].raw%>");
+  <%/section%>
+  <%section name=r loop=$langrepli.rawlist%>
+  catlangs.list["<%$langrepli.rawlist[r].tlang%>"] = "<%$langrepli.rawlist[r].slang%>";
+  catlangs.replist["<%$langrepli.rawlist[r].slang%>"] = "<%$langrepli.rawlist[r].tlang%>";
+  <%/section%>
+  jQuery(document).ready(function(){
+    catlangs.check();
+    jQuery("#editlangstatus<%$uniqid%> select").on("change", function(e){
+      catlangs.check.call(catlangs);
+    });
+  });
+</script>
+<div class="cv8-editlangstatus" id="editlangstatus<%$uniqid%>">
+  <table class="list2">
+  <%section name=l loop=$langrepli.authlist%>
+  <%if $langrepli.authlist[l].olang->raw == $lang_def%>
+  <tr>
+  <td colspan="4"><strong><%$langrepli.authlist[l].olang->html%></strong></td>
+  <%else%>
+  <tr class="langstatusline" data-lang="<%$langrepli.authlist[l].raw%>">
+  <td><%$langrepli.authlist[l].olang->html%></td>
+  <td><%$langrepli.fieldlabel%></td>
+  <td><%$langrepli.authlist[l].olangrepli->html%></td>
+  <%/if%>
+  </tr>
+  <%/section%>
+</table>
+<%if $langrepli.edit%>
+<div class="tzr-action">
+<input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+</div>
+<%/if%>
+</div>
+<%*
+<div>
+  <table class="list2">
+  <%section name=lr loop=$langrepli.rawlist%>
+  <tr>
+  <td><%$langrepli.rawlist[lr].otlang->html%></td>
+  <td><%$langrepli.fieldlabel%></td>
+  <td><%$langrepli.rawlist[lr].oslang->html%></td>
+  </tr>
+  <%/section%>
+</div>
+*%>

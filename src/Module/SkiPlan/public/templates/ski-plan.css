@@ -1,0 +1,742 @@
+
+
+
+@font-face {
+  font-family: 'xs-skiplan';
+  src:  url('//fonts.xsalto.com/xs-skiplan/xs-skiplan.eot?2gflqq');
+  src:  url('//fonts.xsalto.com/xs-skiplan/xs-skiplan.eot?2gflqq#iefix') format('embedded-opentype'),
+  url('//fonts.xsalto.com/xs-skiplan/xs-skiplan.ttf?2gflqq') format('truetype'),
+  url('//fonts.xsalto.com/xs-skiplan/xs-skiplan.woff?2gflqq') format('woff'),
+  url('//fonts.xsalto.com/xs-skiplan/xs-skiplan.svg?2gflqq#xs-skiplan') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="xssp-"], [class*=" xssp-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'xs-skiplan' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.xssp-xsalto:before {
+  content: "\e100";
+}
+.xssp-niveau:before {
+  content: "\e301";
+}
+.xssp-etat:before {
+  content: "\e302";
+}
+
+/* Pistes - Types */
+
+.xssp-type-skialpin:before {
+  content: "\e303";
+}
+.xssp-type-skidefond:before {
+  content: "\e304";
+}
+.xssp-type-snowboard:before {
+  content: "\e305";
+}
+.xssp-type-luge:before {
+  content: "\e306";
+}
+.xssp-type-caisse:before {
+  content: "\e307";
+}
+.xssp-type-pieton:before {
+  content: "\e308";
+}
+.xssp-type-boardercross:before {
+  content: "\e309";
+}
+.xssp-type-snowzone:before {
+  content: "\e310";
+}
+.xssp-type-toilettes:before {
+  content: "\e311";
+}
+.xssp-type-bikepark:before {
+  content: "\e312";
+}
+.xssp-type-snowpark:before {
+  content: "\e313";
+}
+.xssp-type-ludique:before {
+  content: "\e314";
+}
+.xssp-type-vttdescente:before {
+  content: "\e315";
+}
+.xssp-type-restaurant:before {
+  content: "\e316";
+}
+.xssp-type-sentierSN:before {
+  content: "\e317";
+}
+.xssp-type-sentierPA:before {
+  content: "\e318";
+}
+.xssp-type-bosses:before {
+  content: "\e319";
+}
+.xssp-type-vttcross:before {
+  content: "\e900";
+}
+
+/* Remontees - Types */
+
+.xssp-type-ascenceur:before {
+  content: "\e320";
+}
+.xssp-type-tapisroulant:before {
+  content: "\e321";
+}
+.xssp-type-telebenne:before {
+  content: "\e322";
+}
+.xssp-type-telecabine:before {
+  content: "\e323";
+}
+.xssp-type-telepherique:before {
+  content: "\e324";
+}
+.xssp-type-telesiege:before {
+  content: "\e325";
+}
+.xssp-type-teleski:before {
+  content: "\e326";
+}
+.xssp-type-train:before {
+  content: "\e327";
+}
+.xssp-type-tsdebrayable:before {
+  content: "\e328";
+}
+.xssp-type-funiculaire:before {
+  content: "\e329";
+}
+.xssp-type-funitel:before {
+  content: "\e330";
+}
+.xssp-type-telemix:before {
+  content: "\e331";
+}
+.xssp-type-tsdebrayablebulle:before {
+  content: "\e332";
+}
+.xssp-type-total:before {
+  content: "\e333";
+}
+.xssp-type-telecorde:before {
+  content: "\e334";
+}
+
+
+
+
+
+
+
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}
+
+.etat_menu {
+  margin-bottom: 0.5em;
+}
+
+.etat_menu ul {
+  clear: both;
+  display: list-item;
+  list-style: outside none none;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+.etat_menu ul li {
+  border-left: 1px solid #0085c6;
+  color: #ffffff;
+  display: inline;
+  margin: 0;
+  padding: 0 7px;
+}
+
+.etat_menu ul li:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+
+.etat_menu ul li a {
+  font-size: 1.25em;
+  font-family: 'roboto_slabregular', arial, helvetica, sans-serif;
+  color: #0085c6;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.etat_menu ul li a:hover {
+  color: #9bc721;
+}
+
+
+.etat-pistes-legende {
+  margin-bottom: 0.5em;
+}
+
+.etat-pistes-legende .btn {
+  border-radius: 0;
+}
+
+.etat-pistes-legende .btn-default {
+  min-height: 40px;
+  border: 1px solid #cccccc;
+  background-color: #e4e4e4;
+  margin-bottom: 5px;
+}
+
+.etat-pistes-legende .btn-default:hover {
+  background-color: #eeeeee;
+}
+
+.etat-pistes-legende .glyphicon {
+  top: 0;
+  font-size: 20px;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+.etat-pistes-legende .xssp-etat {
+  font-size: 12px;
+}
+
+.etat-pistes-legende .xssp-niveau {
+  font-size: 15px;
+}
+
+.etat-liaisons .liaisons-container .etat_tab td {
+  text-align: left;
+}
+
+.etat-pistes {
+  margin-bottom: 1em;
+}
+
+.etat-pistes .ancre {
+  font-size: 10px;
+  padding-top: 85px;
+  text-decoration: none;
+}
+
+.etat_col1 {
+  float: left;
+  margin: 0 4% 1em 0;
+  padding: 0;
+  width: 48%;
+}
+
+.etat_col2 {
+  float: left;
+  margin-bottom: 1em;
+  width: 48%
+}
+
+.etat-liaisons-titre,
+.etat-pistes-titre {
+  font-family: 'roboto_slabregular', arial, helvetica, sans-serif;
+  font-size: 1.35em;
+  line-height: 1em;
+  color: #0085c6;
+  border: 1px solid #0085c6;
+  padding: 0.45em 8px;
+}
+.pistes-recap-container {
+  margin: 0 auto;
+  width: auto;
+}
+.pistes-recap-container {
+  margin: 0 auto;
+  width: auto;
+}
+
+
+.etat_tab {
+  font-size: 0.95em;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.etat_tab .tzr-image {
+  font-size: 0.95em;
+  background-color: #ffffff;
+}
+
+
+.etat_tab > thead > tr > th,
+.etat_tab > tbody > tr > th,
+.etat_tab > tfoot > tr > th,
+.etat_tab > thead > tr > td,
+.etat_tab > tbody > tr > td,
+.etat_tab > tfoot > tr > td {
+  vertical-align: top;
+  border-top: none;
+}
+
+.etat_tab tbody td {
+  text-align: center;
+}
+
+.etat_tab > thead > tr > th {
+  color: #ffffff;
+  border-bottom: none;
+  background-color: #0085c6;
+}
+
+.etat_tab tbody td:first-child {
+  width: 80%;
+  text-align: left;
+}
+
+
+.etat_tab .glyphicon {
+  font-size: 1.75em;
+}
+
+.etat_tab .glyphicon:hover {
+  cursor:pointer;
+}
+
+/* etat des pistes */
+
+.etat_tab .xssp-etat {
+  font-size: 0.925em;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.ouvert {
+  color: #00cc00;
+}
+
+.ferme {
+  color: #d3041f;
+}
+
+.encours {
+  color: #ffcc00;
+}
+
+.horsservice {
+  color: #333333;
+}
+
+.horsperiode {
+  color: #666666;
+}
+
+
+/* niveau */
+
+.etat_tab .xssp-niveau {
+  font-size: 1em;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.vert {
+  color: #00cc00;
+}
+
+.rouge {
+  color: #d3041f;
+}
+
+.noir {
+  color: #111111;
+}
+
+.sansniveau {
+  color: #eeeeee;
+}
+
+.bleu {
+  color: #3ea9f5;
+}
+
+.jaune {
+  color: #ffea00;
+}
+
+
+/* piste */
+
+.etat_tab .xssp-type-ludique {
+  font-size: 1.55em;
+}
+
+
+/* remontee */
+
+.etat_tab .xssp-type-tsdebrayable,
+.etat_tab .xssp-type-telesiege {
+  font-size: 1.95em;
+}
+
+
+/* legendes en modal */
+
+ul.modal-legende,
+.tzr-page-content ul.modal-legende {
+  list-style: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-legende .glyphicon,
+.etat-pistes-legende .modal-legende .glyphicon {
+  font-size: 2em;
+  margin-right: -0.15em;
+}
+
+.modal-legende .xssp-niveau {
+  font-size: 1.5em;
+  margin-right: 0.15em;
+}
+
+.modal-legende .xssp-etat {
+  font-size: 1em;
+  margin-right: 0.15em;
+}
+
+
+.modal-legende li {
+  width: 48%;
+  display: inline-block;
+  padding: 0 0 0 0;
+  margin: 0 0 10px;
+}
+
+.modal-legende li:nth-child(2n+1) {
+  margin-left: 0;
+}
+
+
+
+
+
+.meteo-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+}
+
+
+.meteo {
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+  box-ordinal-group: 2;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
+
+
+.meteo .nav-tabs {
+  list-style: none;
+  margin: 0 0 15px 0;
+  border-bottom-color: #0085c6;
+}
+
+.tzr-page-content .meteo ul.nav-tabs li {
+  padding-bottom: 0;
+}
+
+.meteo .nav-tabs > li > a {
+  text-decoration: none;
+  border-radius: 0;
+}
+
+.meteo .nav-tabs > li > a:hover {
+  background-color: #f5f5f5;
+  border-color: transparent transparent #0085c6 transparent;
+}
+
+.meteo .nav-tabs > li.active > a,
+.meteo .nav-tabs > li.active > a:hover,
+.meteo .nav-tabs > li.active > a:focus {
+  background-color: #f5f5f5;
+  border-color: #0085c6;
+  border-bottom-color: transparent;
+}
+
+
+.pistes-recap-container {
+  padding-bottom: 15px;
+}
+
+.meteo_ciel,
+.meteo_risk,
+.meteo_temp,
+.pistes-recap {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 5% 15px 0;
+  padding: 0;
+}
+
+.meteo_temp {
+  margin-left: 0;
+}
+
+.meteo_ciel strong,
+.meteo_risk strong,
+.meteo_temp strong {
+  color: #0085c6;
+}
+
+.meteo_risk .risk_icon,
+.meteo_temp .temp_icon,
+.meteo_ciel .ciel_icon,
+.pistes-recap .recap {
+  margin-bottom: 10px;
+  padding: 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+
+.meteo_risk .risk_icon .img-responsive,
+.meteo_ciel .ciel_icon .img-responsive,
+.meteo_temp .temp_icon .img-responsive {
+  display: inline-block;
+}
+
+
+.meteo_plus_lien {
+  margin-bottom: 30px;
+}
+
+.meteo_plus_lien a {
+  font-family: 'roboto_slabregular', arial, helvetica, sans-serif;
+  line-height: 1em;
+  text-decoration: none;
+}
+
+.meteo_moins_lien {
+  display: none;
+}
+
+.meteo_moins_lien a {
+  font-family: 'roboto_slabregular', arial, helvetica, sans-serif;
+  line-height: 1em;
+  text-decoration: none;
+}
+
+.meteo_plus {
+  margin-bottom: 30px;
+  padding: 20px 20px 10px 20px;
+  background-color: #f5f5f5;
+}
+
+.meteo_plus ul {
+  color: #0085c6;
+  list-style: none;
+  margin: 0;
+}
+
+
+.meteo_plus label {
+  font-size: 0.95em;
+  color: #555555;
+  margin: 0 5px 2px 0;
+}
+
+.meteo_plus label:after {
+  content: ":";
+  display: inline-block;
+  margin-left: 5px;
+}
+.meteo_plus #dateheure-chute-neige {
+  display: none;
+}
+
+
+.bulletin {
+  margin: 10px 0 30px 0;
+  padding: 20px;
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  background-color: #f1f1f1;
+}
+
+.bulletin .bulletin-head,
+.bulletin .bulletin-head .nav-tabs {
+  list-style: none;
+  margin: 0;
+}
+
+.bulletin .bulletin-head .bulletin_titre {
+  font-size: 1.8em;
+  font-family: 'roboto_slabregular', arial, helvetica, sans-serif;
+  color: #0085c6;
+  margin-bottom: 0.25em;
+}
+
+.bulletin .bulletin-head li {
+  display: inline-block;
+  vertical-align: top;
+}
+.bulletin .bulletin-head li:last-child {
+  margin-left: 20px;
+}
+
+.bulletin .bulletin-head .nav-tabs {
+  border: none;
+}
+
+.bulletin .bulletin-head .nav-tabs > li > a {
+  text-decoration: none;
+  border-radius: 0;
+}
+
+.bulletin .bulletin-head .nav-tabs > li > a:hover {
+  background-color: #f5f5f5;
+  border-color: transparent transparent #0085c6 transparent;
+}
+
+.bulletin .bulletin-head .nav-tabs > li.active > a,
+.bulletin .bulletin-head .nav-tabs > li.active > a:hover,
+.bulletin .bulletin-head .nav-tabs > li.active > a:focus {
+  background-color: #f5f5f5;
+  border-color: #0085c6;
+}
+
+.bulletin_text {
+  font-size: 1.1em;
+}
+
+@media (min-width: 768px) {
+  
+  .meteo_ciel,
+  .meteo_risk,
+  .meteo_temp,
+  .pistes-recap {
+    width: 27%;
+  }
+  
+  .meteo .nav > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .meteo_plus ul li {
+    display: inline-block;
+    width: 24.5%;
+    vertical-align: top;
+    padding: 0 3% 0 0;
+    margin-bottom: 10px;
+  }
+  
+  .meteo_plus label {
+    display: block;
+    margin: 0 0 2px 0;
+  }
+  
+}
+
+
+@media (min-width: 992px) {
+  
+  
+  
+}
+
+
+@media (min-width: 1200px) {
+
+  .meteo_ciel,
+  .meteo_risk,
+  .meteo_temp,
+  .pistes-recap {
+    width: 28%;
+  }
+  
+  .meteo .nav > li > a {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .meteo_plus label {
+    display: inline-block;
+    margin: 0 5px 2px 0;
+  }
+}
+
+
+
+@media (max-width: 767px) {
+
+  .meteo_ciel,
+  .meteo_risk,
+  .meteo_temp,
+  .pistes-recap {
+    width: 27%;
+  }
+  
+  .meteo .nav > li > a {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  .meteo .nav-tabs > li > a:hover {
+    background-color: #fafafa;
+  }
+  
+  .meteo .nav-tabs > li.active > a,
+  .meteo .nav-tabs > li.active > a:hover,
+  .meteo .nav-tabs > li.active > a:focus {
+    background-color: #fafafa;
+  }
+  
+  .meteo_risk .risk_icon,
+  .meteo_temp .temp_icon,
+  .meteo_ciel .ciel_icon,
+  .pistes-recap .recap {
+    background-color: #fafafa;
+  }
+  
+  .meteo_plus {
+    background-color: #fafafa;
+  }
+  
+  .etat_col1, .etat_col2 {
+    float: none;
+    width: 100%;
+    margin: 0 0 1em 0;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  
+  .meteo_ciel,
+  .meteo_risk,
+  .meteo_temp,
+  .pistes-recap {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+}

@@ -1,0 +1,14 @@
+{
+    "name": "wheregroup/cookieconsent",
+    "description": "A free solution to the EU Cookie Law https://cookieconsent.insites.com/",
+    "license": "MIT",
+    "authors": [
+        {
+
+            "name": "Silktide Ltd.",
+            "email": ""
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

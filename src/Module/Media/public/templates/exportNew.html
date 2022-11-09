@@ -1,0 +1,29 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.new_text%>
+<%include file="Module/Table.functions.html"%>
+<div class="cv8-contenu-center">
+ <form action="<%$self%>" method="post" enctype="multipart/form-data" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <fieldset>
+   <legend><%$syslabels.Seolan_Core_General.new_text%></legend>
+   <div class="row-striped">
+     <%call fieldline field=$br_oname%>
+     <%call fieldline field=$br_ourl%>
+     <%call fieldline field=$br_ologin%>
+     <%call fieldline field=$br_opasswd%>
+     <%call simplefieldline field="repertoire" fieldhtml="<input type=\"text\" name=\"cplt[dir]\">" label="Répertoire"%>
+     <%call simplefieldline field="recherche" fieldhtml=$br_oquery->html label="Recherche"%>
+     <%call simplefieldline field="cplt" fieldhtml="<input type=\"text\" name=\"cplt[reportto]\">" label="Rapport à"%>
+   </div>
+  </fieldset>
+  <input type="hidden" name="_function" value="exportProcInput">
+  <input type="hidden" name="tplentry" value="br">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="template" value="Core.empty.html">
+  <input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+  <input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+  <input type="hidden" name="_next" value="<%$back%>">
+  <input type="hidden" name="skip" value="1">
+  <div id="tzr-action<%$uniqid%>" class="tzr-action">
+   <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  </div>
+ </form>
+</div>

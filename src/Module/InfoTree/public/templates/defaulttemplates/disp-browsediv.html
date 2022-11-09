@@ -1,0 +1,36 @@
+<%if $admini%><%assign var=ts value="Module/InfoTree.viewsection.html"%><%else%><%assign var=ts value="Application/MiniSite/public/templates/viewsection.html"%><%/if%>
+<%assign var=sectiondivid value="cv8d-browsediv-`$it_itoid[it]`"%>
+<%assign var=section value=$it_olines[it]%>
+
+<%* fontion callback chargement de la page comme toute liste en section fonction *%>
+<script type="text/javascript" language="javascript">function browsedivinitpage(sectiondivid){}</script>
+
+<%if !isset($smarty.request.contentonly)%>
+  <div class="cv8d-browsediv cv8d-browsediv-<%$section._functionparams.moid%>" id="<%$sectiondivid%>">
+  <%assign var=end value="</div>"%>
+<%else%>
+  <%assign var=end value=""%>
+<%/if%>
+
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsefilters.html" browsetype="div" sectiondivid="`$sectiondivid`"%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsepagination.html" assign="pager" section=$section %>
+
+<%if $pager %><div class="cv8d-pagelist cv8d-pagelist-top"><%$pager%></div><%/if%>
+
+<div class="cv8d-objectlist">
+  <%*** object list ***%>
+  <%if $section.groups %>
+    <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-group.html" groups=$section.groups%>
+  <%else%>
+    <div class="cv8d-content">
+      <%foreach key=i item=oid from=$section.lines_oid %>
+        <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/disp-browsediv-object.html" lines=$section%>
+      <%/foreach%>
+    </div>
+  <%/if%>
+</div>
+
+<%if $pager %><div class="cv8d-pagelist cv8d-pagelist-bottom"><%$pager%></div><%/if%>
+
+<%$end%>
+

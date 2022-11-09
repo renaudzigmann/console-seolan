@@ -1,0 +1,11 @@
+<div class="cv3-txtimage clearfix">
+  <%if $it_olines[it].oimg1->resizer%>
+      <%include file="`$smarty.const.TZR_SHARE_DIR`Module/InfoTree.defaulttemplates/page/disp/zraw-image-resp-link.html" img=$it_olines[it].oimg1 url=$it_olines[it].oimgurl1 lnk=$it_olines[it].oimglnk1 leg=$it_olines[it].oimgleg1 titsec=$it_olines[it].otitsec displeg=1 srcsetId='img_demi'%>
+  <%/if%>
+
+  <%if $it_olines[it].otitsec->html%><h2><%$it_olines[it].otitsec->html%></h2><%/if%>
+  <%if $it_olines[it].osubtit->html%><h3><%$it_olines[it].osubtit->html%></h3><%/if%>
+  <%if $it_olines[it].ochapeau->html%><h4><%$it_olines[it].ochapeau->html%></h4><%/if%>
+  <%if $it_olines[it].otxt1->html%><%$it_olines[it].otxt1->html%><%/if%>
+</div>
+

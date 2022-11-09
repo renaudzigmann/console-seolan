@@ -1,0 +1,46 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html"%>
+
+<%if $br_choosetab%>
+ <form action="<%$self%>" method="post" onsubmit="return TZR.ajaxSubmitForm(this);">
+  <fieldset><legend><%$syslabels.Seolan_Core_Module_Module.create_default_templates%></legend>
+  <p><%$syslabels.Seolan_Core_Module_Module.create_default_templates_comment%></p>
+  <input type="hidden" name="_function" value="<%$smarty.request._function%>">
+  <input type="hidden" name="moid" value="<%$_moid%>">
+  <input type="hidden" name="modid" value="<%$_moid%>">
+  <input type="hidden" name="template" value="<%$smarty.request.template%>">
+  <input type="hidden" name="tplentry" value="<%$smarty.request.tplentry%>">
+  <input type="hidden" name="_skip" value="1">
+  <label><%$br_choosetab->fielddef->label%></label> <%$br_choosetab->html%>
+  <div class="tzr-action">
+    <input type="submit" value="<%$syslabels.Seolan_Core_General.ok%>">
+  </div>
+  </fieldset>
+ </form>
+<%else%>
+ <%if $br_added_templates%>
+  <div class="added_templates">
+  <strong><%$br_added_templates|@count%> <%$syslabels.Seolan_Core_Module_Module.added_templates%></strong>
+  <ul>
+  <%foreach item=tpl from=$br_added_templates%> 
+   <li><%$tpl%></li>
+  <%/foreach%>
+  </ul>
+  </div>
+ <%/if%>
+ <%if $br_skipped_templates%>
+  <div class="skipped_templates">
+  <strong><%$br_skipped_templates|@count%> <%$syslabels.Seolan_Core_Module_Module.skipped_templates%></strong>
+  <ul>
+  <%foreach item=tpl from=$br_skipped_templates%> 
+   <li><%$tpl%></li>
+  <%/foreach%>
+  </ul>
+  </div>
+ <%/if%>
+<%/if%>
+
+<%if $_back || $br_back%>
+ <div class="tzr-action">
+  <input type="button" value="<%$syslabels.Seolan_Core_General.back_text%>" onclick="v<%$uniqid%>.jQueryLoad('<%$_back%><%$br_back%>');">
+ </div>
+<%/if%>

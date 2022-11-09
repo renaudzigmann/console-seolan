@@ -1,0 +1,8 @@
+<ul class="nav nav-pills nav-justified text-center hidden-xs">
+  <%assign var=navsteps value=','|explode:'cart,address,validate,payment'%>
+  <%foreach from=','|explode:'cart,address,validate,payment' item=navstep%>
+  <li class="<%if $step eq $navstep%>active<%elseif !$shop->isStepAccessible($navstep)%>disabled<%/if%>">
+    <a href="<%if $shop->isStepAccessible($navstep)%><%$shop->getStepUrl($navstep)%><%else%>javascript:;<%/if%>"><%$shop->getStepLabel($navstep)%></a>
+  </li>
+  <%/foreach%>
+</ul>

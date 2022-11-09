@@ -1,0 +1,30 @@
+<ul class="dropdown-menu">
+  <input type="hidden" name="new-messages-count" value="<%$br_total%>">
+  <%if $br_total%>
+  <li class="dropdown-header"><span><%$syslabels.Seolan_Module_Chat_Chat.new_messages%>:</span></li>
+  <%foreach key=user item=value from=$br_users%>
+  <%if $value%>
+  <li class="module-selection">
+    <a aria-haspopup="true" class="" role="button"  href="#<%$self%>?&moid=<%$sysmods.xmodchat%>&function=display&tplentry=br&template=Module/Chat.display.html&_persistent=1&alias=<%$user|urlencode%>" title="<%$value.alias%>" onclick="home_activatelink(jQuery(this));" data-togglepage='{"action":"home_viewmodule","arguments":[]}'>
+      <%$user%> (<%$value%>)
+    </a>
+  </li>
+  <%/if%>
+  <%/foreach%>
+  <%else%>
+  <li class="dropdown-header"><span><%$syslabels.Seolan_Module_Chat_Chat.no_new_messages%></span></li>
+  <%/if%>
+  <li class="divider" role="separator"></li>
+  <li>
+    <a href="#<%$self%>?&moid=<%$sysmods.xmodchat%>&function=browse&tplentry=br&template=Module/Table.browse.html&_persistent=1" title="<%$syslabels.Seolan_Module_Chat_Chat.open_chat%>" onclick="home_activatelink(jQuery(this));" data-togglepage='{"action":"home_viewmodule","arguments":[]}'>
+      <%$syslabels.Seolan_Module_Chat_Chat.open_chat%>
+    </a>
+  </li>
+  <%if $br_total%>
+  <li>
+    <a href="#<%$self%>?&moid=<%$sysmods.xmodchat%>&function=setAllRead&tplentry=br&template=Module/Table.browse.html&_persistent=1" title="<%$syslabels.Seolan_Module_Chat_Chat.setallread%>" onclick="home_activatelink(jQuery(this));" data-togglepage='{"action":"home_viewmodule","arguments":[]}'>
+      <%$syslabels.Seolan_Module_Chat_Chat.setallread%>
+    </a>
+  </li>
+<%/if%>
+</ul>

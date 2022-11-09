@@ -1,0 +1,105 @@
+<%*
+mise en forme des labels de champs en edition/consultation/insertion
+  *%>
+<%function name="fieldcomment"%>
+<div class="cs-col-label">
+  <%$comment%>
+</div>
+<%/function%>
+<%function name="fieldlabel"%><%* param : field value *%>
+<%assign var="thclasses" value=""%>
+<%assign var="fieldicon" value=""%>
+<%assign var="infos" value=""%>
+
+<%if $field->fielddef->translatable%>
+<%assign var="thclasses" value=$thclasses|cat:' translatable-field'%>
+<%assign var="fieldicon" value=$field_icon|cat:$translatable_field_icon%>
+<%/if%>
+<%$infos=[]%>
+<%$tooltip=null%>
+<%if !empty($comment)%><%$infos[]=$comment|escape:'html'%><%/if%>
+<%if !empty($field->fielddef->acomment)%><%$infos[]=$field->fielddef->acomment|escape:'html'%><%/if%>
+<%if $field->fielddef->readonly%><%$infos[]="<i>"|cat:$syslabels.Seolan_Core_Field_Field.readonly|cat:"</i>"%><%/if%>
+<%if $field->fielddef->hidden%><%$infos[]="<i>"|cat:$syslabels.Seolan_Core_Field_Field.hidden|cat:"</li>"%><%/if%>
+<%if count($infos)>1%>
+<%$tooltip=$infos|implode:"</p><p>"%>
+<%elseif count($infos)>0%>
+<%$tooltip=$infos[0]%>
+<%/if%>
+<div class="cs-col-label <%$thclasses%>">
+  <%if $field->edit && $TZR.lang_trad && $smarty.CONST.TZR_DEEPL_WEBSERVICE_KEY%>
+  <input type="checkbox" name="<%$field->field%>">
+  <%/if%>
+    <label class="fieldHelp" 
+      <%if $tooltip!=null%> tabindex="0" role="button" data-html="true" data-toggle="popover" data-trigger="" data-content="<p><%$tooltip%></p>" title="<%$field->fielddef->label|escape:'html'%>"<%/if%>>
+      <%$fieldicon%>
+      <%if $tooltip!=null%><span class="glyphicon csico-infos" aria-hidden="true"></span><%/if%>
+      <%if !empty($label)%>
+      <%$label%>
+      <%else%>
+      <span><%$field->fielddef->label|wordwrap:"50":"<br>"%></span>
+      <%/if%>
+    </label>
+  </div>
+<%/function%>
+
+<%function name="simplefieldlabel"%><%* label :texte du label $comment : commentaire*%>
+<div class="cs-col-label">
+  <label><span><%$label%></span></label><%if !empty($comment)%><br/><%$comment%><%/if%>
+</div>
+<%/function%>
+
+<%function name="simplefieldlabel2"%><%* label :texte du label *%>
+<div class="cs-col-label">
+  <label><span><%$label%></span></label>
+</div>
+<%/function%>
+
+<%function name="fieldline"%><%* param : field value *%>
+<div id="cont-<%$field->field%>" class="row">
+  <div class="row-striped-content">
+    <%call fieldlabel field=$field comment=$comment%>
+    <div class="cs-col-data">
+      <%$field->html%>
+      <input type="hidden" name="fields[]" value="<%$field->fielddef->field%>">
+    </div>
+  </div>
+</div>
+<%/function%>
+
+<%function name="fieldlineTranslationMode"%><%* param : field value, tradfield *%>
+<div id="cont-<%$field->field%>" class="row">
+  <div class="row-striped-content">
+    <%call fieldlabel field=$field%>
+    <div class="cs-col-data">
+      <span class="flag"><%$TZR.lang_trad.long%></span><%$tradField->html%><br>
+      <span class="flag"><%$TZR.lang_data.long%></span><%$field->html%>
+    </div>
+  </div>
+</div>
+<%/function%>
+
+<%function name="simplefieldline"%><%* field = nom textuel du champ, fieldhtml = contenu html du champ, label = contenu textuel du libellé *%>
+<div id="cont-<%$field%>" class="row">
+  <div class="row-striped-content">
+    <%if empty($comment) %><%$comment=""%><%/if%>
+    <%call simplefieldlabel label=$label comment=$comment %>
+    <div class="cs-col-data"><%$fieldhtml%></div>
+  </div>
+</div>
+<%/function%>
+
+<%function name="documentlink"%><%*parm : moid, oid *%>
+<%assign var="doclink" value="`$fullself`moid=`$moid`&function=goto1&template=Core%2Fempty.html&_direct=1&oid=`$oid`"%>
+<%counter assign="documentlink_var" name="documentlink"%>
+<script>var mytext<%$documentlink_var%>="<a href=\"<%$doclink%>\"><%$title|default:"Document"|escape:"javascript"%></a>"; </script>
+<div class="row">
+  <div class="row-striped-content">
+    <div class="cs-col-label"><label><%$syslabels.Seolan_Core_General.getgotolink_text%></label></div>
+    <div class="cs-col-data">
+      <button type="button" class="btn btn-default btn-md btn-inverse"  title="<%$syslabels.Seolan_Core_General.copytoclipboard_text|escape:'html'%>" href="#" onclick="TZR.copy2clipboard('<%$doclink%>','<%$syslabels.Seolan_Core_General.getgotolinkmess_text|escape:'javascript'%>');return false";>Adresse URL <span class="glyphicon csico-duplicate" aria-hidden="true"></span></a>
+      <button type="button" class="btn btn-default btn-md btn-inverse"  title="<%$syslabels.Seolan_Core_General.copytoclipboard_text|escape:'html'%>" href="#" onclick="TZR.copyHTML2Clipboard(mytext<%$documentlink_var%>);return false;">Lien complet enrichi <span class="glyphicon csico-duplicate" aria-hidden="true"></span></a>
+    </div>
+  </div>
+</div>
+<%/function%>

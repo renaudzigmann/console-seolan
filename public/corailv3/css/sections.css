@@ -1,0 +1,39 @@
+/********************/
+/* sections         */
+/********************/
+.cv3-download {clear: both;}
+.cv3-grdimage {clear: both;}
+.cv3-txtimage {clear: both;}
+.cv3-imagetxt {clear: both;}
+.cv3-txtseul { clear: both;}
+.cv3-1234images { clear: both;}
+.cv3-flash { clear: both; margin:0; padding:0;}
+
+
+.cv3-download img {float: left;margin: 0 10px 5px 0px;border: 0px solid #666;padding: 0px;}
+.cv3-grdimage img { padding-top: 2px; padding-bottom: 5px; }
+.cv3-txtimage img {float: right;margin: 0 0 5px 10px;border: 0px solid #666;padding: 0px;}
+.cv3-imagetxt img {float: left; margin: 0 10px 5px 0px;border: 0px solid #666;padding: 0px; }
+.cv3-1234images img {margin: 0 5px 2px 0px; padding:0; border: 0px solid #666;padding: 0px;}
+.cv3-1234images .diaporama4 {position:relative; float:left; width:auto; margin:0px;padding:0px; border:0px solid gray;}
+
+.legende {font-size:80%;text-align:center; margin:0; padding:0;display:block;}
+
+/*********************/
+/* PAGE*/
+/*********************/
+.cv3-somediv{ width: 510px; clear: left; }
+.cv3-somediv .floatbox{float: left;width: 245px;}
+* html .somediv p{ /* IE 3px jog hack*/height: 1%;}
+.cv3-somediv p{margin-top: 0;margin-left: 250px;}
+
+/*********************/
+/* DIAPORAMA 4 IMAGES*/
+/*********************/
+.cv3-thumbnail{ position: relative; width: 520px; z-index: 0; }
+.cv3-thumbnail:hover{background-color: transparent;z-index: 50;}
+.cv3-thumbnail span{ /*CSS grande image*/position: absolute; padding: 5px; left: -1000px; border: solid 1px gray; color: black; background-color: #fff; text-decoration: none; visibility: hidden; }
+.cv3-thumbnail span img{ /*CSS grande image*/border-width: 0;padding: 2px;}
+.cv3-thumbnail:hover span{ /*CSS grande image en hover*/visibility: visible; left: 60px; /*position où l'image agrandie devrait etre excentrer horizontalement*/}
+
+

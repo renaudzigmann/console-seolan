@@ -1,0 +1,53 @@
+<%assign var=section value=$it_olines[it]%>
+<%assign var=form value=$section.form%>
+<%assign var=next value=$smarty.request.next|default:$self_with_alias%>
+<%assign var=moid value=$form.hiddenfields.moid|default:$form.moid%>
+<%if $form%>
+<form action="<%$self_with_alias%>"
+      method="post"
+      enctype="multipart/form-data"
+      onsubmit="return TZR.isFormValidWithFocus(this,true);"
+      name="userform<%$uniqid%>"
+      class="form-account cv8d-insert cv8d-insert-<%$moid%> cv8d-function-<%$form.function|default:'procEdit'%> clearfix">
+  <%foreach from=$form.hiddenfields key=name item=value%>
+  <input type="hidden" name="<%$name%>" value="<%$value%>" />
+  <%foreachelse%>
+  <input type="hidden" name="moid" value="<%$form.moid%>" />
+  <input type="hidden" name="function" value="<%$form.function|default:'procEdit'%>" />
+  <%/foreach%>
+  <input type="hidden" name="oid" value="<%$smarty.request.oid%>" />
+  <input type="hidden" name="onerror" value="<%$current_uri%>" />
+  <input type="hidden" name="_next" value="<%$next%>" />
+
+  <%if !$in_lightbox and $form.title%><h2><%$form.title%></h2><%/if%>
+  <%if $form.intro%><p><%$form.intro%></p><%/if%>
+
+  <%foreach from=$form.selectedfields item=field%>
+  <%include file="Module/FrontUsers.form-field.html" form=$form.fields field=$field%>
+  <%/foreach%>
+
+  <div class="cv8d-action clearfix">
+    <%if !$in_lightbox%>
+    <a href="<%$next%>" class="cancel"><%label t='Annuler'%></a>
+    <%/if%>
+    <input type="submit" value="<%$form.submit_label|default:'Enregistrer'%>">
+  </div>
+
+  <%if $form.more_actions%>
+  <div class="cv8d-action clearfix more-actions">
+    <%foreach from=$form.more_actions item=action%>
+    <a href="<%$self_with_alias%>&amp;<%$action.url%>" class="<%$action_id%> <%$action.class%>" title="<%$action.label|escape%>"><%$action.label%></a>
+    <%/foreach%>
+  </div>
+  <%/if%>
+
+  <%if $form.outro%><p><%$form.intro%></p><%/if%>
+
+</form>
+
+<script type="text/javascript">
+  if(TZR != undefined) TZR.activeDependency(document.userform<%$uniqid%>);
+</script>
+<%else%>
+<div class="alert alert-warning">Fonction pas encore développée</div>
+<%/if%>

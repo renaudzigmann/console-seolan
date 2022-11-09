@@ -1,0 +1,341 @@
+body {
+	font: 12px/22px helvetica, arial, verdana, sans-serif;
+	color: #000000;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.body {
+	font-family: helvetica, arial, verdana, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	margin: 0 0 0 0;
+	padding: 10px 10px 10px 10px;
+	text-decoration: none;
+}
+
+a {
+	color: #12a3a2;
+	text-decoration: none;
+	font-weight: bold;
+}
+a img{
+    vertical-align:middle
+}
+a:hover {
+	color: #bc0707;
+}
+img {
+    border: none;
+}
+h1 {
+	color: #bc0707 !important;
+	font-size: 25px;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	padding: 0 0 5px 0;
+	line-height: 28px;
+}
+h2 {
+	font-size: 24px;
+	font-weight: normal;
+	color: #7a7a7a !important;
+	margin: 0 0 8px 0;
+	padding: 0 0 0 0;
+	font-weight: bold;
+}
+h3 {
+	color: #bc0707 !important;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 0 0 8px 0;
+	padding: 0 0 0 0;
+	line-height: 20px;
+	text-transform: uppercase;
+}
+h4 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000 !important;
+    margin: 0 0 8px 0;
+    padding: 0 0 0 0;
+    
+}
+h5 {
+    color: #000 !important;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0 0 5px 0;
+    padding: 0 0 0 0;
+}
+h6 {
+    font-size: 13px;
+    color: #000;
+    font-weight: normal;
+    margin: 0 0 5px 0;
+    padding: 0 0 0 0;
+}
+p {
+    line-height: 16px;
+    padding: 0 0 10px 0;
+    margin: 0 0 0 0;
+}
+ul {
+    list-style-image: none;
+    list-style-type: square ;
+    list-style-position: outside;
+    line-height: 16px;
+    margin: 0 0 15px 15px;
+    padding: 0;
+}
+ul li {
+    padding: 0 0 5px 0;
+}
+ul ul {
+    margin: 5px 0 0 30px;
+    padding: 0;
+}
+.legende {
+    font-size: 11px;
+    color: #604a42;
+    margin: 0;
+    padding: 0;
+    text-align:center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    vertical-align: top;
+    padding: 0 0 0 0;
+}
+
+table img {
+    border: none;
+}
+
+
+.tab_lien {
+	font-size: 11px;
+	color: #000000;
+}
+
+.tab_lien td {
+    text-align: right;
+}
+
+.tab_lien a {
+    color: #000000;
+}
+
+.tab_lien p {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+
+.tab_bandeau {
+
+}
+
+.tab_bandeau img {
+    border: none;
+    display:block;
+}
+.tab_newstitre img {
+    border: none;
+    display:block;
+}
+.td_titrebas {}
+
+.tab_bas img{
+    border: none;
+    display:block;
+}
+.tab_newstitre {
+	font-size: 17px;
+	font-weight: normal;
+	color: #545454;
+}
+
+.tab_newstitre p {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+
+.tab_conteneur {
+}
+
+.tab_conteneur table {
+}
+
+.tab_conteneur table span {
+    font-size: 11px;
+    color: #bc0707;
+}
+.td_contenu{
+    padding-bottom:30px
+}
+.tab_partenaire {
+    background-color: #ded9c7;
+}
+
+.tab_partenaire td {
+    text-align: center;
+}
+
+.tab_partenaire td img {
+    margin: 0 10px 0 10px;
+    padding: 5px;
+}
+
+.tab_bas {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color:#005759;
+}
+.cv3-envaleur{
+    color: #ffffff;
+    background-color:#005759;
+
+}
+
+.tab_bas p {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.tab_bas a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+table.cv3-txtseul {
+    font-size: 12px;
+    color: #656565;
+}
+table.cv3-txtimage{
+    font-size: 12px;
+    color: #656565;
+}
+table.cv3-imagetxt {
+    font-size: 12px;
+    color: #656565;
+}
+table.cv3-txtimage img {
+    float: right;
+    margin: 0 0 0 0;
+    padding: 0 0 15px 30px;
+}
+
+
+table.cv3-imagetxt img {
+    float: left;
+    margin: 0 0 0 0;
+    padding: 0 30px 15px 0;
+}
+table.cv3-grdimage {}
+table.cv3-grdimage img{
+    margin: 0 0 5px 0;
+    padding: 0 0 0 0;
+}
+
+table.cv3-1234images {}
+table.cv3-1234images img {
+    margin: 0 0 5px 0;
+    padding: 0 0 0 0;
+}
+
+table.cv3-separateur {}
+table.cv3-separateur img{
+    margin: 0 0 5px 0;
+    padding: 0 0 0 0;
+}  
+
+.coultop {   
+	 color: #000000;
+}
+.coultop a {   
+	 color: #000000;
+}
+body,.body{
+	<%if $charte_oBODY_backgroundColor->raw%>background-color:<%$charte_oBODY_backgroundColor->raw%>;<%else%>
+	background-color: #ffffff;
+	<%/if%>
+	<%if $charte_oBODY_fontFamily->raw %>font-family:<%$charte_oBODY_fontFamily->link.odeclaration->raw%>;<%/if%>
+}
+.tab_lien,.tab_bandeau,.tab_newstitre,.tab_conteneur,.tab_conteneur table,table.cv3-txtimage img,table.cv3-imagetxt img {
+	<%if $charte_oBODY_backgroundColor->raw%>background-color:<%$charte_oBODY_backgroundColor->raw%>;<%/if%>
+
+}
+.tab_bas {
+    <%if $charte_ofooter_backgroundColor->raw%>background-color:<%$charte_ofooter_backgroundColor->raw%>;<%/if%>
+    <%if $charte_ofooter_fontColor->raw%>color:<%$charte_ofooter_fontColor->raw%>;<%/if%>
+}
+h1,h2,h3,h4,h5,h6,.cv3-envaleur
+{
+	font-family: <%$charte_oHEADINGS_fontFamily->link.odeclaration->raw%>;
+}
+
+h1{
+    <%if $charte_oH1_color->raw%>color:<%$charte_oH1_color->raw%> !important;<%/if%>
+    <%if $charte_oH1_fontWeight->raw%>font-weight:<%$charte_oH1_fontWeight->raw%>;<%/if%>
+}
+h2
+{
+    <%if $charte_oH2_color->raw%>color:<%$charte_oH2_color->raw%> !important;<%/if%>
+    <%if $charte_oH2_fontWeight->raw%>font-weight:<%$charte_oH2_fontWeight->raw%>;<%/if%>
+}
+h3{
+    <%if $charte_oH3_color->raw%>color:<%$charte_oH3_color->raw%> !important;<%/if%>
+    <%if $charte_oH3_fontWeight->raw%>font-weight:<%$charte_oH3_fontWeight->raw%>;<%/if%>
+}
+h4{
+    <%if $charte_oH4_color->raw%>color:<%$charte_oH4_color->raw%> !important;<%/if%>
+    <%if $charte_oH4_fontWeight->raw%>font-weight:<%$charte_oH4_fontWeight->raw%>;<%/if%>
+}
+h5{
+    <%if $charte_oH5_color->raw%>color:<%$charte_oH5_color->raw%> !important;<%/if%>
+    <%if $charte_oH5_fontWeight->raw%>font-weight:<%$charte_oH5_fontWeight->raw%>;<%/if%>
+}
+h6{
+    <%if $charte_oH6_color->raw%>color:<%$charte_oH6_color->raw%> !important;<%/if%>
+    <%if $charte_oH6_fontWeight->raw%>font-weight:<%$charte_oH6_fontWeight->raw%>;<%/if%>
+}
+a{    
+    <%if $charte_oa_color->raw%>color:<%$charte_oa_color->raw%>;<%/if%>
+    <%if $charte_oa_textDecoration->raw%>text-decoration:<%$charte_oa_textDecoration->raw%>;<%/if%>
+}
+a:hover
+{    
+    <%if $charte_oa_hover_color->raw%>color:<%$charte_oa_hover_color->raw%>;<%/if%>
+    <%if $charte_oa_hover_textDecoration->raw%>text-decoration:<%$charte_oa_hover_textDecoration->raw%>;<%/if%>
+}
+.cv3-envaleur{
+    <%if $charte_ofooter_backgroundColor->raw%>background-color:<%$charte_ofooter_backgroundColor->raw%>;<%/if%>
+    <%if $charte_ofooter_fontColor->raw%>color:<%$charte_ofooter_fontColor->raw%>;<%/if%>
+}
+.cv3-envaleur a,.tab_bas a
+{    
+    <%if $charte_ofooter_a_color->raw%>color:<%$charte_ofooter_a_color->raw%> !important;<%/if%>
+    <%if $charte_ofooter_a_textDecoration->raw%>text-decoration:<%$charte_ofooter_a_textDecoration->raw%>;<%/if%>
+}
+.cv3-envaleur a:hover,.tab_bas a:hover {
+    <%if $charte_ofooter_a_hover_color->raw%>color:<%$charte_ofooter_a_hover_color->raw%>;<%/if%>
+    <%if $charte_ofooter_a_hover_textDecoration->raw%>text-decoration:<%$charte_ofooter_a_hover_textDecoration->raw%>;<%/if%>
+}
+.cv3-envaleur h1, .cv3-envaleur h2,.cv3-envaleur h3,.cv3-envaleur h4,.cv3-envaleur h5,.cv3-envaleur h6
+{
+    <%if $charte_ofooter_H2_color->raw%>color:<%$charte_ofooter_H2_color->raw%> !important;<%/if%>
+    <%if $charte_ofooter_H2_fontWeight->raw%>font-weight:<%$charte_ofooter_H2_fontWeight->raw%>;<%/if%>
+}
+.cv3-envaleur {
+    padding: 20px 2em 2em 2em;
+}
+.tzr-picto {
+    display:none
+}

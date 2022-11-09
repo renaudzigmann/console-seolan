@@ -1,0 +1,40 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Calendar_Calendar.displayyear_text%>
+<div><%include file="Module/Calendar.top.html"%></div>
+<div class="calendars-action"><%include file="Module/Calendar.bottom.html"%></div>
+<div class="calendars">
+<div class="table-responsive">
+<h4><%$br_year%></h4>
+<table class="tzr-cal-display-year">
+ <tr><th colspan="3"></th></tr>
+ <%foreach from=$br_body item=month name=fmonth%>
+  <%cycle name="a" values="<tr>,,"%>
+  <td class="tzr-cal-display-year-month">
+    <table class="table tzr-cal-display-year-month-table">
+     <tr>
+      <th colspan="7">
+       <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayMonth&tplentry=br&template=Module/Calendar.displayMonth.html&day=1&month=<%$smarty.foreach.fmonth.iteration%>&year=<%$br_year%>"><%$month.header%></a>
+      </th>
+     </tr>
+     <tr>
+      <%foreach from=$syslabels.Seolan_Module_Calendar_Calendar.dayinter item=text%>
+       <td class="tzr-cal-display-year-day-list"><%$text%></td>
+      <%/foreach%>
+     </tr>
+     <%foreach from=$month.content item=day%>
+      <%cycle name="z" values="<tr>,,,,,,"%>
+      <td class="tzr-cal-display-year-day-<%$day.style%><%if $day.event%> tzr-cal-display-year-event<%/if%>">
+       <a class="cv8-ajaxlink" href="<%$self%>oid=<%$br_diary.KOID%>&moid=<%$_moid%>&_function=displayDay&tplentry=br&template=Module/Calendar.displayDay.html&day=<%$day.day%>&month=<%$day.month%>&year=<%$day.year%>"><%$day.day%></a>
+      </td>
+      <%cycle name="e" values=",,,,,,</tr>"%>
+     <%/foreach%>
+    </table>
+  </td>
+  <%cycle name="r" values=",,</tr>"%>
+ <%/foreach%>
+ <tr><td colspan="3" class="tzr-cal-display-year-month">&nbsp;</td></tr>
+</table>
+</div>
+</div>
+
+
+

@@ -1,0 +1,49 @@
+<%if $ag_lines_oid[0] %>
+<!-- Debut cv3-agenda-bottom.html -->
+<div id="agendaBottom">
+<div class="agendaContainer">
+		<h4 class="titre">Agenda</h4>
+		<div id="agenda">
+	    <%section name=ag loop=$ag_lines_oid%>
+				<%assign var=evtUrl value="`$self`alias=agenda-fiche&oid=`$ag_lines_oid[ag]`&from[alias]=`$it_cat_mit.oalias->raw`&from[itoid]=`$it_itoid[$it_itoid|@count - 1]`"%>
+	      <div class="datePar clearfix">
+	        <div class="col-xs-12 col-sm-12 col-md-4">
+	          <div class="itemAgendaHome">
+	            <%assign var=date1time value=$ag_lines_ostart[ag]->raw|strtotime%>
+	            <%assign var=date2time value=$ag_lines_oend[ag]->raw|strtotime%>
+	            <%assign var=day1 value="d"|date:$date1time%>
+	            <%assign var=month1 value="m"|date:$date1time%>
+	            <%assign var=day2 value="d"|date:$date2time%>
+	            <%assign var=month2 value="m"|date:$date2time%>
+	            <%if $day1 neq $day2 and $month1 neq $month2 %>
+	              <div class="date1"><span class="color"><%$day1%> </span><%$month1|@getFrenchMonth|substr:0:4%><%if $ag_lines_oend[ag]->raw%> au <span class="color"><%$day2%> </span><%$month2|@getFrenchMonth|substr:0:4%><%/if%></div>
+              <%else%>
+	              <div class="date1">Le <span class="color"><%$day1%> </span><%$month1|@getFrenchMonth%><%if $agline.oend->raw%><%/if%></div>
+	            <%/if%>
+	            <%if $ag_lines_ohor->raw%><div class="duree">à <%$ag_lines_ohor->html%></div><%/if%>
+	          </div>
+	        </div>
+	        <div class="col-xs-12 col-sm-12 col-md-6">
+	          <div class="itemAgenda">
+	            <%if $ag_lines_otheme[ag]->raw%><div class="theme"><%$ag_lines_otheme[ag]->html%></div><%/if%>
+	            <%if $ag_lines_otype[ag]->raw%><div class="type"><%$ag_lines_otype[ag]->html%></div><%/if%>
+	            <div class="titreItem"><%$ag_lines_otitle[ag]->toText()%></div>
+	          </div>
+	        </div>
+	        <div class="col-xs-12 col-sm-12 col-md-2">
+	          <div class="descItem"></div>
+	          <a href="<%$evtUrl%>" type="button" class="btn btn-default btAgenda">+</a>
+	        </div>
+	      </div>
+	    <%/section%>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <a href="/index.php?nocache=1&amp;alias=agenda" class="btn btn-default btAgendatte">Toutes les dates</a>
+        </div>
+      </div>
+
+	</div><!-- / #agenda -->
+</div><!-- / #cv3-agenda -->
+</div>
+<!-- Debut cv3-agenda-bottom.html -->
+<%/if%>

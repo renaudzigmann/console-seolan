@@ -1,0 +1,84 @@
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Module_Calendar_Calendar.confirmplanif%>
+<script type="text/javascript">
+ v<%$uniqid%>.changeParticipation=function(o){
+  if(o.checked==true) jQuery(":checkbox[name^='confirm']",o.form).attr('disabled',true).attr('checked',false);
+  else jQuery(":checkbox[name^='confirm']",o.form).attr('disabled',false);
+ }
+</script>
+<form action="<%$self%>" method="post" name="editform<%$uniqid%>" onsubmit="return TZR.ajaxSubmitForm(this);">
+ <input type="hidden" name="moid" value="<%$_moid%>">
+ <input type="hidden" name="function" value="procConfirmPlanif">
+ <input type="hidden" name="oid" value="<%$br_oid%>">
+ <input type="hidden" name="skip" value="1">
+ <input type="hidden" name="_next" value="<%$self%>&template=Core.message.html">
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.event%></legend>
+  <div class="table-responsive">
+  <table class="list2" >
+   <%section name=fields loop=$brp_fields_object%>
+    <%if !$brp_fields_object[fields]->sys && $brp_fields_object[fields]->fielddef->field!="ag"%>
+     <tr id="cont-<%$brp_fields_object[fields]->field%>">
+      <th <%if $brp_fields_object[fields]->fielddef->comment%>class="tzr-hottip-c" bt-xTitle="[<%$syslabels.Seolan_Core_General.help_text%>]&nbsp;<%$brp_fields_object[fields]->fielddef->comment|escape:'html'%>"<%/if%>><label><%$brp_fields_object[fields]->fielddef->label|wordwrap:"50":"<br>"%></label></th>
+      <td><%$brp_fields_object[fields]->html%></td>
+     </tr>
+    <%/if%>
+   <%/section%>
+  </table>
+  </div>
+ </fieldset>
+ 
+ <fieldset>
+  <legend><%$syslabels.Seolan_Module_Calendar_Calendar.confirm%></legend>
+  <%if $br__mode=='display' && $br_opart->raw==2%>
+   <%$syslabels.Seolan_Module_Calendar_Calendar.notparticipate%>
+  <%else%>
+   <%if $br__mode!='display'%>
+    <input type="checkbox" name="nopart" value="1" id="nopart<%$uniqid%>" class="checkbox" onclick="v<%$uniqid%>.changeParticipation(this);" <%if $br_opart->raw!=1%>checked<%/if%>> <label for="nopart<%$uniqid%>"><%$syslabels.Seolan_Module_Calendar_Calendar.notparticipate%></label><br>
+   <%/if%>
+   <%section name=d loop=$brd_lines_oid%>
+    <%if $br__mode=='display'%>
+     <label>
+      <%if $brd_lines_obegin[d]->hour->html!="00:00" || $brd_lines_oend[d]->hour->html!="00:00"%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.the%> <%$brd_lines_obegin[d]->date->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <%$brd_lines_obegin[d]->hour->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <%$brd_lines_oend[d]->hour->html%>
+      <%else%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.the%> <%$brd_lines_obegin[d]->date->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.allday|lower%>
+      <%/if%>
+     </label><br>
+     <%if in_array($br_oid,$brd_lines_oconfirm[d]->oidcollection)%>
+      <%$syslabels.Seolan_Module_Calendar_Calendar.confirmed%>
+      <%else%>
+      <%$syslabels.Seolan_Module_Calendar_Calendar.notconfirmed%>
+     <%/if%>
+     <br>
+    <%else%>
+     <input type="hidden" name="confirm_HID[<%$brd_lines_oid[d]%>]" value="2">
+     <input type="checkbox" name="confirm[<%$brd_lines_oid[d]%>]" id="date<%$smarty.section.d.index%>" class="checkbox" value="1" <%if in_array($br_oid,$brd_lines_oconfirm[d]->oidcollection)%>checked<%/if%>>
+     <label for="date<%$smarty.section.d.index%>">
+      <%if $brd_lines_obegin[d]->hour->html!="00:00" || $brd_lines_oend[d]->hour->html!="00:00"%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.the%> <%$brd_lines_obegin[d]->date->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.at2%> <%$brd_lines_obegin[d]->hour->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.to2%> <%$brd_lines_oend[d]->hour->html%>
+      <%else%>
+       <%$syslabels.Seolan_Module_Calendar_Calendar.the%> <%$brd_lines_obegin[d]->date->html%> <%$syslabels.Seolan_Module_Calendar_Calendar.allday|lower%>
+      <%/if%>
+     </label><br>
+    <%/if%>
+   <%/section%>
+  <%/if%>
+  <%if $br_oremark->html%>
+  <div class="table-responsive">
+   <table class="list2" >
+    <tr>
+     <th><label><%$br_oremark->fielddef->label%></label></th>
+     <td><%$br_oremark->html%></td>
+    </tr>
+   </table>
+  </div>
+  <%/if%>
+ </fieldset>
+ 
+ <%if $br__mode!='display'%>
+ <div class="table-responsive">
+  <div id="tzr-action<%$uniqid%>" class="tzr-action"><input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>" name="btnNewField"></div>
+ </div>
+  <script type="text/javascript">v<%$uniqid%>.changeParticipation(document.editform<%$uniqid%>.nopart);</script>
+ <%/if%>
+</form>

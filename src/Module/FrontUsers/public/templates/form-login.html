@@ -1,0 +1,44 @@
+<!-- <%$smarty.template%> -->
+<form action="<%$self%>" method="post" onsubmit="return TZR.isFormValidWithFocus(this,true);" name="<%$formLogin%>" class="<%$formClass%>">
+  <%if !empty($token_id)%>
+  <%*///// login \\\\\
+  mix de la section gestion de compte de base et de celle de FrontUsers _account)
+  Module/InfoTree.defaulttemplates/disp-manageLogin.html
+  *%>
+  <input type="hidden" name="_section" value="<%$it_moid%>,<%$it_itoid[it]%>">
+  <input type="hidden" name="next" value="<%$self%>alias=<%$it_cat_mit.oalias->raw%>&panel=<%$smarty.request.panel%>">
+  <input type="hidden" name="moid" value="<%$section._functionparams.moid%>">
+  <input type="hidden" name="id" value="<%$token_id%>">
+  <input type="hidden" name="function" value="procNewPasswordRequest">
+  <input type="hidden" name="onerror" value="<%$self|cat:http_build_query(['alias'=>$it_cat_mit.oalias->raw,'panel'=>$smarty.request.panel,'id'=>$token_id,'_'=>date('ymdhis')])%>">
+  <div class="alert alert-info"><%$token_message%></div>
+
+  <div id="password_container">
+    <div class="form-group ident">
+      <label id="labellogin"><%$syslabels.Seolan_Core_Session.login%></label>
+      <p><%$token_alias%></p>
+      <input type="hidden" value="<%$token_alias%>" id="newpasswordalias">
+    </div>
+    <label id="labelpassword"><%$syslabels.Seolan_Core_Session.password%></label>	 
+      <%$form_password->html%>
+    <div class="tzr-action">
+      <button type="submit" class="btn btn-primary">Ok</button>
+    </div>
+  </div>
+
+  <%else%> <%*///// login \\\\\*%>
+  <input type="hidden" name="class" value="<%$smarty.const.TZR_SESSION_MANAGER%>" />
+  <input type="hidden" name="onerror" value="<%$onerror|default:$smarty.request.onerror%>" />
+  <input type="hidden" name="_next" value="<%$next|default:$smarty.request.next%>" />
+  <input type="hidden" name="_function" value="procAuth">
+  <div class="form-group">
+    <label><%$loginLabel|default:"Login" %></label>
+    <input type="text" name="login" placeholder="<%$loginPlaceholder%>" value="<%if $smarty.request.login%><%$smarty.request.login%><%/if%>">
+  </div>
+  <div class="form-group">
+    <label><%$passwordLabel|default:"Password" %></label>
+    <input type="password" name="password" placeholder="<%$passwordPlaceholder%>">
+  </div>
+  <input type="submit" value="<%$submitLabel|default:'Connexion' %>">
+  <%/if%>
+</form>

@@ -1,0 +1,32 @@
+<%if !empty($img->title) %>
+ <%assign var=imgtitle value=$img->title|strip_tags%>
+<%elseif !empty($url) && $lnk->raw eq "1"%>
+ <%assign var=test value=$url->toText()%>
+ <%if !empty($test) %>
+  <%assign var=imgtitle value=$test|strip_tags%>
+ <%else%>
+  <%assign var=imgtitle value=$titsec->raw|default:$leg->raw|strip_tags%>
+ <%/if%>
+<%else%>
+ <%assign var=imgtitle value=$titsec->raw|default:$leg->raw|strip_tags%>
+<%/if%>
+                
+<%if !empty($lnk) && $lnk->raw eq "1"%>
+ <%if !empty($url->url)%>
+  <a  href="<%$url->url%>" target="<%$url->target%>" title="<%$url->toText()|escape:"html"%>">
+ <%else%>
+  <!--<%* lightbox effect  *%>-->
+  <a class="nyroModal" href="<%$img->resizer%>&amp;geometry=<%$tzr.nyro_zoom|default:1024%>x%3E&amp;t=.jpg" rel="<%$it_cat_mit.oid|replace:':':''%>" title="<%$imgtitle|escape:"html"%>" >
+ <%/if%>
+<%/if%>
+
+<%assign var=imgSrcsetId value=$srcsetId|default:'test'%>
+<%html_picture resizer=$img->resizer alt=$imgtitle title=$imgtitle srcsetId=$imgSrcsetId class=$imgclass zone=$zone%>
+
+<%if !empty($displeg) && !empty($leg->html)%>
+ <span class="legende"><%$leg->html%></span>
+<%/if%>
+                
+<%if !empty($lnk) && $lnk->raw eq "1"%>
+ </a>
+<%/if%>

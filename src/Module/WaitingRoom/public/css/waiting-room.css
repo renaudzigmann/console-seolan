@@ -1,0 +1,143 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333333;
+  margin: 20px;
+  background-color: #ffffff;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.waiting-room .logo {
+  margin-bottom: 20px;
+}
+
+.waiting-room .logo:before,
+.waiting-room .logo:after {
+  display: table;
+  content: " ";
+}
+
+.waiting-room .logo:after {
+  clear: both;
+}
+
+.waiting-room .logo img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.waiting-room h1 {
+  font-size: 38px;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+
+.waiting-room h2 {
+  font-size: 22px;
+  color: #f28e0d;
+  margin-bottom: 25px;
+}
+
+.waiting-room p {
+  margin-bottom: 15px;
+}
+
+.waiting-room .rank,
+.waiting-room .alert-info {
+  vertical-align: middle;
+  margin-bottom: 15px;
+}
+
+.waiting-room .rank {
+  font-size: 16px;
+  color: #ffffff;
+  padding: 18px 15px;
+  border-radius: 5px;
+  background-color: #777777;
+}
+
+
+.waiting-room .rank .count {
+  display: inline-block;
+  line-height: 1;
+  color: #333333;
+  vertical-align: middle;
+  padding: 8px 10px 9px 10px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.waiting-room #waiting_room_rank {
+  font-weight: 700;
+  font-size: 110%;
+}
+
+.waiting-room #waiting_room_delay {
+  font-weight: 700;
+  font-size: 110%;
+}
+
+.waiting-room .alert-info {
+  color: #f28e0d;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+  padding: 15px;
+  border-radius: 5px;
+  border: 2px solid #f28e0d;
+  background-color: #f8f8f8;
+}
+
+.message {
+  background-color: #f28e0d;
+  border: 2px solid #a94442;
+  border-radius: 5px;
+  color: #fff;
+  display: none;
+  font-weight: 700;
+  font-size: 110%;
+  margin-bottom: 15px;
+  padding: 15px;
+}
+
+@media (min-width: 768px) {
+
+  body {
+    margin: 50px;
+  }
+
+  .waiting-room .rank,
+  .waiting-room .alert-info {
+    margin-bottom: 20px;
+  }
+
+  .waiting-room .rank .rank-info {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 20px 0 0;
+  }
+
+}
+

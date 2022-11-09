@@ -1,0 +1,61 @@
+<%* gestion des upgrades console *%>
+<%include file="`$smarty.const.TZR_SHARE_DIR`Core.header/ajax.html" title=$syslabels.Seolan_Core_General.config%>
+<script type="text/javascript">
+ v<%$uniqid%>.submit = function(){
+   if (confirm('Confirmer ?')){
+     return TZR.ajaxSubmitForm(document.forms["applyupgrades<%$uniqid%>"]);
+   } 
+   return false;
+ }
+</script>
+<div class="cv8-contenu-center">
+  <%if $upgr_procmess%>
+  <div class="alert alert-info" style="height:10em;overflow-y:auto"><%$upgr_procmess%></div>
+  <%/if%>
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<div class="panel-title"><a data-toggle="collapse">Mises à jour</a></div>
+      </div>
+      <div class="panel-collapse">
+	<div class="panel-body table-responsive">
+	  <%if count($upgr_pending) > 0%>
+	  <form name="applyupgrades<%$uniqid%>" action="<%$self%>" onsubmit="return v<%$uniqid%>.submit();">
+	    <input type="hidden" name="moid" value="<%$_moid%>">
+	    <input type="hidden" name="function" value="procApplyUpgrades">
+	    
+	    <table class="table table-striped">
+	      <thead>
+		<tr><th>Critique</th><td>No</td><td>Classe</td><td>Commentaire</td></tr>
+	      </thead>
+	      </thead>
+	      <%foreach from=$upgr_pending key="date" item="upgrades"%>
+	      <%foreach from=$upgrades item="upgrade"%>
+	      <tr>
+		<td>
+		  <%if $upgrade[1] == 'critical'%>
+		  <span class="glyphicon csico-warning"/></span>
+		  <%/if%>
+		</td>
+		<td><%$date%></td><td><%$upgrade[0]%></td>
+		<td>
+		  <%if $upgrade[2]%>
+		  <%$upgrade[2]%>
+		  <%/if%>
+		</td>
+	      </tr>
+	      <%/foreach%>
+	      <%/foreach%>
+	    </table>
+	    <div class="tzr-action">
+	      <button class="btn btn-primary">Appliquer les mises à jour</button>
+	    </div>
+	  </form>
+	  <%else%>
+	  Console à jour.
+	  <%/if%>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>

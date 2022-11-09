@@ -1,0 +1,120 @@
+<%extends file="Module/Table.edit.html"%>
+<%*
+* actions et next spécifiques
+* pas de commentaires ou d'onglet sécurité ou langue
+*%>
+<%block name=headers%>
+<%if !$smarty.request.tabsmode%>
+ <%if empty($title)%><%assign var="title" value=$syslabels.Seolan_Core_General.new_text%><%/if%>
+ <%include file="Core.header/ajax.html"%>
+<%else%>
+<%include file="Core.header/ajax.html" nonav=1 nohistory=1 nodata=1%>
+<%/if%>
+<%include file="Module/Table.functions.html"%>
+<%/block%>
+<%block name=configure append%>
+<%if empty($smarty.request.tabsmode) || $smarty.request.tabsmode eq '2'%>
+<%$onsubmit="return TZR.ajaxSubmitForm(this);"%>
+<%$withContainer=true%>
+<%else%>
+<%* en mode tabs insertion de sous fiches, il ne faut pas la div tzr-tabcontainer*%>
+<%$withContainer=false%>
+<%$onsubmit="TZR.SMod.findBrowseTab(this,'`$_moid`');return TZR.ajaxSubmitForm(this,jQuery(v`$uniqid`.div).parents('div.tab-pane:first'));"%>
+<%/if%>
+<%$ajaxProcCtrl="ajaxProcInsertCtrl"%>
+<%$tabs = ['object_sec'=>false,'langstatus'=>false, 'comments'=>false, 'ajaxtabs'=>false]%>
+<%/block%>
+<%block name="overloadconfiguration"%>
+<%if isset($imod_props.allowcomments) && $imod_props.allowcomments && $imod_mod->secure('','getComments')  && $function!='editDup'%>
+<%$tabIsActive['comments']=false%>
+<%$inlineCommentsMoid=$_moid%>
+<%/if%>
+<%/block%>
+<%block name=tzrActions%>
+<%$formname=sprintf("editform%s", $uniqid)%>
+<%if !$smarty.capture.action_handled%>
+<%if $imod_props.sendacopyto%>
+<%capture assign="sendacopyto"%>
+<input type="submit" onclick="var nm=document.forms['<%$formname%>'].elements['_nextmode']; if (nm){nm.value=''};this.form.elements['_sendacopyto[<%$_moid%>]'].value=1;" value="<%$syslabels.Seolan_Core_General.save_and_sendacopyto%>">
+<input type="hidden" name="_sendacopyto[<%$_moid%>]" value="0">
+<%/capture%>
+<%else%>
+<%assign var="sendacopyto" value=""%>
+<%/if%>
+
+<div id="tzr-action<%$uniqid%>" class="tzr-action">
+  <%if empty($smarty.request.tabsmode) || $smarty.request.tabsmode eq '2'%>
+  <input type="hidden" form="<%$formname%>" name="template" value="Core.empty.html">
+  <input type="submit" name="save" value="<%$__save_text|default:$syslabels.Seolan_Core_General.save_text%>" onclick="document.forms['<%$formname%>'].elements['_nextmode'].value='';">
+  <%$sendacopyto%>
+  <%if empty($__function)%>
+  <input type="submit" name="save_and_edit" value="<%$syslabels.Seolan_Module_Table_Table.saveedit_text%>" onclick="document.forms['<%$formname%>'].elements['_nextmode'].value='edit';">
+  <%/if%>
+  <%section name=a loop=$br__actions%>
+  <input type="submit" value="<%$br__actions[a].label%>" onclick="<%$br__actions[a].action|escape:"html"%>" name="<%$br__actions[a].name%>">
+  <%/section%>
+  <input type="hidden" name="_applywf" value="">
+  <%section name=w loop=$br_wf_id%>
+  <input type="submit" value="<%$br_wf_label[w]%>" onclick="document.forms['<%$formname%>'].elements['_applywf'].value='<%$br_wf_id[w]%>';">
+  <%/section%>
+  <input type="hidden" name="_next" value="<%$back%>">
+  <%else%>
+  <input type="hidden" name="tabsmode" value="1">
+  <input type="hidden" name="template" value="Module/Table.closeTab.html">
+  <input type="submit" value="<%$syslabels.Seolan_Core_General.save_text%>">
+  <%$sendacopyto%>
+  <%/if%>
+</div>
+<%/if%>
+<%/block%>
+<%block name=editFormConfiguration%>
+<input type="hidden" name="_function" value="<%$__function|default:'procInsert'%>">
+<input type="hidden" name="uniqid" value="<%$uniqid%>">
+<input type="hidden" name="tplentry" value="br">
+<input type="hidden" name="moid" value="<%$_moid%>">
+<input type="hidden" name="LANG_USER" value="<%$lang_user%>">
+<input type="hidden" name="LANG_DATA" value="<%$lang_data%>">
+<input type="hidden" name="_skip" value="1">
+<%if empty($smarty.request.tabsmode) || $smarty.request.tabsmode == '2'%>
+<input type="hidden" name="template" value="Core.empty.html">
+<input type="hidden" name="_nextmode" value="">
+<input type="hidden" name="_next" value="<%$back|default:$here%><%if $smarty.request._fromtabs%>&_tabs=<%$smarty.request._fromtabs%><%/if%>">
+<input type="hidden" name="_ssinsertmoid" value="">
+<input type="hidden" name="newoid" value="<%$br_oid%>">
+<%/if%>
+<%/block%>
+<%block name=bottom append%>
+<script type="text/javascript">
+ jQuery(document).ready(function(){
+   <%*
+   capture du click onglet -> confirm + save et edit
+   *%>
+   <%section name=ssmod loop=$br___ssmod%>
+   var tabid="<%"li-%s-%s"|sprintf:$br___ssprops[ssmod]._moid:$tabsuniqid%>";
+   var tabobj=jQuery("#"+tabid+" > a");
+   tabobj.removeAttr('data-url');
+   tabobj.on("click", function(event){
+     event.preventDefault();
+     var done = function(){
+       var form = document.forms["editform<%$uniqid%>"];
+       form.elements["_nextmode"].value='edit';
+       form.elements["_ssinsertmoid"].value="<%$br___ssprops[ssmod]._moid%>";
+       return      TZR.ajaxSubmitForm(form);
+     }
+     new TZR.Modal.Confirm("<%$syslabels.Seolan_Core_General.confirm_text|escape:'javascript'%>",
+			   "<%$syslabels.Seolan_Module_Table_Table.record_create_confirmation|escape:'javascript'%>",
+			   {done:done}).show();
+     return false;
+   });
+   <%/section%>
+ });
+ <%if $imod_props.unfoldedgroupsnumber > 1%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"),
+                       0,
+                       "fieldset:gt(<%$imod_props.unfoldedgroupsnumber-2%>)");
+ <%else%>
+ TZR.fieldsetAccordion(jQuery("#tzr-tablist-<%$uniqid%>"));
+ <%/if%>
+ //# sourceURL=Module/Table.new.js
+</script>
+<%/block%>

@@ -1,0 +1,10 @@
+<%* menu selection : item de la selection *%>
+<ul class="select-tool clearfix" role="tablist">
+  <li><%$sel._count%> <%"<strong id=\"selection-nbchecked`$sel._moid`\">0</strong>"|string_format:$syslabels.Seolan_Core_Module_Module.selectionitems%></li>
+  <li>
+    <button class="btn btn-default" onclick="var that = jQuery(this); var checked = that.data('checked'); TZR.checkBoxes(document.selectionform<%$sel._moid%>, !checked); that.data('checked', !checked);"><%$syslabels.Seolan_Core_General.select_unselect_all%></button>
+  </li>
+  <li>
+    <button class="btn btn-default" type="button" data-toggle="tooltip" title="<%$syslabels.Seolan_Core_Module_Module.deltoselection%>" href="#" onclick="TZR.SELECTION.delTo('<%$sel._moid%>'); return false;"><%$syslabels.Seolan_Core_Module_Module.deltoselection%></button>
+  </li>
+</ul>
