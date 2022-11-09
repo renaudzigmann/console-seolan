@@ -3697,6 +3697,7 @@ class DataSource implements \Seolan\Core\Module\ConnectionInterface {
     $nkoid = $this->duplicate(['oid'=>$oid,
 			       'newoid'=>$oid,
 			       'fromArchive'=>$archive, // force source = A_
+			       'changeown'=>false,
 			       'nolog'=>true], 
 			      $this->base,
 			      $aupd);
