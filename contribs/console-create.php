@@ -1,8 +1,11 @@
 <?php
 include('lib2.php');
 
+include('console-create-checkenv.php');
+
 $homename =  getenv('USERNAME');
 
+echo("\r\n\r\n");
 $homename = myReadline("Répertoire d'installation ?", $homename);
 $root = "/home/$homename/";
 
@@ -16,6 +19,19 @@ $user = myReadline('User', $homename);
 $pass = myReadline('Password', '');
 $host = myReadline('Hostname', '');
 $databse = myReadline('DB Name', $user);
+
+$conn = getDBConn($host, $databse, $user, $pass);
+$res = $conn->query("show variables like 'version'")->fetch();
+
+list($version) = explode(':', $res['Value']);
+list($versionnum) = explode('-', $version);
+
+if (empty($versionnum) || !version_compare('10.3.18', $versionnum, '<=')){
+  die("\r\nVersion mysql {$version} trop ancienne, '10.3.18' ou >= attendue");
+} else {
+  echo("\r\nVersion base de donnée ({$version}) ok\r\n\r\n");
+}
+
 
 $siteurl = myReadline('Adresse du site ($HOME_ROOT_URL)', '');
 

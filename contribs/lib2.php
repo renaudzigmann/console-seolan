@@ -20,7 +20,24 @@ function newMOID(&$db) {
       return $moid;
   }
 }
-
+function getDBConn($host, $dbname, $user, $passwd, $options=[]){
+  static $conn;
+  if (!isset($conn)){
+    $dsn="mysql:host={$hostd};dbname={$dbname}";
+    $options=$options+array(
+      \PDO::ATTR_PERSISTENT=>false,
+      \PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES utf8',
+      \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY=>true,
+      \PDO::ATTR_DEFAULT_FETCH_MODE=>\PDO::FETCH_ASSOC
+    );
+    try{
+      $conn=new \PDO($dsn,$user,$passwd,$options);
+    }catch(\Exception $e) {
+      die('Database::initialize error '.$e->getMessage());
+    }
+  }
+  return $conn;
+}
 function drop_table($table) {
   msg("Dropping $table",1);
   $x = new \Seolan\Library\Database;
