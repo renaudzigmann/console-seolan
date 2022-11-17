@@ -26,7 +26,7 @@ $res = $conn->query("show variables like 'version'")->fetch();
 list($version) = explode(':', $res['Value']);
 list($versionnum) = explode('-', $version);
 
-if (empty($versionnum) || !version_compare('10.3.18', $versionnum, '<=')){
+if (empty($versionnum) || (version_compare('10.3.18', $versionnum)==1)){
   die("\r\nVersion mysql {$version} trop ancienne, '10.3.18' ou >= attendue");
 } else {
   echo("\r\nVersion base de donnée ({$version}) ok\r\n\r\n");
