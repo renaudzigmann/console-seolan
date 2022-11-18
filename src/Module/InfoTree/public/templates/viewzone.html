@@ -58,7 +58,11 @@
           <li>
             <%assign var=type value=$_zone.olines[it]._type%>
 	    |
-            <%$_zone.fieldobject->display($_zone.tlines[it].oid)->text%>
+	    <%if $xuser->isRoot()%>
+	    <%$_zone.fieldobject->display($_zone.tlines[it].oid)->html%>
+	    <%else%>
+	    <%$_zone.fieldobject->display($_zone.tlines[it].oid)->text%>
+	    <%/if%>
             <%if isset($oo._functionparams)%>
               | <a class="cv8-ajaxlink" href="<%$self%>&moid=<%$oo._functionparams.moid%>&function=gotoMainAction&skip=1"><%$syslabels.Seolan_Module_InfoTree_InfoTree.$type%> : <%$oo._functionparams.modulename%></a>
             <%else%>
