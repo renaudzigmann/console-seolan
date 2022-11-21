@@ -26,7 +26,7 @@ class GoogleMaps extends \Seolan\Module\TarteAuCitron\Service {
     $mapApiKey = $this->getFieldValue('mainparam');
     $callbackFunction = $this->getFieldValue('extraparams');
     $script = "tarteaucitron.user.googlemapsKey = '".$mapApiKey."';";    
-    $script .= "tarteaucitron.user.mapscallback = 'check".($callbackFunction ?? self::$defaulfFunction)."';";
+    $script .= "tarteaucitron.user.mapscallback = 'check".(empty($callbackFunction) ? self::$defaulfFunction : $callbackFunction)."';";
     $script .= parent::getScript();
     return $script ;
   }
