@@ -350,7 +350,13 @@ class Paybox extends \Seolan\Module\Monetique\Monetique {
     } else {
       $transactionResponse->checkAmount = $transactionResponse->_callParms['PBX_TOTAL'] / 100;
     }
-    if ($this->formatOrderAmount($transactionResponse->checkAmount) == $this->formatOrderAmount($transactionResponse->amount)) {
+    $transactionAmount = $transactionResponse->amount;
+    for ($i = 1; $i < 4; $i++) {
+      if (!empty($transactionResponse->_callParms["PBX_2MONT$i"])) {
+        $transactionAmount += $transactionResponse->_callParms["PBX_2MONT$i"] / 100;
+      }
+    }
+    if ($this->formatOrderAmount($transactionResponse->checkAmount) == $this->formatOrderAmount($transactionAmount)) {
       return true;
     }
     return false;
