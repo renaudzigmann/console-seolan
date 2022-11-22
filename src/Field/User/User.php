@@ -76,8 +76,9 @@ class User extends \Seolan\Field\Link\Link {
     else
       $usersoids = array_keys($value);
     $usersoids = array_filter($usersoids);
-    // Liste des users/groupes
-    list($bru, $brg)=\Seolan\Core\User::getUsersAndGroups(true,false);
+
+    // Liste des users/groupes !! sourcemodule
+    list($bru, $brg)=\Seolan\Core\User::getUsersAndGroups(true,false, $this->sourcemodule??null);
     
     // groupes dont un user au moins est actuellement sélectionné
     // et groupes des users
@@ -145,7 +146,12 @@ EOF;
       $countusersgroupoid = count($usersgroupoid);
       $html.='<li id="'.$r->varid.'-'.$inputname.'-ajax-'.$group.'" x-value="'.$group.'" x-name="'.$inputname.'[]" x-type="folder" x-nbusers="'.$countusersgroupoid.'">';
       $html.='<span><span class="'.(in_array($group, $usedgroups)?'hselected':'unselected').'">'.$brg['lines_oGRP'][$ig]->raw.'</span></span>';
-      $html.='<ul class="ajax"><li>{url:"/csx/scripts-admin/ajax8.php?function=xmodgroup_getGroupTree&class=_Seolan_Module_Group_Group&grp='.$group.'&name='.$inputname.'[]"}</li></ul></li>';
+      $groupcontenturl = http_build_query(['function'=>'xmodgroup_getGroupTree',
+					   'class'=>'_Seolan_Module_Group_Group',
+					   'grp'=>$group,
+					   'directorymodule'=>$this->sourcemodule??'',
+					   'name'=>$inputname.'[]']);
+      $html.="<ul class=\"ajax\"><li>{url:\"/csx/scripts-admin/ajax8.php?{$groupcontenturl}\"}</li></ul></li>";
     }
     $html.='</ul></li></ul>';
     $html.= '<script type="text/javascript">TZR.UserSelector.activateField.call(TZR.UserSelector, jQuery("#'.$r->varid.'"));';
