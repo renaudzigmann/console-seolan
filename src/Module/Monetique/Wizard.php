@@ -344,13 +344,13 @@ class Wizard extends \Seolan\Core\Module\Wizard {
     // Identifiant du site fournis par la banque
     $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique','siteId'), 'siteId', 'text');
     // Url de retour pour paiement accepté
-    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique','urlPayed'), 'urlPayed', 'text');
+    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique','urlPayed'), 'urlPayed', 'text', ['size' => 60]);
     $this->_module->urlPayed = '/paiement-carte-ok.html';
     // Url de retour pour paiement refusé
-    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique', 'urlCancelled'), 'urlCancelled', 'text');
+    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique', 'urlCancelled'), 'urlCancelled', 'text', ['size' => 60]);
     $this->_module->urlCancelled = '/paiement-carte-ko.html';
     // Url de retour automatique
-    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique', 'urlAutoResponse'), 'urlAutoResponse', 'text');
+    $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Monetique', 'urlAutoResponse'), 'urlAutoResponse', 'text', ['size' => 60]);
     $this->_module->urlAutoResponse = '/csx/scripts/monetique-retour-auto.php?moid='.$this->_moid;
     // Insertion des propriétées spécifique à chaque module
     $this->insertSpecificProperties();
@@ -426,29 +426,33 @@ class Wizard extends \Seolan\Core\Module\Wizard {
         $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'identifiant'), 'identifiant', 'text');
         $this->_module->identifiant = '107975626';
         // Clé publique pour la vérification de signature
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'hashKey'), 'hashKey', 'text');
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'hashKey'), 'hashKey', 'text', ['row' => 2, 'cols' => 60]);
         $this->_module->hashKey = '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF';
         // Algorithme utilisé pour le calcul de la signature
         $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'algoHash'), 'algoHash', 'list',
           ['values' => Paybox\Paybox::codeHash, 'labels' => Paybox\Paybox::libelleHash]);
         // Url principale du serveur Paybox
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlprincipale'), 'formFirstUrl', 'text');
-        $this->_module->formFirstUrl = '';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlprincipale'), 'formFirstUrl', 'text', ['size' => 60]);
+        $this->_module->formFirstUrl = 'https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi';
         // Url du serveur de pré-production Paybox
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formUrlPreProd'), 'formUrlPreProd', 'text');
-        $this->_module->formUrlPreProd = 'https://preprod-tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlpreprod'), 'formUrlPreProd', 'text', ['size' => 60]);
+        $this->_module->formUrlPreProd = 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlmobile'), 'mobileUrl', 'text', ['size' => 60]);
+        $this->_module->mobileUrl = 'https://tpeweb.paybox.com/cgi/ChoixPaiementMobile.cgi';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlmobilepreprod'), 'mobileUrlPreProd', 'text', ['size' => 60]);
+        $this->_module->mobileUrlPreProd = 'https://preprod-tpeweb.paybox.com/cgi/ChoixPaiementMobile.cgi';
         // Chemin du fichier contenant la clé publique
         $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'keyFile'), 'keyFile', 'text');
         $this->_module->keyFile = 'tzr/pubkey.pem';
         // Url de retour pour paiement accepté
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPppsTest'), 'urlPPPStest', 'text');
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPppsTest'), 'urlPPPStest', 'text', ['size' => 60]);
         $this->_module->urlPPPStest = 'https://preprod-ppps.paybox.com/PPPS.php';
         // Url principal de dial de serveur à serveur
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPpps1'), 'urlPPPS1', 'text');
-        $this->_module->urlPPPS1 = '';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPpps1'), 'urlPPPS1', 'text', ['size' => 60]);
+        $this->_module->urlPPPS1 = 'https://ppps.paybox.com/PPPS.php';
         // Url secondaire de dial de serveur à serveur
-        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPpps2'), 'urlPPPS2', 'text');
-        $this->_module->urlPPPS2 = '';
+        $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlPpps2'), 'urlPPPS2', 'text', ['size' => 60]);
+        $this->_module->urlPPPS2 = 'https://ppps1.paybox.com/PPPS.php';
         // Clé pour le dial de serveur à serveur
         $this->_options->setOpt(Labels::getSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'clePpps'), 'clePPPS', 'text');
         $this->_module->clePPPS = '1999888I';

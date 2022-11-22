@@ -888,19 +888,21 @@ class Paybox extends \Seolan\Module\Monetique\Monetique {
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'algohash'), 'algoHash', 'list',
       ['values' => self::codeHash, 'labels' => self::libelleHash], NULL, $alabel);
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlprincipale'), 'formFirstUrl', 'text',
-      ['size' => 60], NULL, $alabel);
-    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlsecondaire'), 'form2NdUrl', 'text',
-      ['size' => 60], NULL, $alabel);
+      ['size' => 60], 'https://tpeweb.paybox.com/cgi/MYchoix_pagepaiement.cgi', $alabel);
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlpreprod'), 'formUrlPreProd', 'text',
-      ['size' => 60], NULL, $alabel);
+      ['size' => 60], 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi', $alabel);
+    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlmobile'), 'mobileUrl', 'text',
+      ['size' => 60], 'https://tpeweb.paybox.com/cgi/ChoixPaiementMobile.cgi', $alabel);
+    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'formurlmobilepreprod'), 'mobileUrlPreProd', 'text',
+      ['size' => 60], 'https://preprod-tpeweb.paybox.com/cgi/ChoixPaiementMobile.cgi', $alabel);
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'keyFile'), 'keyFile', 'text', ['size' => 60], NULL,
       $alabel);
     $this->_options->setComment('Absolu ou relatif par rapport à ' . realpath(TZR_WWW_DIR . '../') . '/', 'keyFile');
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlpppstest'), 'urlPPPStest', 'text', ['size' => 60],
-      NULL, $alabel);
-    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlppps1'), 'urlPPPS1', 'text', ['size' => 60], NULL,
+      'https://preprod-ppps.paybox.com/PPPS.php', $alabel);
+    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlppps1'), 'urlPPPS1', 'text', ['size' => 60], 'https://ppps.paybox.com/PPPS.php',
       $alabel);
-    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlppps2'), 'urlPPPS2', 'text', ['size' => 60], NULL,
+    $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'urlppps2'), 'urlPPPS2', 'text', ['size' => 60], 'https://ppps1.paybox.com/PPPS.php',
       $alabel);
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'cleppps'), 'clePPPS', 'text', NULL, '', $alabel);
     $this->_options->setOpt(Labels::getTextSysLabel('Seolan_Module_Monetique_Paybox_Paybox', 'grouppps'), 'groupPPPS', 'text', NULL, '', $alabel);

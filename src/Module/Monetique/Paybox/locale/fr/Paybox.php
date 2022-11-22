@@ -3,9 +3,10 @@
 = [
 'algohash'=>'Algorithme de hachage utilisé pour le calcule du HMAC',
 'cleppps'=>'Clé PPPS (mdp BO)',
-'formurlprincipale'=>'Url du serveur de soumission principale',
-'formurlsecondaire'=>'Url de soumission secondaire',
+'formurlprincipale'=>'Url du serveur de soumission',
 'formurlpreprod'=>'Url de soumission en pré-production',
+'formurlmobile'=>'Url de soumission mobile',
+'formurlmobilepreprod'=>'Url de soumission mobile en pré-production',
 'grouppps'=>'Groupe PPPS (ppps++)',
 'hashkey'=>'Clé utilisé pour le hash',
 'identifiant'=>'Identifiant du site (Fournis par la banque)',
