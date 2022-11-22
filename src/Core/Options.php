@@ -690,6 +690,7 @@ class Options {
       else
 	$t.="<option value=\"".$values[$i]."\">".$labels[$i].'</option>';
     }
+    $t .= '</select>';
     return $t;
   }
   private function _getMultipleListUI($name, $value, $labels, $values, $onchange) {
