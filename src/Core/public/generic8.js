@@ -3616,11 +3616,14 @@ TZR.SlickGrid = function(_fieldName, _columns, _data, _options, _pluginOptions) 
     if(!jQuery("#"+idContextMenu).length) return;
     e.preventDefault();
     var cell = grid.getCellFromEvent(e);
+    var gridelem = jQuery('#'+idGrid);
+    var postop = gridelem.offset().top - gridelem.position().top;
+    var posleft = gridelem.offset().left - gridelem.position().left;
     jQuery("#"+idContextMenu)
         .data("row", cell.row)
         .data("col", cell.cell)
-        .css("top", e.pageY-jQuery('#'+idGrid).offset().top)
-        .css("left", e.pageX-jQuery('#'+idGrid).offset().left)
+        .css("top", e.pageY - postop)
+        .css("left", e.pageX - posleft)
         .show();
     jQuery("body").one("click", function () {
       jQuery("#"+idContextMenu).hide();
