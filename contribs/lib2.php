@@ -23,7 +23,7 @@ function newMOID(&$db) {
 function getDBConn($host, $dbname, $user, $passwd, $options=[]){
   static $conn;
   if (!isset($conn)){
-    $dsn="mysql:host={$hostd};dbname={$dbname}";
+    $dsn="mysql:host={$host};dbname={$dbname}";
     $options=$options+array(
       \PDO::ATTR_PERSISTENT=>false,
       \PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES utf8',
@@ -124,7 +124,7 @@ function check_file($koid, $prefix=NULL, $convert=false) {
   }
 }
 
-// création d'un ensemble de champs
+// crÃ©ation d'un ensemble de champs
 //
 function create_fields(&$x, $ar1) {
   for($i=0;$i<count($ar1);$i++) {
@@ -213,7 +213,7 @@ function myConfirm($prompt, $default="Y") {
 }
 
 
-// copie récursive d'une répertoire
+// copie rÃ©cursive d'une rÃ©pertoire
 function copyr($source, $dest) {
   // Simple copy for a file
   if (is_file($source)) {
