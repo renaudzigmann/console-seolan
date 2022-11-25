@@ -450,6 +450,35 @@ body.login .navbar-brand .slogan {
 }
 
 
+.edit-form .passwd-edit {
+	width: 330px;
+}
+
+.edit-form .passwd-edit input[type="password"],
+.edit-form .passwd-edit input[type="text"] {
+	width: calc(100% - 40px);
+	margin-right: 0;
+	margin-bottom: 5px;
+}
+
+.edit-form .passwd-edit input[type="password"]:last-child {
+	margin-bottom: 10px;
+}
+
+.edit-form .csx-input-confirm {
+	margin-top: 0;
+}
+
+.edit-form .passwd-edit .btn {
+	margin-right: 0;
+	margin-bottom: 5px;
+	padding: 10px 12px;
+	border: 1px solid #cccccc;
+	border-left: none;
+}
+
+
+
 
 .directories_ui {
 	position: relative;
@@ -4431,6 +4460,7 @@ input.checkbox.delfile {
 .row-striped-content .cs-col-label,
 .row-striped-content .cs-col-label {
 	width: 25%;
+	text-align: right;
 	padding-right: 15px;
 }
 
@@ -4846,6 +4876,7 @@ input.checkbox.delfile {
 	.row-striped-content .cs-col-label,
 	.row-striped-content .cs-col-data {
 		width: 100%;
+		text-align: left;
 	}
 
 	.cv8-contenu-center .nav-tabs {
@@ -4857,6 +4888,7 @@ input.checkbox.delfile {
 		white-space: nowrap;
 		-webkit-overflow-scrolling: touch;
 	}
+
 
 }
 
