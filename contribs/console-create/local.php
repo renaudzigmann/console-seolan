@@ -14,7 +14,7 @@ define('TZR_USE_APP', 1);
 define('HTML5MEDIA', true);
 
 $DEBUG_IPs = ['127.0.0.1'];
-if (in_array($_SERVER['REMOTE_ADDR'], $DEBUG_IPs) || in_array($_SERVER["HTTP_X_REAL_IP"], $DEBUG_IPs)) {
+if (in_array($_SERVER['REMOTE_ADDR'], $DEBUG_IPs)){
   define('TZR_DEBUG_MODE', E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT & ~E_WARNING);
   define('TZR_LOG_LEVEL', 'PEAR_LOG_DEBUG');
   $TZR_LOG_FILTERS = array('.');

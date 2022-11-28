@@ -30,7 +30,7 @@ if (!empty($missing)){
 }
 
 // autres paquets
-$libs = ['clamav','graphviz','pandoc'];
+$libs = ['clamav','graphviz','pandoc','imagemagick'];
 
 $res = [];
 $installed = [];
@@ -51,7 +51,45 @@ if (!empty($missing)){
 } else {
   echo("\r\nAutres paquets ok");
 }
+// apache ?
+$res = [];
+exec("which apache2", $res);
+if (empty($res)){
+   echo("\r\nLe serveur apache est-il installé ?\r\n");
+}
 
+// modules apaches
+$res = [];
+$enabled = [];
+exec("a2query -m", $res);
+
+foreach($res as $modline){
+  $modline = trim($modline);
+  if (!empty($modline)){
+    list($name) = explode(' ', $modline);
+    $enabled[] = $name;
+  }
+}
+
+echo("\r\n\r\nModules apache :\r\n");
+
+foreach([['rewrite','"rewrite" nécessaire en front'],
+	['actions','"actions" nécessaire en mode CGI'],
+	['suexec','"suexec" nécessaire en mode CGI']
+] as $amod){
+  list($modname, $mess) = $amod;
+  if (!in_array($modname, $enabled)){
+     echo("\r\n\t module {$modname} non trouvé, {$mess}");
+  } else {
+     echo("\r\n\t \"{$modname}\" ok ({$mess})");	
+  }
+}
+
+
+
+
+
+echo("\n\n");
 
 
 
