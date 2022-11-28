@@ -90,7 +90,7 @@ TZR.initToolsTipsAndPopOvers = function(){
     jQuery('[data-toggle="tooltip"]').tooltip();
   }
   if(jQuery('[data-toggle="popover"]').popover) {
-    jQuery('[data-toggle="popover"]').popover({placement:'auto'});
+    jQuery('[data-toggle="popover"]').popover();
   }
 }
 // =====================
