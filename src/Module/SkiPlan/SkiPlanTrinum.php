@@ -80,6 +80,7 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
         $g['chargementDesPistes'] = array('rw', 'rwv', 'admin');
         $g['inLineLoadStations'] = array('rw', 'rwv', 'admin');
         $g['chargementStations'] = array('rw', 'rwv', 'admin');
+        $g['pistes'] = array('none', 'ro', 'rw', 'rwv', 'admin');
         if (isset($g[$function])) {
             if (!empty($group))
                 return in_array($group, $g[$function]);
@@ -635,9 +636,9 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
 	           $stationOid = $secteurs{0}->parentNode->parentNode->getAttribute('nom');
 	        \Seolan\Core\Logs::critical(__METHOD__." oidStation =$stationOid");
           if ($stationOid && !empty($Id_station))
-            getDB()->execute("UPDATE {$this->tbrems} set PUBLISH=2 where station='$stationOid' ");
+            getDB()->execute("UPDATE {$this->tbrems} set UPD=UPD, PUBLISH=2 where station='$stationOid' ");
           elseif ($stationOid) {
-            getDB()->execute("UPDATE {$this->tbrems} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.PUBLISH=2 where s.station='$stationOid' ");
+            getDB()->execute("UPDATE {$this->tbrems} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.UPD=r.UPD, r.PUBLISH=2 where s.station='$stationOid' ");
             $stationOid = null;
           }
         }
@@ -715,13 +716,13 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
 	          $stationOid = $listeDesSecteurs{0}->parentNode->parentNode->getAttribute('nom');
 	        \Seolan\Core\Logs::critical(__METHOD__." oidStation =$stationOid");
           if ($stationOid && !empty($Id_station)) {
-            getDB()->execute("UPDATE {$this->tbpistes} set PUBLISH=2 where station='$stationOid' ");
+            getDB()->execute("UPDATE {$this->tbpistes} set UPD=UPD, PUBLISH=2 where station='$stationOid' ");
             if (!empty($this->tbliaisons))
-              getDB()->execute("UPDATE {$this->tbliaisons} set PUBLISH=2 where station='$stationOid' ");
+              getDB()->execute("UPDATE {$this->tbliaisons} set UPD=UPD, PUBLISH=2 where station='$stationOid' ");
           } elseif ($stationOid) {
-            getDB()->execute("UPDATE {$this->tbpistes} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.PUBLISH=2 where s.station='$stationOid' ");
+            getDB()->execute("UPDATE {$this->tbpistes} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.UPD=r.UPD, r.PUBLISH=2 where s.station='$stationOid' ");
             if (!empty($this->tbliaisons))
-              getDB()->execute("UPDATE {$this->tbliaisons} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.PUBLISH=2 where s.station='$stationOid' ");
+              getDB()->execute("UPDATE {$this->tbliaisons} r join {$this->tbSecteurs} s on r.secteur=s.koid set r.UPD=r.UPD, r.PUBLISH=2 where s.station='$stationOid' ");
             $stationOid = null;
           }
         }
@@ -799,6 +800,14 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
             $ret = $this->fixedProcInput($this->tbpistes, $ar);
         } // foreach
 
+        if (count($listeDesSecteurs)) {
+          $date = date('Y-m-d', strtotime(date('Y-m-d') ." -2 DAYS"));
+          getDB()->execute("DELETE from {$this->tbpistes} where PUBLISH=2 and UPD<? ", [$date]);
+          if (!empty($this->tbliaisons))
+            getDB()->execute("DELETE from {$this->tbliaisons} where PUBLISH=2 and UPD<? ", [$date]);
+          getDB()->execute("DELETE from {$this->tbrems} where PUBLISH=2 and UPD<? ", [$date]);
+          getDB()->execute("DELETE from {$this->tbSecteurs} where PUBLISH=2 and UPD<? ", [$date]);
+        }
         return true;
     } // _insertPistes
 
@@ -810,6 +819,7 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
      * @param type $listeDesSecteurs liste de tout les secteur récupérer dans le xml
      */
     protected function _insertSecteur($listeDesSecteurs = null) {
+        return;
         if (empty($this->tbSecteurs))
           return;
 
@@ -822,7 +832,7 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
 	          $stationOid = $listeDesSecteurs{0}->parentNode->parentNode->getAttribute('nom');
 	        \Seolan\Core\Logs::critical(__METHOD__." oidStation =$stationOid");
           if (!empty($stationOid))
-            getDB()->execute("UPDATE {$this->tbSecteurs} set PUBLISH=2 where station='$stationOid' ");
+            getDB()->execute("UPDATE {$this->tbSecteurs} set UPD=UPD, PUBLISH=2 where station='$stationOid' ");
         }
         foreach ($listeDesSecteurs as $secteur) {
             $ar = [];
@@ -856,7 +866,10 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
     protected function _recupLienVerObjet($table = null, $champ = null, $val = null, $balise = null, $attribut = null, $stationOid = null, $stationField = null) {
         if (empty($table))
           return null;
-        $sql = 'select KOID from ' . $table . ' where ' . $champ . '=?';
+        if (\Seolan\Core\System::fieldExists($table, 'PUBLISH'))
+          $sql = 'select KOID from ' . $table . ' where PUBLISH=1 AND ' . $champ . '=?';
+        else
+          $sql = 'select KOID from ' . $table . ' where ' . $champ . '=?';
         $sqlCondValues = [$val];
         if ($attribut != null && $balise != null) {
             $sql .= ' AND balise=? AND attribut=?';
@@ -926,6 +939,7 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
             }
         } catch (Exception $ex) {
             \Seolan\Core\Shell::setNextData('message',$ex->getMessage());
+            //var_dump($ex->getMessage());
         }
         \Seolan\Core\Shell::setNext(\Seolan\Core\Shell::get_back_url());
     } // public function chargementDesPistes
@@ -1505,6 +1519,7 @@ class SkiPlanTrinum extends \Seolan\Core\Module\Module {
             }
         } catch (Exception $ex) {
             \Seolan\Core\Logs::critical(__METHOD__ . ' ' . $ex->getMessage());
+            //var_dump($ex->getMessage());
         }
         \Seolan\Core\Shell::setNext(\Seolan\Core\Shell::get_back_url());
     } // inlineLoadStations

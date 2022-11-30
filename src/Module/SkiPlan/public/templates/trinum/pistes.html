@@ -99,10 +99,10 @@
                 <table class="table table-striped etat_tab">
                     <thead>
                         <tr>
-                            <th><%$labels.skiplanPiste %></th>
-                            <th>Type</th>
-                            <th><%$labels.skiplanEtat %></th>
-                            <th><%$labels.skiplanNiveau %></th>
+                            <th style=""><%$labels.skiplanPiste %></th>
+                            <th style="min-width:50px">Type</th>
+                            <th style="min-width:50px"><%$labels.skiplanEtat %></th>
+                            <th style="min-width:60px"><%$labels.skiplanNiveau %></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,10 +130,10 @@
                     <table class="table table-striped etat_tab">
                         <thead>
                             <tr>
-                                <th><%$labels.skiplanRemontee %></th>
-                                <th>Type</th>
-                                <th><%$labels.skiplanEtat %></th>
-                                <th></th>
+                                <th style=""><%$labels.skiplanRemontee %></th>
+                                <th style="min-width:50px">Type</th>
+                                <th style="min-width:50px"><%$labels.skiplanEtat %></th>
+                                <th style="min-width:60px">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,7 +143,7 @@
                                 <td><strong><%$remontees2.onom->html%></strong></td>
                                 <td><%if $remontees2.otype->link.ostylesheet->raw%><span class="glyphicon xssp-type-<%$remontees2.otype->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
                                 <td><%if $remontees2.oetat->link.ostylesheet->raw %><span class="glyphicon xssp-etat <%$remontees2.oetat->link.ostylesheet->raw%>" aria-hidden="true">&nbsp;</span><%/if%></td>
-                                <td></td>
+                                <td>&nbsp;</td>
                             </tr>
                             <%/if%>
                             <%/foreach%>
