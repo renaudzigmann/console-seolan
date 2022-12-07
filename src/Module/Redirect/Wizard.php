@@ -51,6 +51,7 @@ class Wizard extends \Seolan\Module\Table\Wizard {
       $x->createField('target_page',      'Target page',      '\Seolan\Field\Thesaurus\Thesaurus', '0',   '9',  '0', '1', '1', '0', '0', '0', $modInfoTree->table);
       $x->createField('redirection_mode', 'Redirection mode', '\Seolan\Field\StringSet\StringSet', '0',   '10', '1', '1', '1', '0', '0', '0', '', ['default' => 'header_location']);
       $x->createField('http_code',        'HTTP code',        '\Seolan\Field\StringSet\StringSet', '0',   '11', '1', '1', '1', '0', '0', '0');
+      $x->createField('ordre',            'Ordre',            '\Seolan\Field\Order\Order',         '0',   '12', '1', '0', '1', '0', '0', '0', '', ['default' => 0]);
 
       // Ajout des valeurs des stringSet
       $f = $x->getField('source_type');

@@ -12,6 +12,13 @@ use Seolan\Module\Table\Table;
 class Redirect extends Table {
 
   /**
+   * Liste des upgrades
+   */
+  static public $upgrades = [
+    '20221207'=>''
+  ];
+
+  /**
    * Le header est modifié pour contenir le code HTTP et on affiche la contenu cible.
    */
   const MODE_CONTENT_REPLACEMENT = 'content_replacement';
@@ -109,7 +116,18 @@ class Redirect extends Table {
       }
     }
 
-    $oidsRedirect = getDB()->fetchCol('select KOID from ' . $this->table . ' where ' . $sql_where);
+    $bootstrapApplication = \Seolan\Module\Application\Application::getBootstrapApplication();
+    if ($bootstrapApplication->oid != null) {
+      $sql_where = $sql_where.'AND APP='.getDB()->quote($bootstrapApplication->oid);
+    }
+
+    $select = 'select KOID from ' . $this->table . ' where ' . $sql_where;
+
+    if(isset($this->xset->desc['ordre'])) {
+      $select .= " order by ordre ASC";
+    }
+
+    $oidsRedirect = getDB()->fetchCol($select);
 
     return $oidsRedirect;
   }
