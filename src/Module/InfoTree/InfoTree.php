@@ -3930,6 +3930,34 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
   }
 
   /**
+   * Retourne le contenu html de la page
+   *
+   * @param ar Options de la fonction viewpage
+   * @return String Contenu html de la page
+   */
+  public function getHtmlContent($ar) {
+    $p = new \Seolan\Core\Param($ar,array(
+      'pagesize' => 999,
+      'tpldata'  => array(), // Données à transmettre au template
+    ));
+    $ar['pagesize'] = $p->get('pagesize');
+    $ar['tplentry'] = 'it';
+    $tpldata = $p->get('tpldata');
+
+    if (!isset($tpldata['it'])) {
+      $tpldata['it'] = $this->viewpage($ar);
+    }
+
+    $xt = $this->retrieveTemplate($ar);
+    $labels = $GLOBALS['XSHELL']->labels->get_labels(array('selectors'=>array('global'),'local'=>true));
+    $xt->set_glob(array('labels'=>&$labels));
+    $rawData = array('it_prop'=>$this);
+    $content = $xt->parse($tpldata,$rawData,NULL);
+    return [$tpldata, $content];
+  }
+
+
+  /**
    * Exporte la page au format PDF
    * @param ar Options de la fonction viewpage avec un paramètre 'action'
    *           supplémentaire qui vaut 'display' par défaut pour renvoyer
@@ -3939,119 +3967,98 @@ class InfoTree extends \Seolan\Core\Module\ModuleWithSourceManagement {
    */
   public function exportPdf($ar) {
     $p = new \Seolan\Core\Param($ar,array(
-      'pagesize' => 999,
       'action'   => 'display',    // 'generate' ou 'display'
       'pdfname'  => 'export.pdf', // Nom du fichier PDF généré
       'tpldata'  => array(),      // Données à transmettre au template
+      'content'  => '',           // Contenu html par défaut
     ));
-    $ar['pagesize'] = $p->get('pagesize');
-    $ar['tplentry'] = 'it';
-    $tpldata = $p->get('tpldata');
     $pdfname = $p->get('pdfname');
-    if (!isset($tpldata['it'])) {
-      $tpldata['it'] = $this->viewpage($ar);
+    $tpldata = $p->get('tpldata'); // utiliser pour le nom du pdf uniquement
+
+    // Récupération du contenu
+    $content = $p->get('content');
+    if (empty($content)) {
+      [$tpldata, $content] = $this->getHtmlContent($ar);
     }
+    // Traitement du nom du fichier
     if (isset($tpldata['it']) && $pdfname == 'export.pdf' && !empty($tpldata['it']['cat_mit']['oalias']->html)) {
       $pdfname = $tpldata['it']['cat_mit']['oalias']->html.'.pdf';
     }
-    $xt = $this->retrieveTemplate($ar);
-    $labels = $GLOBALS['XSHELL']->labels->get_labels(array('selectors'=>array('global'),'local'=>true));
-    $xt->set_glob(array('labels'=>&$labels));
-    $rawData = array('it_prop'=>$this);
-    $content = $xt->parse($tpldata,$rawData,NULL);
+
     $tmpname = princeTidyXML2PDF(null,$content);
     switch ($p->get('action')) {
       case 'generate' :
         $newname = dirname($tmpname).'/'.$pdfname;
         return @rename($tmpname,$newname) ? $newname : $tmpname;
       case 'display' :
-	header('Content-type: application/pdf');
-	header('Content-disposition: attachment; filename='.$pdfname);
-	$size = filesize($tmpname);
-	header('Accept-Ranges: bytes');
-	header('Content-Length: '.$size);
-	readfile($tmpname);
-	unlink($tmpname);
-	exit(0);
+        header('Content-type: application/pdf');
+        header('Content-disposition: attachment; filename='.$pdfname);
+        $size = filesize($tmpname);
+        header('Accept-Ranges: bytes');
+        header('Content-Length: '.$size);
+        readfile($tmpname);
+        unlink($tmpname);
+        exit(0);
     }
   }
 
-    public function exploreNode($oid, $lang, &$oids, &$all_oids) {
-      $rs=getDB()->select("select KOID from ".$this->table." where linkup=? and LANG=? order by corder", array($oid,$lang));
-      $ors=$rs->fetchAll();
+  public function exploreNode($oid, $lang, &$oids, &$all_oids) {
+    $rs=getDB()->select("select KOID from ".$this->table." where linkup=? and LANG=? order by corder", array($oid,$lang));
+    $ors=$rs->fetchAll();
 
-      if (!in_array($oid, $all_oids)) {
-	array_push($oids, $oid);
-	array_push($all_oids, $oid);
-      }
-      if ($ors) foreach($ors as $oidi) $this->exploreNode($oidi['KOID'], $lang, $oids, $all_oids);
+    if (!in_array($oid, $all_oids)) {
+      array_push($oids, $oid);
+      array_push($all_oids, $oid);
     }
+    if ($ors)
+      foreach($ors as $oidi)
+        $this->exploreNode($oidi['KOID'], $lang, $oids, $all_oids);
+  }
 
   public function exportPdfs($ar) {
-    $p=new \Seolan\Core\Param($ar, array());
     $p = new \Seolan\Core\Param($ar,array(
       'pagesize' => 999,
       'action'   => 'display',    // 'generate' ou 'display'
       'pdfname'  => 'export.pdf', // Nom du fichier PDF généré
-      'tpldata'  => array()      // Données à transmettre au template
+      'tpldata'  => array(),      // Données à transmettre au template
     ));
     $action = $p->get('action');
     $tpldata = $p->get('tpldata');
     $sel=$p->get('_selected'); // files selected
-    $i = 0;
+    $content = [];
     $lang = \Seolan\Core\Shell::getLangUser();
     $all_oids = [];
-    $oidTitle=getDB()->fetchOne("select KOID from ".$this->table." where alias=? and LANG=?", array($this->pdf_cover_page,$lang));
-    if ($oidTitle) {
-      $ar['tplentry'] = TZR_RETURN_DATA;
-      $ar['oidit'] = $oidTitle;
-      $tpldata[$i]['it'] = $this->viewpage($ar);
-      array_push($all_oids, $oidTitle);
-      $i++;
-    }
-    foreach($sel as $oid => $bid) {
-      $oids =[];
-      $this->exploreNode($oid, $lang, $oids, $all_oids);
-      foreach($oids as $oidi) {
-	if (!isset($tpldata['it'])) {
-	  $ar['tplentry'] = TZR_RETURN_DATA;
-	  $ar['oidit'] = $oidi;
-	  $tpldata[$i]['it'] = $this->viewpage($ar);
-	  $i++;
-	}
+
+    if(!empty($this->pdf_cover_page)) {
+      $oidTitle=getDB()->fetchOne("select KOID from ".$this->table." where alias=? and LANG=?", array($this->pdf_cover_page,$lang));
+      if ($oidTitle) {
+        $ar['tplentry'] = TZR_RETURN_DATA;
+        $ar['oidit'] = $oidTitle;
+        [$tpldata[], $content[]] = $this->getHtmlContent($ar);
+        array_push($all_oids, $oidTitle);
       }
     }
     $ar['pagesize'] = $p->get('pagesize');
     $ar['tplentry'] = 'it';
+    foreach($sel as $oid => $bid) {
+      $oids =[];
+      $this->exploreNode($oid, $lang, $oids, $all_oids);
+      foreach($oids as $oidi) {
+        $ar['tplentry'] = TZR_RETURN_DATA;
+        $ar['oidit'] = $oidi;
+        [$tpldata[], $content[]] = $this->getHtmlContent($ar);
+      }
+    }
+
+    // Traitement du nom du fichier
     $pdfname = $p->get('pdfname');
     if (isset($tpldata[0]['it']) && $pdfname == 'export.pdf' && !empty($tpldata[0]['it']['cat_mit']['oalias']->html)) {
       $pdfname = $tpldata[0]['it']['cat_mit']['oalias']->html.'.pdf';
     }
-    $content = [];
-    for ($j = 0; $j < $i; $j++) {
-      $xt = $this->retrieveTemplate($ar);
-      $labels = $GLOBALS['XSHELL']->labels->get_labels(array('selectors'=>array('global'),'local'=>true));
-      $xt->set_glob(array('labels'=>&$labels));
-      $rawData = array('it_prop'=>$this);
-      $contenti= $xt->parse($tpldata[$j],$rawData,NULL);
-      array_push($content,$contenti);
-    }
-    $tmpname = princeTidyXML2PDF(null,$content, NULL, NULL, true);
-    switch ($action) {
-    case 'generate' :
-      $newname = dirname($tmpname).'/'.$pdfname;
 
-      return @rename($tmpname,$newname) ? $newname : $tmpname;
-    case 'display' :
-      header('Content-type: application/pdf');
-      header('Content-disposition: attachment; filename='.$pdfname);
-      $size = filesize($tmpname);
-      header('Accept-Ranges: bytes');
-      header('Content-Length: '.$size);
-      readfile($tmpname);
-      unlink($tmpname);
-      exit(0);
-    }
+    $ar['pdfname'] = $pdfname;
+    $ar['content'] = $content;
+    return $this->exportPdf($ar);
   }
 
   private function retrieveTemplate($ar) {

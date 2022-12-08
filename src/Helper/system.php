@@ -813,7 +813,7 @@ function isTZRKeyword($k) {
  // vers PDF en utilisant PRINCE. La fonction rend le nom du fichier
  // contenant le pdf en cas de succes.
  //
- function princeXML2PDF($filename=NULL,$content="", $option="", $multi=false) {
+ function princeXML2PDF($filename=NULL,$content="", $option="") {
   $tmpname=TZR_TMP_DIR.uniqid();
   $destfilename=$tmpname.".pdf";
 
@@ -821,7 +821,8 @@ function isTZRKeyword($k) {
     $option = " ".$option; //On rajoute l'espace nécessaire à l'execution de la commande
   }
   if(empty($content) && !empty($filename)) $content=@file_get_contents($filename);
-  if ($multi) {
+
+  if (is_array($content)) {
     $tmpnames = "";
     $tmpfiles = [];
     $xml_doc = new DOMDocument();
@@ -862,6 +863,9 @@ function isTZRKeyword($k) {
     } else {
       \Seolan\Core\Logs::critical("princeXML2PDF failed : PRINCE package absent");
     }
+    foreach ($tmpfiles as $file) {
+      unlink($file);
+    }
   }
   else {
     convert_charset($content,TZR_INTERNAL_CHARSET,'UTF-8');
@@ -873,16 +877,12 @@ function isTZRKeyword($k) {
     } else {
       \Seolan\Core\Logs::critical("princeXML2PDF failed : PRINCE package absent");
     }
+    unlink($tmpname.".xml");
   }
+
   foreach($ret as $line){
-      \Seolan\Core\Logs::debug($line);
+    \Seolan\Core\Logs::debug($line);
   }
-  if ($multi) {
-    foreach ($tmpfiles as $file) {
-      unlink($file);
-    }
-  }
-  else unlink($tmpname.".xml");
   if(!file_exists($destfilename) && !empty($ret)) {
     \Seolan\Core\Logs::critical('princeXML2PDF failed : ' . implode("\n", $ret));
     exit(0);
@@ -896,7 +896,13 @@ function tidyString(&$content,$ar=array()) {
   if(function_exists('tidy_repair_string')) {
     if(TZR_INTERNAL_CHARSET!='UTF-8') 
         convert_charset($content,TZR_INTERNAL_CHARSET,'UTF-8');
-    $content = tidy_repair_string($content,$ar,'utf8');
+        if (is_array($content)) {
+          foreach ($content as $key => $value) {
+            $content[$key] = tidy_repair_string($value,$ar,'utf8');
+          }
+        } else {
+          $content = tidy_repair_string($content,$ar,'utf8');
+        }
     if(TZR_INTERNAL_CHARSET!='UTF-8') 
         convert_charset($content,'UTF-8',TZR_INTERNAL_CHARSET);
   } 
@@ -910,26 +916,15 @@ function removeJavascript($text) {
 // conversion tidysée du fichier de nom $filename ou du contenu xml de $content
 // vers PDF en utilisant PRINCE. La fonction rend le nom du fichier
 // contenant le pdf en cas de succes.
-function princeTidyXML2PDF($filename=NULL,$content="",$tidyopt=NULL, $option=NULL, $multi=false) {
+function princeTidyXML2PDF($filename=NULL,$content="",$tidyopt=NULL, $option=NULL) {
   if ($tidyopt == null) $tidyopt = [];
-
   $tidyopt['drop-empty-elements']=false;
 
-  if ($multi) {
-    foreach ($content as $key => $value) {
-      if($tidyopt)
-	tidyString($content[$key],$tidyopt);
-      else
-	tidyString($content[$key]);
-    }
-  }
-  else {
-    if($tidyopt)
-      tidyString($content,$tidyopt);
-    else
-      tidyString($content);
-  }
-  $tmpname=princeXML2PDF($filename,$content, $option, $multi);
+  if($tidyopt)
+    tidyString($content,$tidyopt);
+  else
+    tidyString($content);
+  $tmpname=princeXML2PDF($filename,$content, $option);
   return $tmpname;
 }
 
