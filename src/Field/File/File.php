@@ -1870,7 +1870,7 @@ class File extends \Seolan\Core\Field\Field {
     }
     // Input fichier + bouton parcourir console
     $txtInput.='<td id="'.$varid.'-tdfile"'.($disp->isExternal?' style="display:none"':'').'>';
-    if(\Seolan\Core\Shell::admini_mode() || $GLOBALS['TZR_PACKS']->packDefined('\Seolan\Pack\Plupload\Plupload') && empty($options['noPlupload']))
+    if((\Seolan\Core\Shell::admini_mode() || $GLOBALS['TZR_PACKS']->packDefined('\Seolan\Pack\Plupload\Plupload')) && empty($options['noPlupload']))
       $txtInput.=$this->my_edit_get_uploader($fname,$hiddenname,$varid);
     else {
       $accept = '';
