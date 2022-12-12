@@ -114,7 +114,7 @@ $XSHELL = new \Seolan\Core\Shell();
 $XSHELL->_cache=false;
 $XSHELL->run(array());
 
-$forkMinisite = true;
+$forkMinisite = false;
 
 if (isset($GLOBALS['HAS_VHOSTS']) && $GLOBALS['HAS_VHOSTS']) {
     \Seolan\Core\Logs::notice('______________ Scheduler for vhosts start ______________');
