@@ -452,7 +452,7 @@ if (!defined('TZR_TIMEZONE'))
   define('TZR_TIMEZONE', 'Europe/Paris');
 // IPs and USERS id pour la lecture de configuration (private(web03), serveurs nagios)
 if (!defined('TZR_METACONF_IP'))
-  define('TZR_METACONF_IP', '81.200.40.200');
+  define('TZR_METACONF_IP', '127.0.0.1');
 date_default_timezone_set(TZR_TIMEZONE);
 define('TZR_START_TIME', microtime(true));
 

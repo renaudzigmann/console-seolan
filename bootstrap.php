@@ -7,21 +7,6 @@ include('Vendor/autoload.php');
 $GLOBALS['autoloadLogs'] = ['missing'=>[],'loaded'=>[],'calls'=>0];
 spl_autoload_register('tzr_autoload', true, true);
 checkSERVEREnvVariables();
-/*
-if ( ($local_config=include_once($_SERVER['DOCUMENT_ROOT'].'../tzr/config/local.inc')) ===false ) {
-  header("HTTP/1.1 500 Seolan Server Error");
-  exit(0);
-}
-if(!$server_config) $server_config=array();
-$seolan_config = require_once('config/config.php');
-if(!$seolan_config) $seolan_config=array();
-
-$CONFIG=new \Zend\Config\Config(array_merge($seolan_config,$server_config,$local_config));
-    die('r');var_dump($CONFIG);
-
-// Définition des paramètre de log
-error_reporting($CONFIG['error_reporting']);
-*/
 
 if(defined('TZR_DEBUG_MODE')) {
   if(TZR_DEBUG_MODE==1)
