@@ -430,17 +430,27 @@ class Link extends \Seolan\Core\Field\Field {
       $this->_removeOidInLink(NULL, $value);
       return $r;
     }
+    if(!empty($options['target_options']))
+      $targetopts=$options['target_options'];
+    else
+      $targetopts=[];
+    
     // Droit sur le module source de données
     if($this->sourcemodule){
       $mod=\Seolan\Core\Module\Module::objectFactory($this->sourcemodule);
-      if($mod->object_sec && !$mod->secure($value,':ro') || !$mod->object_sec && !$mod->secure('',':ro')) return $r;
+      if($mod->object_sec && !$mod->secure($value,':ro') || !$mod->object_sec && !$mod->secure('',':ro'))
+	return $r;
+      $targetopts['fmoid'] = $this->sourcemodule;      
+    } else {
+      $targetopts['fmoid'] = $options['fmoid']??null;
     }
+    
     $target_ds=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8($target);
-    if(!empty($options['target_options'])) $targetopts=$options['target_options'];
-    else $targetopts=array();
-
-    if(!empty($options['_charset'])) $targetopts['_charset']=$options['_charset'];
-    else $targetopts['_charset'] = \Seolan\Core\Lang::getCharset();
+    
+    if(!empty($options['_charset']))
+      $targetopts['_charset']=$options['_charset'];
+    else
+      $targetopts['_charset'] = \Seolan\Core\Lang::getCharset();
 
     // Liste des champs à recuperer
     if(@$options['display_format']){
@@ -453,11 +463,12 @@ class Link extends \Seolan\Core\Field\Field {
     }else{
       $fmtfields=array();
     }
-    if(isset($options['target_fields'])) $targetopts['selectedfields']=$options['target_fields'];
-    else $targetopts['selectedfields']=$target_ds->getPublished(false);
+    if(isset($options['target_fields']))
+      $targetopts['selectedfields']=$options['target_fields'];
+    else
+      $targetopts['selectedfields']=$target_ds->getPublished(false);
     if ($targetopts['selectedfields'] != 'all')
       $targetopts['selectedfields']=array_merge($fmtfields,$targetopts['selectedfields']);
-    $targetopts['fmoid'] = @$options['fmoid'];
     // Recupere les champs de l'objet cible
     $values=$target_ds->rDisplay($value, array(), false, $LANG_DATA, $lang, $targetopts);
     $cnt=count($values['fields_object']);

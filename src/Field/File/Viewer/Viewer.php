@@ -44,8 +44,10 @@ class Viewer {
           '_skip'=>1,
           'filename'=> ($multi?$r->filename:false),
           'oid'=>$options['oid']??null])]);
-	  // maintient d'une classe pour désactiver via css ?
-	  return '<button type="button" class="btn btn-default btn-md btn-inverse btn-viewer" onclick="TZR.Viewer.load('.htmlspecialchars($params).');"><span class="glyphicon csico-view"></span></button>';
+	// maintient d'une classe pour désactiver via css ?
+	$buttonid = "buttonviewerfor{$r->varid}";
+	$js = "<script>document.getElementById(\"{$buttonid}\").onclick = (event)=>{event.cancelBubble = true; TZR.Viewer.load({$params});return false;}</script>";
+	  return "<button id=\"{$buttonid}\" type=\"button\" class=\"btn btn-default btn-md btn-inverse btn-viewer\"><span class=\"glyphicon csico-view\"></span></button>{$js}";
       }
   }
 
