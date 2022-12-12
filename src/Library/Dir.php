@@ -162,13 +162,13 @@ class Dir {
     $files = \Seolan\Library\Dir::scan($targetdir,true,true,false,$omits);
     foreach($files as $file){
       \Seolan\Core\Logs::debug(__METHOD__.' : scanning '.$file);
-      if(($deleteafterdays>0) && preg_match('/(\.log-[0-9]{8}\.gz)$/',$file)) {
+      if(($deleteafterdays>=0) && preg_match('/(\-[0-9]{8,}\.gz)$/',$file)) {
 	\Seolan\Core\Logs::debug(__METHOD__.' : examining '.$file.' : '.date("Ymd",filemtime($file)));
 	if(filemtime($file) < time()-60*60*24*$deleteafterdays ){
 	  \Seolan\Core\Logs::debug(__METHOD__.' : delete '.$file.' : '.date("Ymd",filemtime($file)));
 	  unlink($file);
 	}
-      }	elseif(preg_match('/(\.log-[0-9]{8})$/',$file)){
+      }	elseif(preg_match('/(\-[0-9]{8,})$/',$file)){
 	//a archivé si plus vieux que $nbdys jours
 	if( filemtime($file) < time()-60*60*24*$nbdays ){
 	  \Seolan\Core\Logs::debug(__METHOD__.' : archive '.$file.' : '.date("Ymd",filemtime($file)));
@@ -186,6 +186,7 @@ class Dir {
     }
     \Seolan\Core\Logs::debug(__METHOD__.' : end '.$targetdir);
   }
+
 
   static function tmpFilename($base="tmpfile") {
     return TZR_TMP_DIR.uniqid($base);
