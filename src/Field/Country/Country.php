@@ -20,7 +20,7 @@ class Country extends \Seolan\Field\Link\Link {
   
   // Edition du champ sous la forme d'une liste déroulante
   function getSelect(&$value,&$options,&$r, &$rs/*contient la requete*/,$fname,$hiddenname,$myliste) {
-    if(!$value && $this->geoLocation){
+    if(!\Seolan\Core\Shell::admini_mode() && !$value && $this->geoLocation){
       // geoip.php peut-être inclu dans php a sa compilation
       if(!function_exists('geoip_open')){
           \Seolan\Core\System::loadVendor('geoip/geoip.inc');
