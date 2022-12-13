@@ -132,7 +132,12 @@ class Logs {
   /// Effectue la rotation des fichiers de log
   static function rotate() {
     if(empty(self::$_logger)) self::_initLogFile();
-    \Seolan\Library\Dir::rotate(TZR_LOG_DIR,1,TZR_LOG_ROTATE);
+    // Economiser de l'espace sur les sites avec minisites : zipper tous les anciens logs
+    if ($GLOBALS['HAS_VHOSTS'] || $GLOBALS['IS_VHOST']) {
+      \Seolan\Library\Dir::rotate(TZR_LOG_DIR,0,TZR_LOG_ROTATE);
+    } else {
+      \Seolan\Library\Dir::rotate(TZR_LOG_DIR,1,TZR_LOG_ROTATE);
+    }
   }
 
   function __construct($ar=NULL) {
