@@ -38,10 +38,11 @@ class BackOfficeInfoTree extends \Seolan\Module\InfoTree\InfoTree {
     }
     return parent::home($ar);
   }
-
   /// préparation de la visibilité des rubriques du backoffice en fonction de leur contenu
   public function prepareBOTree($user) {
-      //RZ      getDB()->execute('DELETE FROM ACL4_CACHE WHERE AGRP=?', array($uid));
+
+    $this->checkACLStatus($user);
+    
     $x=\Seolan\Core\DataSource\DataSource::objectFactoryHelper8('BCLASS=\Seolan\Model\DataSource\Table\Table&SPECS=CS8SEC');
     $m=$this->home(array('maxlevel'=>999,'tplentry'=>TZR_RETURN_DATA,'do'=>'showtree','aliastop'=>$user->botop(),'norubric'=>true));
     foreach($m['lines_oid'] as $i=>$oid) {
@@ -92,6 +93,37 @@ class BackOfficeInfoTree extends \Seolan\Module\InfoTree\InfoTree {
       }else{
 	$todel=array();
       }
+    }
+  }
+  /**
+   * effacer le cache des droits pour cet utilisateur si trop ancien
+   * par rapport au user (ex : on lui a ajouté un groupe)
+   * aux droits posés sur les groupes auxquels il appartient
+   * Tous modules confondus : les droits sur les modules déterminent
+   * la visibilité des sections fonctions
+   */
+  protected function checkACLStatus($user){
+
+    $purge = 0;
+    
+    $cacheupd = getDB()->fetchOne('SELECT min(UPD) FROM ACL4_CACHE WHERE AGRP=?', [$user->_curoid]);
+
+    if (empty($cacheupd))
+      return;
+    
+    if ($user->_cur['UPD'] >= $cacheupd){
+      $purge = 1;
+    } else {
+      $groups = $user->groups(true);
+      $ingroups = implode(',', array_fill(0,count($groups), '?'));
+      $aclupd = getDB()->fetchOne("select max(upd) from ACL4 where agrp in  ($ingroups) ", $groups);
+      if ($aclupd >= $cacheupd){
+	$purge = 2;
+      }
+    }
+    \Seolan\Core\Logs::debug(__METHOD__." purge {$purge} user upd :'{$user->_cur['UPD']}', acl max(upd) : '{$aclupd}' cache max(upd) : '{$cacheupd}'");
+    if ($purge !== 0){
+      getDB()->execute('DELETE FROM ACL4_CACHE WHERE AGRP=?', [$user->_curoid]);
     }
   }
 }
