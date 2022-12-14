@@ -116,9 +116,9 @@ class OpenIdConnect extends \Seolan\Core\Directory\OpenIdConnect{
        'DATEF'=>date('Y-m-d'),
        'DATET'=>date('Y-m-d'),
        'BO'=>in_array($this->config->logintype, ['BO', 'both'])?1:2,
-       'email'=>$item['accessToken']->email,
-       'alias'=>$item['accessToken']->email,  // à voir
-       'fullnam'=>"{$item['userInfo']->name}",
+       'email'=>$item['userInfo']->email,
+       'alias'=>$item['userInfo']->email,
+       'fullnam'=>"{$item['userInfo']->family_name} {$item['userInfo']->given_name}", 
       ],
       $fields);
   }
